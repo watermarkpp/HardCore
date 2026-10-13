@@ -15,6 +15,8 @@ const SETTLED_POSITION_EPSILON_GU := 0.002
 const HCSpatial := preload("res://scripts/runtime_combat_spatial_index.gd")
 var _hc_test_index := HCSpatial.new()
 var _hc_test_registered: Dictionary = {}
+var current_map_id := 1
+var _zone_generation := 1
 
 
 func _test_ground_to_screen(value: Vector2) -> Vector2:
@@ -22,13 +24,15 @@ func _test_ground_to_screen(value: Vector2) -> Vector2:
 
 
 func _configure_enemy_map(enemy: EnemyActor) -> void:
+	if _hc_test_registered.has(enemy.get_instance_id()):
+		return
 	enemy.configure_runtime_map_projection(
 		1,
 		Callable(self, "_test_ground_to_screen")
 	, GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu)
 	enemy.configure_terrain_navigation_context(OpenTerrainFixture.build(1))
-	enemy.combat_spatial_index = _hc_test_index
-	enemy.spatial_actor_runtime_id = enemy.get_instance_id()
+	enemy.set_meta("zone_generation", _zone_generation)
+	enemy.configure_spatial_index(_hc_test_index, enemy.get_instance_id())
 	if not _hc_test_registered.has(enemy.get_instance_id()):
 		_hc_test_registered[enemy.get_instance_id()] = true
 		_hc_test_index.register(enemy.get_instance_id(), 1,
@@ -52,6 +56,9 @@ func _ready() -> void:
 
 func _run() -> void:
 	PlayerState.test_mode = true
+	# This fixture isolates contact geometry, not optional owner scheduling.
+	EnemyActor.configure_owner_optional_budget_for_test(false)
+	EnemyActor.configure_owner_decision_interval_for_test(0)
 	_verify_projected_speed_is_equal_in_32_directions()
 
 	var player := PlayerCharacter.new()
@@ -60,6 +67,7 @@ func _run() -> void:
 		OpenTerrainFixture.CENTER_GROUND_GU
 	)
 	add_child(player)
+	player.set_meta("runtime_map_id", current_map_id)
 	player.set_physics_process(false)
 	player.visual.set_process(false)
 	player.max_hp = 1000000
@@ -143,6 +151,8 @@ func _run() -> void:
 		add_child(enemy)
 		enemies.append(enemy)
 		settled_frame_counts.append(0)
+		_configure_enemy_map(enemy)
+		assert(enemy.request_passive_target_wakeup(player, current_map_id, _zone_generation), "contact fixture must activate its real target through the production wake gate")
 
 	# Preserve the original purpose of this regression: the monster itself must
 	# move from START_DISTANCE_GU into the existing melee-contact geometry.
@@ -210,11 +220,13 @@ func _run() -> void:
 		final_extents_gu.append(
 			maxf(absf(final_delta_ground_gu.x), absf(final_delta_ground_gu.y))
 		)
-		# Axis stations leave the existing body recovery gap; corner stations
-		# occupy the formal L-inf box edge. Verify both from physical inputs.
+		# The source176 stop predicate accepts continuous box contact, not an
+		# exact station coordinate. Native movement may stop inside that box.
+		# Check authoritative contact and physical separation independently.
 		var recovery_margin_gu := enemy.safe_margin / (minf(GroundUnitSpaceScript.HALF_TILE_SIZE_PX.x, GroundUnitSpaceScript.HALF_TILE_SIZE_PX.y) * sqrt(2.0))
-		var expected_extent := minf(1.0, enemy.combat_radius_gu + WorldSpatialRules.actor_combat_radius_gu_from_screen_radius_px(ArtSpec.PLAYER_COLLISION_RADIUS_PX) + 2.0 * recovery_margin_gu + GroundUnitSpaceScript.EPSILON_GU) if direction_index % 2 == 0 else 1.0
-		assert(absf(final_extents_gu[-1] - expected_extent) <= GroundUnitSpaceScript.EPSILON_GU, "direction %d station extent differs from body/box contract: %s != %s" % [direction_index, final_extents_gu[-1], expected_extent])
+		assert(Source176Melee.continuous_adjacent(final_delta_ground_gu), "direction %d did not settle within the authoritative contact box" % direction_index)
+		var body_clearance_gu := enemy.combat_radius_gu + WorldSpatialRules.actor_combat_radius_gu_from_screen_radius_px(ArtSpec.PLAYER_COLLISION_RADIUS_PX) + 2.0 * recovery_margin_gu
+		assert(final_distances_gu[-1] >= body_clearance_gu - GroundUnitSpaceScript.EPSILON_GU, "direction %d station overlaps the physical body/recovery gap" % direction_index)
 		var hp_before := player.current_hp
 		enemy._deal_melee_hit(player, 5)
 		assert(player.current_hp < hp_before, "direction %d footprint contact did not deal damage" % direction_index)

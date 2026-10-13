@@ -5,6 +5,7 @@ extends Node
 ## Do not change cooldowns or damage to make this test pass.
 const IdentityScript := preload("res://scripts/monster_identity.gd")
 const GroundUnitScript := preload("res://scripts/ground_unit_space.gd")
+const WorldFixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
 const IDS := [24, 76, 238, 239, 226]
 
 var _failures: Array[String] = []
@@ -38,6 +39,19 @@ func _run() -> void:
 		await _finish(game)
 		return
 
+	# The formal factory admits only slots in the sealed publication plan.
+	# Keep the exact canonical IDs and positions, publishing all five together
+	# through the existing map owner before inspecting its new generation.
+	var descriptors: Array[Dictionary] = []
+	for offset in range(IDS.size()):
+		descriptors.append({"id": IDS[offset], "ground": Vector2(40.5 + 2.0 * float(offset), 13.5),
+			"respawn": -1.0, "context": {"respawn_enabled": false,
+				"spawn_slot_id": "test:r4-index-radius:%d" % IDS[offset]}})
+	var published: Array[EnemyActor] = await WorldFixture.publish_targets(
+		self, game, descriptors, "r4 radius index consistency")
+	_expect(published.size() == IDS.size(), "all exact-ID radius fixtures must publish through the formal factory")
+	for actor: EnemyActor in published:
+		actor.set_physics_process(false)
 	var index: RuntimeCombatSpatialIndex = game.get("_combat_spatial_index")
 	_expect(index != null, "formal world must own its spatial index")
 	if index == null:
@@ -49,16 +63,11 @@ func _run() -> void:
 		var profile: Dictionary = IdentityScript.body_profile(monster_id)
 		var expected_radius: float = float(profile.get("ground_radius_gu", -1.0))
 		_expect(expected_radius > 0.0, "formal body profile missing for %d" % monster_id)
-		var spawn_ground := Vector2(40.5 + 2.0 * float(offset), 13.5)
-		var spawn_screen: Vector2 = game.call("_canonical_ground_gu_to_screen_px", spawn_ground)
-		var actor: EnemyActor = game.call(
-			"_spawn_enemy", GameData.get_monster_by_id(monster_id), spawn_screen,
-			monster_id in [76, 238, 239], -1.0,
-			{"respawn_enabled": false, "spawn_slot_id": "test:r4-index-radius:%d" % monster_id}
-		)
+		var actor: EnemyActor = published[offset] if offset < published.size() else null
 		_expect(actor != null, "formal factory rejected positive-control %d" % monster_id)
 		if actor == null:
 			continue
+		_expect(actor.monster_id == monster_id, "published factory identity mismatch for %d" % monster_id)
 		# Freezing this actor is valid here: only initialization/index geometry
 		# is tested. Natural combat must be covered by a different scene.
 		actor.set_physics_process(false)

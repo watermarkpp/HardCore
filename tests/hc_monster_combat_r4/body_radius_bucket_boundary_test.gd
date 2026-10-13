@@ -10,6 +10,7 @@ extends Node
 ## proven discriminating without touching production code.
 
 const SpatialIndexScript := preload("res://scripts/runtime_combat_spatial_index.gd")
+const WorldFixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
 
 const STALE_SMALL_RADIUS := 0.353553390593274
 
@@ -39,14 +40,22 @@ func _run() -> void:
 	var boundary := floorf(40.5 / bucket) * bucket
 	var actor_ground := Vector2(boundary - 0.1, 13.5)
 	var actor_screen: Vector2 = game._canonical_ground_gu_to_screen_px(actor_ground)
-	var boss: EnemyActor = game._spawn_enemy(
-		GameData.get_monster_by_id(76),
-		actor_screen,
-		true,
-		-1.0,
-		{"respawn_enabled": false, "spawn_slot_id": "test:r4-radius-boundary"},
+	# Publish this exact canonical identity through the current sealed birth
+	# plan. A new ad hoc slot after READY is correctly rejected by the factory.
+	var published: Array[EnemyActor] = await WorldFixture.publish_targets(
+		self, game,
+		[{"id": 76, "ground": actor_ground, "respawn": -1.0,
+			"context": {"respawn_enabled": false, "spawn_slot_id": "test:r4-radius-boundary"}}],
+		"r4 radius bucket boundary",
 	)
+	# Republication owns a new world generation; inspect its actual index.
+	index = game._combat_spatial_index
+	var boss: EnemyActor = published[0] if not published.is_empty() else null
 	assert(boss != null and boss.combat_radius_gu > STALE_SMALL_RADIUS + 0.05, "fixture needs a large body with its true radius")
+	boss.set_physics_process(false)
+	boss.set_combat_position(actor_screen, &"radius_boundary_fixture")
+	assert(boss.monster_id == 76 and boss.spatial_index_position().is_equal_approx(actor_ground),
+		"published fixture must retain the exact canonical identity and boundary position")
 	var true_radius: float = boss.combat_radius_gu
 	var runtime_id: int = boss.spatial_actor_runtime_id
 

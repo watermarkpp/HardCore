@@ -22,6 +22,18 @@ const BUCKET_SIZE_SETTING := "hardcore/combat/spatial_index_bucket_size_gu"
 const DEFAULT_BUCKET_SIZE_GU := 1.0
 const CONTRACT_ID := "hardcore.combat.spatial_index.map_ground_gu_buckets.v1"
 
+# Fixed metadata budget: 128 records of seven int64 values (7168 bytes).
+# Only the ring slot wraps; the existing global revision remains int64.
+const MEMBERSHIP_JOURNAL_CAPACITY := 128
+const MEMBERSHIP_JOURNAL_STRIDE := 7
+const MEMBERSHIP_OLD_VALID := 1
+const MEMBERSHIP_NEW_VALID := 2
+const MEMBERSHIP_MAP_CLEAR := 4
+const MEMBERSHIP_MAX_BOUNDS_GREW := 8
+# Same-source measurement only. Fixtures set this before creating the index.
+# Disabling writes leaves missing history, which the reader rejects safely.
+static var compute_optimization_journal_enabled := true
+
 
 var _buckets: Dictionary = {}
 var _entries: Dictionary = {}
@@ -35,6 +47,14 @@ var _bucket_size_gu := DEFAULT_BUCKET_SIZE_GU
 ## Every registration/removal/bucket crossing invalidates conservative
 ## bucket identity pools. Positions inside a bucket are read live.
 var bucket_membership_revision := 0
+var _bucket_membership_journal := PackedInt64Array()
+var index_membership_journal_checks := 0
+var index_membership_journal_reuses := 0
+var index_membership_journal_local_changes := 0
+var index_membership_journal_bounds_growth := 0
+var index_membership_journal_map_clear := 0
+var index_membership_journal_history_misses := 0
+var index_membership_journal_records_scanned := 0
 
 var index_register_count := 0
 var index_unregister_count := 0
@@ -61,6 +81,8 @@ var _enemy_query_stamp_serial := 0
 
 
 func _init() -> void:
+	_bucket_membership_journal.resize(MEMBERSHIP_JOURNAL_CAPACITY * MEMBERSHIP_JOURNAL_STRIDE)
+	_bucket_membership_journal.fill(-1)
 	_bucket_size_gu = maxf(
 		0.5,
 		float(ProjectSettings.get_setting(
@@ -72,6 +94,66 @@ func _init() -> void:
 
 func bucket_size_gu() -> float:
 	return _bucket_size_gu
+
+
+func _record_bucket_membership_change(runtime_map_id: int, old_bucket: Vector2i, new_bucket: Vector2i, flags: int) -> void:
+	bucket_membership_revision += 1
+	if PlayerState.test_mode and not compute_optimization_journal_enabled:
+		return
+	var offset := (bucket_membership_revision % MEMBERSHIP_JOURNAL_CAPACITY) * MEMBERSHIP_JOURNAL_STRIDE
+	_bucket_membership_journal[offset] = bucket_membership_revision
+	_bucket_membership_journal[offset + 1] = runtime_map_id
+	_bucket_membership_journal[offset + 2] = old_bucket.x
+	_bucket_membership_journal[offset + 3] = old_bucket.y
+	_bucket_membership_journal[offset + 4] = new_bucket.x
+	_bucket_membership_journal[offset + 5] = new_bucket.y
+	_bucket_membership_journal[offset + 6] = flags
+
+
+## Prove that a cached complete bucket identity pool remains conservative.
+## No positions, eligibility, or geometry answers are retained here.
+func enemy_bucket_pool_unchanged_since(runtime_map_id: int, covered_buckets: Rect2i, since_revision: int) -> bool:
+	index_membership_journal_checks += 1
+	var current := bucket_membership_revision
+	if runtime_map_id < 0 or since_revision < 0 or current < since_revision or covered_buckets.size.x <= 0 or covered_buckets.size.y <= 0:
+		return false
+	if current == since_revision:
+		return true
+	if current - since_revision > MEMBERSHIP_JOURNAL_CAPACITY:
+		index_membership_journal_history_misses += 1
+		return false
+	var end := covered_buckets.end
+	for revision: int in range(since_revision + 1, current + 1):
+		var offset := (revision % MEMBERSHIP_JOURNAL_CAPACITY) * MEMBERSHIP_JOURNAL_STRIDE
+		index_membership_journal_records_scanned += 1
+		if _bucket_membership_journal[offset] != revision:
+			index_membership_journal_history_misses += 1
+			return false
+		var flags := _bucket_membership_journal[offset + 6]
+		# Bounds are a cross-map maximum. A new larger body can reach the
+		# segment even when its centre lies outside the old covered buckets.
+		if flags & MEMBERSHIP_MAX_BOUNDS_GREW:
+			index_membership_journal_bounds_growth += 1
+			return false
+		if _bucket_membership_journal[offset + 1] != runtime_map_id:
+			continue
+		if flags & MEMBERSHIP_MAP_CLEAR:
+			index_membership_journal_map_clear += 1
+			return false
+		if flags & MEMBERSHIP_OLD_VALID:
+			var x := _bucket_membership_journal[offset + 2]
+			var y := _bucket_membership_journal[offset + 3]
+			if x >= covered_buckets.position.x and x < end.x and y >= covered_buckets.position.y and y < end.y:
+				index_membership_journal_local_changes += 1
+				return false
+		if flags & MEMBERSHIP_NEW_VALID:
+			var x := _bucket_membership_journal[offset + 4]
+			var y := _bucket_membership_journal[offset + 5]
+			if x >= covered_buckets.position.x and x < end.x and y >= covered_buckets.position.y and y < end.y:
+				index_membership_journal_local_changes += 1
+				return false
+	index_membership_journal_reuses += 1
+	return true
 
 
 func register(
@@ -102,11 +184,14 @@ func register(
 	}
 	if is_instance_valid(node):
 		_stable_order_by_node_instance_id[node.get_instance_id()] = stable_combat_order
+	var membership_flags := MEMBERSHIP_NEW_VALID
+	if safe_bounds > _max_actor_bounds_gu:
+		membership_flags |= MEMBERSHIP_MAX_BOUNDS_GREW
 	_max_actor_bounds_gu = maxf(_max_actor_bounds_gu, safe_bounds)
 	_bucket_set(runtime_map_id, _entries[actor_runtime_id]["bucket_key"])[
 		actor_runtime_id
 	] = weakref(node)
-	bucket_membership_revision += 1
+	_record_bucket_membership_change(runtime_map_id, Vector2i.ZERO, _entries[actor_runtime_id]["bucket_key"], membership_flags)
 	index_register_count += 1
 
 
@@ -129,7 +214,7 @@ func unregister(actor_runtime_id: int) -> void:
 	if map_buckets.is_empty():
 		_buckets.erase(runtime_map_id)
 	_entries.erase(actor_runtime_id)
-	bucket_membership_revision += 1
+	_record_bucket_membership_change(runtime_map_id, bucket_key, Vector2i.ZERO, MEMBERSHIP_OLD_VALID)
 	index_unregister_count += 1
 
 
@@ -153,7 +238,7 @@ func update_actor(actor_runtime_id: int, absolute_ground_gu: Vector2) -> void:
 	)
 	entry["bucket_key"] = new_bucket
 	_bucket_set(runtime_map_id, new_bucket)[actor_runtime_id] = node_ref
-	bucket_membership_revision += 1
+	_record_bucket_membership_change(runtime_map_id, old_bucket, new_bucket, MEMBERSHIP_OLD_VALID | MEMBERSHIP_NEW_VALID)
 	index_bucket_change_count += 1
 
 
@@ -171,7 +256,7 @@ func clear_map(runtime_map_id: int) -> void:
 			_entries.erase(raw_id)
 			removed += 1
 	if removed > 0:
-		bucket_membership_revision += 1
+		_record_bucket_membership_change(runtime_map_id, Vector2i.ZERO, Vector2i.ZERO, MEMBERSHIP_MAP_CLEAR)
 	index_unregister_count += removed
 
 
@@ -673,6 +758,14 @@ func diagnostics() -> Dictionary:
 		"index_enemy_node_aabb_query_count": index_enemy_node_aabb_query_count,
 		"index_enemy_node_segment_query_count": index_enemy_node_segment_query_count,
 		"index_enemy_node_candidate_count": index_enemy_node_candidate_count,
+		"index_membership_journal_checks": index_membership_journal_checks,
+		"index_membership_journal_reuses": index_membership_journal_reuses,
+		"index_membership_journal_local_changes": index_membership_journal_local_changes,
+		"index_membership_journal_bounds_growth": index_membership_journal_bounds_growth,
+		"index_membership_journal_map_clear": index_membership_journal_map_clear,
+		"index_membership_journal_history_misses": index_membership_journal_history_misses,
+		"index_membership_journal_records_scanned": index_membership_journal_records_scanned,
+		"membership_journal_payload_bytes": _bucket_membership_journal.size() * 8,
 	}
 
 
@@ -726,14 +819,15 @@ func _move_entry_to(actor_runtime_id: int, new_bucket: Vector2i) -> void:
 	if entry.is_empty():
 		return
 	var runtime_map_id := int(entry.get("runtime_map_id", -1))
+	var old_bucket: Vector2i = entry.get("bucket_key", Vector2i.ZERO)
 	var node_ref: WeakRef = _take_bucket_ref(
 		runtime_map_id,
-		entry.get("bucket_key", Vector2i.ZERO),
+		old_bucket,
 		actor_runtime_id
 	)
 	entry["bucket_key"] = new_bucket
 	_bucket_set(runtime_map_id, new_bucket)[actor_runtime_id] = node_ref
-	bucket_membership_revision += 1
+	_record_bucket_membership_change(runtime_map_id, old_bucket, new_bucket, MEMBERSHIP_OLD_VALID | MEMBERSHIP_NEW_VALID)
 	index_bucket_change_count += 1
 
 
@@ -756,7 +850,7 @@ func _erase_entry(actor_runtime_id: int) -> void:
 	if map_buckets.is_empty():
 		_buckets.erase(runtime_map_id)
 	_entries.erase(actor_runtime_id)
-	bucket_membership_revision += 1
+	_record_bucket_membership_change(runtime_map_id, bucket_key, Vector2i.ZERO, MEMBERSHIP_OLD_VALID)
 	index_unregister_count += 1
 
 

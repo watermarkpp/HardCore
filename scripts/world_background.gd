@@ -1,6 +1,9 @@
 class_name WorldBackground
 extends Node2D
 
+const ActorFootprintQuery := preload("res://scripts/map_editor/polygon/actor_footprint_query.gd")
+var _actor_footprint_query := ActorFootprintQuery.new()
+
 const EnvironmentCatalogScript := preload("res://scripts/environment_catalog.gd")
 const MapCoordinateMapperScript := preload("res://scripts/map_coordinate_mapper.gd")
 const GothicBichCampBuilderScript := preload("res://scripts/layers/presentation/gothic_bich_camp_builder.gd")
@@ -389,8 +392,8 @@ func is_environment_actor_blocked(
 	if _editor_runtime_collision_snapshot.has("poly_index"):
 		if not is_finite(collision_radius_px) or collision_radius_px < 0.0:
 			return true
-		return HCPPolyRuntime.actor_world(_editor_runtime_collision_snapshot, center_world_px,
-			WorldSpatialRulesScript.actor_footprint_polygon_px(maxf(0.0, collision_radius_px)))
+		return _actor_footprint_query.blocked(
+			_editor_runtime_collision_snapshot, center_world_px, collision_radius_px)
 	if not center_world_px.is_finite():
 		return true
 	var sample_radius_px := maxf(0.0, collision_radius_px - 1.0)

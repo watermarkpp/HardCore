@@ -1,153 +1,153 @@
 {
 	"accounting": {
-		"atlas_commands": 128,
-		"legacy_commands": 8,
-		"shadow_chunk_commands": 0,
-		"total_commands": 136
+		"atlas_commands": 128.0,
+		"legacy_commands": 8.0,
+		"shadow_chunk_commands": 0.0,
+		"total_commands": 136.0
 	},
 	"atlas_command_indices": [
-		0,
-		27,
-		54,
-		70,
-		96,
-		121,
-		1,
-		28,
-		55,
-		68,
-		95,
-		120,
-		2,
-		29,
-		56,
-		73,
-		98,
-		123,
-		3,
-		31,
-		57,
-		72,
-		97,
-		122,
-		4,
-		32,
-		58,
-		76,
-		100,
-		125,
-		6,
-		33,
-		59,
-		74,
-		99,
-		124,
-		7,
-		34,
-		60,
-		78,
-		103,
-		127,
-		8,
-		37,
-		61,
-		77,
-		101,
-		126,
-		9,
-		38,
-		62,
-		80,
-		105,
-		129,
-		10,
-		39,
-		63,
-		79,
-		104,
-		128,
-		11,
-		40,
-		64,
-		82,
-		107,
-		131,
-		12,
-		41,
-		65,
-		81,
-		106,
-		130,
-		13,
-		42,
-		66,
-		84,
-		109,
-		133,
-		14,
-		43,
-		67,
-		83,
-		108,
-		132,
-		15,
-		44,
-		69,
-		86,
-		111,
-		135,
-		16,
-		45,
-		71,
-		85,
-		110,
-		134,
-		17,
-		46,
-		88,
-		113,
-		18,
-		47,
-		87,
-		112,
-		19,
-		48,
-		90,
-		115,
-		20,
-		49,
-		89,
-		114,
-		21,
-		50,
-		92,
-		117,
-		23,
-		51,
-		91,
-		116,
-		24,
-		52,
-		94,
-		119,
-		26,
-		53,
-		93,
-		118
+		0.0,
+		27.0,
+		54.0,
+		70.0,
+		96.0,
+		121.0,
+		1.0,
+		28.0,
+		55.0,
+		68.0,
+		95.0,
+		120.0,
+		2.0,
+		29.0,
+		56.0,
+		73.0,
+		98.0,
+		123.0,
+		3.0,
+		31.0,
+		57.0,
+		72.0,
+		97.0,
+		122.0,
+		4.0,
+		32.0,
+		58.0,
+		76.0,
+		100.0,
+		125.0,
+		6.0,
+		33.0,
+		59.0,
+		74.0,
+		99.0,
+		124.0,
+		7.0,
+		34.0,
+		60.0,
+		78.0,
+		103.0,
+		127.0,
+		8.0,
+		37.0,
+		61.0,
+		77.0,
+		101.0,
+		126.0,
+		9.0,
+		38.0,
+		62.0,
+		80.0,
+		105.0,
+		129.0,
+		10.0,
+		39.0,
+		63.0,
+		79.0,
+		104.0,
+		128.0,
+		11.0,
+		40.0,
+		64.0,
+		82.0,
+		107.0,
+		131.0,
+		12.0,
+		41.0,
+		65.0,
+		81.0,
+		106.0,
+		130.0,
+		13.0,
+		42.0,
+		66.0,
+		84.0,
+		109.0,
+		133.0,
+		14.0,
+		43.0,
+		67.0,
+		83.0,
+		108.0,
+		132.0,
+		15.0,
+		44.0,
+		69.0,
+		86.0,
+		111.0,
+		135.0,
+		16.0,
+		45.0,
+		71.0,
+		85.0,
+		110.0,
+		134.0,
+		17.0,
+		46.0,
+		88.0,
+		113.0,
+		18.0,
+		47.0,
+		87.0,
+		112.0,
+		19.0,
+		48.0,
+		90.0,
+		115.0,
+		20.0,
+		49.0,
+		89.0,
+		114.0,
+		21.0,
+		50.0,
+		92.0,
+		117.0,
+		23.0,
+		51.0,
+		91.0,
+		116.0,
+		24.0,
+		52.0,
+		94.0,
+		119.0,
+		26.0,
+		53.0,
+		93.0,
+		118.0
 	],
 	"atlas_entries": [
 		{
 			"command_indices": [
-				1,
-				28,
-				55,
-				68,
-				95,
-				120
+				1.0,
+				28.0,
+				55.0,
+				68.0,
+				95.0,
+				120.0
 			],
 			"composite_size": [
-				192,
-				272
+				192.0,
+				272.0
 			],
 			"group_keys": [
 				"wall_part:inst_000001:9:0",
@@ -160,59 +160,59 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						1
+						1.0
 					],
 					"group_key": "wall_part:inst_000001:9:0",
-					"representative_command_index": 1
+					"representative_command_index": 1.0
 				},
 				{
 					"command_indices": [
-						28
+						28.0
 					],
 					"group_key": "wall_part:inst_000004:15:0",
-					"representative_command_index": 28
+					"representative_command_index": 28.0
 				},
 				{
 					"command_indices": [
-						55
+						55.0
 					],
 					"group_key": "wall_part:inst_000007:21:0",
-					"representative_command_index": 55
+					"representative_command_index": 55.0
 				},
 				{
 					"command_indices": [
-						68
+						68.0
 					],
 					"group_key": "wall_part:inst_000009:24:0",
-					"representative_command_index": 68
+					"representative_command_index": 68.0
 				},
 				{
 					"command_indices": [
-						95
+						95.0
 					],
 					"group_key": "wall_part:inst_000012:30:0",
-					"representative_command_index": 95
+					"representative_command_index": 95.0
 				},
 				{
 					"command_indices": [
-						120
+						120.0
 					],
 					"group_key": "wall_part:inst_000015:36:0",
-					"representative_command_index": 120
+					"representative_command_index": 120.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-64.0, -184.0)",
 			"layers": [
 				{
-					"command_index": 1,
+					"command_index": 1.0,
 					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
 					"offset": [
 						-64.0,
 						-184.0
 					],
 					"size": [
-						192,
-						272
+						192.0,
+						272.0
 					]
 				}
 			],
@@ -220,26 +220,26 @@
 				-64.0,
 				-184.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				0,
-				0,
-				192,
-				272
+				0.0,
+				0.0,
+				192.0,
+				272.0
 			]
 		},
 		{
 			"command_indices": [
-				3,
-				31,
-				57,
-				72,
-				97,
-				122
+				3.0,
+				31.0,
+				57.0,
+				72.0,
+				97.0,
+				122.0
 			],
 			"composite_size": [
-				192,
-				272
+				192.0,
+				272.0
 			],
 			"group_keys": [
 				"wall_part:inst_000001:9:1",
@@ -252,59 +252,59 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						3
+						3.0
 					],
 					"group_key": "wall_part:inst_000001:9:1",
-					"representative_command_index": 3
+					"representative_command_index": 3.0
 				},
 				{
 					"command_indices": [
-						31
+						31.0
 					],
 					"group_key": "wall_part:inst_000004:15:1",
-					"representative_command_index": 31
+					"representative_command_index": 31.0
 				},
 				{
 					"command_indices": [
-						57
+						57.0
 					],
 					"group_key": "wall_part:inst_000007:21:1",
-					"representative_command_index": 57
+					"representative_command_index": 57.0
 				},
 				{
 					"command_indices": [
-						72
+						72.0
 					],
 					"group_key": "wall_part:inst_000009:24:1",
-					"representative_command_index": 72
+					"representative_command_index": 72.0
 				},
 				{
 					"command_indices": [
-						97
+						97.0
 					],
 					"group_key": "wall_part:inst_000012:30:1",
-					"representative_command_index": 97
+					"representative_command_index": 97.0
 				},
 				{
 					"command_indices": [
-						122
+						122.0
 					],
 					"group_key": "wall_part:inst_000015:36:1",
-					"representative_command_index": 122
+					"representative_command_index": 122.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-64.0, -184.0)",
 			"layers": [
 				{
-					"command_index": 3,
+					"command_index": 3.0,
 					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
 					"offset": [
 						-64.0,
 						-184.0
 					],
 					"size": [
-						192,
-						272
+						192.0,
+						272.0
 					]
 				}
 			],
@@ -312,26 +312,26 @@
 				-64.0,
 				-184.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				192,
-				0,
-				192,
-				272
+				192.0,
+				0.0,
+				192.0,
+				272.0
 			]
 		},
 		{
 			"command_indices": [
-				6,
-				33,
-				59,
-				74,
-				99,
-				124
+				6.0,
+				33.0,
+				59.0,
+				74.0,
+				99.0,
+				124.0
 			],
 			"composite_size": [
-				192,
-				272
+				192.0,
+				272.0
 			],
 			"group_keys": [
 				"wall_part:inst_000001:9:2",
@@ -344,59 +344,59 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						6
+						6.0
 					],
 					"group_key": "wall_part:inst_000001:9:2",
-					"representative_command_index": 6
+					"representative_command_index": 6.0
 				},
 				{
 					"command_indices": [
-						33
+						33.0
 					],
 					"group_key": "wall_part:inst_000004:15:2",
-					"representative_command_index": 33
+					"representative_command_index": 33.0
 				},
 				{
 					"command_indices": [
-						59
+						59.0
 					],
 					"group_key": "wall_part:inst_000007:21:2",
-					"representative_command_index": 59
+					"representative_command_index": 59.0
 				},
 				{
 					"command_indices": [
-						74
+						74.0
 					],
 					"group_key": "wall_part:inst_000009:24:2",
-					"representative_command_index": 74
+					"representative_command_index": 74.0
 				},
 				{
 					"command_indices": [
-						99
+						99.0
 					],
 					"group_key": "wall_part:inst_000012:30:2",
-					"representative_command_index": 99
+					"representative_command_index": 99.0
 				},
 				{
 					"command_indices": [
-						124
+						124.0
 					],
 					"group_key": "wall_part:inst_000015:36:2",
-					"representative_command_index": 124
+					"representative_command_index": 124.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-64.0, -184.0)",
 			"layers": [
 				{
-					"command_index": 6,
+					"command_index": 6.0,
 					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
 					"offset": [
 						-64.0,
 						-184.0
 					],
 					"size": [
-						192,
-						272
+						192.0,
+						272.0
 					]
 				}
 			],
@@ -404,26 +404,26 @@
 				-64.0,
 				-184.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				384,
-				0,
-				192,
-				272
+				384.0,
+				0.0,
+				192.0,
+				272.0
 			]
 		},
 		{
 			"command_indices": [
-				8,
-				37,
-				61,
-				77,
-				101,
-				126
+				8.0,
+				37.0,
+				61.0,
+				77.0,
+				101.0,
+				126.0
 			],
 			"composite_size": [
-				192,
-				272
+				192.0,
+				272.0
 			],
 			"group_keys": [
 				"wall_part:inst_000001:9:3",
@@ -436,59 +436,59 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						8
+						8.0
 					],
 					"group_key": "wall_part:inst_000001:9:3",
-					"representative_command_index": 8
+					"representative_command_index": 8.0
 				},
 				{
 					"command_indices": [
-						37
+						37.0
 					],
 					"group_key": "wall_part:inst_000004:15:3",
-					"representative_command_index": 37
+					"representative_command_index": 37.0
 				},
 				{
 					"command_indices": [
-						61
+						61.0
 					],
 					"group_key": "wall_part:inst_000007:21:3",
-					"representative_command_index": 61
+					"representative_command_index": 61.0
 				},
 				{
 					"command_indices": [
-						77
+						77.0
 					],
 					"group_key": "wall_part:inst_000009:24:3",
-					"representative_command_index": 77
+					"representative_command_index": 77.0
 				},
 				{
 					"command_indices": [
-						101
+						101.0
 					],
 					"group_key": "wall_part:inst_000012:30:3",
-					"representative_command_index": 101
+					"representative_command_index": 101.0
 				},
 				{
 					"command_indices": [
-						126
+						126.0
 					],
 					"group_key": "wall_part:inst_000015:36:3",
-					"representative_command_index": 126
+					"representative_command_index": 126.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-64.0, -184.0)",
 			"layers": [
 				{
-					"command_index": 8,
+					"command_index": 8.0,
 					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png",
 					"offset": [
 						-64.0,
 						-184.0
 					],
 					"size": [
-						192,
-						272
+						192.0,
+						272.0
 					]
 				}
 			],
@@ -496,26 +496,26 @@
 				-64.0,
 				-184.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				576,
-				0,
-				192,
-				272
+				576.0,
+				0.0,
+				192.0,
+				272.0
 			]
 		},
 		{
 			"command_indices": [
-				10,
-				39,
-				63,
-				79,
-				104,
-				128
+				10.0,
+				39.0,
+				63.0,
+				79.0,
+				104.0,
+				128.0
 			],
 			"composite_size": [
-				192,
-				272
+				192.0,
+				272.0
 			],
 			"group_keys": [
 				"wall_part:inst_000002:11:0",
@@ -528,59 +528,59 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						10
+						10.0
 					],
 					"group_key": "wall_part:inst_000002:11:0",
-					"representative_command_index": 10
+					"representative_command_index": 10.0
 				},
 				{
 					"command_indices": [
-						39
+						39.0
 					],
 					"group_key": "wall_part:inst_000005:17:0",
-					"representative_command_index": 39
+					"representative_command_index": 39.0
 				},
 				{
 					"command_indices": [
-						63
+						63.0
 					],
 					"group_key": "wall_part:inst_000008:23:0",
-					"representative_command_index": 63
+					"representative_command_index": 63.0
 				},
 				{
 					"command_indices": [
-						79
+						79.0
 					],
 					"group_key": "wall_part:inst_000010:26:0",
-					"representative_command_index": 79
+					"representative_command_index": 79.0
 				},
 				{
 					"command_indices": [
-						104
+						104.0
 					],
 					"group_key": "wall_part:inst_000013:32:0",
-					"representative_command_index": 104
+					"representative_command_index": 104.0
 				},
 				{
 					"command_indices": [
-						128
+						128.0
 					],
 					"group_key": "wall_part:inst_000016:38:0",
-					"representative_command_index": 128
+					"representative_command_index": 128.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-64.0, -184.0)",
 			"layers": [
 				{
-					"command_index": 10,
+					"command_index": 10.0,
 					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
 					"offset": [
 						-64.0,
 						-184.0
 					],
 					"size": [
-						192,
-						272
+						192.0,
+						272.0
 					]
 				}
 			],
@@ -588,26 +588,26 @@
 				-64.0,
 				-184.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				768,
-				0,
-				192,
-				272
+				768.0,
+				0.0,
+				192.0,
+				272.0
 			]
 		},
 		{
 			"command_indices": [
-				12,
-				41,
-				65,
-				81,
-				106,
-				130
+				12.0,
+				41.0,
+				65.0,
+				81.0,
+				106.0,
+				130.0
 			],
 			"composite_size": [
-				192,
-				272
+				192.0,
+				272.0
 			],
 			"group_keys": [
 				"wall_part:inst_000002:11:1",
@@ -620,59 +620,59 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						12
+						12.0
 					],
 					"group_key": "wall_part:inst_000002:11:1",
-					"representative_command_index": 12
+					"representative_command_index": 12.0
 				},
 				{
 					"command_indices": [
-						41
+						41.0
 					],
 					"group_key": "wall_part:inst_000005:17:1",
-					"representative_command_index": 41
+					"representative_command_index": 41.0
 				},
 				{
 					"command_indices": [
-						65
+						65.0
 					],
 					"group_key": "wall_part:inst_000008:23:1",
-					"representative_command_index": 65
+					"representative_command_index": 65.0
 				},
 				{
 					"command_indices": [
-						81
+						81.0
 					],
 					"group_key": "wall_part:inst_000010:26:1",
-					"representative_command_index": 81
+					"representative_command_index": 81.0
 				},
 				{
 					"command_indices": [
-						106
+						106.0
 					],
 					"group_key": "wall_part:inst_000013:32:1",
-					"representative_command_index": 106
+					"representative_command_index": 106.0
 				},
 				{
 					"command_indices": [
-						130
+						130.0
 					],
 					"group_key": "wall_part:inst_000016:38:1",
-					"representative_command_index": 130
+					"representative_command_index": 130.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-64.0, -184.0)",
 			"layers": [
 				{
-					"command_index": 12,
+					"command_index": 12.0,
 					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
 					"offset": [
 						-64.0,
 						-184.0
 					],
 					"size": [
-						192,
-						272
+						192.0,
+						272.0
 					]
 				}
 			],
@@ -680,26 +680,26 @@
 				-64.0,
 				-184.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				960,
-				0,
-				192,
-				272
+				960.0,
+				0.0,
+				192.0,
+				272.0
 			]
 		},
 		{
 			"command_indices": [
-				14,
-				43,
-				67,
-				83,
-				108,
-				132
+				14.0,
+				43.0,
+				67.0,
+				83.0,
+				108.0,
+				132.0
 			],
 			"composite_size": [
-				192,
-				272
+				192.0,
+				272.0
 			],
 			"group_keys": [
 				"wall_part:inst_000002:11:2",
@@ -712,59 +712,59 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						14
+						14.0
 					],
 					"group_key": "wall_part:inst_000002:11:2",
-					"representative_command_index": 14
+					"representative_command_index": 14.0
 				},
 				{
 					"command_indices": [
-						43
+						43.0
 					],
 					"group_key": "wall_part:inst_000005:17:2",
-					"representative_command_index": 43
+					"representative_command_index": 43.0
 				},
 				{
 					"command_indices": [
-						67
+						67.0
 					],
 					"group_key": "wall_part:inst_000008:23:2",
-					"representative_command_index": 67
+					"representative_command_index": 67.0
 				},
 				{
 					"command_indices": [
-						83
+						83.0
 					],
 					"group_key": "wall_part:inst_000010:26:2",
-					"representative_command_index": 83
+					"representative_command_index": 83.0
 				},
 				{
 					"command_indices": [
-						108
+						108.0
 					],
 					"group_key": "wall_part:inst_000013:32:2",
-					"representative_command_index": 108
+					"representative_command_index": 108.0
 				},
 				{
 					"command_indices": [
-						132
+						132.0
 					],
 					"group_key": "wall_part:inst_000016:38:2",
-					"representative_command_index": 132
+					"representative_command_index": 132.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-64.0, -184.0)",
 			"layers": [
 				{
-					"command_index": 14,
+					"command_index": 14.0,
 					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
 					"offset": [
 						-64.0,
 						-184.0
 					],
 					"size": [
-						192,
-						272
+						192.0,
+						272.0
 					]
 				}
 			],
@@ -772,26 +772,26 @@
 				-64.0,
 				-184.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				1152,
-				0,
-				192,
-				272
+				1152.0,
+				0.0,
+				192.0,
+				272.0
 			]
 		},
 		{
 			"command_indices": [
-				16,
-				45,
-				71,
-				85,
-				110,
-				134
+				16.0,
+				45.0,
+				71.0,
+				85.0,
+				110.0,
+				134.0
 			],
 			"composite_size": [
-				192,
-				272
+				192.0,
+				272.0
 			],
 			"group_keys": [
 				"wall_part:inst_000002:11:3",
@@ -804,59 +804,59 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						16
+						16.0
 					],
 					"group_key": "wall_part:inst_000002:11:3",
-					"representative_command_index": 16
+					"representative_command_index": 16.0
 				},
 				{
 					"command_indices": [
-						45
+						45.0
 					],
 					"group_key": "wall_part:inst_000005:17:3",
-					"representative_command_index": 45
+					"representative_command_index": 45.0
 				},
 				{
 					"command_indices": [
-						71
+						71.0
 					],
 					"group_key": "wall_part:inst_000008:23:3",
-					"representative_command_index": 71
+					"representative_command_index": 71.0
 				},
 				{
 					"command_indices": [
-						85
+						85.0
 					],
 					"group_key": "wall_part:inst_000010:26:3",
-					"representative_command_index": 85
+					"representative_command_index": 85.0
 				},
 				{
 					"command_indices": [
-						110
+						110.0
 					],
 					"group_key": "wall_part:inst_000013:32:3",
-					"representative_command_index": 110
+					"representative_command_index": 110.0
 				},
 				{
 					"command_indices": [
-						134
+						134.0
 					],
 					"group_key": "wall_part:inst_000016:38:3",
-					"representative_command_index": 134
+					"representative_command_index": 134.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-64.0, -184.0)",
 			"layers": [
 				{
-					"command_index": 16,
+					"command_index": 16.0,
 					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png",
 					"offset": [
 						-64.0,
 						-184.0
 					],
 					"size": [
-						192,
-						272
+						192.0,
+						272.0
 					]
 				}
 			],
@@ -864,24 +864,24 @@
 				-64.0,
 				-184.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				1344,
-				0,
-				192,
-				272
+				1344.0,
+				0.0,
+				192.0,
+				272.0
 			]
 		},
 		{
 			"command_indices": [
-				18,
-				47,
-				87,
-				112
+				18.0,
+				47.0,
+				87.0,
+				112.0
 			],
 			"composite_size": [
-				192,
-				272
+				192.0,
+				272.0
 			],
 			"group_keys": [
 				"wall_part:inst_000003:13:0",
@@ -892,45 +892,45 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						18
+						18.0
 					],
 					"group_key": "wall_part:inst_000003:13:0",
-					"representative_command_index": 18
+					"representative_command_index": 18.0
 				},
 				{
 					"command_indices": [
-						47
+						47.0
 					],
 					"group_key": "wall_part:inst_000006:19:0",
-					"representative_command_index": 47
+					"representative_command_index": 47.0
 				},
 				{
 					"command_indices": [
-						87
+						87.0
 					],
 					"group_key": "wall_part:inst_000011:28:0",
-					"representative_command_index": 87
+					"representative_command_index": 87.0
 				},
 				{
 					"command_indices": [
-						112
+						112.0
 					],
 					"group_key": "wall_part:inst_000014:34:0",
-					"representative_command_index": 112
+					"representative_command_index": 112.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-64.0, -184.0)",
 			"layers": [
 				{
-					"command_index": 18,
+					"command_index": 18.0,
 					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
 					"offset": [
 						-64.0,
 						-184.0
 					],
 					"size": [
-						192,
-						272
+						192.0,
+						272.0
 					]
 				}
 			],
@@ -938,24 +938,24 @@
 				-64.0,
 				-184.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				1536,
-				0,
-				192,
-				272
+				1536.0,
+				0.0,
+				192.0,
+				272.0
 			]
 		},
 		{
 			"command_indices": [
-				20,
-				49,
-				89,
-				114
+				20.0,
+				49.0,
+				89.0,
+				114.0
 			],
 			"composite_size": [
-				192,
-				272
+				192.0,
+				272.0
 			],
 			"group_keys": [
 				"wall_part:inst_000003:13:1",
@@ -966,45 +966,45 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						20
+						20.0
 					],
 					"group_key": "wall_part:inst_000003:13:1",
-					"representative_command_index": 20
+					"representative_command_index": 20.0
 				},
 				{
 					"command_indices": [
-						49
+						49.0
 					],
 					"group_key": "wall_part:inst_000006:19:1",
-					"representative_command_index": 49
+					"representative_command_index": 49.0
 				},
 				{
 					"command_indices": [
-						89
+						89.0
 					],
 					"group_key": "wall_part:inst_000011:28:1",
-					"representative_command_index": 89
+					"representative_command_index": 89.0
 				},
 				{
 					"command_indices": [
-						114
+						114.0
 					],
 					"group_key": "wall_part:inst_000014:34:1",
-					"representative_command_index": 114
+					"representative_command_index": 114.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-64.0, -184.0)",
 			"layers": [
 				{
-					"command_index": 20,
+					"command_index": 20.0,
 					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
 					"offset": [
 						-64.0,
 						-184.0
 					],
 					"size": [
-						192,
-						272
+						192.0,
+						272.0
 					]
 				}
 			],
@@ -1012,24 +1012,24 @@
 				-64.0,
 				-184.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				1728,
-				0,
-				192,
-				272
+				1728.0,
+				0.0,
+				192.0,
+				272.0
 			]
 		},
 		{
 			"command_indices": [
-				23,
-				51,
-				91,
-				116
+				23.0,
+				51.0,
+				91.0,
+				116.0
 			],
 			"composite_size": [
-				192,
-				272
+				192.0,
+				272.0
 			],
 			"group_keys": [
 				"wall_part:inst_000003:13:2",
@@ -1040,45 +1040,45 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						23
+						23.0
 					],
 					"group_key": "wall_part:inst_000003:13:2",
-					"representative_command_index": 23
+					"representative_command_index": 23.0
 				},
 				{
 					"command_indices": [
-						51
+						51.0
 					],
 					"group_key": "wall_part:inst_000006:19:2",
-					"representative_command_index": 51
+					"representative_command_index": 51.0
 				},
 				{
 					"command_indices": [
-						91
+						91.0
 					],
 					"group_key": "wall_part:inst_000011:28:2",
-					"representative_command_index": 91
+					"representative_command_index": 91.0
 				},
 				{
 					"command_indices": [
-						116
+						116.0
 					],
 					"group_key": "wall_part:inst_000014:34:2",
-					"representative_command_index": 116
+					"representative_command_index": 116.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-64.0, -184.0)",
 			"layers": [
 				{
-					"command_index": 23,
+					"command_index": 23.0,
 					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
 					"offset": [
 						-64.0,
 						-184.0
 					],
 					"size": [
-						192,
-						272
+						192.0,
+						272.0
 					]
 				}
 			],
@@ -1086,24 +1086,24 @@
 				-64.0,
 				-184.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				0,
-				272,
-				192,
-				272
+				0.0,
+				272.0,
+				192.0,
+				272.0
 			]
 		},
 		{
 			"command_indices": [
-				26,
-				53,
-				93,
-				118
+				26.0,
+				53.0,
+				93.0,
+				118.0
 			],
 			"composite_size": [
-				192,
-				272
+				192.0,
+				272.0
 			],
 			"group_keys": [
 				"wall_part:inst_000003:13:3",
@@ -1114,45 +1114,45 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						26
+						26.0
 					],
 					"group_key": "wall_part:inst_000003:13:3",
-					"representative_command_index": 26
+					"representative_command_index": 26.0
 				},
 				{
 					"command_indices": [
-						53
+						53.0
 					],
 					"group_key": "wall_part:inst_000006:19:3",
-					"representative_command_index": 53
+					"representative_command_index": 53.0
 				},
 				{
 					"command_indices": [
-						93
+						93.0
 					],
 					"group_key": "wall_part:inst_000011:28:3",
-					"representative_command_index": 93
+					"representative_command_index": 93.0
 				},
 				{
 					"command_indices": [
-						118
+						118.0
 					],
 					"group_key": "wall_part:inst_000014:34:3",
-					"representative_command_index": 118
+					"representative_command_index": 118.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-64.0, -184.0)",
 			"layers": [
 				{
-					"command_index": 26,
+					"command_index": 26.0,
 					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png",
 					"offset": [
 						-64.0,
 						-184.0
 					],
 					"size": [
-						192,
-						272
+						192.0,
+						272.0
 					]
 				}
 			],
@@ -1160,26 +1160,26 @@
 				-64.0,
 				-184.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				192,
-				272,
-				192,
-				272
+				192.0,
+				272.0,
+				192.0,
+				272.0
 			]
 		},
 		{
 			"command_indices": [
-				0,
-				27,
-				54,
-				70,
-				96,
-				121
+				0.0,
+				27.0,
+				54.0,
+				70.0,
+				96.0,
+				121.0
 			],
 			"composite_size": [
-				192,
-				272
+				192.0,
+				272.0
 			],
 			"group_keys": [
 				"wall_part:inst_000017:8:0",
@@ -1192,59 +1192,59 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						0
+						0.0
 					],
 					"group_key": "wall_part:inst_000017:8:0",
-					"representative_command_index": 0
+					"representative_command_index": 0.0
 				},
 				{
 					"command_indices": [
-						27
+						27.0
 					],
 					"group_key": "wall_part:inst_000020:14:0",
-					"representative_command_index": 27
+					"representative_command_index": 27.0
 				},
 				{
 					"command_indices": [
-						54
+						54.0
 					],
 					"group_key": "wall_part:inst_000023:20:0",
-					"representative_command_index": 54
+					"representative_command_index": 54.0
 				},
 				{
 					"command_indices": [
-						70
+						70.0
 					],
 					"group_key": "wall_part:inst_000025:25:0",
-					"representative_command_index": 70
+					"representative_command_index": 70.0
 				},
 				{
 					"command_indices": [
-						96
+						96.0
 					],
 					"group_key": "wall_part:inst_000028:31:0",
-					"representative_command_index": 96
+					"representative_command_index": 96.0
 				},
 				{
 					"command_indices": [
-						121
+						121.0
 					],
 					"group_key": "wall_part:inst_000031:37:0",
-					"representative_command_index": 121
+					"representative_command_index": 121.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-128.0, -184.0)",
 			"layers": [
 				{
-					"command_index": 0,
+					"command_index": 0.0,
 					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
 					"offset": [
 						-128.0,
 						-184.0
 					],
 					"size": [
-						192,
-						272
+						192.0,
+						272.0
 					]
 				}
 			],
@@ -1252,26 +1252,26 @@
 				-128.0,
 				-184.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				384,
-				272,
-				192,
-				272
+				384.0,
+				272.0,
+				192.0,
+				272.0
 			]
 		},
 		{
 			"command_indices": [
-				2,
-				29,
-				56,
-				73,
-				98,
-				123
+				2.0,
+				29.0,
+				56.0,
+				73.0,
+				98.0,
+				123.0
 			],
 			"composite_size": [
-				192,
-				272
+				192.0,
+				272.0
 			],
 			"group_keys": [
 				"wall_part:inst_000017:8:1",
@@ -1284,59 +1284,59 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						2
+						2.0
 					],
 					"group_key": "wall_part:inst_000017:8:1",
-					"representative_command_index": 2
+					"representative_command_index": 2.0
 				},
 				{
 					"command_indices": [
-						29
+						29.0
 					],
 					"group_key": "wall_part:inst_000020:14:1",
-					"representative_command_index": 29
+					"representative_command_index": 29.0
 				},
 				{
 					"command_indices": [
-						56
+						56.0
 					],
 					"group_key": "wall_part:inst_000023:20:1",
-					"representative_command_index": 56
+					"representative_command_index": 56.0
 				},
 				{
 					"command_indices": [
-						73
+						73.0
 					],
 					"group_key": "wall_part:inst_000025:25:1",
-					"representative_command_index": 73
+					"representative_command_index": 73.0
 				},
 				{
 					"command_indices": [
-						98
+						98.0
 					],
 					"group_key": "wall_part:inst_000028:31:1",
-					"representative_command_index": 98
+					"representative_command_index": 98.0
 				},
 				{
 					"command_indices": [
-						123
+						123.0
 					],
 					"group_key": "wall_part:inst_000031:37:1",
-					"representative_command_index": 123
+					"representative_command_index": 123.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-128.0, -184.0)",
 			"layers": [
 				{
-					"command_index": 2,
+					"command_index": 2.0,
 					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
 					"offset": [
 						-128.0,
 						-184.0
 					],
 					"size": [
-						192,
-						272
+						192.0,
+						272.0
 					]
 				}
 			],
@@ -1344,26 +1344,26 @@
 				-128.0,
 				-184.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				576,
-				272,
-				192,
-				272
+				576.0,
+				272.0,
+				192.0,
+				272.0
 			]
 		},
 		{
 			"command_indices": [
-				4,
-				32,
-				58,
-				76,
-				100,
-				125
+				4.0,
+				32.0,
+				58.0,
+				76.0,
+				100.0,
+				125.0
 			],
 			"composite_size": [
-				192,
-				272
+				192.0,
+				272.0
 			],
 			"group_keys": [
 				"wall_part:inst_000017:8:2",
@@ -1376,59 +1376,59 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						4
+						4.0
 					],
 					"group_key": "wall_part:inst_000017:8:2",
-					"representative_command_index": 4
+					"representative_command_index": 4.0
 				},
 				{
 					"command_indices": [
-						32
+						32.0
 					],
 					"group_key": "wall_part:inst_000020:14:2",
-					"representative_command_index": 32
+					"representative_command_index": 32.0
 				},
 				{
 					"command_indices": [
-						58
+						58.0
 					],
 					"group_key": "wall_part:inst_000023:20:2",
-					"representative_command_index": 58
+					"representative_command_index": 58.0
 				},
 				{
 					"command_indices": [
-						76
+						76.0
 					],
 					"group_key": "wall_part:inst_000025:25:2",
-					"representative_command_index": 76
+					"representative_command_index": 76.0
 				},
 				{
 					"command_indices": [
-						100
+						100.0
 					],
 					"group_key": "wall_part:inst_000028:31:2",
-					"representative_command_index": 100
+					"representative_command_index": 100.0
 				},
 				{
 					"command_indices": [
-						125
+						125.0
 					],
 					"group_key": "wall_part:inst_000031:37:2",
-					"representative_command_index": 125
+					"representative_command_index": 125.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-128.0, -184.0)",
 			"layers": [
 				{
-					"command_index": 4,
+					"command_index": 4.0,
 					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
 					"offset": [
 						-128.0,
 						-184.0
 					],
 					"size": [
-						192,
-						272
+						192.0,
+						272.0
 					]
 				}
 			],
@@ -1436,26 +1436,26 @@
 				-128.0,
 				-184.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				768,
-				272,
-				192,
-				272
+				768.0,
+				272.0,
+				192.0,
+				272.0
 			]
 		},
 		{
 			"command_indices": [
-				7,
-				34,
-				60,
-				78,
-				103,
-				127
+				7.0,
+				34.0,
+				60.0,
+				78.0,
+				103.0,
+				127.0
 			],
 			"composite_size": [
-				192,
-				272
+				192.0,
+				272.0
 			],
 			"group_keys": [
 				"wall_part:inst_000017:8:3",
@@ -1468,59 +1468,59 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						7
+						7.0
 					],
 					"group_key": "wall_part:inst_000017:8:3",
-					"representative_command_index": 7
+					"representative_command_index": 7.0
 				},
 				{
 					"command_indices": [
-						34
+						34.0
 					],
 					"group_key": "wall_part:inst_000020:14:3",
-					"representative_command_index": 34
+					"representative_command_index": 34.0
 				},
 				{
 					"command_indices": [
-						60
+						60.0
 					],
 					"group_key": "wall_part:inst_000023:20:3",
-					"representative_command_index": 60
+					"representative_command_index": 60.0
 				},
 				{
 					"command_indices": [
-						78
+						78.0
 					],
 					"group_key": "wall_part:inst_000025:25:3",
-					"representative_command_index": 78
+					"representative_command_index": 78.0
 				},
 				{
 					"command_indices": [
-						103
+						103.0
 					],
 					"group_key": "wall_part:inst_000028:31:3",
-					"representative_command_index": 103
+					"representative_command_index": 103.0
 				},
 				{
 					"command_indices": [
-						127
+						127.0
 					],
 					"group_key": "wall_part:inst_000031:37:3",
-					"representative_command_index": 127
+					"representative_command_index": 127.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-128.0, -184.0)",
 			"layers": [
 				{
-					"command_index": 7,
+					"command_index": 7.0,
 					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png",
 					"offset": [
 						-128.0,
 						-184.0
 					],
 					"size": [
-						192,
-						272
+						192.0,
+						272.0
 					]
 				}
 			],
@@ -1528,26 +1528,26 @@
 				-128.0,
 				-184.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				960,
-				272,
-				192,
-				272
+				960.0,
+				272.0,
+				192.0,
+				272.0
 			]
 		},
 		{
 			"command_indices": [
-				9,
-				38,
-				62,
-				80,
-				105,
-				129
+				9.0,
+				38.0,
+				62.0,
+				80.0,
+				105.0,
+				129.0
 			],
 			"composite_size": [
-				192,
-				272
+				192.0,
+				272.0
 			],
 			"group_keys": [
 				"wall_part:inst_000018:10:0",
@@ -1560,59 +1560,59 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						9
+						9.0
 					],
 					"group_key": "wall_part:inst_000018:10:0",
-					"representative_command_index": 9
+					"representative_command_index": 9.0
 				},
 				{
 					"command_indices": [
-						38
+						38.0
 					],
 					"group_key": "wall_part:inst_000021:16:0",
-					"representative_command_index": 38
+					"representative_command_index": 38.0
 				},
 				{
 					"command_indices": [
-						62
+						62.0
 					],
 					"group_key": "wall_part:inst_000024:22:0",
-					"representative_command_index": 62
+					"representative_command_index": 62.0
 				},
 				{
 					"command_indices": [
-						80
+						80.0
 					],
 					"group_key": "wall_part:inst_000026:27:0",
-					"representative_command_index": 80
+					"representative_command_index": 80.0
 				},
 				{
 					"command_indices": [
-						105
+						105.0
 					],
 					"group_key": "wall_part:inst_000029:33:0",
-					"representative_command_index": 105
+					"representative_command_index": 105.0
 				},
 				{
 					"command_indices": [
-						129
+						129.0
 					],
 					"group_key": "wall_part:inst_000032:39:0",
-					"representative_command_index": 129
+					"representative_command_index": 129.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-128.0, -184.0)",
 			"layers": [
 				{
-					"command_index": 9,
+					"command_index": 9.0,
 					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
 					"offset": [
 						-128.0,
 						-184.0
 					],
 					"size": [
-						192,
-						272
+						192.0,
+						272.0
 					]
 				}
 			],
@@ -1620,26 +1620,26 @@
 				-128.0,
 				-184.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				1152,
-				272,
-				192,
-				272
+				1152.0,
+				272.0,
+				192.0,
+				272.0
 			]
 		},
 		{
 			"command_indices": [
-				11,
-				40,
-				64,
-				82,
-				107,
-				131
+				11.0,
+				40.0,
+				64.0,
+				82.0,
+				107.0,
+				131.0
 			],
 			"composite_size": [
-				192,
-				272
+				192.0,
+				272.0
 			],
 			"group_keys": [
 				"wall_part:inst_000018:10:1",
@@ -1652,59 +1652,59 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						11
+						11.0
 					],
 					"group_key": "wall_part:inst_000018:10:1",
-					"representative_command_index": 11
+					"representative_command_index": 11.0
 				},
 				{
 					"command_indices": [
-						40
+						40.0
 					],
 					"group_key": "wall_part:inst_000021:16:1",
-					"representative_command_index": 40
+					"representative_command_index": 40.0
 				},
 				{
 					"command_indices": [
-						64
+						64.0
 					],
 					"group_key": "wall_part:inst_000024:22:1",
-					"representative_command_index": 64
+					"representative_command_index": 64.0
 				},
 				{
 					"command_indices": [
-						82
+						82.0
 					],
 					"group_key": "wall_part:inst_000026:27:1",
-					"representative_command_index": 82
+					"representative_command_index": 82.0
 				},
 				{
 					"command_indices": [
-						107
+						107.0
 					],
 					"group_key": "wall_part:inst_000029:33:1",
-					"representative_command_index": 107
+					"representative_command_index": 107.0
 				},
 				{
 					"command_indices": [
-						131
+						131.0
 					],
 					"group_key": "wall_part:inst_000032:39:1",
-					"representative_command_index": 131
+					"representative_command_index": 131.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-128.0, -184.0)",
 			"layers": [
 				{
-					"command_index": 11,
+					"command_index": 11.0,
 					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
 					"offset": [
 						-128.0,
 						-184.0
 					],
 					"size": [
-						192,
-						272
+						192.0,
+						272.0
 					]
 				}
 			],
@@ -1712,26 +1712,26 @@
 				-128.0,
 				-184.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				1344,
-				272,
-				192,
-				272
+				1344.0,
+				272.0,
+				192.0,
+				272.0
 			]
 		},
 		{
 			"command_indices": [
-				13,
-				42,
-				66,
-				84,
-				109,
-				133
+				13.0,
+				42.0,
+				66.0,
+				84.0,
+				109.0,
+				133.0
 			],
 			"composite_size": [
-				192,
-				272
+				192.0,
+				272.0
 			],
 			"group_keys": [
 				"wall_part:inst_000018:10:2",
@@ -1744,59 +1744,59 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						13
+						13.0
 					],
 					"group_key": "wall_part:inst_000018:10:2",
-					"representative_command_index": 13
+					"representative_command_index": 13.0
 				},
 				{
 					"command_indices": [
-						42
+						42.0
 					],
 					"group_key": "wall_part:inst_000021:16:2",
-					"representative_command_index": 42
+					"representative_command_index": 42.0
 				},
 				{
 					"command_indices": [
-						66
+						66.0
 					],
 					"group_key": "wall_part:inst_000024:22:2",
-					"representative_command_index": 66
+					"representative_command_index": 66.0
 				},
 				{
 					"command_indices": [
-						84
+						84.0
 					],
 					"group_key": "wall_part:inst_000026:27:2",
-					"representative_command_index": 84
+					"representative_command_index": 84.0
 				},
 				{
 					"command_indices": [
-						109
+						109.0
 					],
 					"group_key": "wall_part:inst_000029:33:2",
-					"representative_command_index": 109
+					"representative_command_index": 109.0
 				},
 				{
 					"command_indices": [
-						133
+						133.0
 					],
 					"group_key": "wall_part:inst_000032:39:2",
-					"representative_command_index": 133
+					"representative_command_index": 133.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-128.0, -184.0)",
 			"layers": [
 				{
-					"command_index": 13,
+					"command_index": 13.0,
 					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
 					"offset": [
 						-128.0,
 						-184.0
 					],
 					"size": [
-						192,
-						272
+						192.0,
+						272.0
 					]
 				}
 			],
@@ -1804,26 +1804,26 @@
 				-128.0,
 				-184.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				1536,
-				272,
-				192,
-				272
+				1536.0,
+				272.0,
+				192.0,
+				272.0
 			]
 		},
 		{
 			"command_indices": [
-				15,
-				44,
-				69,
-				86,
-				111,
-				135
+				15.0,
+				44.0,
+				69.0,
+				86.0,
+				111.0,
+				135.0
 			],
 			"composite_size": [
-				192,
-				272
+				192.0,
+				272.0
 			],
 			"group_keys": [
 				"wall_part:inst_000018:10:3",
@@ -1836,59 +1836,59 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						15
+						15.0
 					],
 					"group_key": "wall_part:inst_000018:10:3",
-					"representative_command_index": 15
+					"representative_command_index": 15.0
 				},
 				{
 					"command_indices": [
-						44
+						44.0
 					],
 					"group_key": "wall_part:inst_000021:16:3",
-					"representative_command_index": 44
+					"representative_command_index": 44.0
 				},
 				{
 					"command_indices": [
-						69
+						69.0
 					],
 					"group_key": "wall_part:inst_000024:22:3",
-					"representative_command_index": 69
+					"representative_command_index": 69.0
 				},
 				{
 					"command_indices": [
-						86
+						86.0
 					],
 					"group_key": "wall_part:inst_000026:27:3",
-					"representative_command_index": 86
+					"representative_command_index": 86.0
 				},
 				{
 					"command_indices": [
-						111
+						111.0
 					],
 					"group_key": "wall_part:inst_000029:33:3",
-					"representative_command_index": 111
+					"representative_command_index": 111.0
 				},
 				{
 					"command_indices": [
-						135
+						135.0
 					],
 					"group_key": "wall_part:inst_000032:39:3",
-					"representative_command_index": 135
+					"representative_command_index": 135.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-128.0, -184.0)",
 			"layers": [
 				{
-					"command_index": 15,
+					"command_index": 15.0,
 					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png",
 					"offset": [
 						-128.0,
 						-184.0
 					],
 					"size": [
-						192,
-						272
+						192.0,
+						272.0
 					]
 				}
 			],
@@ -1896,24 +1896,24 @@
 				-128.0,
 				-184.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				1728,
-				272,
-				192,
-				272
+				1728.0,
+				272.0,
+				192.0,
+				272.0
 			]
 		},
 		{
 			"command_indices": [
-				17,
-				46,
-				88,
-				113
+				17.0,
+				46.0,
+				88.0,
+				113.0
 			],
 			"composite_size": [
-				192,
-				272
+				192.0,
+				272.0
 			],
 			"group_keys": [
 				"wall_part:inst_000019:12:0",
@@ -1924,45 +1924,45 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						17
+						17.0
 					],
 					"group_key": "wall_part:inst_000019:12:0",
-					"representative_command_index": 17
+					"representative_command_index": 17.0
 				},
 				{
 					"command_indices": [
-						46
+						46.0
 					],
 					"group_key": "wall_part:inst_000022:18:0",
-					"representative_command_index": 46
+					"representative_command_index": 46.0
 				},
 				{
 					"command_indices": [
-						88
+						88.0
 					],
 					"group_key": "wall_part:inst_000027:29:0",
-					"representative_command_index": 88
+					"representative_command_index": 88.0
 				},
 				{
 					"command_indices": [
-						113
+						113.0
 					],
 					"group_key": "wall_part:inst_000030:35:0",
-					"representative_command_index": 113
+					"representative_command_index": 113.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-128.0, -184.0)",
 			"layers": [
 				{
-					"command_index": 17,
+					"command_index": 17.0,
 					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
 					"offset": [
 						-128.0,
 						-184.0
 					],
 					"size": [
-						192,
-						272
+						192.0,
+						272.0
 					]
 				}
 			],
@@ -1970,24 +1970,24 @@
 				-128.0,
 				-184.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				0,
-				544,
-				192,
-				272
+				0.0,
+				544.0,
+				192.0,
+				272.0
 			]
 		},
 		{
 			"command_indices": [
-				19,
-				48,
-				90,
-				115
+				19.0,
+				48.0,
+				90.0,
+				115.0
 			],
 			"composite_size": [
-				192,
-				272
+				192.0,
+				272.0
 			],
 			"group_keys": [
 				"wall_part:inst_000019:12:1",
@@ -1998,45 +1998,45 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						19
+						19.0
 					],
 					"group_key": "wall_part:inst_000019:12:1",
-					"representative_command_index": 19
+					"representative_command_index": 19.0
 				},
 				{
 					"command_indices": [
-						48
+						48.0
 					],
 					"group_key": "wall_part:inst_000022:18:1",
-					"representative_command_index": 48
+					"representative_command_index": 48.0
 				},
 				{
 					"command_indices": [
-						90
+						90.0
 					],
 					"group_key": "wall_part:inst_000027:29:1",
-					"representative_command_index": 90
+					"representative_command_index": 90.0
 				},
 				{
 					"command_indices": [
-						115
+						115.0
 					],
 					"group_key": "wall_part:inst_000030:35:1",
-					"representative_command_index": 115
+					"representative_command_index": 115.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-128.0, -184.0)",
 			"layers": [
 				{
-					"command_index": 19,
+					"command_index": 19.0,
 					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
 					"offset": [
 						-128.0,
 						-184.0
 					],
 					"size": [
-						192,
-						272
+						192.0,
+						272.0
 					]
 				}
 			],
@@ -2044,24 +2044,24 @@
 				-128.0,
 				-184.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				192,
-				544,
-				192,
-				272
+				192.0,
+				544.0,
+				192.0,
+				272.0
 			]
 		},
 		{
 			"command_indices": [
-				21,
-				50,
-				92,
-				117
+				21.0,
+				50.0,
+				92.0,
+				117.0
 			],
 			"composite_size": [
-				192,
-				272
+				192.0,
+				272.0
 			],
 			"group_keys": [
 				"wall_part:inst_000019:12:2",
@@ -2072,45 +2072,45 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						21
+						21.0
 					],
 					"group_key": "wall_part:inst_000019:12:2",
-					"representative_command_index": 21
+					"representative_command_index": 21.0
 				},
 				{
 					"command_indices": [
-						50
+						50.0
 					],
 					"group_key": "wall_part:inst_000022:18:2",
-					"representative_command_index": 50
+					"representative_command_index": 50.0
 				},
 				{
 					"command_indices": [
-						92
+						92.0
 					],
 					"group_key": "wall_part:inst_000027:29:2",
-					"representative_command_index": 92
+					"representative_command_index": 92.0
 				},
 				{
 					"command_indices": [
-						117
+						117.0
 					],
 					"group_key": "wall_part:inst_000030:35:2",
-					"representative_command_index": 117
+					"representative_command_index": 117.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-128.0, -184.0)",
 			"layers": [
 				{
-					"command_index": 21,
+					"command_index": 21.0,
 					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
 					"offset": [
 						-128.0,
 						-184.0
 					],
 					"size": [
-						192,
-						272
+						192.0,
+						272.0
 					]
 				}
 			],
@@ -2118,24 +2118,24 @@
 				-128.0,
 				-184.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				384,
-				544,
-				192,
-				272
+				384.0,
+				544.0,
+				192.0,
+				272.0
 			]
 		},
 		{
 			"command_indices": [
-				24,
-				52,
-				94,
-				119
+				24.0,
+				52.0,
+				94.0,
+				119.0
 			],
 			"composite_size": [
-				192,
-				272
+				192.0,
+				272.0
 			],
 			"group_keys": [
 				"wall_part:inst_000019:12:3",
@@ -2146,45 +2146,45 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						24
+						24.0
 					],
 					"group_key": "wall_part:inst_000019:12:3",
-					"representative_command_index": 24
+					"representative_command_index": 24.0
 				},
 				{
 					"command_indices": [
-						52
+						52.0
 					],
 					"group_key": "wall_part:inst_000022:18:3",
-					"representative_command_index": 52
+					"representative_command_index": 52.0
 				},
 				{
 					"command_indices": [
-						94
+						94.0
 					],
 					"group_key": "wall_part:inst_000027:29:3",
-					"representative_command_index": 94
+					"representative_command_index": 94.0
 				},
 				{
 					"command_indices": [
-						119
+						119.0
 					],
 					"group_key": "wall_part:inst_000030:35:3",
-					"representative_command_index": 119
+					"representative_command_index": 119.0
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png@(-128.0, -184.0)",
 			"layers": [
 				{
-					"command_index": 24,
+					"command_index": 24.0,
 					"image_path": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png",
 					"offset": [
 						-128.0,
 						-184.0
 					],
 					"size": [
-						192,
-						272
+						192.0,
+						272.0
 					]
 				}
 			],
@@ -2192,44 +2192,44 @@
 				-128.0,
 				-184.0
 			],
-			"page": 0,
+			"page": 0.0,
 			"region": [
-				576,
-				544,
-				192,
-				272
+				576.0,
+				544.0,
+				192.0,
+				272.0
 			]
 		}
 	],
 	"atlas_page_heights": [
-		816
+		816.0
 	],
 	"atlas_pages": [
 		{
-			"height": 816,
-			"page_index": 0,
+			"height": 816.0,
+			"page_index": 0.0,
 			"path": "assets/data/runtime/map_editor/wall_render_store/aaecaddb41b238fc6f559efd41f30f9ad5ac8ce091f190bd92515336fc2d8d99.png",
-			"png_bytes": 428011,
+			"png_bytes": 428011.0,
 			"sha256": "aaecaddb41b238fc6f559efd41f30f9ad5ac8ce091f190bd92515336fc2d8d99",
-			"width": 2048
+			"width": 2048.0
 		}
 	],
-	"compiler_version": 2,
+	"compiler_version": 2.0,
 	"contract_id": "hardcore.wall_render_plan.v1",
 	"design_size": [
-		32,
-		32
+		32.0,
+		32.0
 	],
 	"ground_coordinate_contract_id": "isometric_cell_center_64x32_v2",
 	"legacy_command_indices": [
-		5,
-		22,
-		25,
-		30,
-		35,
-		36,
-		75,
-		102
+		5.0,
+		22.0,
+		25.0,
+		30.0,
+		35.0,
+		36.0,
+		75.0,
+		102.0
 	],
 	"map_key": "chiyue_red_moon_lair",
 	"shadow_chunk_command_indices": [],
@@ -2262,6 +2262,6 @@
 		"assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png": "138ed9e2e0d753cd2380bce3bcf6d8481938728536304181bffe84e7548cea5a",
 		"assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png": "90eb2ccdf4278efa8b7099c4ad40caa8839ae1cbe3175faf1a6517193c237cc4"
 	},
-	"source_runtime_json_sha256": "0e910bfb02464d067d4714f19d565ea01a2aca0a070f6f86366c322a7e4fcf38",
+	"source_runtime_json_sha256": "4bdb273dae5335c3539cfc7a07bec83ef4a6e69a657280cb21ec8ca705a025e0",
 	"visual_geometry_contract_id": "map_editor_runtime_visual_geometry_v6"
 }

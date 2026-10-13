@@ -3307,10 +3307,15 @@ func _physics_process_internal(delta: float) -> void:
 	if not is_instance_valid(target):
 		_hold_pursuit_at_current_position()
 		return
-	var offset_px := target.global_position - global_position
-	var offset_ground_gu := GroundUnitSpace.screen_delta_px_to_ground_delta_gu(offset_px)
-	var distance_gu := offset_ground_gu.length()
-	if _burrowed:
+	# Standard melee reads its own current distance after the action gates.
+	# Keep the pre-emerge value only for paths that actually consume it.
+	var had_burrow_distance := _burrowed
+	var offset_ground_gu := Vector2.ZERO
+	var distance_gu := 0.0
+	if had_burrow_distance:
+		var offset_px := target.global_position - global_position
+		offset_ground_gu = GroundUnitSpace.screen_delta_px_to_ground_delta_gu(offset_px)
+		distance_gu = offset_ground_gu.length()
 		var burrow: Dictionary = boss_rule.get("mechanics", {}).get("burrowAmbush", {})
 		var emerge_range_gu := MonsterUnitAdapterScript.range_gu(
 			burrow,
@@ -3338,6 +3343,10 @@ func _physics_process_internal(delta: float) -> void:
 		_request_actor_redraw_if_dynamic()
 		return
 	_residual_phase_probe_begin("other_special_plan")
+	if not had_burrow_distance:
+		var offset_px := target.global_position - global_position
+		offset_ground_gu = GroundUnitSpace.screen_delta_px_to_ground_delta_gu(offset_px)
+		distance_gu = offset_ground_gu.length()
 	if _movement_step_active:
 		_advance_autonomous_step(physics_delta)
 		if _movement_step_active:
@@ -9068,10 +9077,11 @@ func _request_actor_redraw_if_dynamic() -> void:
 ## remains outside this file; this probe covers only redraw work requested by
 ## EnemyActor physics/state transitions.
 func _request_actor_redraw_if_dynamic_internal() -> void:
-	var has_formal_visual := visual != null and visual.uses_final_art()
+	if visual != null and visual.uses_final_art():
+		return
 	var draws_procedural_fallback := should_draw_synthetic_ground_shadow()
 	var fallback_attack_active := visual != null and visual.is_fallback_attacking()
-	if has_formal_visual or (not draws_procedural_fallback and not fallback_attack_active):
+	if not draws_procedural_fallback and not fallback_attack_active:
 		return
 	_request_actor_redraw()
 
@@ -9787,6 +9797,16 @@ var _hc_motion_candidate_low := Vector2.INF
 var _hc_motion_candidate_high := Vector2.INF
 var _hc_motion_candidate_buckets := Rect2i()
 
+# Fixtures set these before actors spawn. Production always uses CANDIDATE;
+# CONTROL preserves global-revision invalidation and SHADOW adds evidence only.
+static var compute_optimization_test_mode := 1
+static var compute_optimization_shadow_checks := 0
+static var compute_optimization_shadow_missing_identities := 0
+static var compute_optimization_shadow_mismatches := 0
+static var compute_optimization_shadow_supersets := 0
+static var compute_optimization_shadow_first_mismatch: Dictionary = {}
+var _hc_motion_shadow_scratch: Array = []
+
 func _hc_motion_clear(a: Vector2, b: Vector2) -> bool:
 	var _hc_diag_started_usec := RuntimeDiagnostics.begin_timed_segment(&"enemy_motion_clear_calls")
 	var _hc_diag_result: bool = _hc_motion_clear_internal(a, b)
@@ -9807,12 +9827,18 @@ func _hc_motion_clear_internal(a: Vector2, b: Vector2) -> bool:
 	# reads current positions/eligibility and reruns the exact body core test.
 	var same_scope := (
 		_hc_motion_candidate_index == combat_spatial_index.get_instance_id()
-		and _hc_motion_candidate_revision == revision
 		and _hc_motion_candidate_map == runtime_map_id
 		and _hc_motion_candidate_generation == generation
 		and _hc_motion_candidate_life == life
 		and _hc_motion_candidate_radius == combat_radius_gu
 	)
+	if same_scope and _hc_motion_candidate_revision != revision:
+		if PlayerState.test_mode and compute_optimization_test_mode == 0:
+			same_scope = false
+		else:
+			same_scope = combat_spatial_index.enemy_bucket_pool_unchanged_since(runtime_map_id, _hc_motion_candidate_buckets, _hc_motion_candidate_revision)
+			if same_scope:
+				_hc_motion_candidate_revision = revision
 	var contained := (low.x >= _hc_motion_candidate_low.x and low.y >= _hc_motion_candidate_low.y
 		and high.x <= _hc_motion_candidate_high.x and high.y <= _hc_motion_candidate_high.y)
 	if same_scope and not contained:
@@ -9843,7 +9869,61 @@ func _hc_motion_clear_internal(a: Vector2, b: Vector2) -> bool:
 		_hc_motion_candidate_high = high
 	elif RuntimeDiagnostics.performance_detail_enabled():
 		_record_performance_counter(&"enemy_motion_pool_reuses")
-	return _hc_motion_candidates(a, b, _hc_motion_scratch)
+	var result := _hc_motion_candidates(a, b, _hc_motion_scratch)
+	if PlayerState.test_mode and compute_optimization_test_mode == 2:
+		_hc_motion_shadow_check(a, b, result)
+	return result
+
+
+func _hc_motion_shadow_check(a: Vector2, b: Vector2, candidate_result: bool) -> void:
+	# Same synchronous call, independent original full-bucket query. This
+	# query may perform its normal stale cleanup; SHADOW is not timed evidence.
+	# The audited production can_receive_damage reads only local life fields;
+	# spatial_index_position refreshes a projection memo without gameplay writes.
+	# Repeating those reads cannot consume an action or alter an actor's state.
+	combat_spatial_index.query_enemy_nodes_bucket_segment_into(runtime_map_id, a, b, combat_radius_gu, _hc_motion_shadow_scratch)
+	compute_optimization_shadow_checks += 1
+	var expected := true
+	if _hc_surround_goal.is_finite() and is_instance_valid(target):
+		expected = not _hc_motion_shadow_original_core(a, b, _screen_position_px_to_ground_position_gu(target.global_position), combat_radius_gu, _target_combat_radius_gu(target))
+	var missing := 0
+	for raw: Variant in _hc_motion_shadow_scratch:
+		if not is_instance_valid(raw) or not raw is EnemyActor:
+			continue
+		var other := raw as EnemyActor
+		if other == self or other == target or other.runtime_map_id != runtime_map_id:
+			continue
+		if not other.can_receive_damage() or not bool(other.behavior_profile.get("worldCollision", true)):
+			continue
+		if not _hc_motion_scratch.has(other):
+			missing += 1
+		if _hc_motion_shadow_original_core(a, b, other.spatial_index_position(), combat_radius_gu, other.combat_radius_gu):
+			expected = false
+	compute_optimization_shadow_missing_identities += missing
+	if _hc_motion_scratch.size() > _hc_motion_shadow_scratch.size():
+		compute_optimization_shadow_supersets += 1
+	if missing > 0 or candidate_result != expected:
+		compute_optimization_shadow_mismatches += 1
+		if compute_optimization_shadow_first_mismatch.is_empty():
+			compute_optimization_shadow_first_mismatch = {
+				"actor_runtime_id": spatial_actor_runtime_id, "map_id": runtime_map_id,
+				"generation": _hc_motion_candidate_generation, "life": _hc_motion_candidate_life,
+				"revision": combat_spatial_index.bucket_membership_revision,
+				"a": a, "b": b, "candidate": candidate_result, "reference": expected,
+				"missing_identities": missing, "candidate_count": _hc_motion_scratch.size(),
+				"reference_count": _hc_motion_shadow_scratch.size(),
+			}
+
+
+static func _hc_motion_shadow_original_core(a: Vector2, b: Vector2, c: Vector2, ra: float, rb: float) -> bool:
+	# Frozen bd73a256 predicate, independent of the optimized policy function.
+	var r := maxf(0.0, ra + rb)
+	var before := a.distance_squared_to(c)
+	var after := b.distance_squared_to(c)
+	if before < r * r:
+		return (b - a).dot(a - c) < -HCPolicy.EPS or after < before - HCPolicy.EPS
+	var q := Geometry2D.get_closest_point_to_segment(c, a, b)
+	return q.distance_squared_to(c) < r * r - HCPolicy.EPS
 
 func _delivery_observation_identity(record: Variant, victim: Node, child: String) -> Variant:
 	if not DamageLedgerObserverScript.recording_enabled or not record is Dictionary:

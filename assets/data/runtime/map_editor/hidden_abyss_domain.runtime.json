@@ -1,5 +1,5 @@
 {
-  "build_sha256": "bdcfb6d30917ce3ccda5e189580b937a39b4d5f23ac8624c888300b8dc2194a1",
+  "build_sha256": "d8d6ce7c0448a13c3254b58ccf83118ed1c6c4e0fb9e64d47009b40e38b6339a",
   "collision": {
     "authored_polygons_ground_gu": [
       {
@@ -396,7 +396,8 @@
     "coordinate_contract_id": "hc.map.polygon_ground_gu.v1",
     "ground_coordinate_contract_id": "isometric_cell_center_64x32_v2",
     "navigation": {
-      "canonical_catalog_sha256": "e801fc9dfe9bfa920376872f6ac4ff735073a27a8b5eb05cc922e4ecb19d3099",
+      "body_inventory_sha256": "c429bf1e622f2f611da3154b57884a81a71235faf279128b4299ea27cb5c9f1a",
+      "canonical_catalog_sha256": "a46aca4209b3abc0f3f2cd5365b274605cd07886060706e14ef3e984aad8880a",
       "clearance_gu": 0.025,
       "contract_id": "hc.polygon_nav_faces.v1",
       "profiles": [
@@ -1576,7 +1577,118 @@
               10.4447021484375
             ]
           ]
+        },
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              1.0,
+              0.0,
+              3.0
+            ],
+            [
+              1.0,
+              3.0,
+              4.0
+            ],
+            [
+              5.0,
+              1.0,
+              4.0
+            ],
+            [
+              6.0,
+              5.0,
+              4.0
+            ],
+            [
+              6.0,
+              4.0,
+              7.0
+            ],
+            [
+              8.0,
+              6.0,
+              7.0
+            ],
+            [
+              9.0,
+              8.0,
+              7.0
+            ],
+            [
+              9.0,
+              7.0,
+              0.0
+            ],
+            [
+              10.0,
+              9.0,
+              0.0
+            ],
+            [
+              10.0,
+              0.0,
+              2.0
+            ]
+          ],
+          "radius_gu": 0.49999999999999994,
+          "radius_key": "ffffffffffffdf3f",
+          "vertices_ground_gu": [
+            [
+              30.4749755859375,
+              1.5250244140625
+            ],
+            [
+              16.5250244140625,
+              15.5250244140625
+            ],
+            [
+              16.5250244140625,
+              11.782470703125
+            ],
+            [
+              30.4749755859375,
+              30.4749755859375
+            ],
+            [
+              1.5250244140625,
+              30.4749755859375
+            ],
+            [
+              12.782470703125,
+              15.5250244140625
+            ],
+            [
+              11.4749755859375,
+              14.217529296875
+            ],
+            [
+              1.5250244140625,
+              1.5250244140625
+            ],
+            [
+              11.4749755859375,
+              11.782470703125
+            ],
+            [
+              12.782470703125,
+              10.4749755859375
+            ],
+            [
+              15.217529296875,
+              10.4749755859375
+            ]
+          ]
         }
+      ],
+      "required_monster_radius_keys": [
+        "cc3b7f669ea0d63f",
+        "ffffffffffffdf3f"
       ]
     },
     "physics_source_id": "published_convex_polygon_parts_gu.v1"
@@ -6253,10 +6365,10 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "68a9c99c2819cc9f3101f1acc93aded849428179ee63665da954eaaae1869443",
+      "authoring_sha256": "03cb379db4cfb4214223450b7dc68249942145a8ae4eba5bff3b76ea549e8bfc",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
       "document_revision": 6.0,
-      "document_sha256": "e432564ed3cfab56aa24ec7c59b1f1873856515a042ddf9dedb0ea18fdaaacde",
+      "document_sha256": "14c23b98ab6cc5ae3079946f26a86e14a177868dea801bd0267817d6319f5977",
       "ground_manifest_sha256": "e3516baf51ee924d617cf6b253dfc64c4390ee83f74c231d7a68775632ae625e",
       "ground_state_sha256": "6581e6047ea9045d15171a9a82b23f7d71c457a894e2cd4ce6fdb37185bfea0f",
       "map_key": "hidden_abyss_domain",
