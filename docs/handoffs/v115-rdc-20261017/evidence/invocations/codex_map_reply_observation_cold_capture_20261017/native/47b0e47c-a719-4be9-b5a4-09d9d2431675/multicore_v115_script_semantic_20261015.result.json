@@ -1,0 +1,1572 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "original command raw bytes SHA256 matches known abc vector",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_caster_presentation_port.gd",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_root_death_owner.gd",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_root_numeric.gd",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_root_source_callbacks.gd",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_root_phase_adapter.gd",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_root_view_helpers.gd",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_root_map_loading.gd",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/audio_runtime_service.gd",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/features/runtime/feature_resource_main_primitives.gd",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/features/runtime/feature_resource_owner_coordinator.gd",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/features/runtime/feature_resource_owner_primitives.gd",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/features/runtime/issued_claim_identity.gd",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/features/runtime/source_feature_live_provider.gd",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/game_root.gd",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/actors/actor_runtime_factory.gd",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/enemy/enemy_main_resource_primitives.gd",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/enemy/enemy_main_visual_renderer.gd",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/foundation/actor_handle.gd",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/presentation/actor_asset_main_ledger.gd",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/presentation/actor_main_asset_port.gd",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/presentation/actor_main_visual_journal_consumer.gd",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/presentation/actor_main_visual_shell.gd",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/presentation/actor_visual_projection_contract.gd",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/presentation/enemy_birth_structural_header.gd",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/presentation/enemy_main_overhead_projection.gd",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/presentation/enemy_main_visual_projection.gd",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/presentation/main_actor_visual_registry.gd",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/presentation/main_original_visual_phase_bridge.gd",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/presentation/player_main_health_bar.gd",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/presentation/player_main_status_marker_strip.gd",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/presentation/player_main_visual_projection.gd",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/presentation/source_actor_visual_publication.gd",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_boot_application.gd",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_boot_launch_loading.gd",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_boot_main_composition.gd",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_boot_root_transport.gd",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_boot_source_observations.gd",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_close_process_frame_listener.gd",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_close_process_frame_producer.gd",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_map_loading_producer.gd",
+      "passed": true
+    },
+    {
+      "id": 42,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_original_actor_birth_templates.gd",
+      "passed": true
+    },
+    {
+      "id": 43,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_original_blueprint_provider.gd",
+      "passed": true
+    },
+    {
+      "id": 44,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_original_boot_provider_factory.gd",
+      "passed": true
+    },
+    {
+      "id": 45,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_original_boot_publisher.gd",
+      "passed": true
+    },
+    {
+      "id": 46,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_original_host_config_provider.gd",
+      "passed": true
+    },
+    {
+      "id": 47,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_original_loading_pin_provider.gd",
+      "passed": true
+    },
+    {
+      "id": 48,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_original_process_scope.gd",
+      "passed": true
+    },
+    {
+      "id": 49,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_original_resource_pump.gd",
+      "passed": true
+    },
+    {
+      "id": 50,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_original_service_birth_capture.gd",
+      "passed": true
+    },
+    {
+      "id": 51,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_original_session_publication_provider.gd",
+      "passed": true
+    },
+    {
+      "id": 52,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_original_world_input.gd",
+      "passed": true
+    },
+    {
+      "id": 53,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_original_world_publication_provider.gd",
+      "passed": true
+    },
+    {
+      "id": 54,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_profile_source_gate.gd",
+      "passed": true
+    },
+    {
+      "id": 55,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_root_checkpoint_ports.gd",
+      "passed": true
+    },
+    {
+      "id": 56,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_root_checkpoint_router.gd",
+      "passed": true
+    },
+    {
+      "id": 57,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_session_transport.gd",
+      "passed": true
+    },
+    {
+      "id": 58,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_session_transport_listener.gd",
+      "passed": true
+    },
+    {
+      "id": 59,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_source_admission.gd",
+      "passed": true
+    },
+    {
+      "id": 60,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_source_closing_io_producer.gd",
+      "passed": true
+    },
+    {
+      "id": 61,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_source_failure.gd",
+      "passed": true
+    },
+    {
+      "id": 62,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_source_lifecycle_driver.gd",
+      "passed": true
+    },
+    {
+      "id": 63,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_source_tree_publication.gd",
+      "passed": true
+    },
+    {
+      "id": 64,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_world_content_publication.gd",
+      "passed": true
+    },
+    {
+      "id": 65,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_world_source_fields_capture.gd",
+      "passed": true
+    },
+    {
+      "id": 66,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/profile_original_command_catalog.gd",
+      "passed": true
+    },
+    {
+      "id": 67,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/profile_source_admission_port.gd",
+      "passed": true
+    },
+    {
+      "id": 68,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/profile_source_command_consumer.gd",
+      "passed": true
+    },
+    {
+      "id": 69,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/source_application_live_call.gd",
+      "passed": true
+    },
+    {
+      "id": 70,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/source_application_providers.gd",
+      "passed": true
+    },
+    {
+      "id": 71,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/source_close_process_dispatcher.gd",
+      "passed": true
+    },
+    {
+      "id": 72,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/source_command_digest.gd",
+      "passed": true
+    },
+    {
+      "id": 73,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/source_constructor_value_codec.gd",
+      "passed": true
+    },
+    {
+      "id": 74,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/source_original_frame_dispatcher.gd",
+      "passed": true
+    },
+    {
+      "id": 75,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/source_path_state_graph.gd",
+      "passed": true
+    },
+    {
+      "id": 76,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/source_persistent_path_bindings.gd",
+      "passed": true
+    },
+    {
+      "id": 77,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/source_persistent_path_main.gd",
+      "passed": true
+    },
+    {
+      "id": 78,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/source_persistent_path_tree.gd",
+      "passed": true
+    },
+    {
+      "id": 79,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/source_profile_command_owner.gd",
+      "passed": true
+    },
+    {
+      "id": 80,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/source_profile_session_hooks.gd",
+      "passed": true
+    },
+    {
+      "id": 81,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/source_session.gd",
+      "passed": true
+    },
+    {
+      "id": 82,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/source_session_actor_router.gd",
+      "passed": true
+    },
+    {
+      "id": 83,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/source_session_budget.gd",
+      "passed": true
+    },
+    {
+      "id": 84,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/source_session_clock.gd",
+      "passed": true
+    },
+    {
+      "id": 85,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/source_session_factory.gd",
+      "passed": true
+    },
+    {
+      "id": 86,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/source_session_runtime.gd",
+      "passed": true
+    },
+    {
+      "id": 87,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/source_session_runtime_installation.gd",
+      "passed": true
+    },
+    {
+      "id": 88,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/source_session_transport.gd",
+      "passed": true
+    },
+    {
+      "id": 89,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/source_tree_root_ordinal_port.gd",
+      "passed": true
+    },
+    {
+      "id": 90,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/legacy_world_skill_ports.gd",
+      "passed": true
+    },
+    {
+      "id": 91,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/legacy_world_skill_timing_profiles.gd",
+      "passed": true
+    },
+    {
+      "id": 92,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/ordinary_pursuit_pipeline.gd",
+      "passed": true
+    },
+    {
+      "id": 93,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/ordinary_pursuit_source_snapshot.gd",
+      "passed": true
+    },
+    {
+      "id": 94,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/source_session_path_jobs.gd",
+      "passed": true
+    },
+    {
+      "id": 95,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/source_session_path_slot.gd",
+      "passed": true
+    },
+    {
+      "id": 96,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_audio_owner_primitives.gd",
+      "passed": true
+    },
+    {
+      "id": 97,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_bootstrap_pipeline_warm.gd",
+      "passed": true
+    },
+    {
+      "id": 98,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_camera_constraint_owner.gd",
+      "passed": true
+    },
+    {
+      "id": 99,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_camera_constraint_publication.gd",
+      "passed": true
+    },
+    {
+      "id": 100,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_canonical_actor_access.gd",
+      "passed": true
+    },
+    {
+      "id": 101,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_caster_direction_numeric.gd",
+      "passed": true
+    },
+    {
+      "id": 102,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_caster_display_model.gd",
+      "passed": true
+    },
+    {
+      "id": 103,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_caster_ground_display.gd",
+      "passed": true
+    },
+    {
+      "id": 104,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_caster_main_executor.gd",
+      "passed": true
+    },
+    {
+      "id": 105,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_caster_projectile_display.gd",
+      "passed": true
+    },
+    {
+      "id": 106,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_caster_visual_port.gd",
+      "passed": true
+    },
+    {
+      "id": 107,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_caster_visual_publication.gd",
+      "passed": true
+    },
+    {
+      "id": 108,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_caster_visual_structure.gd",
+      "passed": true
+    },
+    {
+      "id": 109,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_caster_warm_main.gd",
+      "passed": true
+    },
+    {
+      "id": 110,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_caster_warm_port.gd",
+      "passed": true
+    },
+    {
+      "id": 111,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_combat_log_owner.gd",
+      "passed": true
+    },
+    {
+      "id": 112,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_crowd_geometry_mirror.gd",
+      "passed": true
+    },
+    {
+      "id": 113,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_enemy_native_motion.gd",
+      "passed": true
+    },
+    {
+      "id": 114,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_enemy_runtime_instance.gd",
+      "passed": true
+    },
+    {
+      "id": 115,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_enemy_runtime_ports.gd",
+      "passed": true
+    },
+    {
+      "id": 116,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_environment_boot_loader.gd",
+      "passed": true
+    },
+    {
+      "id": 117,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_environment_boot_publication.gd",
+      "passed": true
+    },
+    {
+      "id": 118,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_environment_catalog.gd",
+      "passed": true
+    },
+    {
+      "id": 119,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_environment_collision_geometry.gd",
+      "passed": true
+    },
+    {
+      "id": 120,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_environment_coordinate_mapper.gd",
+      "passed": true
+    },
+    {
+      "id": 121,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_environment_factory.gd",
+      "passed": true
+    },
+    {
+      "id": 122,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_environment_footprint_query.gd",
+      "passed": true
+    },
+    {
+      "id": 123,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_environment_geometry_port.gd",
+      "passed": true
+    },
+    {
+      "id": 124,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_environment_mask_values.gd",
+      "passed": true
+    },
+    {
+      "id": 125,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_environment_math_validator.gd",
+      "passed": true
+    },
+    {
+      "id": 126,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_environment_model.gd",
+      "passed": true
+    },
+    {
+      "id": 127,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_environment_native_bodies.gd",
+      "passed": true
+    },
+    {
+      "id": 128,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_environment_native_value_graph.gd",
+      "passed": true
+    },
+    {
+      "id": 129,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_environment_publication.gd",
+      "passed": true
+    },
+    {
+      "id": 130,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_environment_runtime_maps.gd",
+      "passed": true
+    },
+    {
+      "id": 131,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_environment_spatial_rules.gd",
+      "passed": true
+    },
+    {
+      "id": 132,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_environment_transport_codec.gd",
+      "passed": true
+    },
+    {
+      "id": 133,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_environment_value_graph.gd",
+      "passed": true
+    },
+    {
+      "id": 134,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_follow_landing_authority.gd",
+      "passed": true
+    },
+    {
+      "id": 135,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_footprint_log_owner.gd",
+      "passed": true
+    },
+    {
+      "id": 136,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_interactable_owner_port.gd",
+      "passed": true
+    },
+    {
+      "id": 137,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_interactable_visual_main.gd",
+      "passed": true
+    },
+    {
+      "id": 138,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_interactable_workset.gd",
+      "passed": true
+    },
+    {
+      "id": 139,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_live_close_phase.gd",
+      "passed": true
+    },
+    {
+      "id": 140,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_loot_actor_factory.gd",
+      "passed": true
+    },
+    {
+      "id": 141,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_loot_descriptors.gd",
+      "passed": true
+    },
+    {
+      "id": 142,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_loot_pickup_model.gd",
+      "passed": true
+    },
+    {
+      "id": 143,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_loot_preferences.gd",
+      "passed": true
+    },
+    {
+      "id": 144,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_loot_runtime_manager.gd",
+      "passed": true
+    },
+    {
+      "id": 145,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_loot_spatial_index.gd",
+      "passed": true
+    },
+    {
+      "id": 146,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_loot_trace_owner.gd",
+      "passed": true
+    },
+    {
+      "id": 147,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_main_background.gd",
+      "passed": true
+    },
+    {
+      "id": 148,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_main_hud.gd",
+      "passed": true
+    },
+    {
+      "id": 149,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_main_prefix_consumer.gd",
+      "passed": true
+    },
+    {
+      "id": 150,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_main_root_attachment.gd",
+      "passed": true
+    },
+    {
+      "id": 151,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_main_service_ports.gd",
+      "passed": true
+    },
+    {
+      "id": 152,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_main_service_support.gd",
+      "passed": true
+    },
+    {
+      "id": 153,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_main_view_facade.gd",
+      "passed": true
+    },
+    {
+      "id": 154,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_main_views.gd",
+      "passed": true
+    },
+    {
+      "id": 155,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_map_build_owner.gd",
+      "passed": true
+    },
+    {
+      "id": 156,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_map_event_main.gd",
+      "passed": true
+    },
+    {
+      "id": 157,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_map_gothic_visual.gd",
+      "passed": true
+    },
+    {
+      "id": 158,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_map_loading_coordinator.gd",
+      "passed": true
+    },
+    {
+      "id": 159,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_map_loading_port.gd",
+      "passed": true
+    },
+    {
+      "id": 160,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_map_loading_transport.gd",
+      "passed": true
+    },
+    {
+      "id": 161,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_map_teleport_policy_owner.gd",
+      "passed": true
+    },
+    {
+      "id": 162,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_map_visual_main.gd",
+      "passed": true
+    },
+    {
+      "id": 163,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_npc_pinned_visual.gd",
+      "passed": true
+    },
+    {
+      "id": 164,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_npc_visual_shell.gd",
+      "passed": true
+    },
+    {
+      "id": 165,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_original_event_journal.gd",
+      "passed": true
+    },
+    {
+      "id": 166,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_original_map_arrival_contract.gd",
+      "passed": true
+    },
+    {
+      "id": 167,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_original_map_warm_main.gd",
+      "passed": true
+    },
+    {
+      "id": 168,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_original_node_timer.gd",
+      "passed": true
+    },
+    {
+      "id": 169,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_original_primitive_port.gd",
+      "passed": true
+    },
+    {
+      "id": 170,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_original_source_tree.gd",
+      "passed": true
+    },
+    {
+      "id": 171,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_owner_art_rules.gd",
+      "passed": true
+    },
+    {
+      "id": 172,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_owner_body_rules.gd",
+      "passed": true
+    },
+    {
+      "id": 173,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_owner_bootstrap_coordinator.gd",
+      "passed": true
+    },
+    {
+      "id": 174,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_owner_clock_ports.gd",
+      "passed": true
+    },
+    {
+      "id": 175,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_owner_content_services.gd",
+      "passed": true
+    },
+    {
+      "id": 176,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_owner_damage_observer.gd",
+      "passed": true
+    },
+    {
+      "id": 177,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_owner_diagnostics.gd",
+      "passed": true
+    },
+    {
+      "id": 178,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_owner_enemy_audio_shared.gd",
+      "passed": true
+    },
+    {
+      "id": 179,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_owner_enemy_presentation.gd",
+      "passed": true
+    },
+    {
+      "id": 180,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_owner_enemy_shared.gd",
+      "passed": true
+    },
+    {
+      "id": 181,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_owner_engagement_window.gd",
+      "passed": true
+    },
+    {
+      "id": 182,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_owner_full_ports.gd",
+      "passed": true
+    },
+    {
+      "id": 183,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_owner_granted_rules.gd",
+      "passed": true
+    },
+    {
+      "id": 184,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_owner_group_order.gd",
+      "passed": true
+    },
+    {
+      "id": 185,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_owner_input.gd",
+      "passed": true
+    },
+    {
+      "id": 186,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_owner_monster_identity.gd",
+      "passed": true
+    },
+    {
+      "id": 187,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_owner_path_services.gd",
+      "passed": true
+    },
+    {
+      "id": 188,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_owner_profile_services.gd",
+      "passed": true
+    },
+    {
+      "id": 189,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_owner_source_text.gd",
+      "passed": true
+    },
+    {
+      "id": 190,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_owner_target_ring.gd",
+      "passed": true
+    },
+    {
+      "id": 191,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_owner_time_domains.gd",
+      "passed": true
+    },
+    {
+      "id": 192,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_owner_warrior_rules.gd",
+      "passed": true
+    },
+    {
+      "id": 193,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_portal_visual_shell.gd",
+      "passed": true
+    },
+    {
+      "id": 194,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_profile_budget_port.gd",
+      "passed": true
+    },
+    {
+      "id": 195,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_profile_ui_view.gd",
+      "passed": true
+    },
+    {
+      "id": 196,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_profile_view_publisher.gd",
+      "passed": true
+    },
+    {
+      "id": 197,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_resource_prefix_transport.gd",
+      "passed": true
+    },
+    {
+      "id": 198,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_root_interactable_loading.gd",
+      "passed": true
+    },
+    {
+      "id": 199,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_runtime_working_graph.gd",
+      "passed": true
+    },
+    {
+      "id": 200,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_session_services.gd",
+      "passed": true
+    },
+    {
+      "id": 201,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_simulation_core.gd",
+      "passed": true
+    },
+    {
+      "id": 202,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_action_timing.gd",
+      "passed": true
+    },
+    {
+      "id": 203,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_actor_port.gd",
+      "passed": true
+    },
+    {
+      "id": 204,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_cast_factory.gd",
+      "passed": true
+    },
+    {
+      "id": 205,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_combat_rules.gd",
+      "passed": true
+    },
+    {
+      "id": 206,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_combat_runtime.gd",
+      "passed": true
+    },
+    {
+      "id": 207,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_effect_model.gd",
+      "passed": true
+    },
+    {
+      "id": 208,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_fields.gd",
+      "passed": true
+    },
+    {
+      "id": 209,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_fire_wall_model.gd",
+      "passed": true
+    },
+    {
+      "id": 210,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_full_fields.gd",
+      "passed": true
+    },
+    {
+      "id": 211,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_full_model.gd",
+      "passed": true
+    },
+    {
+      "id": 212,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_ground_claims.gd",
+      "passed": true
+    },
+    {
+      "id": 213,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_ground_manager.gd",
+      "passed": true
+    },
+    {
+      "id": 214,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_ground_model.gd",
+      "passed": true
+    },
+    {
+      "id": 215,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_legacy_actor_link.gd",
+      "passed": true
+    },
+    {
+      "id": 216,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_legacy_full_ports.gd",
+      "passed": true
+    },
+    {
+      "id": 217,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_legacy_global_random.gd",
+      "passed": true
+    },
+    {
+      "id": 218,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_legacy_link_map.gd",
+      "passed": true
+    },
+    {
+      "id": 219,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_legacy_link_sequence.gd",
+      "passed": true
+    },
+    {
+      "id": 220,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_link_map.gd",
+      "passed": true
+    },
+    {
+      "id": 221,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_link_sequence.gd",
+      "passed": true
+    },
+    {
+      "id": 222,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_plan_contract.gd",
+      "passed": true
+    },
+    {
+      "id": 223,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_planner.gd",
+      "passed": true
+    },
+    {
+      "id": 224,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_projectile_model.gd",
+      "passed": true
+    },
+    {
+      "id": 225,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_runtime.gd",
+      "passed": true
+    },
+    {
+      "id": 226,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_spatial_index.gd",
+      "passed": true
+    },
+    {
+      "id": 227,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_target_query.gd",
+      "passed": true
+    },
+    {
+      "id": 228,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_timing_port.gd",
+      "passed": true
+    },
+    {
+      "id": 229,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_timing_profiles.gd",
+      "passed": true
+    },
+    {
+      "id": 230,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_timing_publication.gd",
+      "passed": true
+    },
+    {
+      "id": 231,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_skill_warrior_rules.gd",
+      "passed": true
+    },
+    {
+      "id": 232,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_source_application_contract.gd",
+      "passed": true
+    },
+    {
+      "id": 233,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_source_application_main.gd",
+      "passed": true
+    },
+    {
+      "id": 234,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_source_checkpoint.gd",
+      "passed": true
+    },
+    {
+      "id": 235,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_source_field_port.gd",
+      "passed": true
+    },
+    {
+      "id": 236,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_source_frames_owner.gd",
+      "passed": true
+    },
+    {
+      "id": 237,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_source_rule_ports.gd",
+      "passed": true
+    },
+    {
+      "id": 238,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_summon_queue_model.gd",
+      "passed": true
+    },
+    {
+      "id": 239,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_summon_queue_ports.gd",
+      "passed": true
+    },
+    {
+      "id": 240,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_temporal_scope.gd",
+      "passed": true
+    },
+    {
+      "id": 241,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_ui_command_owner.gd",
+      "passed": true
+    },
+    {
+      "id": 242,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_visual_viewport_port.gd",
+      "passed": true
+    },
+    {
+      "id": 243,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/monster_source_frames.gd",
+      "passed": true
+    },
+    {
+      "id": 244,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_audio_source_contract.gd",
+      "passed": true
+    },
+    {
+      "id": 245,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_original_map_loading_owner.gd",
+      "passed": true
+    },
+    {
+      "id": 246,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/main_audio_delivery_20261016.gd",
+      "passed": true
+    },
+    {
+      "id": 247,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/helpers/main_audio_delivery_source_20261016.gd",
+      "passed": true
+    },
+    {
+      "id": 248,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/map_owner_physical_lifecycle_20261016.gd",
+      "passed": true
+    },
+    {
+      "id": 249,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/feature_actual_lease_publication_20261016.gd",
+      "passed": true
+    },
+    {
+      "id": 250,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/enemy/enemy_owner_resource_primitives.gd",
+      "passed": true
+    },
+    {
+      "id": 251,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/enemy/enemy_owner_streaming_coordinator.gd",
+      "passed": true
+    },
+    {
+      "id": 252,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/renderer_retirement_physical_20261016.gd",
+      "passed": true
+    },
+    {
+      "id": 253,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/helpers/renderer_retirement_source_20261016.gd",
+      "passed": true
+    },
+    {
+      "id": 254,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/foundation/actor_registry.gd",
+      "passed": true
+    },
+    {
+      "id": 255,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/foundation/service_registry.gd",
+      "passed": true
+    },
+    {
+      "id": 256,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/foundation/service_handle.gd",
+      "passed": true
+    },
+    {
+      "id": 257,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/features/runtime/feature_resource_live_rpc.gd",
+      "passed": true
+    },
+    {
+      "id": 258,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/source_feature_command_transport.gd",
+      "passed": true
+    },
+    {
+      "id": 259,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/feature_original_command_catalog.gd",
+      "passed": true
+    },
+    {
+      "id": 260,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/features/runtime/feature_resource_main_facade.gd",
+      "passed": true
+    },
+    {
+      "id": 261,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/features/contracts/feature_resource_lease.gd",
+      "passed": true
+    },
+    {
+      "id": 262,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/main_feature_command_loans_20261016.gd",
+      "passed": true
+    },
+    {
+      "id": 263,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/feature_live_jobs_actual_20261016.gd",
+      "passed": true
+    },
+    {
+      "id": 264,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/helpers/feature_live_jobs_source_20261016.gd",
+      "passed": true
+    },
+    {
+      "id": 265,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_startup_application_producer.gd",
+      "passed": true
+    },
+    {
+      "id": 266,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/main_startup_application_producer_20261016.gd",
+      "passed": true
+    },
+    {
+      "id": 267,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/profile/profile_publication.gd",
+      "passed": true
+    },
+    {
+      "id": 268,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/character_select.gd",
+      "passed": true
+    },
+    {
+      "id": 269,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/character_source_launch_entry_20261016.gd",
+      "passed": true
+    },
+    {
+      "id": 270,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/character_source_full_world_20261016.gd",
+      "passed": true
+    },
+    {
+      "id": 271,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/main_boot_trace.gd",
+      "passed": true
+    },
+    {
+      "id": 272,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/environment_graph_identity_memo_20261017.gd",
+      "passed": true
+    },
+    {
+      "id": 273,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/helpers/world_environment_value_graph_original_20261017.gd",
+      "passed": true
+    },
+    {
+      "id": 274,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/profile_canonical_preparation_memo_20261017.gd",
+      "passed": true
+    },
+    {
+      "id": 275,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/helpers/profile_publication_original_20261017.gd",
+      "passed": true
+    },
+    {
+      "id": 276,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/boot_validation_without_copy_20261017.gd",
+      "passed": true
+    },
+    {
+      "id": 277,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/character_launch_cover_camera_20261017.gd",
+      "passed": true
+    },
+    {
+      "id": 278,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/main_static_catalog_startup_20261017.gd",
+      "passed": true
+    },
+    {
+      "id": 279,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/features/contracts/loading_preparation_scope.gd",
+      "passed": true
+    },
+    {
+      "id": 280,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/source/source_path_object_codec.gd",
+      "passed": true
+    },
+    {
+      "id": 281,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/path_object_handoff_20261017.gd",
+      "passed": true
+    },
+    {
+      "id": 282,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/enemy/enemy_owner_visual.gd",
+      "passed": true
+    },
+    {
+      "id": 283,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/actors/player_actor_model.gd",
+      "passed": true
+    },
+    {
+      "id": 284,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/service_birth_capture_20261016.gd",
+      "passed": true
+    },
+    {
+      "id": 285,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/game_data.gd",
+      "passed": true
+    },
+    {
+      "id": 286,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/content/content_query_core.gd",
+      "passed": true
+    },
+    {
+      "id": 287,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/multicore_content_query_20261014.gd",
+      "passed": true
+    },
+    {
+      "id": 288,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/v115_main_exit_guards_20261017.gd",
+      "passed": true
+    },
+    {
+      "id": 289,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/multicore_world_environment_owner_20261014.gd",
+      "passed": true
+    },
+    {
+      "id": 290,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/helpers/premap_environment_source_20261015.gd",
+      "passed": true
+    },
+    {
+      "id": 291,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/actor_visual_projection_contract_20261015.gd",
+      "passed": true
+    },
+    {
+      "id": 292,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/profile/profile_terminal_return.gd",
+      "passed": true
+    },
+    {
+      "id": 293,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/presentation/main_loot_display.gd",
+      "passed": true
+    },
+    {
+      "id": 294,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/presentation/main_loot_visual_registry.gd",
+      "passed": true
+    },
+    {
+      "id": 295,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/v115_terminal_rng_guards_20261017.gd",
+      "passed": true
+    },
+    {
+      "id": 296,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/helpers/numeric_point_source_core_20261017.gd",
+      "passed": true
+    },
+    {
+      "id": 297,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/numeric_point_native_fixture_20261017.gd",
+      "passed": true
+    },
+    {
+      "id": 298,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/journal_overlap_native_20261017.gd",
+      "passed": true
+    },
+    {
+      "id": 299,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/helpers/journal_overlap_source_20261017.gd",
+      "passed": true
+    },
+    {
+      "id": 300,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/actors/enemy_actor_model.gd",
+      "passed": true
+    },
+    {
+      "id": 301,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/presentation/main_enemy_effect_registry.gd",
+      "passed": true
+    },
+    {
+      "id": 302,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/presentation/main_enemy_projectile_preview.gd",
+      "passed": true
+    },
+    {
+      "id": 303,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/presentation/main_enemy_target_magic_preview.gd",
+      "passed": true
+    },
+    {
+      "id": 304,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/presentation/main_original_pick_input.gd",
+      "passed": true
+    },
+    {
+      "id": 305,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/presentation/original_melee_presentation_context.gd",
+      "passed": true
+    },
+    {
+      "id": 306,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_enemy_projectile_effect_model.gd",
+      "passed": true
+    },
+    {
+      "id": 307,
+      "label": "actual Godot semantic compiler accepts fixed source scripts/gameplay/world/world_enemy_target_magic_model.gd",
+      "passed": true
+    },
+    {
+      "id": 308,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/enemy_presentation_20261017.gd",
+      "passed": true
+    },
+    {
+      "id": 309,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/helpers/enemy_presentation_source_20261017.gd",
+      "passed": true
+    },
+    {
+      "id": 310,
+      "label": "actual Godot semantic compiler accepts fixed source tests/framework/source_save_roundtrip_20261017.gd",
+      "passed": true
+    }
+  ],
+  "count": 310,
+  "engine_version": "4.7-stable (custom_build)",
+  "failed": 0,
+  "invocation_id": "daf70158-e120-463d-a65e-b824fef3a3f5",
+  "passed": 310,
+  "reported_checks": 310,
+  "reported_failures": 0,
+  "run_id": "47b0e47c-a719-4be9-b5a4-09d9d2431675",
+  "runtime_environment": {
+    "native_process_id": 3776,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/multicore-v115/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\.godot\\runtime_appdata\\multicore_v115\\runner_daf70158-e120-463d-a65e-b824fef3a3f5",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/multicore-v115/HardCore/.godot/runtime_appdata/multicore_v115/runner_daf70158-e120-463d-a65e-b824fef3a3f5/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "multicore_v115_script_semantic_20261015",
+  "schema_version": 1,
+  "source_content_sha256": "e2f403e5c062b0494e950a3c8347b288b1d77655721a526594c3b3c2c84ee8a5",
+  "status": "PASS"
+}

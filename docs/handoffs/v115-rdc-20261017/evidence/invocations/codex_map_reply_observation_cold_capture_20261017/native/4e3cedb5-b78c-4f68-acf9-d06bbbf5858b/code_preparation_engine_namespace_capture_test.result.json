@@ -1,0 +1,87 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "metadata capture keeps the real non-test runtime setting",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal runner supplies isolated APPDATA and run identity",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "metadata producer binds invocation and exact tested source content",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "ClassDB returns real native object classes",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "Variant type names are captured separately from ClassDB object classes",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "fixed executing engine bytes have a real FileAccess SHA256",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "exact native Mutex is a constructible RefCounted",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "actual GDScript compiler accepts the exact static native Mutex initializer",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "compiled static initializer constructed a genuine scriptless native Mutex",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "metadata enumeration does not change target Script cache state",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "metadata artifact uses the formal evidence directory",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "metadata artifact opens at one exact evidence path",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "metadata artifact bytes have a recorded exact SHA256",
+      "passed": true
+    }
+  ],
+  "count": 13,
+  "engine_version": "4.7-stable (custom_build)",
+  "failed": 0,
+  "invocation_id": "daf70158-e120-463d-a65e-b824fef3a3f5",
+  "passed": 13,
+  "reported_checks": 13,
+  "reported_failures": 0,
+  "run_id": "4e3cedb5-b78c-4f68-acf9-d06bbbf5858b",
+  "runtime_environment": {
+    "native_process_id": 11692,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/multicore-v115/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\.godot\\runtime_appdata\\multicore_v115\\runner_daf70158-e120-463d-a65e-b824fef3a3f5",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/multicore-v115/HardCore/.godot/runtime_appdata/multicore_v115/runner_daf70158-e120-463d-a65e-b824fef3a3f5/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "code_preparation_engine_namespace_capture_test",
+  "schema_version": 1,
+  "source_content_sha256": "e2f403e5c062b0494e950a3c8347b288b1d77655721a526594c3b3c2c84ee8a5",
+  "status": "PASS"
+}

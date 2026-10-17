@@ -50,7 +50,7 @@ function Invoke-CodeExportProcess {
     } finally { $out.Dispose(); $err.Dispose(); $process.Dispose() }
 }
 
-function Invoke-CodeOfficialExport([string]$GodotConsole, [string]$StageRoot, [string]$Apk, [string]$EvidenceRoot, [string]$Name) {
+function Invoke-CodeOfficialExport([string]$GodotConsole, [string]$StageRoot, [string]$Apk, [string]$EvidenceRoot, [string]$Name, [string]$SigningToolRoot = "") {
     $Log = Join-Path $EvidenceRoot "$Name.engine.log"
     $Stdout = Join-Path $EvidenceRoot "$Name.stdout.log"
     $Stderr = Join-Path $EvidenceRoot "$Name.stderr.log"
@@ -60,7 +60,7 @@ function Invoke-CodeOfficialExport([string]$GodotConsole, [string]$StageRoot, [s
     # Imported media source bytes are audited runtime inputs. Both passes use
     # the same post-export injection, alignment and existing certificate BEFORE
     # the APK identity is captured; no unsigned or stale pre-injection hash.
-    & (Join-Path $PSScriptRoot 'inject_sources_resign.ps1') -ApkPath $Apk -StageRoot $StageRoot *> (Join-Path $EvidenceRoot ($Name + '.source_injection.log'))
+    & (Join-Path $PSScriptRoot 'inject_sources_resign.ps1') -ApkPath $Apk -StageRoot $StageRoot -SigningToolRoot $SigningToolRoot *> (Join-Path $EvidenceRoot ($Name + '.source_injection.log'))
     if ($LASTEXITCODE -ne 0) { throw "Owned source injection/signing failed: $Name" }
     return @{native_exit=$NativeExit; apk=$Apk; apk_sha256=(Get-CodeExportHash $Apk); engine_sha256=(Get-CodeExportHash $GodotConsole); log=$Log; stdout=$Stdout; stderr=$Stderr}
 }
@@ -91,7 +91,8 @@ function Invoke-TwoPassAndroidCodeExport {
         [Parameter(Mandatory=$true)][string]$BaselineApk,
         [Parameter(Mandatory=$true)][string]$ApkSigner,
         [Parameter(Mandatory=$true)][scriptblock]$RegenerateStageCatalogue,
-        [Parameter(Mandatory=$true)][scriptblock]$VerifyProductionBuild
+        [Parameter(Mandatory=$true)][scriptblock]$VerifyProductionBuild,
+        [string]$SigningToolRoot = ""
     )
     $StageRoot = (Resolve-Path -LiteralPath $StageRoot).Path
     $EvidenceRoot = [IO.Path]::GetFullPath($EvidenceRoot)
@@ -116,6 +117,10 @@ function Invoke-TwoPassAndroidCodeExport {
     foreach ($Path in @((Join-Path $StageRoot 'project.godot'),(Join-Path $StageRoot '.godot/global_script_class_cache.cfg'),(Join-Path $StageRoot 'export_presets.cfg'),(Join-Path $StageRoot 'assets/generated/build_info.json'),$Inputs.SourceCatalogue,$Inputs.SourcePlan,$Inputs.Producer,$Inputs.Namespace,$GodotConsole,$TemplateApk,$SealTool,$VerifyTool,$FrozenCollector,(Join-Path $PSScriptRoot 'android_two_pass_export_hook.ps1'))) {
         $Fixed[$Path] = Get-CodeExportHash $Path
     }
+    foreach ($Relative in @('android/build/gradle.properties','android/build/libs/debug/godot-lib.template_debug.aar','android/build/libs/release/godot-lib.template_release.aar')) {
+        $Path = Join-Path $StageRoot $Relative
+        if (Test-Path -LiteralPath $Path -PathType Leaf) { $Fixed[$Path] = Get-CodeExportHash $Path }
+    }
     # These bytes affect the real APK independently of the code graph.
     foreach ($Source in @('assets/art/items/service/inventory/client.classic_raw_complete/Items_00014.png', 'assets/audio/sfx/client/137__M26-3.wav', 'assets/audio/sfx/client/10332__M33-3.wav')) {
         $Path = Join-Path $StageRoot $Source
@@ -126,7 +131,7 @@ function Invoke-TwoPassAndroidCodeExport {
     if (-not (Test-Path -LiteralPath $Metadata -PathType Leaf) -or [IO.File]::ReadAllText($Metadata) -notmatch '(?m)^const AVAILABLE := false\s*$') { throw 'First export requires the tracked unavailable placeholder, with no class_name.' }
     $FirstApk = Join-Path $EvidenceRoot 'first-unavailable-export.apk'
     if (Test-Path -LiteralPath $FirstApk) { throw 'First export path already exists.' }
-    $First = Invoke-CodeOfficialExport $GodotConsole $StageRoot $FirstApk $EvidenceRoot 'first'
+    $First = Invoke-CodeOfficialExport $GodotConsole $StageRoot $FirstApk $EvidenceRoot 'first' $SigningToolRoot
     $FirstSigner = Assert-CodeExportSigner $FirstApk $BaselineApk $ApkSigner
     Assert-CodeExportFrozen $Fixed
     $SealJson = Join-Path $EvidenceRoot 'android-export-seal.json'
@@ -138,7 +143,7 @@ function Invoke-TwoPassAndroidCodeExport {
     # class-cache edit or source regeneration is permitted between these passes.
     Assert-CodeExportFrozen $Fixed
     if (Test-Path -LiteralPath $OutputApk) { throw 'Final APK path already exists.' }
-    $Final = Invoke-CodeOfficialExport $GodotConsole $StageRoot $OutputApk $EvidenceRoot 'final'
+    $Final = Invoke-CodeOfficialExport $GodotConsole $StageRoot $OutputApk $EvidenceRoot 'final' $SigningToolRoot
     Assert-CodeExportFrozen $Fixed
     if ((Get-CodeExportHash $Metadata) -cne $SealGdHash) { throw 'Generated metadata source changed during export.' }
     $FinalSigner = Assert-CodeExportSigner $OutputApk $BaselineApk $ApkSigner

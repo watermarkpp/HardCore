@@ -9,7 +9,10 @@ param(
     [int]$VersionCode = 0,
     [string]$PreparedStagePath = "",
     [switch]$PreflightOnly,
-    [switch]$KeepStage
+    [switch]$KeepStage,
+    [string]$NativeTemplateReceipt = "",
+    [string]$ExpectedNativeTemplateReceiptSha256 = "",
+    [string]$SigningToolRoot = ""
 )
 
 $ErrorActionPreference = "Stop"
@@ -223,6 +226,20 @@ if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($ProjectConfigText)) {
 if ($ProjectConfigText -notmatch ("(?m)^config/version=`"{0}`"`r?$" -f [regex]::Escape($ExpectedVersionName))) {
     throw "Build commit project.godot does not contain config/version=`"$ExpectedVersionName`"."
 }
+$PinnedTemplateApk = ""
+$PinnedAndroidSourceZip = ""
+if ($ExpectedVersionCode -ge 115) {
+    if ([string]::IsNullOrWhiteSpace($NativeTemplateReceipt) -or $ExpectedNativeTemplateReceiptSha256 -notmatch '^[0-9a-f]{64}$') { throw 'v115 requires a pinned fresh Native template receipt.' }
+    if ((Get-FileHash -LiteralPath $NativeTemplateReceipt -Algorithm SHA256).Hash.ToLowerInvariant() -cne $ExpectedNativeTemplateReceiptSha256) { throw 'Native template receipt bytes differ.' }
+    $NativeReceipt = Get-Content -LiteralPath $NativeTemplateReceipt -Raw | ConvertFrom-Json
+    if ($NativeReceipt.status -cne 'PASS' -or $NativeReceipt.build -cne 'PASS' -or $NativeReceipt.preflight.source_sha256 -cne $NativeReceipt.postflight.source_sha256) { throw 'Native build/source freeze is incomplete.' }
+    foreach ($Artifact in @($NativeReceipt.artifacts.debug.file, $NativeReceipt.artifacts.source_zip)) {
+        if ((Get-FileHash -LiteralPath $Artifact.path -Algorithm SHA256).Hash.ToLowerInvariant() -cne $Artifact.sha256) { throw 'Sealed Native template artifact changed.' }
+    }
+    $PinnedTemplateApk = $NativeReceipt.artifacts.debug.file.path
+    $PinnedAndroidSourceZip = $NativeReceipt.artifacts.source_zip.path
+}
+
 $ShortCommit = $ResolvedCommit.Substring(0, 12)
 $StageParent = Join-Path (Split-Path $ProjectRoot -Parent) "HardCore-android-staging"
 $StageName = "{0}-{1}-{2}" -f $ShortCommit, (Get-Date -Format "yyyyMMdd-HHmmss"), ([guid]::NewGuid().ToString("N").Substring(0, 8))
@@ -298,7 +315,7 @@ try {
     # Bootstrap the host-managed Gradle template into the disposable stage
     # without network access or mutation of the integration worktree.
     if ($ExportPresetText -match '(?m)^gradle_build/use_gradle_build=true\r?$') {
-        $AndroidSourceZip = Join-Path $ProjectRoot "tools\godot-4.7\editor_data\export_templates\4.7.stable\android_source.zip"
+        $AndroidSourceZip = if ($PinnedAndroidSourceZip) { $PinnedAndroidSourceZip } else { Join-Path $ProjectRoot "tools\godot-4.7\editor_data\export_templates\4.7.stable\android_source.zip" }
         if (-not (Test-Path -LiteralPath $AndroidSourceZip -PathType Leaf)) {
             throw "Gradle Android export is enabled but offline template is missing: $AndroidSourceZip"
         }
@@ -334,6 +351,11 @@ try {
         [System.IO.File]::WriteAllText((Join-Path $StageAndroidPath ".gdignore"), "`n", $Utf8WithoutBom)
         if ($StageThemesText -notmatch 'windowSplashScreenAnimatedIcon.*@android:color/transparent' -or $StageThemesText -notmatch 'windowSplashScreenBrandingImage.*@null') {
             throw "Offline Android template splash patch did not apply: $StageThemesPath"
+        }
+        if ($PinnedTemplateApk) {
+            # Preserve exact sealed JNI bytes through the game's Gradle packaging.
+            $NativeGradleProperties = Join-Path $StageAndroidPath 'gradle.properties'
+            [IO.File]::AppendAllText($NativeGradleProperties, "`ndoNotStrip=true`n", [Text.UTF8Encoding]::new($false))
         }
         Write-Output "ANDROID_GRADLE_TEMPLATE_BOOTSTRAP_PASS"
     }
@@ -399,6 +421,19 @@ try {
                 $Utf8NoBomPreset
             )
             Write-Output "VERSION_CODE_OVERRIDE=$VersionCode"
+        }
+
+        if ($PinnedTemplateApk) {
+            $AbiPresetPath = Join-Path $StageProjectPath 'export_presets.cfg'
+            $AbiPreset = [IO.File]::ReadAllText($AbiPresetPath)
+            foreach ($Abi in @('arm64-v8a','x86_64','armeabi-v7a','x86')) {
+                $Enabled = if ($Abi -in @('arm64-v8a','x86_64')) { 'true' } else { 'false' }
+                $Pattern = '(?m)^architectures/' + [regex]::Escape($Abi) + '=(?:true|false)'
+                if ($AbiPreset -notmatch $Pattern) { throw "Missing explicit stage ABI: $Abi" }
+                $AbiPreset = [regex]::Replace($AbiPreset,$Pattern,('architectures/'+$Abi+'='+$Enabled))
+            }
+            [IO.File]::WriteAllText($AbiPresetPath,$AbiPreset,[Text.UTF8Encoding]::new($false))
+            Write-Output 'NATIVE_TWO_ABI_STAGE_CONFIGURATION_PASS'
         }
 
         # v98 regression gate (GPT Pro review 2026-10-06): the identity
@@ -472,8 +507,9 @@ try {
         # AVAILABLE=true metadata. Between passes only that one generated file
         # may change and every frozen input is re-verified by the hook.
         . (Join-Path $ProjectRoot 'tools\android_seal\bridge\android_two_pass_export_hook.ps1')
-        $RealEngineExe = Join-Path $ProjectRoot "tools\godot-4.7\Godot_v4.7-stable_win64.exe"
-        $TemplateApk = Join-Path $ProjectRoot "tools\godot-4.7\editor_data\export_templates\4.7.stable\android_debug.apk"
+        $RealEngineExe = Join-Path (Split-Path -Parent $GodotConsole) ([IO.Path]::GetFileName($GodotConsole).Replace("_console.exe", ".exe"))
+        if (-not (Test-Path -LiteralPath $RealEngineExe -PathType Leaf)) { throw "Executing editor sibling missing." }
+        $TemplateApk = if ($PinnedTemplateApk) { $PinnedTemplateApk } else { Join-Path $ProjectRoot "tools\godot-4.7\editor_data\export_templates\4.7.stable\android_debug.apk" }
         $TemplateSha = (Get-FileHash -LiteralPath $TemplateApk -Algorithm SHA256).Hash.ToLowerInvariant()
         $ApkSigner = Join-Path $AndroidRoot "sdk\build-tools\35.0.1\apksigner.bat"
         $PythonExe = (Get-Command python).Source
@@ -512,7 +548,7 @@ try {
                 foreach ($key in $artifacts.Keys) {
                     $runAppData = Join-Path $StageRoot ".godot\runtime_appdata\seal_$key\"
                     $env:HARDCORE_AUDIT_RUNTIME_APPDATA = $runAppData
-                    & pwsh -NoProfile -File (Join-Path $StageRoot 'tools\run_godot_tests.ps1') -TestPaths $sceneByArtifact[$key] -TimeoutSeconds 30 | Out-Null
+                    & pwsh -NoProfile -File (Join-Path $StageRoot 'tools\run_godot_tests.ps1') -GodotExecutable $GodotConsole -TestPaths $sceneByArtifact[$key] -TimeoutSeconds 30 | Out-Null
                     if ($LASTEXITCODE -ne 0) { throw "Stage capture scene failed: $($sceneByArtifact[$key])" }
                     $artifactPath = Join-Path $frameworkDir $artifacts[$key]
                     if (-not (Test-Path -LiteralPath $artifactPath -PathType Leaf)) { throw "Missing stage capture artifact: $($artifacts[$key])" }
@@ -566,7 +602,7 @@ try {
         }
         $FinalExport = Invoke-TwoPassAndroidCodeExport -StageRoot $StageProjectPath -GodotConsole $RealEngineExe `
             -Python $PythonExe -OutputApk $StageApk -EvidenceRoot $SealEvidenceRoot -SourceCommit $ResolvedCommit `
-            -TemplateApk $TemplateApk -ExpectedTemplateSha256 $TemplateSha -BaselineApk $BaselineApkPath `
+            -TemplateApk $TemplateApk -ExpectedTemplateSha256 $TemplateSha -BaselineApk $BaselineApkPath -SigningToolRoot $SigningToolRoot `
             -ApkSigner $ApkSigner -RegenerateStageCatalogue $RegenerateStageCatalogue -VerifyProductionBuild $VerifyProductionBuild
         Write-Output ("TWO_PASS_SEAL_EXPORT_PASS final=" + $FinalExport.apk_sha256)
         if (-not (Test-Path -LiteralPath $StageApk -PathType Leaf)) {

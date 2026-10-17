@@ -1,0 +1,906 @@
+{
+  "schema": "hardcore.v115.source_manifest.v1",
+  "project_head": "45170d0eaf4d2c642d4a03de392f64fa2b1e25bf",
+  "engine_commit": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+  "source_scope": "Same Native f8e9 ACK retention/terminal RNG/point contracts plus Source try-only ordinary publication admission using existing bounded FIFO. READY seals actual acceptance; PENDING preserves unaccepted Source journal; INVALID never fabricates ACK. Actual linked integration/full World NOT_RUN. Plus readonly SourceEventReplyMailbox.poll preserves already-latched receipt time and Source poll epoch for exact Map settlement/retirement; does not observe or advance clock. Real mailbox regression and Host World acceptance remain separate.",
+  "source_sha256": "58a1b306f62b5d805bd2ff282ab37367cc807e7dd2672c0fb265c2e2289de5f8",
+  "changed_files": [
+    {
+      "root": "engine",
+      "relative_path": "core/io/resource_loader.cpp",
+      "sha256": "91ad9d97fd0e50ee18d9bc07a5837a0661c6720d5ba2d4a0331af483f4ec4b59"
+    },
+    {
+      "root": "engine",
+      "relative_path": "core/io/resource_loader.h",
+      "sha256": "6cd55faedbe7317db41d6b3bf14136eb7bdf64ff969c43d90761d50ac017ec6b"
+    },
+    {
+      "root": "engine",
+      "relative_path": "core/math/math_funcs.cpp",
+      "sha256": "5fdd76c7151e4cb7f5175ed1d75ee60b7781cce769f96b659cdc89751ef938da"
+    },
+    {
+      "root": "engine",
+      "relative_path": "core/math/math_funcs.h",
+      "sha256": "b2c3ec36c0d09297713be78278e97a293a0b023cdabc1cfd7942e4877795c6b9"
+    },
+    {
+      "root": "engine",
+      "relative_path": "core/object/worker_thread_pool.cpp",
+      "sha256": "b4a23f214e7ed28c3663787fa9439bdd3fda5827a357d0b7215932b7a30fb9ed"
+    },
+    {
+      "root": "engine",
+      "relative_path": "core/object/worker_thread_pool.h",
+      "sha256": "dd54a1d4c5b12c038f1cf26a670e8f2e9a0e94d97928ecc53a19bbd0d991cc98"
+    },
+    {
+      "root": "engine",
+      "relative_path": "main/main.cpp",
+      "sha256": "74ebd33d1b98895df544e988cc386703c3b33bf402840fe8b6ae756a02c41598"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/godot_physics_2d/godot_space_2d.cpp",
+      "sha256": "bdf4b6b053530e1061d785a7fdf708c19100ef30d5e0e1bea1ed8c320e3500dc"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/godot_physics_2d/register_types.cpp",
+      "sha256": "1787182d192482db7482b06ec56b94b7abee424fc337bf1b11fd27c57801abcf"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/SCsub",
+      "sha256": "109cf7b68a6a9b1296567fa911ec5161aaeb9d0b63e717f93a960676a7982de0"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/async_live_resource_mailbox.cpp",
+      "sha256": "7111e3fec45102411c3bdb979aa326d4bf5a5085c0f71d3a03c772d5fbecb5e4"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/async_live_resource_mailbox.h",
+      "sha256": "420e2099262be48647a322d6aa3e779321ca6654c3483d651c12f2d04e6643f7"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/batch_executor.cpp",
+      "sha256": "e28aa648fac15a746877ad071ac489a9c7633267bcc66d56eec292f9d2a6d09a"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/batch_executor.h",
+      "sha256": "df7a33373a5e45030a43345037b9340cdcd355f005b8b460e8d826636f19a174"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/batch_types.h",
+      "sha256": "1e48f3326668e217ae60c8706ddef0900dc4e0c3f6680ec04e6a4b3069f992cc"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/close_process_mailbox.h",
+      "sha256": "8249d9073e4da0056d45b1f57ddb10e9041ea392f4e066a6580a3292b325eec1"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/close_progress_signal.h",
+      "sha256": "04f936b0ef42e475455ba6ef4a8075ade78714064f5fe56b414b697c7617ecbc"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/config.py",
+      "sha256": "a8de87cf6212f9f5cf058243ada34193a83095d95475b3974e2a1354b20ba7da"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/content_value_graph.cpp",
+      "sha256": "c47365bb1bd5b480790190d656ba9024b85fda8a3aecd3133544853751f475aa"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/content_value_graph.h",
+      "sha256": "b124e7a4f3669e9f51895bb855a5a2ac4ca061b9433e910bc7583e52c9431ddb"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/crowd_geometry_kernel.cpp",
+      "sha256": "a775be5b1d161c6df1515df613a3e0d8bc3936e4c637c5e7f3204ac3e383100b"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/crowd_geometry_kernel.h",
+      "sha256": "13a75093be16042a9cf09c9875750e5eb580eff7cac3284e035b314ef56f0096"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/crowd_geometry_owner.cpp",
+      "sha256": "66f79df4b801ebc082e0c2ffa27f18c168ef1cfaddf49f50e9dbc5b20d105101"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/crowd_geometry_owner.h",
+      "sha256": "ceb3a82c13b9651ff58f7e479f32934c8f9526d861721634e6af060059b0b9d9"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/feature_live_schema.h",
+      "sha256": "72027ad2119f8d5ebed267c42d475c33ae6eef12d687d02a06a23e5d083e1123"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/feature_live_source_seal.h",
+      "sha256": "2975b531093f4e88aef0ecf767b76e84d4c9476718642c6753a71ee8495de41a"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/feature_live_transport.h",
+      "sha256": "e83805fa2e4aba0793c8be4e055404774212509a5a8e3ba093aed5bfcc6c4bae"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/gameplay_global_random.h",
+      "sha256": "de90e77f0c8a5f5393ae9d2050b919f256526d8852654f57dc39aecd06022a2e"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/gameplay_global_random_binding.cpp",
+      "sha256": "cd47da170be3af0b1b151c996003ff53adb17c1758b25b5c84e452eea53efb77"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/gameplay_global_random_binding.h",
+      "sha256": "e4ed3ec88cc9f30562de47e49e2bc0d5e61d67a8138da45af89096bdcc6c7e1d"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/gameplay_random_return_math.h",
+      "sha256": "0dce511303092e0f986c0276f71f4d14a4c819ef08fb22489894731f21ddaaaa"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/godot_physics_backend.cpp",
+      "sha256": "2980f1bb5bf88a08dedbbbace2f5a937f790493b19476ebdb68879b831379ed9"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/godot_physics_backend.h",
+      "sha256": "c112e972169de8e43faf9a3f0eb764ed672a2fa63288ecb1eb2b3ca10af0328a"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/godot_worker_pool_adapter.cpp",
+      "sha256": "26a95cbb60a0a37295128317224edbb198bb59e7e68eea81f918a7cd5de5ddc4"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/godot_worker_pool_adapter.h",
+      "sha256": "ecea6c14983409678f7d58bc4012f1c41f2f93dfc937182faefd27e80b02ae9a"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/main_source_deferred.cpp",
+      "sha256": "2af9228fe45ca2ac039218f099789d7a206ec83d1012b4c843eae83bb35bb9bc"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/main_source_deferred.h",
+      "sha256": "cea430fedae98d24f22a14e8c28898cb0629a01ad0c44f500faf3f6dcc40e669"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/map_loading_host_state.h",
+      "sha256": "ecb2116ec04896989e85c0527b1dea0d1415ce7b3ac8835bd859944c81d6ec57"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/map_loading_provenance.cpp",
+      "sha256": "353da959a62779edd95cd8000b819c98d5f2b59d76f2aed2a5b87f8059074086"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/map_loading_provenance.h",
+      "sha256": "6f2ef20885223abc6afd7b4fe273777983021217d450572ad967933fd785a0e7"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/motion_adapter.cpp",
+      "sha256": "dcbd22eb812b515485706fe02a6f555ff6437232f84302c5e10a769f337a6c49"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/motion_adapter.h",
+      "sha256": "8a7ef24eb81a42abb1603e97875b9d607228ade83268d79b93c2219476964442"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/numeric_point_query_scope.cpp",
+      "sha256": "d822178363cec9ac8e9052189d8abbc98fe9c51eecdbbedb03766da730d6ad29"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/numeric_point_query_scope.h",
+      "sha256": "1141d47f850af4ca1e4b95c0524e8114c792f4ecb585cc329281ca7be7604710"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/original_primitive_mailbox.cpp",
+      "sha256": "f2e0716eee9e4d7d1dc1d23d113dd24602798b4ff3ac1c6184b8a1d36822e9d5"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/original_primitive_mailbox.h",
+      "sha256": "01f0f4e39922d10d3b9d482a7814411dc58b49c3576cbe9aeeac99b4861767a6"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/physics_motion_parity_tests.cpp",
+      "sha256": "bdfcc642a38adbe61bc02b8e951883aded5d3d2415e2168d0030e4e9d4dbd2fa"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/physics_motion_parity_tests.h",
+      "sha256": "dc7428492470f5ea8e460dd438c1a602583e8be90cfbe23f1d38139540c53484"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/physics_port.cpp",
+      "sha256": "c4d833788d2fd1137598047f13e07126be82672d4ddc9826224374747867228c"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/physics_port.h",
+      "sha256": "626d81d3013e53de4efcb0f84e6ee7a549cc41da85b51bed74f6a939826bab06"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/presentation_bridge.cpp",
+      "sha256": "2c938d3b5905e3e052edea72f2bca651b8c869b8ddea56403703a7417ac2981e"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/presentation_bridge.h",
+      "sha256": "ad733001f29202649b0e7479a000b72c6b50bd75649b2e01a593a9ccdf9182ba"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/pursuit_numeric.cpp",
+      "sha256": "2c52e3ed9f43d0d109ee106581004a2da14690301e0aae10848be542da5666b6"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/pursuit_numeric.h",
+      "sha256": "4cf49e3f15a92e2342612d785d18cffd805433bb345bc5d5e085fe8700b58ca5"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/pursuit_planning_owner.cpp",
+      "sha256": "568845143c3044efff8a41ca488582e88590b52fe935602034a6441827b82512"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/pursuit_planning_owner.h",
+      "sha256": "e8a4c4b0c985a1b1e77d54adc2a39feb77049bae08c7635e78926e15aa4886d4"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/register_types.cpp",
+      "sha256": "c43a83b1825ff33f37b6139c710e620ba2caefb9ff4e94500c1aff0288e9e7b2"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/register_types.h",
+      "sha256": "cdd7ba1925918dbd030ba6d9addfa533eaa8668d64428a3d2c4b4b696f02b521"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/resource_observation.cpp",
+      "sha256": "8bbde8c262605eaaaffa92a0a4e54305a7d2ef057c289e63bb3f51e4d50c64ef"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/resource_observation.h",
+      "sha256": "aac97a9a4dd92fa964b02cde9adcbe36d9f28ecc748dfd7db156704dce324616"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/simulation_clock.cpp",
+      "sha256": "2caa780c01b2e8795ebce28c3ffde2a0d4b69a32a18192f5df4e664dee45be13"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/simulation_clock.h",
+      "sha256": "5728100df474bd2fcf675bd76650f043b6c7d6e441faeb97f7229d085ad1b457"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/simulation_host.cpp",
+      "sha256": "045d01f53a2d741bd88f34ebc6bc684684175bfc0e7eaacfedad8999e3134b8d"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/simulation_host.h",
+      "sha256": "5ec3e26e834b01060e7c54608658ad089a44f162a8687ed9067471e87b11638f"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/simulation_host_close_process.cpp",
+      "sha256": "05b523748d6c753233bfa43cfa5eae8f107c091cd072cffe109448900a39f747"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/simulation_host_feature_live.cpp",
+      "sha256": "041b3a6c4bf5d0786fce01bf84b35ffe9d0b1dcafb0210934d8d403cca1c4a25"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/simulation_host_gameplay_random_return.cpp",
+      "sha256": "ce66da5b83c930f266c5d4fc698de28b6fe0298052309b12dfc9c8dc6322a03c"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/simulation_host_issued_claims.cpp",
+      "sha256": "6b1de434b8433255a3064b7013b920edfce491534cef4c24805c43335529d54c"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/simulation_host_map_loading.cpp",
+      "sha256": "1f4bea6c6071f0f6c958cddadfe333e3002359e326aea3b47e915bca5af0263c"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/simulation_host_original_primitives.cpp",
+      "sha256": "5d386451a1feffef03eed18c45836841e46c55e01c966ddd4357c4cb3c562e18"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/simulation_world_2d.cpp",
+      "sha256": "f37ae7790cec8aa805bc4652b29fe1a328d9e660960d4e34055e2e5a90a4c861"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/simulation_world_2d.h",
+      "sha256": "fb6793777aed7f5355af33b8e6bfddb12564ee6784dbc637ca65202fc02506f8"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/source_admission_opcodes.h",
+      "sha256": "b10e699efba094c8b996c00a6bb1e44596d1e42bb985e6cb70243a09844b8089"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/source_admission_scope_ledger.cpp",
+      "sha256": "4debdeb88067d0e0cdd4c8308c01d88791e04dbc02588f78ad7d2bf777695f59"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/source_admission_scope_ledger.h",
+      "sha256": "08f5eb82f7f5089475c690aca63d0470b85f788cadb8533276878f0cbff26651"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/source_event_issued_claim_attachment.cpp",
+      "sha256": "429a8067d0fe3f0df2f604c7b9b09aa521a0181ab7c23fddf57461b7faf901a9"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/source_event_reply_mailbox.cpp",
+      "sha256": "f96fca9250b5a044fdb2948954cf6e3fbbab4c328c1a24e392853d58f76f570f"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/source_event_reply_mailbox.h",
+      "sha256": "435b3864c3d5316c1d3d7cd6da98b4cc4438f3db3614ff5358270886426b5d20"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/terminal_owner_unbind_guard.h",
+      "sha256": "8284392603bb106c7ad3a30e4a52e386dbf141d39d9ab229ed89f76ea26d3df8"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/timer_ledger.cpp",
+      "sha256": "73ef7dad3548d85f091787b7a1f340d16f6d96785fcbfca75a1eff09c9f9e4f5"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/timer_ledger.h",
+      "sha256": "8b29763ea6f64665fab179412ca841dbcc9bbae89e130bb4affb269c091056c2"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/transport_probe.cpp",
+      "sha256": "852b0f61a94b58bb774b148a8497a3e936493bc9770ef83b4884587c621a750c"
+    },
+    {
+      "root": "engine",
+      "relative_path": "modules/hardcore_simulation/transport_probe.h",
+      "sha256": "6dda0a0f68dc9b8a13fa783ed046f50c832cff2c38a0632422099ad4ff55de96"
+    },
+    {
+      "root": "engine",
+      "relative_path": "scene/2d/physics/character_body_2d.cpp",
+      "sha256": "68d6844f6632dc083a93db0b486e7491ade81b56a9af73ff2d0e44dfa66f3544"
+    },
+    {
+      "root": "engine",
+      "relative_path": "scene/2d/physics/character_body_2d.h",
+      "sha256": "3ff08877cfd7b4812d9a44b8ae49077a0bec6a4aadfe875668b7022ff876fc71"
+    },
+    {
+      "root": "engine",
+      "relative_path": "scene/2d/physics/character_motion_2d.cpp",
+      "sha256": "f5808d520c7ea0344f47aadf7f48af6a9d3fda2fbba6865d0fa4f20e72b9987d"
+    },
+    {
+      "root": "engine",
+      "relative_path": "scene/2d/physics/character_motion_2d.h",
+      "sha256": "eb0f5d5373d4ea67384cd0d066d490ac740047d05719a423f63a8cd1f610d140"
+    },
+    {
+      "root": "engine",
+      "relative_path": "scene/2d/physics/physics_body_2d.cpp",
+      "sha256": "b610fef9c9cec4bb95fc44ae9d019f3e6255c1e66167c2780e94ace10ef68670"
+    },
+    {
+      "root": "engine",
+      "relative_path": "scene/main/scene_tree.cpp",
+      "sha256": "043d6ee454ea8c2d5b022029f3095188603c3ae0e608c6be7892d0434044869d"
+    },
+    {
+      "root": "engine",
+      "relative_path": "scene/main/viewport.cpp",
+      "sha256": "0eb70c50c2e46db7906d27aa943d7d1782866e5ef222a6e509ffdd718db7b0ac"
+    },
+    {
+      "root": "engine",
+      "relative_path": "scene/resources/world_2d.cpp",
+      "sha256": "e7c9dc3b908ea7e21a292df51fc68aede68265965eef44b79a9cc69b21b98e52"
+    },
+    {
+      "root": "engine",
+      "relative_path": "servers/physics_2d/physics_server_2d.h",
+      "sha256": "05e659527264653c113c3874a01e855ff4e5ff9e01f25c05bb371f6f12bb1735"
+    },
+    {
+      "root": "engine",
+      "relative_path": "servers/physics_2d/physics_server_2d_wrap_mt.cpp",
+      "sha256": "65a5ef4d27e030503fe029260ddba64863cce5f6edc3cf71975eebbe49b71133"
+    },
+    {
+      "root": "engine",
+      "relative_path": "servers/physics_2d/physics_server_2d_wrap_mt.h",
+      "sha256": "917045f41b5665129988774c471484f64b5295c8557c0779e8de3c5cc8f4bfab"
+    },
+    {
+      "root": "engine",
+      "relative_path": "servers/server_wrap_mt_common.h",
+      "sha256": "7970bff3f98233deba8438da17df91bf7ce8277eee647656c8c02a8ea2367b7e"
+    }
+  ],
+  "module_inputs": [
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/SCsub",
+      "sha256": "109cf7b68a6a9b1296567fa911ec5161aaeb9d0b63e717f93a960676a7982de0"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/async_live_resource_mailbox.cpp",
+      "sha256": "7111e3fec45102411c3bdb979aa326d4bf5a5085c0f71d3a03c772d5fbecb5e4"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/async_live_resource_mailbox.h",
+      "sha256": "420e2099262be48647a322d6aa3e779321ca6654c3483d651c12f2d04e6643f7"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/batch_executor.cpp",
+      "sha256": "e28aa648fac15a746877ad071ac489a9c7633267bcc66d56eec292f9d2a6d09a"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/batch_executor.h",
+      "sha256": "df7a33373a5e45030a43345037b9340cdcd355f005b8b460e8d826636f19a174"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/batch_types.h",
+      "sha256": "1e48f3326668e217ae60c8706ddef0900dc4e0c3f6680ec04e6a4b3069f992cc"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/close_process_mailbox.h",
+      "sha256": "8249d9073e4da0056d45b1f57ddb10e9041ea392f4e066a6580a3292b325eec1"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/close_progress_signal.h",
+      "sha256": "04f936b0ef42e475455ba6ef4a8075ade78714064f5fe56b414b697c7617ecbc"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/config.py",
+      "sha256": "a8de87cf6212f9f5cf058243ada34193a83095d95475b3974e2a1354b20ba7da"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/content_value_graph.cpp",
+      "sha256": "c47365bb1bd5b480790190d656ba9024b85fda8a3aecd3133544853751f475aa"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/content_value_graph.h",
+      "sha256": "b124e7a4f3669e9f51895bb855a5a2ac4ca061b9433e910bc7583e52c9431ddb"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/crowd_geometry_kernel.cpp",
+      "sha256": "a775be5b1d161c6df1515df613a3e0d8bc3936e4c637c5e7f3204ac3e383100b"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/crowd_geometry_kernel.h",
+      "sha256": "13a75093be16042a9cf09c9875750e5eb580eff7cac3284e035b314ef56f0096"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/crowd_geometry_owner.cpp",
+      "sha256": "66f79df4b801ebc082e0c2ffa27f18c168ef1cfaddf49f50e9dbc5b20d105101"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/crowd_geometry_owner.h",
+      "sha256": "ceb3a82c13b9651ff58f7e479f32934c8f9526d861721634e6af060059b0b9d9"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/feature_live_schema.h",
+      "sha256": "72027ad2119f8d5ebed267c42d475c33ae6eef12d687d02a06a23e5d083e1123"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/feature_live_source_seal.h",
+      "sha256": "2975b531093f4e88aef0ecf767b76e84d4c9476718642c6753a71ee8495de41a"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/feature_live_transport.h",
+      "sha256": "e83805fa2e4aba0793c8be4e055404774212509a5a8e3ba093aed5bfcc6c4bae"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/gameplay_global_random.h",
+      "sha256": "de90e77f0c8a5f5393ae9d2050b919f256526d8852654f57dc39aecd06022a2e"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/gameplay_global_random_binding.cpp",
+      "sha256": "cd47da170be3af0b1b151c996003ff53adb17c1758b25b5c84e452eea53efb77"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/gameplay_global_random_binding.h",
+      "sha256": "e4ed3ec88cc9f30562de47e49e2bc0d5e61d67a8138da45af89096bdcc6c7e1d"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/gameplay_random_return_math.h",
+      "sha256": "0dce511303092e0f986c0276f71f4d14a4c819ef08fb22489894731f21ddaaaa"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/godot_physics_backend.cpp",
+      "sha256": "2980f1bb5bf88a08dedbbbace2f5a937f790493b19476ebdb68879b831379ed9"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/godot_physics_backend.h",
+      "sha256": "c112e972169de8e43faf9a3f0eb764ed672a2fa63288ecb1eb2b3ca10af0328a"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/godot_worker_pool_adapter.cpp",
+      "sha256": "26a95cbb60a0a37295128317224edbb198bb59e7e68eea81f918a7cd5de5ddc4"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/godot_worker_pool_adapter.h",
+      "sha256": "ecea6c14983409678f7d58bc4012f1c41f2f93dfc937182faefd27e80b02ae9a"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/main_source_deferred.cpp",
+      "sha256": "2af9228fe45ca2ac039218f099789d7a206ec83d1012b4c843eae83bb35bb9bc"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/main_source_deferred.h",
+      "sha256": "cea430fedae98d24f22a14e8c28898cb0629a01ad0c44f500faf3f6dcc40e669"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/map_loading_host_state.h",
+      "sha256": "ecb2116ec04896989e85c0527b1dea0d1415ce7b3ac8835bd859944c81d6ec57"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/map_loading_provenance.cpp",
+      "sha256": "353da959a62779edd95cd8000b819c98d5f2b59d76f2aed2a5b87f8059074086"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/map_loading_provenance.h",
+      "sha256": "6f2ef20885223abc6afd7b4fe273777983021217d450572ad967933fd785a0e7"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/motion_adapter.cpp",
+      "sha256": "dcbd22eb812b515485706fe02a6f555ff6437232f84302c5e10a769f337a6c49"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/motion_adapter.h",
+      "sha256": "8a7ef24eb81a42abb1603e97875b9d607228ade83268d79b93c2219476964442"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/numeric_point_query_scope.cpp",
+      "sha256": "d822178363cec9ac8e9052189d8abbc98fe9c51eecdbbedb03766da730d6ad29"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/numeric_point_query_scope.h",
+      "sha256": "1141d47f850af4ca1e4b95c0524e8114c792f4ecb585cc329281ca7be7604710"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/original_primitive_mailbox.cpp",
+      "sha256": "f2e0716eee9e4d7d1dc1d23d113dd24602798b4ff3ac1c6184b8a1d36822e9d5"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/original_primitive_mailbox.h",
+      "sha256": "01f0f4e39922d10d3b9d482a7814411dc58b49c3576cbe9aeeac99b4861767a6"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/physics_motion_parity_tests.cpp",
+      "sha256": "bdfcc642a38adbe61bc02b8e951883aded5d3d2415e2168d0030e4e9d4dbd2fa"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/physics_motion_parity_tests.h",
+      "sha256": "dc7428492470f5ea8e460dd438c1a602583e8be90cfbe23f1d38139540c53484"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/physics_port.cpp",
+      "sha256": "c4d833788d2fd1137598047f13e07126be82672d4ddc9826224374747867228c"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/physics_port.h",
+      "sha256": "626d81d3013e53de4efcb0f84e6ee7a549cc41da85b51bed74f6a939826bab06"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/presentation_bridge.cpp",
+      "sha256": "2c938d3b5905e3e052edea72f2bca651b8c869b8ddea56403703a7417ac2981e"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/presentation_bridge.h",
+      "sha256": "ad733001f29202649b0e7479a000b72c6b50bd75649b2e01a593a9ccdf9182ba"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/pursuit_numeric.cpp",
+      "sha256": "2c52e3ed9f43d0d109ee106581004a2da14690301e0aae10848be542da5666b6"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/pursuit_numeric.h",
+      "sha256": "4cf49e3f15a92e2342612d785d18cffd805433bb345bc5d5e085fe8700b58ca5"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/pursuit_planning_owner.cpp",
+      "sha256": "568845143c3044efff8a41ca488582e88590b52fe935602034a6441827b82512"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/pursuit_planning_owner.h",
+      "sha256": "e8a4c4b0c985a1b1e77d54adc2a39feb77049bae08c7635e78926e15aa4886d4"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/register_types.cpp",
+      "sha256": "c43a83b1825ff33f37b6139c710e620ba2caefb9ff4e94500c1aff0288e9e7b2"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/register_types.h",
+      "sha256": "cdd7ba1925918dbd030ba6d9addfa533eaa8668d64428a3d2c4b4b696f02b521"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/resource_observation.cpp",
+      "sha256": "8bbde8c262605eaaaffa92a0a4e54305a7d2ef057c289e63bb3f51e4d50c64ef"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/resource_observation.h",
+      "sha256": "aac97a9a4dd92fa964b02cde9adcbe36d9f28ecc748dfd7db156704dce324616"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/simulation_clock.cpp",
+      "sha256": "2caa780c01b2e8795ebce28c3ffde2a0d4b69a32a18192f5df4e664dee45be13"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/simulation_clock.h",
+      "sha256": "5728100df474bd2fcf675bd76650f043b6c7d6e441faeb97f7229d085ad1b457"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/simulation_host.cpp",
+      "sha256": "045d01f53a2d741bd88f34ebc6bc684684175bfc0e7eaacfedad8999e3134b8d"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/simulation_host.h",
+      "sha256": "5ec3e26e834b01060e7c54608658ad089a44f162a8687ed9067471e87b11638f"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/simulation_host_close_process.cpp",
+      "sha256": "05b523748d6c753233bfa43cfa5eae8f107c091cd072cffe109448900a39f747"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/simulation_host_feature_live.cpp",
+      "sha256": "041b3a6c4bf5d0786fce01bf84b35ffe9d0b1dcafb0210934d8d403cca1c4a25"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/simulation_host_gameplay_random_return.cpp",
+      "sha256": "ce66da5b83c930f266c5d4fc698de28b6fe0298052309b12dfc9c8dc6322a03c"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/simulation_host_issued_claims.cpp",
+      "sha256": "6b1de434b8433255a3064b7013b920edfce491534cef4c24805c43335529d54c"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/simulation_host_map_loading.cpp",
+      "sha256": "1f4bea6c6071f0f6c958cddadfe333e3002359e326aea3b47e915bca5af0263c"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/simulation_host_original_primitives.cpp",
+      "sha256": "5d386451a1feffef03eed18c45836841e46c55e01c966ddd4357c4cb3c562e18"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/simulation_world_2d.cpp",
+      "sha256": "f37ae7790cec8aa805bc4652b29fe1a328d9e660960d4e34055e2e5a90a4c861"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/simulation_world_2d.h",
+      "sha256": "fb6793777aed7f5355af33b8e6bfddb12564ee6784dbc637ca65202fc02506f8"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/source_admission_opcodes.h",
+      "sha256": "b10e699efba094c8b996c00a6bb1e44596d1e42bb985e6cb70243a09844b8089"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/source_admission_scope_ledger.cpp",
+      "sha256": "4debdeb88067d0e0cdd4c8308c01d88791e04dbc02588f78ad7d2bf777695f59"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/source_admission_scope_ledger.h",
+      "sha256": "08f5eb82f7f5089475c690aca63d0470b85f788cadb8533276878f0cbff26651"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/source_event_issued_claim_attachment.cpp",
+      "sha256": "429a8067d0fe3f0df2f604c7b9b09aa521a0181ab7c23fddf57461b7faf901a9"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/source_event_reply_mailbox.cpp",
+      "sha256": "f96fca9250b5a044fdb2948954cf6e3fbbab4c328c1a24e392853d58f76f570f"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/source_event_reply_mailbox.h",
+      "sha256": "435b3864c3d5316c1d3d7cd6da98b4cc4438f3db3614ff5358270886426b5d20"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/terminal_owner_unbind_guard.h",
+      "sha256": "8284392603bb106c7ad3a30e4a52e386dbf141d39d9ab229ed89f76ea26d3df8"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/timer_ledger.cpp",
+      "sha256": "73ef7dad3548d85f091787b7a1f340d16f6d96785fcbfca75a1eff09c9f9e4f5"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/timer_ledger.h",
+      "sha256": "8b29763ea6f64665fab179412ca841dbcc9bbae89e130bb4affb269c091056c2"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/transport_probe.cpp",
+      "sha256": "852b0f61a94b58bb774b148a8497a3e936493bc9770ef83b4884587c621a750c"
+    },
+    {
+      "root": "project",
+      "relative_path": "native/hardcore_simulation/transport_probe.h",
+      "sha256": "6dda0a0f68dc9b8a13fa783ed046f50c832cff2c38a0632422099ad4ff55de96"
+    }
+  ],
+  "build_config": {
+    "precision": "single",
+    "windows_arch": "x86_64",
+    "android_arch": "arm64",
+    "android_abis": [
+      "arm64-v8a",
+      "x86_64"
+    ],
+    "ndk_version": "29.0.14206865",
+    "target": "editor",
+    "platform": "windows",
+    "jobs": 4,
+    "android_archs": [
+      "arm64",
+      "x86_64"
+    ]
+  },
+  "source_fingerprint_algorithm": "sha256(utf8(sorted root/relative_path:sha256 rows joined with LF, including final LF))",
+  "reviewed_gd_seals": [
+    {
+      "name": "FEATURE",
+      "path": "scripts/features/runtime/feature_resource_main_primitives.gd",
+      "before": "744490fad6a95671073ba646e4d5323d1854a6a512f02083976d459254412b66",
+      "after": "e6ed41a4444084e8892818c68adb96a3c5895559774d88b7b210b41461d509e6"
+    },
+    {
+      "name": "ORIGIN",
+      "path": "scripts/gameplay/source/main_source_closing_io_producer.gd",
+      "before": "8884d1b1ebe232f10605cdea0eced15b686244c45f677ebfb59fd078387bfae1",
+      "after": "8884d1b1ebe232f10605cdea0eced15b686244c45f677ebfb59fd078387bfae1"
+    },
+    {
+      "name": "SOURCE",
+      "path": "scripts/features/runtime/feature_resource_owner_coordinator.gd",
+      "before": "6ba6941921d31088d12ad4233697336ec839ea65c79f307b4c69d38de8bc9efa",
+      "after": "6ba6941921d31088d12ad4233697336ec839ea65c79f307b4c69d38de8bc9efa"
+    },
+    {
+      "name": "WARM",
+      "path": "scripts/gameplay/world/world_caster_warm_main.gd",
+      "before": "5cae0c8d8e39d93fa5230bd9ca2543b43512acbecafa13c41f27e36cc9fff65c",
+      "after": "5cae0c8d8e39d93fa5230bd9ca2543b43512acbecafa13c41f27e36cc9fff65c"
+    },
+    {
+      "name": "WARM_PORT",
+      "path": "scripts/gameplay/world/world_caster_warm_port.gd",
+      "before": "148c2e8d4c3e7dc8ccac844426e37014022a1304b2e9fe2185f0cad9b733a3d5",
+      "after": "148c2e8d4c3e7dc8ccac844426e37014022a1304b2e9fe2185f0cad9b733a3d5"
+    }
+  ]
+}

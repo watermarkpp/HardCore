@@ -238,7 +238,7 @@ class StringExpression:
         return result
 
 
-def extract(source: str, owner: str, global_classes: dict[str, str], native_symbols: set[str], autoloads: dict[str, str], approved_folds: dict[str, dict[str, Any]] | None = None) -> dict[str, Any]:
+def extract(source: str, owner: str, global_classes: dict[str, str], native_symbols: set[str], autoloads: dict[str, str], approved_folds: dict[str, dict[str, Any]] | None = None, approved_static_constructors: set[str] | None = None) -> dict[str, Any]:
     tokens = lex(source)
     pairs = balanced(tokens)
     contexts: dict[int, tuple[str, str]] = {}
@@ -442,6 +442,11 @@ def extract(source: str, owner: str, global_classes: dict[str, str], native_symb
         equal = next((j for j in range(i + 1, end) if tokens[j].value == "="), -1)
         if equal < 0:
             continue
+        expression_values = [part.value for part in tokens[equal + 1:end] if part.kind != "NL"]
+        # One observed native, zero-argument, scriptless synchronization object.
+        # No arbitrary new(), helper invocation, chaining or argument support.
+        if expression_values == ["Mutex", ".", "new", "(", ")"] and "Mutex" in native_symbols and "Mutex.new" in (approved_static_constructors or set()):
+            continue
         intrinsic_values = {"Vector2", "Vector2i", "Vector3", "Vector3i", "Vector4", "Vector4i", "Rect2", "Rect2i", "Color", "Quaternion", "Transform2D", "Transform3D", "Basis", "Projection", "Plane", "AABB"}
         for j in range(equal + 1, end):
             candidate = tokens[j]
@@ -551,6 +556,27 @@ def read_autoloads(source: str) -> dict[str, str]:
             raise Refusal("duplicate_autoload_identity:" + name)
         result[name] = normalized_path(value.removeprefix("*"), "res://project.godot")
     return result
+
+
+MUTEX_STATIC_PROBE_SHA256 = "8ec1b1e47b1ae92e7b6dc466946db92a0b0eeaf5193520f90a45eee37da9595a"
+
+
+def native_static_constructors(envelope: dict[str, Any] | None, expected_binary: str | None) -> set[str]:
+    if envelope is None or not envelope.get("native_static_initializers"):
+        return set()
+    names, errors = native_namespace(envelope, expected_binary)
+    if errors or "Mutex" not in names:
+        raise Refusal("native_static_initializer_namespace_missing")
+    proofs = envelope["native_static_initializers"]
+    expected = {"contract_id":"hc.code_preparation.native_static_mutex.probe.v1", "class_name":"Mutex",
+                "operation":"new", "argument_count":0, "context":"static_member_initializer",
+                "source_sha256":MUTEX_STATIC_PROBE_SHA256, "native_class_observed":"Mutex",
+                "native_scriptless":True, "reference_counted":True, "lock_roundtrip":True}
+    if not isinstance(proofs, dict) or set(proofs) != {"Mutex.new"} or not isinstance(proofs["Mutex.new"], dict) or proofs["Mutex.new"] != expected or any(type(proofs["Mutex.new"].get(key)) is not type(value) for key, value in expected.items()):
+        raise Refusal("native_static_initializer_probe_invalid")
+    # No JSON-only status flag grants an operation; this exact artifact is
+    # separately byte-bound to an actual capture run by the catalogue builder.
+    return {"Mutex.new"}
 
 
 def native_namespace(envelope: dict[str, Any] | None, expected_binary: str | None, utility_symbols: dict[str, Any] | None = None) -> tuple[set[str], list[str]]:
@@ -697,7 +723,7 @@ def compile_entry(root: Path, entry: str, class_cache: Path, native: dict[str, A
             for key, case in approved_folds.items():
                 if key.startswith(path + "#") and not fold_owner_matches_source(case["owner_source_sha256"], data):
                     raise Refusal("eager_fold_owner_source_changed")
-            observation = extract(data.decode("utf-8-sig"), path, classes, native_names, autoloads, approved_folds)
+            observation = extract(data.decode("utf-8-sig"), path, classes, native_names, autoloads, approved_folds, native_static_constructors(native, expected_binary))
         except (Refusal, UnicodeError) as error:
             errors.append(f"{path}:{error}")
             continue

@@ -40,7 +40,7 @@ func _run() -> void:
 	assert(GameModes.apply_mode("enhanced_loot") and ContentLayers.is_expansion_enabled("personal_expansion_001"), "增强模式没有启用扩展包")
 	assert(GameModes.apply_mode("modded_expansion") and ContentLayers.is_expansion_enabled("user_equipment"), "魔改模式没有启用用户扩展")
 	assert(GameModes.apply_mode("classic_176") and ContentLayers.enabled_package_ids().is_empty(), "经典模式没有恢复纯Vanilla")
-	var player_state_source := FileAccess.get_file_as_string("res://scripts/player_state.gd")
+	var player_state_source := FileAccess.get_file_as_string("res://scripts/gameplay/profile/profile_model.gd")
 	assert("content_packages" in player_state_source and "content_schema_version" in player_state_source and "game_mode_id" in player_state_source, "存档没有记录模式和扩展包版本")
 	print("ARCHITECTURE_FINAL_PASS：五层、通用规则、Boss技能库、三模式与存档兼容全部接管")
 	get_tree().quit(0)

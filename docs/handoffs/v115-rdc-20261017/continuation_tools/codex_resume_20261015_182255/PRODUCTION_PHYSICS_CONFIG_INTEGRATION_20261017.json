@@ -1,0 +1,16 @@
+{
+  "status": "NOT_RUN",
+  "red_invocation": "codex_production_physics_setting_red_20261017",
+  "reason": "Real nonfixture Host.start requires is_external_owner_mode; final project omitted setting while previous diagnostics injected it temporarily. Existing unclaimed exit assertion failed without override. Set production project once and test with no physics override.",
+  "project": {
+    "path": "project.godot",
+    "before": "91c926febd6efb9b0e0cfa09de8dd0a67b3da3f44e35a82a372c7ad8a541fb15",
+    "after": "3ef1f56ff19fdcdeb9c343ca29f2b11be4954a68a775d9c848fea463118a9462"
+  },
+  "heavy_semantic_classification": {
+    "path": "tools/run_godot_tests.ps1",
+    "before": "7f1a25b023237e98f30b084bb9d368818021be988076928957b6f3fb5cc47eeb",
+    "after": "c2353f58387772e612e8db73fdd689b07c3782f1a1c3492bfe8876bcc59f19f3"
+  },
+  "native_unchanged": "4035170f8e8396d3cc25075a8a2c1860d024006ae314567cb38f0b61d3168558"
+}

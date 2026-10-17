@@ -7,6 +7,45 @@ var _world: RefCounted
 var _actor := WeakRef.new()
 var _identity: Dictionary = {}
 var _life_authority := ""
+var _domain_registry: RefCounted
+var _domain_lease := 0
+
+static func capture_domain(registry: RefCounted, actor: Object) -> RefCounted:
+	if registry == null or not is_instance_valid(actor):
+		return null
+	var captured: Dictionary = registry.capture_actor_identity(actor)
+	if captured.is_empty():
+		return null
+	var lease: int = registry.retain_actor(captured)
+	if lease <= 0:
+		return null
+	var result := new()
+	result._domain_registry = registry
+	result._domain_lease = lease
+	result._identity = captured
+	return result
+
+func resolve_record(require_alive := true) -> Object:
+	if _domain_registry == null or _domain_lease <= 0:
+		return null
+	return _domain_registry.resolve_actor_identity(_identity, require_alive)
+
+func dispose_domain() -> void:
+	if _domain_registry != null and _domain_lease > 0:
+		var released: bool = _domain_registry.release_actor(_domain_lease)
+		assert(released, "actor reference lease could not retire")
+		if released:
+			_domain_lease = 0
+			_domain_registry = null
+
+func _notification(what: int) -> void:
+	# At PREDELETE the RefCounted owner is already invalid for a new call on
+	# self. Retire directly through the still-retained registry instead.
+	if what == NOTIFICATION_PREDELETE and _domain_registry != null and _domain_lease > 0:
+		var released: bool = _domain_registry.release_actor(_domain_lease)
+		assert(released, "actor reference final lease could not retire")
+		_domain_lease = 0
+		_domain_registry = null
 
 static func capture(world: RefCounted, actor: Node, life_authority: String = LIFE_METADATA) -> RefCounted:
 	if world == null or not is_instance_valid(actor) or actor.is_queued_for_deletion() or not actor.is_inside_tree() \

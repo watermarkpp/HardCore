@@ -1,0 +1,134 @@
+{
+  "scope": "STATIC_PROTOCOL_PROJECTION_ONLY",
+  "status": "PASS",
+  "checks": 29,
+  "failed": 0,
+  "details": [
+    {
+      "label": "exact original code projection after removing declared diagnostic hunks",
+      "status": "PASS"
+    },
+    {
+      "label": "production source still equals captured preimage",
+      "status": "PASS"
+    },
+    {
+      "label": "actual parent index has expected protected bytes",
+      "status": "PASS"
+    },
+    {
+      "label": "negative: reserve invocation change detected",
+      "status": "PASS"
+    },
+    {
+      "label": "negative: added extra accept call detected",
+      "status": "PASS"
+    },
+    {
+      "label": "negative: P retry removed detected",
+      "status": "PASS"
+    },
+    {
+      "label": "negative: settlement failure softened detected",
+      "status": "PASS"
+    },
+    {
+      "label": "negative: budget lane changed detected",
+      "status": "PASS"
+    },
+    {
+      "label": "negative: prefix acceptance branch changed detected",
+      "status": "PASS"
+    },
+    {
+      "label": "all original Native/Session/Budget/Journal/Graph calls retain exact lexical order and counts",
+      "status": "PASS"
+    },
+    {
+      "label": "all original await expressions retain exact lexical order and count",
+      "status": "PASS"
+    },
+    {
+      "label": "diagnostic helpers have no await/timer/queue/signal/physics work",
+      "status": "PASS"
+    },
+    {
+      "label": "trace defaults disabled",
+      "status": "PASS"
+    },
+    {
+      "label": "trace uses existing published source clock setting",
+      "status": "PASS"
+    },
+    {
+      "label": "single diagnostic job dictionary cleared on exchange return",
+      "status": "PASS"
+    },
+    {
+      "label": "only one request size encoding site",
+      "status": "PASS"
+    },
+    {
+      "label": "request size encoding only on first successful event graph copy",
+      "status": "PASS"
+    },
+    {
+      "label": "request size encoding time separate from original graph copy time",
+      "status": "PASS"
+    },
+    {
+      "label": "request size accurately labeled non-Native wire bytes",
+      "status": "PASS"
+    },
+    {
+      "label": "Native status only in infrequent emitter",
+      "status": "PASS"
+    },
+    {
+      "label": "bounded statuses and OTHER bucket",
+      "status": "PASS"
+    },
+    {
+      "label": "5-second emit gate and unconditional completion summary",
+      "status": "PASS"
+    },
+    {
+      "label": "actual polling/Main costs captured once",
+      "status": "PASS"
+    },
+    {
+      "label": "no diagnostic copying of original request/event/prefix/reply graphs",
+      "status": "PASS"
+    },
+    {
+      "label": "all diagnostic stages have literal fixed names",
+      "status": "PASS"
+    },
+    {
+      "label": "Native retire boolean evaluated exactly once",
+      "status": "PASS"
+    },
+    {
+      "label": "no trailing whitespace added",
+      "status": "PASS"
+    },
+    {
+      "label": "parent source unchanged after static validation",
+      "status": "PASS"
+    },
+    {
+      "label": "parent index unchanged after static validation",
+      "status": "PASS"
+    }
+  ],
+  "source_before_sha256": "3d3eee21b41983fbabd309433556838b604ef16d03223607f986d2a79497f959",
+  "source_after_sha256": "3d3eee21b41983fbabd309433556838b604ef16d03223607f986d2a79497f959",
+  "index_before_sha256": "3180f91855b8bc8d7a22848592ff9f95f2d19574a73f7a3eea90e962f7151b22",
+  "index_after_sha256": "3180f91855b8bc8d7a22848592ff9f95f2d19574a73f7a3eea90e962f7151b22",
+  "candidate_sha256": "ce29e83170efa896cb6ca47aec28efb67afbbf71ed3ebb38a79477e99e3af037",
+  "preimage_sha256": "3d3eee21b41983fbabd309433556838b604ef16d03223607f986d2a79497f959",
+  "Godot_parser": "NOT_RUN",
+  "actual_World_trace": "NOT_RUN",
+  "performance_cause": "NOT_PROVEN",
+  "command": "C:\\Users\\Administrator\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\map_loading_throughput_parallel_20261017\\validate_static.py"
+}

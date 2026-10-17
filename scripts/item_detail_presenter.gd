@@ -54,6 +54,10 @@ static var _special_rules_cache: Dictionary = {}
 static var _special_rules_loaded := false
 
 
+# Main callback depth only. No new gameplay/IO owner or timer.
+var _original_main_callback_ledger: Dictionary = {}
+
+
 func _init() -> void:
 	name = "ItemDetailPresenter"
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -92,6 +96,12 @@ func _init() -> void:
 
 
 func _ready() -> void:
+	_original_main_callback_ledger["_ready"] = int(_original_main_callback_ledger.get("_ready",0)) + 1
+	_original_source_item_detail_presenter__ready()
+	_original_main_callback_ledger["_ready"] -= 1
+
+
+func _original_source_item_detail_presenter__ready() -> void:
 	attribute_help = AttributeHelp.attach(self, detail_label)
 	var surface := StyleBoxFlat.new()
 	surface.bg_color = Color(0.055, 0.039, 0.027, 0.96)

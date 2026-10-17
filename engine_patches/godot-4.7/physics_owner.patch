@@ -1,0 +1,2623 @@
+diff --git a/core/io/resource_loader.cpp b/core/io/resource_loader.cpp
+index e7cf8b8..fc2a6dd 100644
+--- a/core/io/resource_loader.cpp
++++ b/core/io/resource_loader.cpp
+@@ -885,7 +885,21 @@ float ResourceLoader::_dependency_get_progress(const String &p_path) {
+ }
+ 
+ ResourceLoader::ThreadLoadStatus ResourceLoader::load_threaded_get_status(const String &p_path, float *r_progress) {
++	return _load_threaded_get_status(p_path, r_progress, 0, 0, nullptr);
++}
++
++ResourceLoader::ThreadLoadStatus ResourceLoader::load_threaded_get_status_at_process_epoch(
++		const String &p_path, uint64_t p_process_epoch, uint64_t p_bridge_generation,
++		float *r_progress, bool *r_progress_ensured) {
++	return _load_threaded_get_status(p_path, r_progress, p_bridge_generation, p_process_epoch, r_progress_ensured);
++}
++
++ResourceLoader::ThreadLoadStatus ResourceLoader::_load_threaded_get_status(const String &p_path,
++		float *r_progress, uint64_t p_bridge_generation, uint64_t p_process_epoch, bool *r_progress_ensured) {
+ 	bool ensure_progress = false;
++	if (r_progress_ensured) {
++		*r_progress_ensured = false;
++	}
+ 	ThreadLoadStatus status = THREAD_LOAD_IN_PROGRESS;
+ 	{
+ 		MutexLock thread_load_lock(thread_load_mutex);
+@@ -913,22 +927,47 @@ ResourceLoader::ThreadLoadStatus ResourceLoader::load_threaded_get_status(const
+ 
+ 		// Support userland polling in a loop on the main thread.
+ 		if (Thread::is_main_thread() && status == THREAD_LOAD_IN_PROGRESS) {
+-			uint64_t frame = Engine::get_singleton()->get_process_frames();
+-			if (frame == load_task_ptr->last_progress_check_main_thread_frame) {
+-				ensure_progress = true;
++			if (p_bridge_generation != 0) {
++				const uint64_t *previous = load_task_ptr->last_progress_check_hardcore_epoch.getptr(p_bridge_generation);
++				if (previous && *previous == p_process_epoch) {
++					ensure_progress = true;
++				} else {
++					load_task_ptr->last_progress_check_hardcore_epoch.insert(p_bridge_generation, p_process_epoch);
++				}
+ 			} else {
+-				load_task_ptr->last_progress_check_main_thread_frame = frame;
++				uint64_t frame = Engine::get_singleton()->get_process_frames();
++				if (frame == load_task_ptr->last_progress_check_main_thread_frame) {
++					ensure_progress = true;
++				} else {
++					load_task_ptr->last_progress_check_main_thread_frame = frame;
++				}
+ 			}
+ 		}
+ 	}
+ 
+ 	if (ensure_progress) {
+ 		_ensure_load_progress();
++		if (r_progress_ensured) {
++			*r_progress_ensured = true;
++		}
+ 	}
+ 
+ 	return status;
+ }
+ 
++void ResourceLoader::retire_hardcore_observation_generation(uint64_t p_bridge_generation) {
++	MutexLock thread_load_lock(thread_load_mutex);
++	for (KeyValue<String, ThreadLoadTask> &entry : thread_load_tasks) {
++		entry.value.last_progress_check_hardcore_epoch.erase(p_bridge_generation);
++	}
++	// Tasks retained by a user token may already be outside the task registry.
++	for (KeyValue<String, LoadToken *> &entry : user_load_tokens) {
++		if (entry.value->task_if_unregistered) {
++			entry.value->task_if_unregistered->last_progress_check_hardcore_epoch.erase(p_bridge_generation);
++		}
++	}
++}
++
+ Ref<Resource> ResourceLoader::load_threaded_get(const String &p_path, Error *r_error) {
+ 	if (r_error) {
+ 		*r_error = OK;
+diff --git a/core/io/resource_loader.h b/core/io/resource_loader.h
+index d1af3a0..527c74e 100644
+--- a/core/io/resource_loader.h
++++ b/core/io/resource_loader.h
+@@ -190,6 +190,9 @@ private:
+ 		float progress = 0.0f;
+ 		float max_reported_progress = 0.0f;
+ 		uint64_t last_progress_check_main_thread_frame = UINT64_MAX;
++		// Registered HardCore consumers observe their simulation P epoch. Keep
++		// each bridge incarnation independent while old accepted work drains.
++		HashMap<uint64_t, uint64_t> last_progress_check_hardcore_epoch;
+ 		ThreadLoadStatus status = THREAD_LOAD_IN_PROGRESS;
+ 		CacheMode cache_mode = CACHE_MODE_REUSE;
+ 		Error error = OK;
+@@ -242,12 +245,18 @@ private:
+ 	static float _dependency_get_progress(const String &p_path);
+ 
+ 	static bool _ensure_load_progress();
++	static ThreadLoadStatus _load_threaded_get_status(const String &p_path, float *r_progress,
++			uint64_t p_bridge_generation, uint64_t p_process_epoch, bool *r_progress_ensured);
+ 
+ 	static String _validate_local_path(const String &p_path);
+ 
+ public:
+ 	static Error load_threaded_request(const String &p_path, const String &p_type_hint = "", bool p_use_sub_threads = false, CacheMode p_cache_mode = CACHE_MODE_REUSE);
+ 	static ThreadLoadStatus load_threaded_get_status(const String &p_path, float *r_progress = nullptr);
++	static ThreadLoadStatus load_threaded_get_status_at_process_epoch(const String &p_path,
++			uint64_t p_process_epoch, uint64_t p_bridge_generation, float *r_progress = nullptr,
++			bool *r_progress_ensured = nullptr);
++	static void retire_hardcore_observation_generation(uint64_t p_bridge_generation);
+ 	static Ref<Resource> load_threaded_get(const String &p_path, Error *r_error = nullptr);
+ 
+ 	static bool is_within_load() { return load_nesting > 0; }
+diff --git a/core/math/math_funcs.cpp b/core/math/math_funcs.cpp
+index 76d9cd2..0da56c5 100644
+--- a/core/math/math_funcs.cpp
++++ b/core/math/math_funcs.cpp
+@@ -32,8 +32,11 @@
+ 
+ #include "core/error/error_macros.h"
+ #include "core/math/random_pcg.h"
++#include <mutex>
+ 
+ static RandomPCG default_rand;
++static std::mutex default_rand_mutex;
++Math::GlobalRandomHandoff Math::capture_default_random_handoff(){std::lock_guard<std::mutex> lock(default_rand_mutex);return {default_rand.get_seed(),default_rand.get_state(),RandomPCG::DEFAULT_INC};}
+ 
+ uint32_t Math::rand_from_seed(uint64_t *p_seed) {
+ 	RandomPCG rng = RandomPCG(*p_seed);
+@@ -43,18 +46,22 @@ uint32_t Math::rand_from_seed(uint64_t *p_seed) {
+ }
+ 
+ void Math::seed(uint64_t p_value) {
++	std::lock_guard<std::mutex> lock(default_rand_mutex);
+ 	default_rand.seed(p_value);
+ }
+ 
+ void Math::randomize() {
++	std::lock_guard<std::mutex> lock(default_rand_mutex);
+ 	default_rand.randomize();
+ }
+ 
+ uint32_t Math::rand() {
++	std::lock_guard<std::mutex> lock(default_rand_mutex);
+ 	return default_rand.rand();
+ }
+ 
+ double Math::randfn(double p_mean, double p_deviation) {
++	std::lock_guard<std::mutex> lock(default_rand_mutex);
+ 	return default_rand.randfn(p_mean, p_deviation);
+ }
+ 
+@@ -170,13 +177,16 @@ uint32_t Math::larger_prime(uint32_t p_val) {
+ }
+ 
+ double Math::random(double p_from, double p_to) {
++	std::lock_guard<std::mutex> lock(default_rand_mutex);
+ 	return default_rand.random(p_from, p_to);
+ }
+ 
+ float Math::random(float p_from, float p_to) {
++	std::lock_guard<std::mutex> lock(default_rand_mutex);
+ 	return default_rand.random(p_from, p_to);
+ }
+ 
+ int Math::random(int p_from, int p_to) {
++	std::lock_guard<std::mutex> lock(default_rand_mutex);
+ 	return default_rand.random(p_from, p_to);
+ }
+diff --git a/core/math/math_funcs.h b/core/math/math_funcs.h
+index 43e4aac..eb6a93a 100644
+--- a/core/math/math_funcs.h
++++ b/core/math/math_funcs.h
+@@ -678,6 +678,8 @@ double snapped(double p_value, double p_step);
+ 
+ uint32_t larger_prime(uint32_t p_val);
+ 
++struct GlobalRandomHandoff{uint64_t seed,state,increment;};
++GlobalRandomHandoff capture_default_random_handoff(); // Read-only, same writer mutex.
+ void seed(uint64_t p_seed);
+ void randomize();
+ uint32_t rand_from_seed(uint64_t *p_seed);
+diff --git a/core/object/worker_thread_pool.cpp b/core/object/worker_thread_pool.cpp
+index f5574c4..72f8144 100644
+--- a/core/object/worker_thread_pool.cpp
++++ b/core/object/worker_thread_pool.cpp
+@@ -122,7 +122,12 @@ void WorkerThreadPool::_process_task(Task *p_task) {
+ 
+ 		if (do_post) {
+ 			p_task->group->done_semaphore.post();
++            // Completion witness runs after every user callback returned, under
++            // the same mutex as consumer reclamation. It must only notify
++            // native progress and must not reenter the pool or call Godot.
++            MutexLock completion_lock(task_mutex);
+ 			p_task->group->completed.set_to(true);
++            if(p_task->group->native_completion)p_task->group->native_completion(p_task->group->native_completion_userdata);
+ 		}
+ 		uint32_t max_users = p_task->group->tasks_used + 1; // Add 1 because the thread waiting for it is also user. Read before to avoid another thread freeing task after increment.
+ 		uint32_t finished_users = p_task->group->finished.increment();
+@@ -707,6 +712,13 @@ WorkerThreadPool::GroupID WorkerThreadPool::add_group_task(const Callable &p_act
+ 	return _add_group_task(p_action, nullptr, nullptr, nullptr, p_elements, p_tasks, p_high_priority, p_description);
+ }
+ 
++bool WorkerThreadPool::set_native_group_completion_callback(GroupID p_group,void (*p_callback)(void*),void*p_userdata){
++    if(!p_callback||!p_userdata)return false;
++    MutexLock lock(task_mutex);Group**found=groups.getptr(p_group);if(!found||(*found)->native_completion)return false;
++    Group*group=*found;group->native_completion=p_callback;group->native_completion_userdata=p_userdata;
++    if(group->completed.is_set())p_callback(p_userdata);
++    return true;
++}
+ uint32_t WorkerThreadPool::get_group_processed_element_count(GroupID p_group) const {
+ 	MutexLock task_lock(task_mutex);
+ 	const Group *const *groupp = groups.getptr(p_group);
+@@ -724,6 +736,35 @@ bool WorkerThreadPool::is_group_task_completed(GroupID p_group) const {
+ 	return (*groupp)->completed.is_set();
+ }
+ 
++bool WorkerThreadPool::try_reclaim_completed_group_task(GroupID p_group) {
++#ifdef THREADS_ENABLED
++	// S never waits on task_mutex or the group semaphore. Another poll may
++	// retry at its actual source boundary after competing pool bookkeeping.
++	if (!task_mutex.try_lock()) {
++		return false;
++	}
++	Group **groupp = groups.getptr(p_group);
++	if (!groupp || !(*groupp)->completed.is_set()) {
++		task_mutex.unlock();
++		return false;
++	}
++	Group *group = *groupp;
++	// _process_task posts/completed before its worker tail's finished.inc.
++	// Preserve exactly the original consumer+worker reference protocol.
++	uint32_t max_users = group->tasks_used + 1;
++	uint32_t finished_users = group->finished.increment();
++	// Erase under this same unique consumer claim. A repeated ID cannot
++	// consume the last consumer twice, even while workers leave their tails.
++	groups.erase(p_group);
++	if (finished_users == max_users) {
++		group_allocator.free(group);
++	}
++	task_mutex.unlock();
++#endif
++	return true;
++}
++
++
+ void WorkerThreadPool::wait_for_group_task_completion(GroupID p_group) {
+ #ifdef THREADS_ENABLED
+ 	task_mutex.lock();
+diff --git a/core/object/worker_thread_pool.h b/core/object/worker_thread_pool.h
+index 808be67..f2bb7ff 100644
+--- a/core/object/worker_thread_pool.h
++++ b/core/object/worker_thread_pool.h
+@@ -69,6 +69,8 @@ private:
+ 		SafeFlag completed;
+ 		SafeNumeric<uint32_t> finished;
+ 		uint32_t tasks_used = 0;
++        void (*native_completion)(void*)=nullptr;
++        void* native_completion_userdata=nullptr;
+ 	};
+ 
+ 	struct Task {
+@@ -263,8 +265,10 @@ public:
+ 	}
+ 	GroupID add_native_group_task(void (*p_func)(void *, uint32_t), void *p_userdata, int p_elements, int p_tasks = -1, bool p_high_priority = false, const String &p_description = String());
+ 	GroupID add_group_task(const Callable &p_action, int p_elements, int p_tasks = -1, bool p_high_priority = false, const String &p_description = String());
++    bool set_native_group_completion_callback(GroupID p_group,void (*p_callback)(void*),void*p_userdata);
+ 	uint32_t get_group_processed_element_count(GroupID p_group) const;
+ 	bool is_group_task_completed(GroupID p_group) const;
++	bool try_reclaim_completed_group_task(GroupID p_group);
+ 	void wait_for_group_task_completion(GroupID p_group);
+ 
+ 	_FORCE_INLINE_ int get_thread_count() const {
+diff --git a/main/main.cpp b/main/main.cpp
+index b8a7c6c..0b6e218 100644
+--- a/main/main.cpp
++++ b/main/main.cpp
+@@ -94,6 +94,7 @@
+ #ifndef PHYSICS_2D_DISABLED
+ #include "servers/physics_2d/physics_server_2d.h"
+ #include "servers/physics_2d/physics_server_2d_dummy.h"
++#include "servers/physics_2d/physics_server_2d_wrap_mt.h"
+ #endif // PHYSICS_2D_DISABLED
+ 
+ // 3D
+@@ -405,7 +406,15 @@ void finalize_physics() {
+ #endif // PHYSICS_3D_DISABLED
+ 
+ #ifndef PHYSICS_2D_DISABLED
+-	physics_server_2d->finish();
++	if (PhysicsServer2DWrapMT::is_external_owner_server(physics_server_2d)) {
++		auto *wrapper = Object::cast_to<PhysicsServer2DWrapMT>(physics_server_2d);
++		if (!wrapper->is_external_finished()) {
++			wrapper->finish_external_unclaimed_bootstrap();
++		}
++		CRASH_COND_MSG(!wrapper->is_external_finished(), "S must finish/join external Physics2D before Main finalization.");
++	} else {
++		physics_server_2d->finish();
++	}
+ 	memdelete(physics_server_2d);
+ #endif // PHYSICS_2D_DISABLED
+ }
+@@ -4980,6 +4989,9 @@ bool Main::iteration() {
+ 		// may be the same, and no interpolation takes place.
+ 		GodotProfileZoneGrouped(_physics_zone, "main loop iteration prepare");
+ 		OS::get_singleton()->get_main_loop()->iteration_prepare();
++#ifndef PHYSICS_2D_DISABLED
++		bool physics_2d_external_owner = false;
++#endif
+ 
+ #ifndef PHYSICS_3D_DISABLED
+ 		GodotProfileZoneGrouped(_physics_zone, "PhysicsServer3D::sync");
+@@ -4988,18 +5000,25 @@ bool Main::iteration() {
+ #endif // PHYSICS_3D_DISABLED
+ 
+ #ifndef PHYSICS_2D_DISABLED
+-		GodotProfileZoneGrouped(_physics_zone, "PhysicsServer2D::sync");
+-		PhysicsServer2D::get_singleton()->sync();
+-		PhysicsServer2D::get_singleton()->flush_queries();
++		physics_2d_external_owner = PhysicsServer2DWrapMT::is_external_owner_server(PhysicsServer2D::get_singleton());
++		if (!physics_2d_external_owner) {
++			GodotProfileZoneGrouped(_physics_zone, "PhysicsServer2D::sync");
++			PhysicsServer2D::get_singleton()->sync();
++			PhysicsServer2D::get_singleton()->flush_queries();
++		}
+ #endif // PHYSICS_2D_DISABLED
+ 
+ 		GodotProfileZoneGrouped(_physics_zone, "physics_process");
++		// SceneTree physics services remain on Main. The external simulation host
++		// owns only live game physics calls and the backend phase driver.
+ 		if (OS::get_singleton()->get_main_loop()->physics_process(physics_step * time_scale)) {
+ #ifndef PHYSICS_3D_DISABLED
+ 			PhysicsServer3D::get_singleton()->end_sync();
+ #endif // PHYSICS_3D_DISABLED
+ #ifndef PHYSICS_2D_DISABLED
+-			PhysicsServer2D::get_singleton()->end_sync();
++			if (!physics_2d_external_owner) {
++				PhysicsServer2D::get_singleton()->end_sync();
++			}
+ #endif // PHYSICS_2D_DISABLED
+ 
+ 			Engine::get_singleton()->_in_physics = false;
+@@ -5032,9 +5051,11 @@ bool Main::iteration() {
+ #endif // PHYSICS_3D_DISABLED
+ 
+ #ifndef PHYSICS_2D_DISABLED
+-		GodotProfileZoneGrouped(_profile_zone, "2D physics");
+-		PhysicsServer2D::get_singleton()->end_sync();
+-		PhysicsServer2D::get_singleton()->step(physics_step * time_scale);
++		if (!physics_2d_external_owner) {
++			GodotProfileZoneGrouped(_profile_zone, "2D physics");
++			PhysicsServer2D::get_singleton()->end_sync();
++			PhysicsServer2D::get_singleton()->step(physics_step * time_scale);
++		}
+ #endif // PHYSICS_2D_DISABLED
+ 
+ 		message_queue->flush();
+diff --git a/modules/godot_physics_2d/godot_space_2d.cpp b/modules/godot_physics_2d/godot_space_2d.cpp
+index 1d7ce01..5ac933f 100644
+--- a/modules/godot_physics_2d/godot_space_2d.cpp
++++ b/modules/godot_physics_2d/godot_space_2d.cpp
+@@ -194,7 +194,9 @@ bool GodotPhysicsDirectSpaceState2D::intersect_ray(const RayParameters &p_parame
+ 	ERR_FAIL_NULL_V(res_obj, false); // Shouldn't happen but silences warning.
+ 
+ 	r_result.collider_id = res_obj->get_instance_id();
+-	if (r_result.collider_id.is_valid()) {
++	if (!p_parameters.resolve_collider_object) {
++		r_result.collider = nullptr;
++	} else if (r_result.collider_id.is_valid()) {
+ 		r_result.collider = ObjectDB::get_instance(r_result.collider_id);
+ 	}
+ 	r_result.normal = res_normal;
+@@ -242,7 +244,9 @@ int GodotPhysicsDirectSpaceState2D::intersect_shape(const ShapeParameters &p_par
+ 		}
+ 
+ 		r_results[cc].collider_id = col_obj->get_instance_id();
+-		if (r_results[cc].collider_id.is_valid()) {
++		if (!p_parameters.resolve_collider_object) {
++			r_results[cc].collider = nullptr;
++		} else if (r_results[cc].collider_id.is_valid()) {
+ 			r_results[cc].collider = ObjectDB::get_instance(r_results[cc].collider_id);
+ 		}
+ 		r_results[cc].rid = col_obj->get_self();
+diff --git a/modules/godot_physics_2d/register_types.cpp b/modules/godot_physics_2d/register_types.cpp
+index 830f0d5..12eb29c 100644
+--- a/modules/godot_physics_2d/register_types.cpp
++++ b/modules/godot_physics_2d/register_types.cpp
+@@ -43,10 +43,12 @@ static PhysicsServer2D *_createGodotPhysics2DCallback() {
+ #else
+ 	bool using_threads = false;
+ #endif
++	bool external_owner_mode = GLOBAL_DEF("physics/2d/external_owner_mode", false);
++	ERR_FAIL_COND_V_MSG(external_owner_mode && using_threads, nullptr, "physics/2d/external_owner_mode cannot be combined with run_on_separate_thread.");
+ 
+ 	PhysicsServer2D *physics_server_2d = memnew(GodotPhysicsServer2D(using_threads));
+ 
+-	return memnew(PhysicsServer2DWrapMT(physics_server_2d, using_threads));
++	return memnew(PhysicsServer2DWrapMT(physics_server_2d, using_threads, external_owner_mode));
+ }
+ 
+ void initialize_godot_physics_2d_module(ModuleInitializationLevel p_level) {
+diff --git a/scene/2d/physics/character_body_2d.cpp b/scene/2d/physics/character_body_2d.cpp
+index 374676b..952dc7c 100644
+--- a/scene/2d/physics/character_body_2d.cpp
++++ b/scene/2d/physics/character_body_2d.cpp
+@@ -37,411 +37,46 @@
+ #include "servers/physics_2d/physics_server_2d_extension.h"
+ #endif
+ 
+-// So, if you pass 45 as limit, avoid numerical precision errors when angle is 45.
+-#define FLOOR_ANGLE_THRESHOLD 0.01
+-
+-bool CharacterBody2D::move_and_slide() {
+-	// Hack in order to work with calling from _process as well as from _physics_process; calling from thread is risky.
+-	double delta = Engine::get_singleton()->is_in_physics_frame() ? get_physics_process_delta_time() : get_process_delta_time();
+-
+-	Vector2 current_platform_velocity = platform_velocity;
+-	Transform2D gt = get_global_transform();
+-	previous_position = gt.columns[2];
+-
+-	if ((on_floor || on_wall) && platform_rid.is_valid()) {
+-		bool excluded = false;
+-		if (on_floor) {
+-			excluded = (platform_floor_layers & platform_layer) == 0;
+-		} else if (on_wall) {
+-			excluded = (platform_wall_layers & platform_layer) == 0;
+-		}
+-		if (!excluded) {
+-			//this approach makes sure there is less delay between the actual body velocity and the one we saved
+-			PhysicsDirectBodyState2D *bs = PhysicsServer2D::get_singleton()->body_get_direct_state(platform_rid);
+-			if (bs) {
+-				Vector2 local_position = gt.columns[2] - bs->get_transform().columns[2];
+-				current_platform_velocity = bs->get_velocity_at_local_position(local_position);
+-			} else {
+-				// Body is removed or destroyed, invalidate floor.
+-				current_platform_velocity = Vector2();
+-				platform_rid = RID();
+-			}
+-		} else {
+-			current_platform_velocity = Vector2();
+-		}
+-	}
+-
+-	motion_results.clear();
+-	last_motion = Vector2();
+-
+-	bool was_on_floor = on_floor;
+-	on_floor = false;
+-	on_ceiling = false;
+-	on_wall = false;
+-
+-	if (!current_platform_velocity.is_zero_approx()) {
+-		PhysicsServer2D::MotionParameters parameters(get_global_transform(), current_platform_velocity * delta, margin);
+-		parameters.recovery_as_collision = true; // Also report collisions generated only from recovery.
+-		parameters.exclude_bodies.insert(platform_rid);
+-		if (platform_object_id.is_valid()) {
+-			parameters.exclude_objects.insert(platform_object_id);
+-		}
+-
+-		PhysicsServer2D::MotionResult floor_result;
+-		if (move_and_collide(parameters, floor_result, false, false)) {
+-			motion_results.push_back(floor_result);
+-			_set_collision_direction(floor_result);
+-		}
+-	}
+-
+-	if (motion_mode == MOTION_MODE_GROUNDED) {
+-		_move_and_slide_grounded(delta, was_on_floor);
+-	} else {
+-		_move_and_slide_floating(delta);
+-	}
+-
+-	// Compute real velocity.
+-	real_velocity = get_position_delta() / delta;
+-
+-	if (platform_on_leave != PLATFORM_ON_LEAVE_DO_NOTHING) {
+-		// Add last platform velocity when just left a moving platform.
+-		if (!on_floor && !on_wall) {
+-			if (platform_on_leave == PLATFORM_ON_LEAVE_ADD_UPWARD_VELOCITY && current_platform_velocity.dot(up_direction) < 0) {
+-				current_platform_velocity = current_platform_velocity.slide(up_direction);
+-			}
+-			velocity += current_platform_velocity;
+-		}
++namespace {
++struct CharacterMotion2DNodeAdapter final : CharacterMotion2DAdapter {
++	CharacterBody2D &body;
++	explicit CharacterMotion2DNodeAdapter(CharacterBody2D &p_body, bool p_only_update) : body(p_body), only_update(p_only_update) {}
++	bool only_update = false;
++	Transform2D get_transform() const override { return body.get_global_transform(); }
++	void set_transform(const Transform2D &p_transform) override { body.set_global_transform(p_transform); }
++	bool only_update_transform_changes() const override { return only_update; }
++	bool test_motion(const PhysicsServer2D::MotionParameters &p_parameters, PhysicsServer2D::MotionResult &r_result) override {
++		return PhysicsServer2D::get_singleton()->body_test_motion(body.get_rid(), p_parameters, &r_result);
+ 	}
+-
+-	return motion_results.size() > 0;
+-}
+-
+-void CharacterBody2D::_move_and_slide_grounded(double p_delta, bool p_was_on_floor) {
+-	Vector2 motion = velocity * p_delta;
+-	Vector2 motion_slide_up = motion.slide(up_direction);
+-
+-	Vector2 prev_floor_normal = floor_normal;
+-
+-	platform_rid = RID();
+-	platform_object_id = ObjectID();
+-	floor_normal = Vector2();
+-	platform_velocity = Vector2();
+-
+-	// No sliding on first attempt to keep floor motion stable when possible,
+-	// When stop on slope is enabled or when there is no up direction.
+-	bool sliding_enabled = !floor_stop_on_slope;
+-	// Constant speed can be applied only the first time sliding is enabled.
+-	bool can_apply_constant_speed = sliding_enabled;
+-	// If the platform's ceiling push down the body.
+-	bool apply_ceiling_velocity = false;
+-	bool first_slide = true;
+-	bool vel_dir_facing_up = velocity.dot(up_direction) > 0;
+-	Vector2 last_travel;
+-
+-	for (int iteration = 0; iteration < max_slides; ++iteration) {
+-		PhysicsServer2D::MotionParameters parameters(get_global_transform(), motion, margin);
+-		parameters.recovery_as_collision = true; // Also report collisions generated only from recovery.
+-
+-		Vector2 prev_position = parameters.from.columns[2];
+-
+-		PhysicsServer2D::MotionResult result;
+-		bool collided = move_and_collide(parameters, result, false, !sliding_enabled);
+-
+-		last_motion = result.travel;
+-
+-		if (collided) {
+-			motion_results.push_back(result);
+-			_set_collision_direction(result);
+-
+-			// If we hit a ceiling platform, we set the vertical velocity to at least the platform one.
+-			if (on_ceiling && result.collider_velocity != Vector2() && result.collider_velocity.dot(up_direction) < 0) {
+-				// If ceiling sliding is on, only apply when the ceiling is flat or when the motion is upward.
+-				if (!slide_on_ceiling || motion.dot(up_direction) < 0 || (result.collision_normal + up_direction).length() < 0.01) {
+-					apply_ceiling_velocity = true;
+-					Vector2 ceiling_vertical_velocity = up_direction * up_direction.dot(result.collider_velocity);
+-					Vector2 motion_vertical_velocity = up_direction * up_direction.dot(velocity);
+-					if (motion_vertical_velocity.dot(up_direction) > 0 || ceiling_vertical_velocity.length_squared() > motion_vertical_velocity.length_squared()) {
+-						velocity = ceiling_vertical_velocity + velocity.slide(up_direction);
+-					}
+-				}
+-			}
+-
+-			if (on_floor && floor_stop_on_slope && (velocity.normalized() + up_direction).length() < 0.01) {
+-				Transform2D gt = get_global_transform();
+-				if (result.travel.length() <= margin + CMP_EPSILON) {
+-					gt.columns[2] -= result.travel;
+-				}
+-				set_global_transform(gt);
+-				velocity = Vector2();
+-				last_motion = Vector2();
+-				motion = Vector2();
+-				break;
+-			}
+-
+-			if (result.remainder.is_zero_approx()) {
+-				motion = Vector2();
+-				break;
+-			}
+-
+-			// Move on floor only checks.
+-			if (floor_block_on_wall && on_wall && motion_slide_up.dot(result.collision_normal) <= 0) {
+-				// Avoid to move forward on a wall if floor_block_on_wall is true.
+-				if (p_was_on_floor && !on_floor && !vel_dir_facing_up) {
+-					// If the movement is large the body can be prevented from reaching the walls.
+-					if (result.travel.length() <= margin + CMP_EPSILON) {
+-						// Cancels the motion.
+-						Transform2D gt = get_global_transform();
+-						gt.columns[2] -= result.travel;
+-						set_global_transform(gt);
+-					}
+-					// Determines if you are on the ground.
+-					_snap_on_floor(true, false, true);
+-					velocity = Vector2();
+-					last_motion = Vector2();
+-					motion = Vector2();
+-					break;
+-				}
+-				// Prevents the body from being able to climb a slope when it moves forward against the wall.
+-				else if (!on_floor) {
+-					motion = up_direction * up_direction.dot(result.remainder);
+-					motion = motion.slide(result.collision_normal);
+-				} else {
+-					motion = result.remainder;
+-				}
+-			}
+-			// Constant Speed when the slope is upward.
+-			else if (floor_constant_speed && is_on_floor_only() && can_apply_constant_speed && p_was_on_floor && motion.dot(result.collision_normal) < 0) {
+-				can_apply_constant_speed = false;
+-				Vector2 motion_slide_norm = result.remainder.slide(result.collision_normal).normalized();
+-				motion = motion_slide_norm * (motion_slide_up.length() - result.travel.slide(up_direction).length() - last_travel.slide(up_direction).length());
+-			}
+-			// Regular sliding, the last part of the test handle the case when you don't want to slide on the ceiling.
+-			else if ((sliding_enabled || !on_floor) && (!on_ceiling || slide_on_ceiling || !vel_dir_facing_up) && !apply_ceiling_velocity) {
+-				Vector2 slide_motion = result.remainder.slide(result.collision_normal);
+-				if (slide_motion.dot(velocity) > 0.0) {
+-					motion = slide_motion;
+-				} else {
+-					motion = Vector2();
+-				}
+-				if (slide_on_ceiling && on_ceiling) {
+-					// Apply slide only in the direction of the input motion, otherwise just stop to avoid jittering when moving against a wall.
+-					if (vel_dir_facing_up) {
+-						velocity = velocity.slide(result.collision_normal);
+-					} else {
+-						// Avoid acceleration in slope when falling.
+-						velocity = up_direction * up_direction.dot(velocity);
+-					}
+-				}
+-			}
+-			// No sliding on first attempt to keep floor motion stable when possible.
+-			else {
+-				motion = result.remainder;
+-				if (on_ceiling && !slide_on_ceiling && vel_dir_facing_up) {
+-					velocity = velocity.slide(up_direction);
+-					motion = motion.slide(up_direction);
+-				}
+-			}
+-
+-			last_travel = result.travel;
+-		}
+-		// When you move forward in a downward slope you don’t collide because you will be in the air.
+-		// This test ensures that constant speed is applied, only if the player is still on the ground after the snap is applied.
+-		else if (floor_constant_speed && first_slide && _on_floor_if_snapped(p_was_on_floor, vel_dir_facing_up)) {
+-			can_apply_constant_speed = false;
+-			sliding_enabled = true;
+-			Transform2D gt = get_global_transform();
+-			gt.columns[2] = prev_position;
+-			set_global_transform(gt);
+-
+-			Vector2 motion_slide_norm = motion.slide(prev_floor_normal).normalized();
+-			motion = motion_slide_norm * (motion_slide_up.length());
+-			collided = true;
+-		}
+-
+-		can_apply_constant_speed = !can_apply_constant_speed && !sliding_enabled;
+-		sliding_enabled = true;
+-		first_slide = false;
+-
+-		if (!collided || motion.is_zero_approx()) {
+-			break;
+-		}
++	PhysicsDirectBodyState2D *body_get_direct_state(RID p_body) override {
++		return PhysicsServer2D::get_singleton()->body_get_direct_state(p_body);
+ 	}
+-
+-	_snap_on_floor(p_was_on_floor, vel_dir_facing_up);
+-
+-	// Scales the horizontal velocity according to the wall slope.
+-	if (is_on_wall_only() && motion_slide_up.dot(motion_results.get(0).collision_normal) < 0) {
+-		Vector2 slide_motion = velocity.slide(motion_results.get(0).collision_normal);
+-		if (motion_slide_up.dot(slide_motion) < 0) {
+-			velocity = up_direction * up_direction.dot(velocity);
+-		} else {
+-			// Keeps the vertical motion from velocity and add the horizontal motion of the projection.
+-			velocity = up_direction * up_direction.dot(velocity) + slide_motion.slide(up_direction);
+-		}
+-	}
+-
+-	// Reset the gravity accumulation when touching the ground.
+-	if (on_floor && !vel_dir_facing_up) {
+-		velocity = velocity.slide(up_direction);
+-	}
+-}
+-
+-void CharacterBody2D::_move_and_slide_floating(double p_delta) {
+-	Vector2 motion = velocity * p_delta;
+-
+-	platform_rid = RID();
+-	platform_object_id = ObjectID();
+-	floor_normal = Vector2();
+-	platform_velocity = Vector2();
+-
+-	bool first_slide = true;
+-	for (int iteration = 0; iteration < max_slides; ++iteration) {
+-		PhysicsServer2D::MotionParameters parameters(get_global_transform(), motion, margin);
+-		parameters.recovery_as_collision = true; // Also report collisions generated only from recovery.
+-
+-		PhysicsServer2D::MotionResult result;
+-		bool collided = move_and_collide(parameters, result, false, false);
+-
+-		last_motion = result.travel;
+-
+-		if (collided) {
+-			motion_results.push_back(result);
+-			_set_collision_direction(result);
+-
+-			if (result.remainder.is_zero_approx()) {
+-				motion = Vector2();
+-				break;
+-			}
+-
+-			if (wall_min_slide_angle != 0 && result.get_angle(-velocity.normalized()) < wall_min_slide_angle + FLOOR_ANGLE_THRESHOLD) {
+-				motion = Vector2();
+-			} else if (first_slide) {
+-				Vector2 motion_slide_norm = result.remainder.slide(result.collision_normal).normalized();
+-				motion = motion_slide_norm * (motion.length() - result.travel.length());
+-			} else {
+-				motion = result.remainder.slide(result.collision_normal);
+-			}
+-
+-			if (motion.dot(velocity) <= 0.0) {
+-				motion = Vector2();
+-			}
+-		}
+-
+-		if (!collided || motion.is_zero_approx()) {
+-			break;
+-		}
+-
+-		first_slide = false;
+-	}
+-}
+-void CharacterBody2D::apply_floor_snap() {
+-	_apply_floor_snap();
+-}
+-
+-// Method that avoids the p_wall_as_floor parameter for the public method.
+-void CharacterBody2D::_apply_floor_snap(bool p_wall_as_floor) {
+-	if (on_floor) {
+-		return;
+-	}
+-
+-	// Snap by at least collision margin to keep floor state consistent.
+-	real_t length = MAX(floor_snap_length, margin);
+-
+-	PhysicsServer2D::MotionParameters parameters(get_global_transform(), -up_direction * length, margin);
+-	parameters.recovery_as_collision = true; // Also report collisions generated only from recovery.
+-	parameters.collide_separation_ray = true;
+-
+-	PhysicsServer2D::MotionResult result;
+-	if (move_and_collide(parameters, result, true, false)) {
+-		if ((result.get_angle(up_direction) <= floor_max_angle + FLOOR_ANGLE_THRESHOLD) ||
+-				(p_wall_as_floor && result.get_angle(-up_direction) > floor_max_angle + FLOOR_ANGLE_THRESHOLD)) {
+-			on_floor = true;
+-			floor_normal = result.collision_normal;
+-			_set_platform_data(result);
+-
+-			// Ensure that we only move the body along the up axis, because
+-			// move_and_collide may stray the object a bit when getting it unstuck.
+-			// Canceling this motion should not affect move_and_slide, as previous
+-			// calls to move_and_collide already took care of freeing the body.
+-			if (result.travel.length() > margin) {
+-				result.travel = up_direction * up_direction.dot(result.travel);
+-			} else {
+-				result.travel = Vector2();
+-			}
+-
+-			parameters.from.columns[2] += result.travel;
+-			set_global_transform(parameters.from);
+-		}
+-	}
+-}
+-
+-void CharacterBody2D::_snap_on_floor(bool p_was_on_floor, bool p_vel_dir_facing_up, bool p_wall_as_floor) {
+-	if (on_floor || !p_was_on_floor || p_vel_dir_facing_up) {
+-		return;
+-	}
+-
+-	_apply_floor_snap(p_wall_as_floor);
+-}
+-
+-bool CharacterBody2D::_on_floor_if_snapped(bool p_was_on_floor, bool p_vel_dir_facing_up) {
+-	if (up_direction == Vector2() || on_floor || !p_was_on_floor || p_vel_dir_facing_up) {
+-		return false;
+-	}
+-
+-	// Snap by at least collision margin to keep floor state consistent.
+-	real_t length = MAX(floor_snap_length, margin);
+-
+-	PhysicsServer2D::MotionParameters parameters(get_global_transform(), -up_direction * length, margin);
+-	parameters.recovery_as_collision = true; // Also report collisions generated only from recovery.
+-	parameters.collide_separation_ray = true;
+-
+-	PhysicsServer2D::MotionResult result;
+-	if (move_and_collide(parameters, result, true, false)) {
+-		if (result.get_angle(up_direction) <= floor_max_angle + FLOOR_ANGLE_THRESHOLD) {
+-			return true;
++	uint32_t get_collision_layer(PhysicsDirectBodyState2D *bs, RID p_body) override {
++#ifndef DISABLE_DEPRECATED
++		PhysicsDirectBodyState2DExtension *bs_ext = Object::cast_to<PhysicsDirectBodyState2DExtension>(bs);
++		if (bs_ext != nullptr && !GDVIRTUAL_IS_OVERRIDDEN_PTR(bs_ext, _get_collision_layer)) {
++			return PhysicsServer2D::get_singleton()->body_get_collision_layer(p_body);
+ 		}
++#endif
++		return bs->get_collision_layer();
+ 	}
++	bool is_character(ObjectID p_object, RID) override { return ObjectDB::get_instance<CharacterBody2D>(p_object) != nullptr; }
++};
++} // namespace
+ 
+-	return false;
++bool CharacterBody2D::move_and_slide() {
++	double delta = Engine::get_singleton()->is_in_physics_frame() ? get_physics_process_delta_time() : get_process_delta_time();
++	return move_and_slide_with_delta(delta);
+ }
+ 
+-void CharacterBody2D::_set_collision_direction(const PhysicsServer2D::MotionResult &p_result) {
+-	if (motion_mode == MOTION_MODE_GROUNDED && p_result.get_angle(up_direction) <= floor_max_angle + FLOOR_ANGLE_THRESHOLD) { //floor
+-		on_floor = true;
+-		floor_normal = p_result.collision_normal;
+-		_set_platform_data(p_result);
+-	} else if (motion_mode == MOTION_MODE_GROUNDED && p_result.get_angle(-up_direction) <= floor_max_angle + FLOOR_ANGLE_THRESHOLD) { //ceiling
+-		on_ceiling = true;
+-	} else {
+-		on_wall = true;
+-		wall_normal = p_result.collision_normal;
+-		// Don't apply wall velocity when the collider is a CharacterBody2D.
+-		if (ObjectDB::get_instance<CharacterBody2D>(p_result.collider_id) == nullptr) {
+-			_set_platform_data(p_result);
+-		}
+-	}
++bool CharacterBody2D::move_and_slide_with_delta(double p_delta) {
++	CharacterMotion2DNodeAdapter adapter(*this, is_only_update_transform_changes_enabled());
++	return CharacterMotion2DState::move_and_slide(adapter, p_delta);
+ }
+ 
+-void CharacterBody2D::_set_platform_data(const PhysicsServer2D::MotionResult &p_result) {
+-	PhysicsDirectBodyState2D *bs = PhysicsServer2D::get_singleton()->body_get_direct_state(p_result.collider);
+-	if (bs == nullptr) {
+-		return;
+-	}
+-
+-	platform_rid = p_result.collider;
+-	platform_object_id = p_result.collider_id;
+-	platform_velocity = p_result.collider_velocity;
+-
+-#ifndef DISABLE_DEPRECATED
+-	// Try to accommodate for any physics extensions that have yet to implement `PhysicsDirectBodyState2D::get_collision_layer`.
+-	PhysicsDirectBodyState2DExtension *bs_ext = Object::cast_to<PhysicsDirectBodyState2DExtension>(bs);
+-	if (bs_ext != nullptr && !GDVIRTUAL_IS_OVERRIDDEN_PTR(bs_ext, _get_collision_layer)) {
+-		platform_layer = PhysicsServer2D::get_singleton()->body_get_collision_layer(p_result.collider);
+-	} else
+-#endif
+-	{
+-		platform_layer = bs->get_collision_layer();
+-	}
++void CharacterBody2D::apply_floor_snap() {
++	CharacterMotion2DNodeAdapter adapter(*this, is_only_update_transform_changes_enabled());
++	CharacterMotion2DState::_apply_floor_snap(adapter);
+ }
+ 
+ const Vector2 &CharacterBody2D::get_velocity() const {
+@@ -598,7 +233,7 @@ void CharacterBody2D::set_motion_mode(MotionMode p_mode) {
+ }
+ 
+ CharacterBody2D::MotionMode CharacterBody2D::get_motion_mode() const {
+-	return motion_mode;
++	return static_cast<MotionMode>(motion_mode);
+ }
+ 
+ void CharacterBody2D::set_platform_on_leave(PlatformOnLeave p_on_leave_apply_velocity) {
+@@ -606,7 +241,7 @@ void CharacterBody2D::set_platform_on_leave(PlatformOnLeave p_on_leave_apply_vel
+ }
+ 
+ CharacterBody2D::PlatformOnLeave CharacterBody2D::get_platform_on_leave() const {
+-	return platform_on_leave;
++	return static_cast<PlatformOnLeave>(platform_on_leave);
+ }
+ 
+ int CharacterBody2D::get_max_slides() const {
+diff --git a/scene/2d/physics/character_body_2d.h b/scene/2d/physics/character_body_2d.h
+index 5c7f44b..b20a2f8 100644
+--- a/scene/2d/physics/character_body_2d.h
++++ b/scene/2d/physics/character_body_2d.h
+@@ -30,10 +30,11 @@
+ 
+ #pragma once
+ 
++#include "scene/2d/physics/character_motion_2d.h"
+ #include "scene/2d/physics/kinematic_collision_2d.h"
+ #include "scene/2d/physics/physics_body_2d.h"
+ 
+-class CharacterBody2D : public PhysicsBody2D {
++class CharacterBody2D : public PhysicsBody2D, protected CharacterMotion2DState {
+ 	GDCLASS(CharacterBody2D, PhysicsBody2D);
+ 
+ public:
+@@ -47,6 +48,8 @@ public:
+ 		PLATFORM_ON_LEAVE_DO_NOTHING,
+ 	};
+ 	bool move_and_slide();
++	// Internal deterministic adapter entry; script API retains its original delta source.
++	bool move_and_slide_with_delta(double p_delta);
+ 	void apply_floor_snap();
+ 
+ 	const Vector2 &get_velocity() const;
+@@ -112,52 +115,12 @@ public:
+ 	CharacterBody2D();
+ 
+ private:
+-	real_t margin = 0.08;
+-	MotionMode motion_mode = MOTION_MODE_GROUNDED;
+-	PlatformOnLeave platform_on_leave = PLATFORM_ON_LEAVE_ADD_VELOCITY;
+-
+-	bool floor_constant_speed = false;
+-	bool floor_stop_on_slope = true;
+-	bool floor_block_on_wall = true;
+-	bool slide_on_ceiling = true;
+-	int max_slides = 4;
+-	int platform_layer = 0;
+-	real_t floor_max_angle = Math::deg_to_rad((real_t)45.0);
+-	real_t floor_snap_length = 1;
+-	real_t wall_min_slide_angle = Math::deg_to_rad((real_t)15.0);
+-	Vector2 up_direction = Vector2(0.0, -1.0);
+-	uint32_t platform_floor_layers = UINT32_MAX;
+-	uint32_t platform_wall_layers = 0;
+-	Vector2 velocity;
+-
+-	Vector2 floor_normal;
+-	Vector2 platform_velocity;
+-	Vector2 wall_normal;
+-	Vector2 last_motion;
+-	Vector2 previous_position;
+-	Vector2 real_velocity;
+-
+-	RID platform_rid;
+-	ObjectID platform_object_id;
+-	bool on_floor = false;
+-	bool on_ceiling = false;
+-	bool on_wall = false;
+-
+-	Vector<PhysicsServer2D::MotionResult> motion_results;
+ 	Vector<Ref<KinematicCollision2D>> slide_colliders;
+ 
+-	void _move_and_slide_floating(double p_delta);
+-	void _move_and_slide_grounded(double p_delta, bool p_was_on_floor);
+-
+ 	Ref<KinematicCollision2D> _get_slide_collision(int p_bounce);
+ 	Ref<KinematicCollision2D> _get_last_slide_collision();
+ 	const Vector2 &get_up_direction() const;
+-	bool _on_floor_if_snapped(bool p_was_on_floor, bool p_vel_dir_facing_up);
+ 	void set_up_direction(const Vector2 &p_up_direction);
+-	void _set_collision_direction(const PhysicsServer2D::MotionResult &p_result);
+-	void _set_platform_data(const PhysicsServer2D::MotionResult &p_result);
+-	void _apply_floor_snap(bool p_wall_as_floor = false);
+-	void _snap_on_floor(bool p_was_on_floor, bool p_vel_dir_facing_up, bool p_wall_as_floor = false);
+ 
+ protected:
+ 	void _notification(int p_what);
+diff --git a/scene/2d/physics/character_motion_2d.cpp b/scene/2d/physics/character_motion_2d.cpp
+new file mode 100644
+index 0000000..78c561a
+--- /dev/null
++++ b/scene/2d/physics/character_motion_2d.cpp
+@@ -0,0 +1,477 @@
++/**************************************************************************/
++/*  character_body_2d.cpp                                                 */
++/**************************************************************************/
++/*                         This file is part of:                          */
++/*                             GODOT ENGINE                               */
++/*                        https://godotengine.org                         */
++/**************************************************************************/
++/* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
++/* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
++/*                                                                        */
++/* Permission is hereby granted, free of charge, to any person obtaining  */
++/* a copy of this software and associated documentation files (the        */
++/* "Software"), to deal in the Software without restriction, including    */
++/* without limitation the rights to use, copy, modify, merge, publish,    */
++/* distribute, sublicense, and/or sell copies of the Software, and to     */
++/* permit persons to whom the Software is furnished to do so, subject to  */
++/* the following conditions:                                              */
++/*                                                                        */
++/* The above copyright notice and this permission notice shall be         */
++/* included in all copies or substantial portions of the Software.        */
++/*                                                                        */
++/* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,        */
++/* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF     */
++/* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. */
++/* IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY   */
++/* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,   */
++/* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE      */
++/* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
++/**************************************************************************/
++
++#include "character_motion_2d.h"
++
++// Mechanically extracted from pinned Godot 4.7; see extraction manifest.
++#define FLOOR_ANGLE_THRESHOLD 0.01
++
++bool physics_motion_2d_move_and_collide(PhysicsMotion2DAdapter &p_adapter, const PhysicsServer2D::MotionParameters &p_parameters, PhysicsServer2D::MotionResult &r_result, bool p_test_only, bool p_cancel_sliding) {
++	if (p_adapter.only_update_transform_changes()) {
++		ERR_PRINT("Move functions do not work together with 'sync to physics' option. See the documentation for details.");
++	}
++
++	bool colliding = p_adapter.test_motion(p_parameters, r_result);
++
++	// Restore direction of motion to be along original motion,
++	// in order to avoid sliding due to recovery,
++	// but only if collision depth is low enough to avoid tunneling.
++	if (p_cancel_sliding) {
++		real_t motion_length = p_parameters.motion.length();
++		real_t precision = 0.001;
++
++		if (colliding) {
++			// Can't just use margin as a threshold because collision depth is calculated on unsafe motion,
++			// so even in normal resting cases the depth can be a bit more than the margin.
++			precision += motion_length * (r_result.collision_unsafe_fraction - r_result.collision_safe_fraction);
++
++			if (r_result.collision_depth > p_parameters.margin + precision) {
++				p_cancel_sliding = false;
++			}
++		}
++
++		if (p_cancel_sliding) {
++			// When motion is null, recovery is the resulting motion.
++			Vector2 motion_normal;
++			if (motion_length > CMP_EPSILON) {
++				motion_normal = p_parameters.motion / motion_length;
++			}
++
++			// Check depth of recovery.
++			real_t projected_length = r_result.travel.dot(motion_normal);
++			Vector2 recovery = r_result.travel - motion_normal * projected_length;
++			real_t recovery_length = recovery.length();
++			// Fixes cases where canceling slide causes the motion to go too deep into the ground,
++			// because we're only taking rest information into account and not general recovery.
++			if (recovery_length < p_parameters.margin + precision) {
++				// Apply adjustment to motion.
++				r_result.travel = motion_normal * projected_length;
++				r_result.remainder = p_parameters.motion - r_result.travel;
++			}
++		}
++	}
++
++	if (!p_test_only) {
++		Transform2D gt = p_parameters.from;
++		gt.columns[2] += r_result.travel;
++		p_adapter.set_transform(gt);
++	}
++
++	return colliding;
++}
++
++bool CharacterMotion2DState::move_and_slide(CharacterMotion2DAdapter &p_adapter, double delta) {
++	Vector2 current_platform_velocity = platform_velocity;
++	Transform2D gt = p_adapter.get_transform();
++	previous_position = gt.columns[2];
++
++	if ((on_floor || on_wall) && platform_rid.is_valid()) {
++		bool excluded = false;
++		if (on_floor) {
++			excluded = (platform_floor_layers & platform_layer) == 0;
++		} else if (on_wall) {
++			excluded = (platform_wall_layers & platform_layer) == 0;
++		}
++		if (!excluded) {
++			//this approach makes sure there is less delay between the actual body velocity and the one we saved
++			PhysicsDirectBodyState2D *bs = p_adapter.body_get_direct_state(platform_rid);
++			if (bs) {
++				Vector2 local_position = gt.columns[2] - bs->get_transform().columns[2];
++				current_platform_velocity = bs->get_velocity_at_local_position(local_position);
++			} else {
++				// Body is removed or destroyed, invalidate floor.
++				current_platform_velocity = Vector2();
++				platform_rid = RID();
++			}
++		} else {
++			current_platform_velocity = Vector2();
++		}
++	}
++
++	motion_results.clear();
++	last_motion = Vector2();
++
++	bool was_on_floor = on_floor;
++	on_floor = false;
++	on_ceiling = false;
++	on_wall = false;
++
++	if (!current_platform_velocity.is_zero_approx()) {
++		PhysicsServer2D::MotionParameters parameters(p_adapter.get_transform(), current_platform_velocity * delta, margin);
++		parameters.recovery_as_collision = true; // Also report collisions generated only from recovery.
++		parameters.exclude_bodies.insert(platform_rid);
++		if (platform_object_id.is_valid()) {
++			parameters.exclude_objects.insert(platform_object_id);
++		}
++
++		PhysicsServer2D::MotionResult floor_result;
++		if (physics_motion_2d_move_and_collide(p_adapter, parameters, floor_result, false, false)) {
++			motion_results.push_back(floor_result);
++			_set_collision_direction(p_adapter, floor_result);
++		}
++	}
++
++	if (motion_mode == 0) {
++		_move_and_slide_grounded(p_adapter, delta, was_on_floor);
++	} else {
++		_move_and_slide_floating(p_adapter, delta);
++	}
++
++	// Compute real velocity.
++	real_velocity = (p_adapter.get_transform().columns[2] - previous_position) / delta;
++
++	if (platform_on_leave != 2) {
++		// Add last platform velocity when just left a moving platform.
++		if (!on_floor && !on_wall) {
++			if (platform_on_leave == 1 && current_platform_velocity.dot(up_direction) < 0) {
++				current_platform_velocity = current_platform_velocity.slide(up_direction);
++			}
++			velocity += current_platform_velocity;
++		}
++	}
++
++	return motion_results.size() > 0;
++}
++
++void CharacterMotion2DState::_move_and_slide_grounded(CharacterMotion2DAdapter &p_adapter, double p_delta, bool p_was_on_floor) {
++	Vector2 motion = velocity * p_delta;
++	Vector2 motion_slide_up = motion.slide(up_direction);
++
++	Vector2 prev_floor_normal = floor_normal;
++
++	platform_rid = RID();
++	platform_object_id = ObjectID();
++	floor_normal = Vector2();
++	platform_velocity = Vector2();
++
++	// No sliding on first attempt to keep floor motion stable when possible,
++	// When stop on slope is enabled or when there is no up direction.
++	bool sliding_enabled = !floor_stop_on_slope;
++	// Constant speed can be applied only the first time sliding is enabled.
++	bool can_apply_constant_speed = sliding_enabled;
++	// If the platform's ceiling push down the body.
++	bool apply_ceiling_velocity = false;
++	bool first_slide = true;
++	bool vel_dir_facing_up = velocity.dot(up_direction) > 0;
++	Vector2 last_travel;
++
++	for (int iteration = 0; iteration < max_slides; ++iteration) {
++		PhysicsServer2D::MotionParameters parameters(p_adapter.get_transform(), motion, margin);
++		parameters.recovery_as_collision = true; // Also report collisions generated only from recovery.
++
++		Vector2 prev_position = parameters.from.columns[2];
++
++		PhysicsServer2D::MotionResult result;
++		bool collided = physics_motion_2d_move_and_collide(p_adapter, parameters, result, false, !sliding_enabled);
++
++		last_motion = result.travel;
++
++		if (collided) {
++			motion_results.push_back(result);
++			_set_collision_direction(p_adapter, result);
++
++			// If we hit a ceiling platform, we set the vertical velocity to at least the platform one.
++			if (on_ceiling && result.collider_velocity != Vector2() && result.collider_velocity.dot(up_direction) < 0) {
++				// If ceiling sliding is on, only apply when the ceiling is flat or when the motion is upward.
++				if (!slide_on_ceiling || motion.dot(up_direction) < 0 || (result.collision_normal + up_direction).length() < 0.01) {
++					apply_ceiling_velocity = true;
++					Vector2 ceiling_vertical_velocity = up_direction * up_direction.dot(result.collider_velocity);
++					Vector2 motion_vertical_velocity = up_direction * up_direction.dot(velocity);
++					if (motion_vertical_velocity.dot(up_direction) > 0 || ceiling_vertical_velocity.length_squared() > motion_vertical_velocity.length_squared()) {
++						velocity = ceiling_vertical_velocity + velocity.slide(up_direction);
++					}
++				}
++			}
++
++			if (on_floor && floor_stop_on_slope && (velocity.normalized() + up_direction).length() < 0.01) {
++				Transform2D gt = p_adapter.get_transform();
++				if (result.travel.length() <= margin + CMP_EPSILON) {
++					gt.columns[2] -= result.travel;
++				}
++				p_adapter.set_transform(gt);
++				velocity = Vector2();
++				last_motion = Vector2();
++				motion = Vector2();
++				break;
++			}
++
++			if (result.remainder.is_zero_approx()) {
++				motion = Vector2();
++				break;
++			}
++
++			// Move on floor only checks.
++			if (floor_block_on_wall && on_wall && motion_slide_up.dot(result.collision_normal) <= 0) {
++				// Avoid to move forward on a wall if floor_block_on_wall is true.
++				if (p_was_on_floor && !on_floor && !vel_dir_facing_up) {
++					// If the movement is large the body can be prevented from reaching the walls.
++					if (result.travel.length() <= margin + CMP_EPSILON) {
++						// Cancels the motion.
++						Transform2D gt = p_adapter.get_transform();
++						gt.columns[2] -= result.travel;
++						p_adapter.set_transform(gt);
++					}
++					// Determines if you are on the ground.
++					_snap_on_floor(p_adapter, true, false, true);
++					velocity = Vector2();
++					last_motion = Vector2();
++					motion = Vector2();
++					break;
++				}
++				// Prevents the body from being able to climb a slope when it moves forward against the wall.
++				else if (!on_floor) {
++					motion = up_direction * up_direction.dot(result.remainder);
++					motion = motion.slide(result.collision_normal);
++				} else {
++					motion = result.remainder;
++				}
++			}
++			// Constant Speed when the slope is upward.
++			else if (floor_constant_speed && (on_floor && !on_wall && !on_ceiling) && can_apply_constant_speed && p_was_on_floor && motion.dot(result.collision_normal) < 0) {
++				can_apply_constant_speed = false;
++				Vector2 motion_slide_norm = result.remainder.slide(result.collision_normal).normalized();
++				motion = motion_slide_norm * (motion_slide_up.length() - result.travel.slide(up_direction).length() - last_travel.slide(up_direction).length());
++			}
++			// Regular sliding, the last part of the test handle the case when you don't want to slide on the ceiling.
++			else if ((sliding_enabled || !on_floor) && (!on_ceiling || slide_on_ceiling || !vel_dir_facing_up) && !apply_ceiling_velocity) {
++				Vector2 slide_motion = result.remainder.slide(result.collision_normal);
++				if (slide_motion.dot(velocity) > 0.0) {
++					motion = slide_motion;
++				} else {
++					motion = Vector2();
++				}
++				if (slide_on_ceiling && on_ceiling) {
++					// Apply slide only in the direction of the input motion, otherwise just stop to avoid jittering when moving against a wall.
++					if (vel_dir_facing_up) {
++						velocity = velocity.slide(result.collision_normal);
++					} else {
++						// Avoid acceleration in slope when falling.
++						velocity = up_direction * up_direction.dot(velocity);
++					}
++				}
++			}
++			// No sliding on first attempt to keep floor motion stable when possible.
++			else {
++				motion = result.remainder;
++				if (on_ceiling && !slide_on_ceiling && vel_dir_facing_up) {
++					velocity = velocity.slide(up_direction);
++					motion = motion.slide(up_direction);
++				}
++			}
++
++			last_travel = result.travel;
++		}
++		// When you move forward in a downward slope you don’t collide because you will be in the air.
++		// This test ensures that constant speed is applied, only if the player is still on the ground after the snap is applied.
++		else if (floor_constant_speed && first_slide && _on_floor_if_snapped(p_adapter, p_was_on_floor, vel_dir_facing_up)) {
++			can_apply_constant_speed = false;
++			sliding_enabled = true;
++			Transform2D gt = p_adapter.get_transform();
++			gt.columns[2] = prev_position;
++			p_adapter.set_transform(gt);
++
++			Vector2 motion_slide_norm = motion.slide(prev_floor_normal).normalized();
++			motion = motion_slide_norm * (motion_slide_up.length());
++			collided = true;
++		}
++
++		can_apply_constant_speed = !can_apply_constant_speed && !sliding_enabled;
++		sliding_enabled = true;
++		first_slide = false;
++
++		if (!collided || motion.is_zero_approx()) {
++			break;
++		}
++	}
++
++	_snap_on_floor(p_adapter, p_was_on_floor, vel_dir_facing_up);
++
++	// Scales the horizontal velocity according to the wall slope.
++	if ((on_wall && !on_floor && !on_ceiling) && motion_slide_up.dot(motion_results.get(0).collision_normal) < 0) {
++		Vector2 slide_motion = velocity.slide(motion_results.get(0).collision_normal);
++		if (motion_slide_up.dot(slide_motion) < 0) {
++			velocity = up_direction * up_direction.dot(velocity);
++		} else {
++			// Keeps the vertical motion from velocity and add the horizontal motion of the projection.
++			velocity = up_direction * up_direction.dot(velocity) + slide_motion.slide(up_direction);
++		}
++	}
++
++	// Reset the gravity accumulation when touching the ground.
++	if (on_floor && !vel_dir_facing_up) {
++		velocity = velocity.slide(up_direction);
++	}
++}
++
++void CharacterMotion2DState::_move_and_slide_floating(CharacterMotion2DAdapter &p_adapter, double p_delta) {
++	Vector2 motion = velocity * p_delta;
++
++	platform_rid = RID();
++	platform_object_id = ObjectID();
++	floor_normal = Vector2();
++	platform_velocity = Vector2();
++
++	bool first_slide = true;
++	for (int iteration = 0; iteration < max_slides; ++iteration) {
++		PhysicsServer2D::MotionParameters parameters(p_adapter.get_transform(), motion, margin);
++		parameters.recovery_as_collision = true; // Also report collisions generated only from recovery.
++
++		PhysicsServer2D::MotionResult result;
++		bool collided = physics_motion_2d_move_and_collide(p_adapter, parameters, result, false, false);
++
++		last_motion = result.travel;
++
++		if (collided) {
++			motion_results.push_back(result);
++			_set_collision_direction(p_adapter, result);
++
++			if (result.remainder.is_zero_approx()) {
++				motion = Vector2();
++				break;
++			}
++
++			if (wall_min_slide_angle != 0 && result.get_angle(-velocity.normalized()) < wall_min_slide_angle + FLOOR_ANGLE_THRESHOLD) {
++				motion = Vector2();
++			} else if (first_slide) {
++				Vector2 motion_slide_norm = result.remainder.slide(result.collision_normal).normalized();
++				motion = motion_slide_norm * (motion.length() - result.travel.length());
++			} else {
++				motion = result.remainder.slide(result.collision_normal);
++			}
++
++			if (motion.dot(velocity) <= 0.0) {
++				motion = Vector2();
++			}
++		}
++
++		if (!collided || motion.is_zero_approx()) {
++			break;
++		}
++
++		first_slide = false;
++	}
++}
++
++void CharacterMotion2DState::_apply_floor_snap(CharacterMotion2DAdapter &p_adapter, bool p_wall_as_floor) {
++	if (on_floor) {
++		return;
++	}
++
++	// Snap by at least collision margin to keep floor state consistent.
++	real_t length = MAX(floor_snap_length, margin);
++
++	PhysicsServer2D::MotionParameters parameters(p_adapter.get_transform(), -up_direction * length, margin);
++	parameters.recovery_as_collision = true; // Also report collisions generated only from recovery.
++	parameters.collide_separation_ray = true;
++
++	PhysicsServer2D::MotionResult result;
++	if (physics_motion_2d_move_and_collide(p_adapter, parameters, result, true, false)) {
++		if ((result.get_angle(up_direction) <= floor_max_angle + FLOOR_ANGLE_THRESHOLD) ||
++				(p_wall_as_floor && result.get_angle(-up_direction) > floor_max_angle + FLOOR_ANGLE_THRESHOLD)) {
++			on_floor = true;
++			floor_normal = result.collision_normal;
++			_set_platform_data(p_adapter, result);
++
++			// Ensure that we only move the body along the up axis, because
++			// move_and_collide may stray the object a bit when getting it unstuck.
++			// Canceling this motion should not affect move_and_slide, as previous
++			// calls to move_and_collide already took care of freeing the body.
++			if (result.travel.length() > margin) {
++				result.travel = up_direction * up_direction.dot(result.travel);
++			} else {
++				result.travel = Vector2();
++			}
++
++			parameters.from.columns[2] += result.travel;
++			p_adapter.set_transform(parameters.from);
++		}
++	}
++}
++
++void CharacterMotion2DState::_snap_on_floor(CharacterMotion2DAdapter &p_adapter, bool p_was_on_floor, bool p_vel_dir_facing_up, bool p_wall_as_floor) {
++	if (on_floor || !p_was_on_floor || p_vel_dir_facing_up) {
++		return;
++	}
++
++	_apply_floor_snap(p_adapter, p_wall_as_floor);
++}
++
++bool CharacterMotion2DState::_on_floor_if_snapped(CharacterMotion2DAdapter &p_adapter, bool p_was_on_floor, bool p_vel_dir_facing_up) {
++	if (up_direction == Vector2() || on_floor || !p_was_on_floor || p_vel_dir_facing_up) {
++		return false;
++	}
++
++	// Snap by at least collision margin to keep floor state consistent.
++	real_t length = MAX(floor_snap_length, margin);
++
++	PhysicsServer2D::MotionParameters parameters(p_adapter.get_transform(), -up_direction * length, margin);
++	parameters.recovery_as_collision = true; // Also report collisions generated only from recovery.
++	parameters.collide_separation_ray = true;
++
++	PhysicsServer2D::MotionResult result;
++	if (physics_motion_2d_move_and_collide(p_adapter, parameters, result, true, false)) {
++		if (result.get_angle(up_direction) <= floor_max_angle + FLOOR_ANGLE_THRESHOLD) {
++			return true;
++		}
++	}
++
++	return false;
++}
++
++void CharacterMotion2DState::_set_collision_direction(CharacterMotion2DAdapter &p_adapter, const PhysicsServer2D::MotionResult &p_result) {
++	if (motion_mode == 0 && p_result.get_angle(up_direction) <= floor_max_angle + FLOOR_ANGLE_THRESHOLD) { //floor
++		on_floor = true;
++		floor_normal = p_result.collision_normal;
++		_set_platform_data(p_adapter, p_result);
++	} else if (motion_mode == 0 && p_result.get_angle(-up_direction) <= floor_max_angle + FLOOR_ANGLE_THRESHOLD) { //ceiling
++		on_ceiling = true;
++	} else {
++		on_wall = true;
++		wall_normal = p_result.collision_normal;
++		// Don't apply wall velocity when the collider is a CharacterBody2D.
++		if (!p_adapter.is_character(p_result.collider_id, p_result.collider)) {
++			_set_platform_data(p_adapter, p_result);
++		}
++	}
++}
++
++void CharacterMotion2DState::_set_platform_data(CharacterMotion2DAdapter &p_adapter, const PhysicsServer2D::MotionResult &p_result) {
++	PhysicsDirectBodyState2D *bs = p_adapter.body_get_direct_state(p_result.collider);
++	if (bs == nullptr) {
++		return;
++	}
++
++	platform_rid = p_result.collider;
++	platform_object_id = p_result.collider_id;
++	platform_velocity = p_result.collider_velocity;
++
++	platform_layer = p_adapter.get_collision_layer(bs, p_result.collider);
++
++}
+diff --git a/scene/2d/physics/character_motion_2d.h b/scene/2d/physics/character_motion_2d.h
+new file mode 100644
+index 0000000..da6bc9e
+--- /dev/null
++++ b/scene/2d/physics/character_motion_2d.h
+@@ -0,0 +1,95 @@
++/**************************************************************************/
++/*  character_body_2d.cpp                                                 */
++/**************************************************************************/
++/*                         This file is part of:                          */
++/*                             GODOT ENGINE                               */
++/*                        https://godotengine.org                         */
++/**************************************************************************/
++/* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
++/* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
++/*                                                                        */
++/* Permission is hereby granted, free of charge, to any person obtaining  */
++/* a copy of this software and associated documentation files (the        */
++/* "Software"), to deal in the Software without restriction, including    */
++/* without limitation the rights to use, copy, modify, merge, publish,    */
++/* distribute, sublicense, and/or sell copies of the Software, and to     */
++/* permit persons to whom the Software is furnished to do so, subject to  */
++/* the following conditions:                                              */
++/*                                                                        */
++/* The above copyright notice and this permission notice shall be         */
++/* included in all copies or substantial portions of the Software.        */
++/*                                                                        */
++/* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,        */
++/* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF     */
++/* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. */
++/* IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY   */
++/* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,   */
++/* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE      */
++/* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
++/**************************************************************************/
++
++#pragma once
++
++#include "servers/physics_2d/physics_server_2d.h"
++
++// Adapters provide access only; every movement decision is in the shared code.
++struct PhysicsMotion2DAdapter {
++	virtual ~PhysicsMotion2DAdapter() = default;
++	virtual Transform2D get_transform() const = 0;
++	virtual void set_transform(const Transform2D &p_transform) = 0;
++	virtual bool test_motion(const PhysicsServer2D::MotionParameters &p_parameters, PhysicsServer2D::MotionResult &r_result) = 0;
++	virtual bool only_update_transform_changes() const { return false; }
++};
++
++struct CharacterMotion2DAdapter : PhysicsMotion2DAdapter {
++	virtual PhysicsDirectBodyState2D *body_get_direct_state(RID p_body) = 0;
++	virtual uint32_t get_collision_layer(PhysicsDirectBodyState2D *p_state, RID p_body) = 0;
++	virtual bool is_character(ObjectID p_object, RID p_body) = 0;
++};
++
++bool physics_motion_2d_move_and_collide(PhysicsMotion2DAdapter &p_adapter, const PhysicsServer2D::MotionParameters &p_parameters, PhysicsServer2D::MotionResult &r_result, bool p_test_only = false, bool p_cancel_sliding = true);
++
++// Original CharacterBody2D motion state. Node and S each own one instance.
++struct CharacterMotion2DState {
++	real_t margin = 0.08;
++	int motion_mode = 0;
++	int platform_on_leave = 0;
++
++	bool floor_constant_speed = false;
++	bool floor_stop_on_slope = true;
++	bool floor_block_on_wall = true;
++	bool slide_on_ceiling = true;
++	int max_slides = 4;
++	int platform_layer = 0;
++	real_t floor_max_angle = Math::deg_to_rad((real_t)45.0);
++	real_t floor_snap_length = 1;
++	real_t wall_min_slide_angle = Math::deg_to_rad((real_t)15.0);
++	Vector2 up_direction = Vector2(0.0, -1.0);
++	uint32_t platform_floor_layers = UINT32_MAX;
++	uint32_t platform_wall_layers = 0;
++	Vector2 velocity;
++
++	Vector2 floor_normal;
++	Vector2 platform_velocity;
++	Vector2 wall_normal;
++	Vector2 last_motion;
++	Vector2 previous_position;
++	Vector2 real_velocity;
++
++	RID platform_rid;
++	ObjectID platform_object_id;
++	bool on_floor = false;
++	bool on_ceiling = false;
++	bool on_wall = false;
++
++	Vector<PhysicsServer2D::MotionResult> motion_results;
++
++	bool move_and_slide(CharacterMotion2DAdapter &p_adapter, double delta);
++	void _move_and_slide_grounded(CharacterMotion2DAdapter &p_adapter, double p_delta, bool p_was_on_floor);
++	void _move_and_slide_floating(CharacterMotion2DAdapter &p_adapter, double p_delta);
++	void _apply_floor_snap(CharacterMotion2DAdapter &p_adapter, bool p_wall_as_floor = false);
++	void _snap_on_floor(CharacterMotion2DAdapter &p_adapter, bool p_was_on_floor, bool p_vel_dir_facing_up, bool p_wall_as_floor = false);
++	bool _on_floor_if_snapped(CharacterMotion2DAdapter &p_adapter, bool p_was_on_floor, bool p_vel_dir_facing_up);
++	void _set_collision_direction(CharacterMotion2DAdapter &p_adapter, const PhysicsServer2D::MotionResult &p_result);
++	void _set_platform_data(CharacterMotion2DAdapter &p_adapter, const PhysicsServer2D::MotionResult &p_result);
++};
+diff --git a/scene/2d/physics/physics_body_2d.cpp b/scene/2d/physics/physics_body_2d.cpp
+index 4cec467..c01eb67 100644
+--- a/scene/2d/physics/physics_body_2d.cpp
++++ b/scene/2d/physics/physics_body_2d.cpp
+@@ -29,6 +29,7 @@
+ /**************************************************************************/
+ 
+ #include "physics_body_2d.h"
++#include "character_motion_2d.h"
+ 
+ #include "core/object/class_db.h"
+ #include "scene/main/scene_tree.h"
+@@ -69,58 +70,23 @@ Ref<KinematicCollision2D> PhysicsBody2D::_move(const Vector2 &p_motion, bool p_t
+ 	return Ref<KinematicCollision2D>();
+ }
+ 
+-bool PhysicsBody2D::move_and_collide(const PhysicsServer2D::MotionParameters &p_parameters, PhysicsServer2D::MotionResult &r_result, bool p_test_only, bool p_cancel_sliding) {
+-	if (is_only_update_transform_changes_enabled()) {
+-		ERR_PRINT("Move functions do not work together with 'sync to physics' option. See the documentation for details.");
+-	}
+-
+-	bool colliding = PhysicsServer2D::get_singleton()->body_test_motion(get_rid(), p_parameters, &r_result);
+-
+-	// Restore direction of motion to be along original motion,
+-	// in order to avoid sliding due to recovery,
+-	// but only if collision depth is low enough to avoid tunneling.
+-	if (p_cancel_sliding) {
+-		real_t motion_length = p_parameters.motion.length();
+-		real_t precision = 0.001;
+-
+-		if (colliding) {
+-			// Can't just use margin as a threshold because collision depth is calculated on unsafe motion,
+-			// so even in normal resting cases the depth can be a bit more than the margin.
+-			precision += motion_length * (r_result.collision_unsafe_fraction - r_result.collision_safe_fraction);
+-
+-			if (r_result.collision_depth > p_parameters.margin + precision) {
+-				p_cancel_sliding = false;
+-			}
+-		}
+-
+-		if (p_cancel_sliding) {
+-			// When motion is null, recovery is the resulting motion.
+-			Vector2 motion_normal;
+-			if (motion_length > CMP_EPSILON) {
+-				motion_normal = p_parameters.motion / motion_length;
+-			}
+-
+-			// Check depth of recovery.
+-			real_t projected_length = r_result.travel.dot(motion_normal);
+-			Vector2 recovery = r_result.travel - motion_normal * projected_length;
+-			real_t recovery_length = recovery.length();
+-			// Fixes cases where canceling slide causes the motion to go too deep into the ground,
+-			// because we're only taking rest information into account and not general recovery.
+-			if (recovery_length < p_parameters.margin + precision) {
+-				// Apply adjustment to motion.
+-				r_result.travel = motion_normal * projected_length;
+-				r_result.remainder = p_parameters.motion - r_result.travel;
+-			}
+-		}
++namespace {
++struct PhysicsBodyMotion2DNodeAdapter final : PhysicsMotion2DAdapter {
++	PhysicsBody2D &body;
++	explicit PhysicsBodyMotion2DNodeAdapter(PhysicsBody2D &p_body, bool p_only_update) : body(p_body), only_update(p_only_update) {}
++	bool only_update = false;
++	Transform2D get_transform() const override { return body.get_global_transform(); }
++	void set_transform(const Transform2D &p_transform) override { body.set_global_transform(p_transform); }
++	bool only_update_transform_changes() const override { return only_update; }
++	bool test_motion(const PhysicsServer2D::MotionParameters &p_parameters, PhysicsServer2D::MotionResult &r_result) override {
++		return PhysicsServer2D::get_singleton()->body_test_motion(body.get_rid(), p_parameters, &r_result);
+ 	}
++};
++} // namespace
+ 
+-	if (!p_test_only) {
+-		Transform2D gt = p_parameters.from;
+-		gt.columns[2] += r_result.travel;
+-		set_global_transform(gt);
+-	}
+-
+-	return colliding;
++bool PhysicsBody2D::move_and_collide(const PhysicsServer2D::MotionParameters &p_parameters, PhysicsServer2D::MotionResult &r_result, bool p_test_only, bool p_cancel_sliding) {
++	PhysicsBodyMotion2DNodeAdapter adapter(*this, is_only_update_transform_changes_enabled());
++	return physics_motion_2d_move_and_collide(adapter, p_parameters, r_result, p_test_only, p_cancel_sliding);
+ }
+ 
+ bool PhysicsBody2D::test_move(const Transform2D &p_from, const Vector2 &p_motion, const Ref<KinematicCollision2D> &r_collision, real_t p_margin, bool p_recovery_as_collision) {
+diff --git a/scene/main/scene_tree.cpp b/scene/main/scene_tree.cpp
+index dd92f0f..8557ac9 100644
+--- a/scene/main/scene_tree.cpp
++++ b/scene/main/scene_tree.cpp
+@@ -66,6 +66,7 @@ STATIC_ASSERT_INCOMPLETE_TYPE(class, RenderingServer);
+ 
+ #ifndef PHYSICS_2D_DISABLED
+ #include "servers/physics_2d/physics_server_2d.h"
++#include "servers/physics_2d/physics_server_2d_wrap_mt.h"
+ #endif // PHYSICS_2D_DISABLED
+ 
+ #ifndef PHYSICS_3D_DISABLED
+@@ -1137,7 +1138,9 @@ void SceneTree::set_pause(bool p_enabled) {
+ 	PhysicsServer3D::get_singleton()->set_active(!p_enabled);
+ #endif // PHYSICS_3D_DISABLED
+ #ifndef PHYSICS_2D_DISABLED
+-	PhysicsServer2D::get_singleton()->set_active(!p_enabled);
++	if (!PhysicsServer2DWrapMT::is_external_owner_server(PhysicsServer2D::get_singleton())) {
++		PhysicsServer2D::get_singleton()->set_active(!p_enabled);
++	}
+ #endif // PHYSICS_2D_DISABLED
+ 	if (get_root()) {
+ 		get_root()->_propagate_pause_notification(p_enabled);
+@@ -1163,7 +1166,9 @@ void SceneTree::set_suspend(bool p_enabled) {
+ 	PhysicsServer3D::get_singleton()->set_active(!p_enabled && !paused);
+ #endif // PHYSICS_3D_DISABLED
+ #ifndef PHYSICS_2D_DISABLED
+-	PhysicsServer2D::get_singleton()->set_active(!p_enabled && !paused);
++	if (!PhysicsServer2DWrapMT::is_external_owner_server(PhysicsServer2D::get_singleton())) {
++		PhysicsServer2D::get_singleton()->set_active(!p_enabled && !paused);
++	}
+ #endif // PHYSICS_2D_DISABLED
+ 	if (get_root()) {
+ 		get_root()->_propagate_suspend_notification(p_enabled);
+diff --git a/scene/main/viewport.cpp b/scene/main/viewport.cpp
+index 54f9f2c..cb14334 100644
+--- a/scene/main/viewport.cpp
++++ b/scene/main/viewport.cpp
+@@ -31,6 +31,10 @@
+ #include "viewport.h"
+ #include "viewport.compat.inc"
+ 
++#ifndef PHYSICS_2D_DISABLED
++#include "servers/physics_2d/physics_server_2d_wrap_mt.h"
++#endif
++
+ STATIC_ASSERT_INCOMPLETE_TYPE(class, RenderingServer);
+ 
+ #include "core/config/engine.h"
+@@ -612,9 +616,11 @@ void Viewport::_notification(int p_what) {
+ #if !defined(PHYSICS_2D_DISABLED) || !defined(PHYSICS_3D_DISABLED)
+ 			if (get_tree()->is_debugging_collisions_hint()) {
+ #ifndef PHYSICS_2D_DISABLED
+-				PhysicsServer2D::get_singleton()->space_set_debug_contacts(find_world_2d()->get_space(), get_tree()->get_collision_debug_contact_count());
+-				contact_2d_debug = RenderingServer::get_singleton()->canvas_item_create();
+-				RenderingServer::get_singleton()->canvas_item_set_parent(contact_2d_debug, current_canvas);
++				if (!PhysicsServer2DWrapMT::is_external_owner_server(PhysicsServer2D::get_singleton())) {
++					PhysicsServer2D::get_singleton()->space_set_debug_contacts(find_world_2d()->get_space(), get_tree()->get_collision_debug_contact_count());
++					contact_2d_debug = RenderingServer::get_singleton()->canvas_item_create();
++					RenderingServer::get_singleton()->canvas_item_set_parent(contact_2d_debug, current_canvas);
++				}
+ #endif // PHYSICS_2D_DISABLED
+ #ifndef PHYSICS_3D_DISABLED
+ 				PhysicsServer3D::get_singleton()->space_set_debug_contacts(find_world_3d()->get_space(), get_tree()->get_collision_debug_contact_count());
+@@ -715,7 +721,7 @@ void Viewport::_notification(int p_what) {
+ 			}
+ 
+ #ifndef PHYSICS_2D_DISABLED
+-			if (get_tree()->is_debugging_collisions_hint() && contact_2d_debug.is_valid()) {
++			if (!PhysicsServer2DWrapMT::is_external_owner_server(PhysicsServer2D::get_singleton()) && get_tree()->is_debugging_collisions_hint() && contact_2d_debug.is_valid()) {
+ 				RenderingServer::get_singleton()->canvas_item_clear(contact_2d_debug);
+ 				RenderingServer::get_singleton()->canvas_item_set_draw_index(contact_2d_debug, 0xFFFFF); //very high index
+ 
+@@ -816,7 +822,10 @@ void Viewport::_process_picking() {
+ #endif // PHYSICS_3D_DISABLED
+ 
+ #ifndef PHYSICS_2D_DISABLED
+-	PhysicsDirectSpaceState2D *ss2d = PhysicsServer2D::get_singleton()->space_get_direct_state(find_world_2d()->get_space());
++	PhysicsDirectSpaceState2D *ss2d = nullptr;
++	if (!PhysicsServer2DWrapMT::is_external_owner_server(PhysicsServer2D::get_singleton())) {
++		ss2d = PhysicsServer2D::get_singleton()->space_get_direct_state(find_world_2d()->get_space());
++	}
+ #endif // PHYSICS_2D_DISABLED
+ 
+ 	SubViewportContainer *parent_svc = Object::cast_to<SubViewportContainer>(get_parent());
+diff --git a/scene/resources/world_2d.cpp b/scene/resources/world_2d.cpp
+index c2749aa..cbaa2ef 100644
+--- a/scene/resources/world_2d.cpp
++++ b/scene/resources/world_2d.cpp
+@@ -35,6 +35,10 @@
+ #include "scene/2d/visible_on_screen_notifier_2d.h"
+ #include "servers/rendering/rendering_server.h"
+ 
++#ifndef PHYSICS_2D_DISABLED
++#include "servers/physics_2d/physics_server_2d_wrap_mt.h"
++#endif
++
+ #ifndef NAVIGATION_2D_DISABLED
+ #include "servers/navigation_2d/navigation_server_2d.h"
+ #endif // NAVIGATION_2D_DISABLED
+@@ -60,6 +64,7 @@ RID World2D::get_navigation_map() const {
+ 
+ #ifndef PHYSICS_2D_DISABLED
+ RID World2D::get_space() const {
++	ERR_FAIL_COND_V_MSG(PhysicsServer2DWrapMT::is_external_owner_server(PhysicsServer2D::get_singleton()), RID(), "External-owner 2D gameplay uses the S-owned numeric world, not a SceneTree World2D space.");
+ 	if (space.is_null()) {
+ 		space = PhysicsServer2D::get_singleton()->space_create();
+ 		PhysicsServer2D::get_singleton()->space_set_active(space, true);
+@@ -72,6 +77,7 @@ RID World2D::get_space() const {
+ }
+ 
+ PhysicsDirectSpaceState2D *World2D::get_direct_space_state() {
++	ERR_FAIL_COND_V_MSG(PhysicsServer2DWrapMT::is_external_owner_server(PhysicsServer2D::get_singleton()), nullptr, "SceneTree World2D cannot query the external-owner gameplay space.");
+ 	return PhysicsServer2D::get_singleton()->space_get_direct_state(get_space());
+ }
+ #endif // PHYSICS_2D_DISABLED
+diff --git a/servers/physics_2d/physics_server_2d.h b/servers/physics_2d/physics_server_2d.h
+index d185fcd..f356e9b 100644
+--- a/servers/physics_2d/physics_server_2d.h
++++ b/servers/physics_2d/physics_server_2d.h
+@@ -135,6 +135,9 @@ protected:
+ 
+ public:
+ 	struct RayParameters {
++		// Internal owner-domain callers need the original numeric collider ID,
++		// not an ObjectDB pointer to a presentation Node. Script API stays true.
++		bool resolve_collider_object = true;
+ 		Vector2 from;
+ 		Vector2 to;
+ 		HashSet<RID> exclude;
+@@ -188,6 +191,9 @@ public:
+ 
+ 		bool collide_with_bodies = true;
+ 		bool collide_with_areas = false;
++		// Numeric Source queries retain the same collision test without resolving
++		// a collider through ObjectDB on the external physics owner thread.
++		bool resolve_collider_object = true;
+ 	};
+ 
+ 	struct ShapeRestInfo {
+diff --git a/servers/physics_2d/physics_server_2d_wrap_mt.cpp b/servers/physics_2d/physics_server_2d_wrap_mt.cpp
+index 33cbbc6..5db7a56 100644
+--- a/servers/physics_2d/physics_server_2d_wrap_mt.cpp
++++ b/servers/physics_2d/physics_server_2d_wrap_mt.cpp
+@@ -58,6 +58,16 @@ void PhysicsServer2DWrapMT::_thread_sync() {
+ /* EVENT QUEUING */
+ 
+ void PhysicsServer2DWrapMT::step(real_t p_step) {
++	if (external_owner_mode) {
++		require_external_phase(ExternalPhase::ENDED);
++		external_phase.store(ExternalPhase::STEPPING, std::memory_order_release);
++		physics_server_2d->step(p_step);
++		for (int i = 0; i < 3; ++i) {
++			published_process_info[i].store(physics_server_2d->get_process_info(static_cast<ProcessInfo>(i)), std::memory_order_release);
++		}
++		external_phase.store(ExternalPhase::IDLE, std::memory_order_release);
++		return;
++	}
+ 	if (create_thread) {
+ 		command_queue.push(physics_server_2d, &PhysicsServer2D::step, p_step);
+ 	} else {
+@@ -66,6 +76,12 @@ void PhysicsServer2DWrapMT::step(real_t p_step) {
+ }
+ 
+ void PhysicsServer2DWrapMT::sync() {
++	if (external_owner_mode) {
++		require_external_phase(ExternalPhase::IDLE);
++		physics_server_2d->sync();
++		external_phase.store(ExternalPhase::SYNCED, std::memory_order_release);
++		return;
++	}
+ 	if (create_thread) {
+ 		command_queue.push_and_sync(this, &PhysicsServer2DWrapMT::_thread_sync);
+ 	} else {
+@@ -75,10 +91,23 @@ void PhysicsServer2DWrapMT::sync() {
+ }
+ 
+ void PhysicsServer2DWrapMT::flush_queries() {
++	if (external_owner_mode) {
++		require_external_phase(ExternalPhase::SYNCED);
++		external_phase.store(ExternalPhase::FLUSHING, std::memory_order_release);
++		physics_server_2d->flush_queries();
++		external_phase.store(ExternalPhase::QUERIES_FLUSHED, std::memory_order_release);
++		return;
++	}
+ 	physics_server_2d->flush_queries();
+ }
+ 
+ void PhysicsServer2DWrapMT::end_sync() {
++	if (external_owner_mode) {
++		require_external_phase(ExternalPhase::LOGIC);
++		physics_server_2d->end_sync();
++		external_phase.store(ExternalPhase::ENDED, std::memory_order_release);
++		return;
++	}
+ 	physics_server_2d->end_sync();
+ 
+ 	if (create_thread) {
+@@ -87,6 +116,12 @@ void PhysicsServer2DWrapMT::end_sync() {
+ }
+ 
+ void PhysicsServer2DWrapMT::init() {
++	if (external_owner_mode) {
++		CRASH_COND_MSG(!Thread::is_main_thread() || external_lifecycle.load() != ExternalLifecycle::CONSTRUCTED, "External Physics2D init must happen once on Main.");
++		physics_server_2d->init();
++		external_lifecycle.store(ExternalLifecycle::BOOTSTRAP_MAIN, std::memory_order_release);
++		return;
++	}
+ 	if (create_thread) {
+ 		WorkerThreadPool::TaskID tid = WorkerThreadPool::get_singleton()->add_task(callable_mp(this, &PhysicsServer2DWrapMT::_thread_loop), true, "Physics server 2D pump task", true);
+ 		command_queue.set_pump_task_id(tid);
+@@ -100,6 +135,10 @@ void PhysicsServer2DWrapMT::init() {
+ }
+ 
+ void PhysicsServer2DWrapMT::finish() {
++	if (external_owner_mode) {
++		CRASH_COND_MSG(!release_external_owner(), "External Physics2D finish must happen once on S at idle.");
++		return;
++	}
+ 	if (create_thread) {
+ 		command_queue.push(physics_server_2d, &PhysicsServer2D::finish);
+ 		command_queue.push(this, &PhysicsServer2DWrapMT::_thread_exit);
+@@ -113,11 +152,100 @@ void PhysicsServer2DWrapMT::finish() {
+ 	}
+ }
+ 
+-PhysicsServer2DWrapMT::PhysicsServer2DWrapMT(PhysicsServer2D *p_contained, bool p_create_thread) {
++bool PhysicsServer2DWrapMT::is_external_query_phase() const {
++	ExternalPhase phase = external_phase.load(std::memory_order_acquire);
++	return is_external_owner_thread() && (phase == ExternalPhase::SYNCED || phase == ExternalPhase::FLUSHING || phase == ExternalPhase::QUERIES_FLUSHED || phase == ExternalPhase::LOGIC || phase == ExternalPhase::PROCESS);
++}
++
++void PhysicsServer2DWrapMT::assert_external_access(bool p_query) const {
++	if (!external_owner_mode) {
++		return;
++	}
++	ExternalLifecycle state = external_lifecycle.load(std::memory_order_acquire);
++	if (state == ExternalLifecycle::BOOTSTRAP_MAIN && Thread::is_main_thread() && !p_query) {
++		return;
++	}
++	CRASH_COND_MSG(state != ExternalLifecycle::OWNED_BY_S || !is_external_owner_thread(), "External Physics2D owner violation: Main/worker access is forbidden after handoff; no command was queued.");
++	ExternalPhase phase = external_phase.load(std::memory_order_acquire);
++	CRASH_COND_MSG(phase == ExternalPhase::STEPPING || phase == ExternalPhase::ENDED, "External Physics2D access outside the service window.");
++	CRASH_COND_MSG(p_query && !is_external_query_phase(), "External Physics2D query outside sync/flush/logic; cannot return an ordinary no-hit result.");
++}
++
++void PhysicsServer2DWrapMT::require_external_phase(ExternalPhase p_phase) const {
++	CRASH_COND_MSG(external_lifecycle.load(std::memory_order_acquire) != ExternalLifecycle::OWNED_BY_S || !is_external_owner_thread(), "External Physics2D phase driver must be its claimed S thread.");
++	CRASH_COND_MSG(external_phase.load(std::memory_order_acquire) != p_phase, "External Physics2D phase order violation.");
++}
++
++bool PhysicsServer2DWrapMT::prepare_external_handoff() {
++	ERR_FAIL_COND_V(!external_owner_mode || !Thread::is_main_thread(), false);
++	ERR_FAIL_COND_V(external_lifecycle.load() != ExternalLifecycle::BOOTSTRAP_MAIN, false);
++	// Bootstrap operations were direct; drain any pre-init command before publication.
++	command_queue.flush_all();
++	external_lifecycle.store(ExternalLifecycle::HANDOFF_QUIESCENT, std::memory_order_release);
++	return true;
++}
++
++bool PhysicsServer2DWrapMT::claim_external_owner() {
++	ERR_FAIL_COND_V(!external_owner_mode || Thread::is_main_thread(), false);
++	ExternalLifecycle expected = ExternalLifecycle::HANDOFF_QUIESCENT;
++	if (!external_lifecycle.compare_exchange_strong(expected, ExternalLifecycle::OWNED_BY_S, std::memory_order_acq_rel)) {
++		return false;
++	}
++	external_owner_thread.store(Thread::get_caller_id(), std::memory_order_release);
++	return true;
++}
++
++void PhysicsServer2DWrapMT::external_begin_logic() {
++	require_external_phase(ExternalPhase::QUERIES_FLUSHED);
++	external_phase.store(ExternalPhase::LOGIC, std::memory_order_release);
++}
++
++void PhysicsServer2DWrapMT::external_begin_process() {
++	// Original process callbacks and their timers query the state produced by
++	// the preceding physics step. This phase performs no second sync or step.
++	require_external_phase(ExternalPhase::IDLE);
++	external_phase.store(ExternalPhase::PROCESS, std::memory_order_release);
++}
++
++void PhysicsServer2DWrapMT::external_end_process() {
++	require_external_phase(ExternalPhase::PROCESS);
++	external_phase.store(ExternalPhase::IDLE, std::memory_order_release);
++}
++
++bool PhysicsServer2DWrapMT::finish_external_unclaimed_bootstrap() {
++	if (!external_owner_mode || !Thread::is_main_thread() || external_lifecycle.load(std::memory_order_acquire) != ExternalLifecycle::BOOTSTRAP_MAIN || external_owner_thread.load(std::memory_order_acquire) != Thread::UNASSIGNED_ID || external_phase.load(std::memory_order_acquire) != ExternalPhase::IDLE) {
++		return false;
++	}
++	// No S was prepared or claimed. Original bootstrap operations belonged to
++	// Main directly; no transition from HANDOFF_QUIESCENT/OWNED_BY_S is allowed.
++	command_queue.flush_all();
++	physics_server_2d->finish();
++	external_lifecycle.store(ExternalLifecycle::FINISHED, std::memory_order_release);
++	return true;
++}
++
++bool PhysicsServer2DWrapMT::release_external_owner() {
++	ERR_FAIL_COND_V(!external_owner_mode || !is_external_owner_thread(), false);
++	ERR_FAIL_COND_V(external_lifecycle.load() != ExternalLifecycle::OWNED_BY_S || external_phase.load() != ExternalPhase::IDLE, false);
++	physics_server_2d->finish();
++	external_owner_thread.store(Thread::UNASSIGNED_ID, std::memory_order_release);
++	external_lifecycle.store(ExternalLifecycle::FINISHED, std::memory_order_release);
++	return true;
++}
++
++bool PhysicsServer2DWrapMT::is_external_owner_server(const PhysicsServer2D *p_server) {
++	const PhysicsServer2DWrapMT *wrap = Object::cast_to<PhysicsServer2DWrapMT>(p_server);
++	return wrap && wrap->is_external_owner_mode();
++}
++
++PhysicsServer2DWrapMT::PhysicsServer2DWrapMT(PhysicsServer2D *p_contained, bool p_create_thread, bool p_external_owner_mode) {
++	external_owner_mode = p_external_owner_mode;
++	CRASH_COND_MSG(external_owner_mode && p_create_thread, "External Physics2D cannot start the WrapMT pump.");
+ 	physics_server_2d = p_contained;
+ 	create_thread = p_create_thread;
+ }
+ 
+ PhysicsServer2DWrapMT::~PhysicsServer2DWrapMT() {
++	CRASH_COND_MSG(external_owner_mode && !is_external_finished(), "External Physics2D must be finished by S and joined before destruction.");
+ 	memdelete(physics_server_2d);
+ }
+diff --git a/servers/physics_2d/physics_server_2d_wrap_mt.h b/servers/physics_2d/physics_server_2d_wrap_mt.h
+index 6d60a25..ee2b442 100644
+--- a/servers/physics_2d/physics_server_2d_wrap_mt.h
++++ b/servers/physics_2d/physics_server_2d_wrap_mt.h
+@@ -30,14 +30,19 @@
+ 
+ #pragma once
+ 
++#include <atomic>
++
+ #include "core/object/worker_thread_pool.h"
+ #include "core/os/thread.h"
+ #include "core/templates/command_queue_mt.h"
+ #include "servers/physics_2d/physics_server_2d.h"
+ 
+-#define ASYNC_COND_PUSH (Thread::get_caller_id() != server_thread && !(doing_sync.is_set() && Thread::is_main_thread()))
+-#define ASYNC_COND_PUSH_AND_RET (Thread::get_caller_id() != server_thread && !(doing_sync.is_set() && Thread::is_main_thread()))
+-#define ASYNC_COND_PUSH_AND_SYNC (Thread::get_caller_id() != server_thread && !(doing_sync.is_set() && Thread::is_main_thread()))
++#undef ASYNC_COND_PUSH
++#undef ASYNC_COND_PUSH_AND_RET
++#undef ASYNC_COND_PUSH_AND_SYNC
++#define ASYNC_COND_PUSH (!external_owner_mode && Thread::get_caller_id() != server_thread && !(doing_sync.is_set() && Thread::is_main_thread()))
++#define ASYNC_COND_PUSH_AND_RET (!external_owner_mode && Thread::get_caller_id() != server_thread && !(doing_sync.is_set() && Thread::is_main_thread()))
++#define ASYNC_COND_PUSH_AND_SYNC (!external_owner_mode && Thread::get_caller_id() != server_thread && !(doing_sync.is_set() && Thread::is_main_thread()))
+ 
+ #ifdef DEBUG_SYNC
+ #define SYNC_DEBUG print_line("sync on: " + String(__FUNCTION__));
+@@ -58,11 +63,29 @@
+ #define server_name physics_server_2d
+ #define WRITE_ACTION
+ 
++#undef SERVER_ACCESS_GUARD
++#define SERVER_ACCESS_GUARD assert_external_access(false);
++
+ #include "servers/server_wrap_mt_common.h"
+ 
+ class PhysicsServer2DWrapMT : public PhysicsServer2D {
+ 	GDSOFTCLASS(PhysicsServer2DWrapMT, PhysicsServer2D);
+ 
++public:
++	enum class ExternalLifecycle { CONSTRUCTED, BOOTSTRAP_MAIN, HANDOFF_QUIESCENT, OWNED_BY_S, FINISHED };
++	enum class ExternalPhase { IDLE, SYNCED, FLUSHING, QUERIES_FLUSHED, LOGIC, ENDED, STEPPING, PROCESS };
++
++private:
++	bool external_owner_mode = false; // Immutable after factory construction.
++	std::atomic<Thread::ID> external_owner_thread{ Thread::UNASSIGNED_ID };
++	std::atomic<ExternalLifecycle> external_lifecycle{ ExternalLifecycle::CONSTRUCTED };
++	std::atomic<ExternalPhase> external_phase{ ExternalPhase::IDLE };
++	std::atomic<int> published_process_info[3]{};
++
++	void require_external_phase(ExternalPhase p_phase) const;
++	void assert_external_access(bool p_query) const;
++
++
+ 	mutable PhysicsServer2D *physics_server_2d = nullptr;
+ 
+ 	mutable CommandQueueMT command_queue;
+@@ -98,7 +121,8 @@ public:
+ 
+ 	//these work well, but should be used from the main thread only
+ 	bool shape_collide(RID p_shape_A, const Transform2D &p_xform_A, const Vector2 &p_motion_A, RID p_shape_B, const Transform2D &p_xform_B, const Vector2 &p_motion_B, Vector2 *r_results, int p_result_max, int &r_result_count) override {
+-		ERR_FAIL_COND_V(!Thread::is_main_thread(), false);
++		assert_external_access(true);
++		ERR_FAIL_COND_V(!external_owner_mode && !Thread::is_main_thread(), false);
+ 		return physics_server_2d->shape_collide(p_shape_A, p_xform_A, p_motion_A, p_shape_B, p_xform_B, p_motion_B, r_results, p_result_max, r_result_count);
+ 	}
+ 
+@@ -113,18 +137,21 @@ public:
+ 
+ 	// this function only works on physics process, errors and returns null otherwise
+ 	PhysicsDirectSpaceState2D *space_get_direct_state(RID p_space) override {
+-		ERR_FAIL_COND_V(!Thread::is_main_thread(), nullptr);
++		assert_external_access(true);
++		ERR_FAIL_COND_V(!external_owner_mode && !Thread::is_main_thread(), nullptr);
+ 		return physics_server_2d->space_get_direct_state(p_space);
+ 	}
+ 
+ 	FUNC2(space_set_debug_contacts, RID, int);
+ 	virtual Vector<Vector2> space_get_contacts(RID p_space) const override {
+-		ERR_FAIL_COND_V(!Thread::is_main_thread(), Vector<Vector2>());
++		assert_external_access(true);
++		ERR_FAIL_COND_V(!external_owner_mode && !Thread::is_main_thread(), Vector<Vector2>());
+ 		return physics_server_2d->space_get_contacts(p_space);
+ 	}
+ 
+ 	virtual int space_get_contact_count(RID p_space) const override {
+-		ERR_FAIL_COND_V(!Thread::is_main_thread(), 0);
++		assert_external_access(true);
++		ERR_FAIL_COND_V(!external_owner_mode && !Thread::is_main_thread(), 0);
+ 		return physics_server_2d->space_get_contact_count(p_space);
+ 	}
+ 
+@@ -259,19 +286,22 @@ public:
+ 	FUNC3(body_set_force_integration_callback, RID, const Callable &, const Variant &);
+ 
+ 	bool body_collide_shape(RID p_body, int p_body_shape, RID p_shape, const Transform2D &p_shape_xform, const Vector2 &p_motion, Vector2 *r_results, int p_result_max, int &r_result_count) override {
++		assert_external_access(true);
+ 		return physics_server_2d->body_collide_shape(p_body, p_body_shape, p_shape, p_shape_xform, p_motion, r_results, p_result_max, r_result_count);
+ 	}
+ 
+ 	FUNC2(body_set_pickable, RID, bool);
+ 
+ 	bool body_test_motion(RID p_body, const MotionParameters &p_parameters, MotionResult *r_result = nullptr) override {
+-		ERR_FAIL_COND_V(!Thread::is_main_thread(), false);
++		assert_external_access(true);
++		ERR_FAIL_COND_V(!external_owner_mode && !Thread::is_main_thread(), false);
+ 		return physics_server_2d->body_test_motion(p_body, p_parameters, r_result);
+ 	}
+ 
+ 	// this function only works on physics process, errors and returns null otherwise
+ 	PhysicsDirectBodyState2D *body_get_direct_state(RID p_body) override {
+-		ERR_FAIL_COND_V(!Thread::is_main_thread(), nullptr);
++		assert_external_access(true);
++		ERR_FAIL_COND_V(!external_owner_mode && !Thread::is_main_thread(), nullptr);
+ 		return physics_server_2d->body_get_direct_state(p_body);
+ 	}
+ 
+@@ -321,16 +351,36 @@ public:
+ 	virtual void finish() override;
+ 
+ 	virtual bool is_flushing_queries() const override {
++		assert_external_access(false);
+ 		return physics_server_2d->is_flushing_queries();
+ 	}
+ 
+ 	int get_process_info(ProcessInfo p_info) override {
++		if (external_owner_mode) {
++			ERR_FAIL_INDEX_V(p_info, 3, 0);
++			return published_process_info[p_info].load(std::memory_order_acquire);
++		}
+ 		return physics_server_2d->get_process_info(p_info);
+ 	}
+ 
+-	PhysicsServer2DWrapMT(PhysicsServer2D *p_contained, bool p_create_thread);
++	PhysicsServer2DWrapMT(PhysicsServer2D *p_contained, bool p_create_thread, bool p_external_owner_mode = false);
++	bool prepare_external_handoff();
++	bool claim_external_owner();
++	bool release_external_owner(); // S-only finish; ownership never returns to Main.
++	bool finish_external_unclaimed_bootstrap(); // Main-only menu exit, before any handoff.
++	void external_begin_logic();
++	void external_begin_process();
++	void external_end_process();
++	bool is_external_owner_mode() const { return external_owner_mode; }
++	bool is_external_finished() const { return external_lifecycle.load(std::memory_order_acquire) == ExternalLifecycle::FINISHED; }
++	bool is_external_owner_thread() const { return external_owner_mode && external_owner_thread.load(std::memory_order_acquire) == Thread::get_caller_id(); }
++	bool is_external_query_phase() const;
++	static bool is_external_owner_server(const PhysicsServer2D *p_server);
+ 	~PhysicsServer2DWrapMT();
+ 
++#undef SERVER_ACCESS_GUARD
++#define SERVER_ACCESS_GUARD
++
+ #undef ServerNameWrapMT
+ #undef ServerName
+ #undef server_name
+@@ -345,3 +395,11 @@ public:
+ #ifdef DEBUG_ENABLED
+ #undef MAIN_THREAD_SYNC_WARN
+ #endif
++
++// Keep shared wrapper macros neutral when another server header follows.
++#undef ASYNC_COND_PUSH
++#undef ASYNC_COND_PUSH_AND_RET
++#undef ASYNC_COND_PUSH_AND_SYNC
++#define ASYNC_COND_PUSH (Thread::get_caller_id() != server_thread && !(doing_sync.is_set() && Thread::is_main_thread()))
++#define ASYNC_COND_PUSH_AND_RET (Thread::get_caller_id() != server_thread && !(doing_sync.is_set() && Thread::is_main_thread()))
++#define ASYNC_COND_PUSH_AND_SYNC (Thread::get_caller_id() != server_thread && !(doing_sync.is_set() && Thread::is_main_thread()))
+diff --git a/servers/server_wrap_mt_common.h b/servers/server_wrap_mt_common.h
+index c55b91b..9177da9 100644
+--- a/servers/server_wrap_mt_common.h
++++ b/servers/server_wrap_mt_common.h
+@@ -30,6 +30,12 @@
+ 
+ #pragma once
+ 
++// Optional wrapper-local access gate, expanded at each generated entrypoint.
++// Other servers retain the empty default.
++#ifndef SERVER_ACCESS_GUARD
++#define SERVER_ACCESS_GUARD
++#endif
++
+ #ifdef DEBUG_ENABLED
+ #include "core/config/engine.h" // IWYU pragma: keep. Used in macro.
+ 
+@@ -43,6 +49,7 @@
+ 
+ #define FUNC0R(m_r, m_type) \
+ 	virtual m_r m_type() override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH_AND_RET) { \
+ 			m_r ret; \
+ 			command_queue.push_and_ret(server_name, &ServerName::m_type, &ret); \
+@@ -57,6 +64,7 @@
+ 
+ #define FUNCRIDSPLIT(m_type) \
+ 	virtual RID m_type##_create() override { \
++		SERVER_ACCESS_GUARD \
+ 		RID ret = server_name->m_type##_allocate(); \
+ 		if (ASYNC_COND_PUSH) { \
+ 			command_queue.push(server_name, &ServerName::m_type##_initialize, ret); \
+@@ -69,11 +77,13 @@
+ //RID now returns directly, ensure thread safety yourself
+ #define FUNCRID(m_type) \
+ 	virtual RID m_type##_create() override { \
++		SERVER_ACCESS_GUARD \
+ 		return server_name->m_type##_create(); \
+ 	}
+ 
+ #define FUNC0RC(m_r, m_type) \
+ 	virtual m_r m_type() const override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH_AND_RET) { \
+ 			m_r ret; \
+@@ -89,6 +99,7 @@
+ 
+ #define FUNC0(m_type) \
+ 	virtual void m_type() override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH) { \
+ 			command_queue.push(server_name, &ServerName::m_type); \
+@@ -100,6 +111,7 @@
+ 
+ #define FUNC0C(m_type) \
+ 	virtual void m_type() const override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH) { \
+ 			command_queue.push(server_name, &ServerName::m_type); \
+ 		} else { \
+@@ -110,6 +122,7 @@
+ 
+ #define FUNC0S(m_type) \
+ 	virtual void m_type() override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH_AND_SYNC) { \
+ 			command_queue.push_and_sync(server_name, &ServerName::m_type); \
+@@ -123,6 +136,7 @@
+ 
+ #define FUNC0SC(m_type) \
+ 	virtual void m_type() const override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH_AND_SYNC) { \
+ 			command_queue.push_and_sync(server_name, &ServerName::m_type); \
+ 			SYNC_DEBUG \
+@@ -137,6 +151,7 @@
+ 
+ #define FUNC1R(m_r, m_type, m_arg1) \
+ 	virtual m_r m_type(m_arg1 p1) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH_AND_RET) { \
+ 			m_r ret; \
+@@ -152,6 +167,7 @@
+ 
+ #define FUNC1RC(m_r, m_type, m_arg1) \
+ 	virtual m_r m_type(m_arg1 p1) const override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH_AND_RET) { \
+ 			m_r ret; \
+ 			command_queue.push_and_ret(server_name, &ServerName::m_type, &ret, p1); \
+@@ -166,6 +182,7 @@
+ 
+ #define FUNC1S(m_type, m_arg1) \
+ 	virtual void m_type(m_arg1 p1) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH_AND_SYNC) { \
+ 			command_queue.push_and_sync(server_name, &ServerName::m_type, p1); \
+@@ -179,6 +196,7 @@
+ 
+ #define FUNC1SC(m_type, m_arg1) \
+ 	virtual void m_type(m_arg1 p1) const override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH_AND_SYNC) { \
+ 			command_queue.push_and_sync(server_name, &ServerName::m_type, p1); \
+ 			SYNC_DEBUG \
+@@ -191,6 +209,7 @@
+ 
+ #define FUNC1(m_type, m_arg1) \
+ 	virtual void m_type(m_arg1 p1) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH) { \
+ 			command_queue.push(server_name, &ServerName::m_type, p1); \
+@@ -202,6 +221,7 @@
+ 
+ #define FUNC1C(m_type, m_arg1) \
+ 	virtual void m_type(m_arg1 p1) const override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH) { \
+ 			command_queue.push(server_name, &ServerName::m_type, p1); \
+ 		} else { \
+@@ -212,6 +232,7 @@
+ 
+ #define FUNC2R(m_r, m_type, m_arg1, m_arg2) \
+ 	virtual m_r m_type(m_arg1 p1, m_arg2 p2) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH_AND_RET) { \
+ 			m_r ret; \
+@@ -227,6 +248,7 @@
+ 
+ #define FUNC2RC(m_r, m_type, m_arg1, m_arg2) \
+ 	virtual m_r m_type(m_arg1 p1, m_arg2 p2) const override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH_AND_RET) { \
+ 			m_r ret; \
+ 			command_queue.push_and_ret(server_name, &ServerName::m_type, &ret, p1, p2); \
+@@ -241,6 +263,7 @@
+ 
+ #define FUNC2S(m_type, m_arg1, m_arg2) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH_AND_SYNC) { \
+ 			command_queue.push_and_sync(server_name, &ServerName::m_type, p1, p2); \
+@@ -254,6 +277,7 @@
+ 
+ #define FUNC2SC(m_type, m_arg1, m_arg2) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2) const override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH_AND_SYNC) { \
+ 			command_queue.push_and_sync(server_name, &ServerName::m_type, p1, p2); \
+ 			SYNC_DEBUG \
+@@ -266,6 +290,7 @@
+ 
+ #define FUNC2(m_type, m_arg1, m_arg2) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH) { \
+ 			command_queue.push(server_name, &ServerName::m_type, p1, p2); \
+@@ -277,6 +302,7 @@
+ 
+ #define FUNC2C(m_type, m_arg1, m_arg2) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2) const override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH) { \
+ 			command_queue.push(server_name, &ServerName::m_type, p1, p2); \
+ 		} else { \
+@@ -287,6 +313,7 @@
+ 
+ #define FUNC3R(m_r, m_type, m_arg1, m_arg2, m_arg3) \
+ 	virtual m_r m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH_AND_RET) { \
+ 			m_r ret; \
+@@ -302,6 +329,7 @@
+ 
+ #define FUNC3RC(m_r, m_type, m_arg1, m_arg2, m_arg3) \
+ 	virtual m_r m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3) const override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH_AND_RET) { \
+ 			m_r ret; \
+ 			command_queue.push_and_ret(server_name, &ServerName::m_type, &ret, p1, p2, p3); \
+@@ -316,6 +344,7 @@
+ 
+ #define FUNC3S(m_type, m_arg1, m_arg2, m_arg3) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH_AND_SYNC) { \
+ 			command_queue.push_and_sync(server_name, &ServerName::m_type, p1, p2, p3); \
+@@ -329,6 +358,7 @@
+ 
+ #define FUNC3SC(m_type, m_arg1, m_arg2, m_arg3) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3) const override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH_AND_SYNC) { \
+ 			command_queue.push_and_sync(server_name, &ServerName::m_type, p1, p2, p3); \
+ 			SYNC_DEBUG \
+@@ -341,6 +371,7 @@
+ 
+ #define FUNC3(m_type, m_arg1, m_arg2, m_arg3) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH) { \
+ 			command_queue.push(server_name, &ServerName::m_type, p1, p2, p3); \
+@@ -352,6 +383,7 @@
+ 
+ #define FUNC3C(m_type, m_arg1, m_arg2, m_arg3) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3) const override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH) { \
+ 			command_queue.push(server_name, &ServerName::m_type, p1, p2, p3); \
+ 		} else { \
+@@ -362,6 +394,7 @@
+ 
+ #define FUNC4R(m_r, m_type, m_arg1, m_arg2, m_arg3, m_arg4) \
+ 	virtual m_r m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH_AND_RET) { \
+ 			m_r ret; \
+@@ -377,6 +410,7 @@
+ 
+ #define FUNC4RC(m_r, m_type, m_arg1, m_arg2, m_arg3, m_arg4) \
+ 	virtual m_r m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4) const override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH_AND_RET) { \
+ 			m_r ret; \
+ 			command_queue.push_and_ret(server_name, &ServerName::m_type, &ret, p1, p2, p3, p4); \
+@@ -391,6 +425,7 @@
+ 
+ #define FUNC4S(m_type, m_arg1, m_arg2, m_arg3, m_arg4) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH_AND_SYNC) { \
+ 			command_queue.push_and_sync(server_name, &ServerName::m_type, p1, p2, p3, p4); \
+@@ -404,6 +439,7 @@
+ 
+ #define FUNC4SC(m_type, m_arg1, m_arg2, m_arg3, m_arg4) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4) const override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH_AND_SYNC) { \
+ 			command_queue.push_and_sync(server_name, &ServerName::m_type, p1, p2, p3, p4); \
+ 			SYNC_DEBUG \
+@@ -416,6 +452,7 @@
+ 
+ #define FUNC4(m_type, m_arg1, m_arg2, m_arg3, m_arg4) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH) { \
+ 			command_queue.push(server_name, &ServerName::m_type, p1, p2, p3, p4); \
+@@ -427,6 +464,7 @@
+ 
+ #define FUNC4C(m_type, m_arg1, m_arg2, m_arg3, m_arg4) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4) const override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH) { \
+ 			command_queue.push(server_name, &ServerName::m_type, p1, p2, p3, p4); \
+ 		} else { \
+@@ -437,6 +475,7 @@
+ 
+ #define FUNC5R(m_r, m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5) \
+ 	virtual m_r m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5) { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH_AND_RET) { \
+ 			m_r ret; \
+@@ -452,6 +491,7 @@
+ 
+ #define FUNC5RC(m_r, m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5) \
+ 	virtual m_r m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5) const override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH_AND_RET) { \
+ 			m_r ret; \
+ 			command_queue.push_and_ret(server_name, &ServerName::m_type, &ret, p1, p2, p3, p4, p5); \
+@@ -466,6 +506,7 @@
+ 
+ #define FUNC5S(m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH_AND_SYNC) { \
+ 			command_queue.push_and_sync(server_name, &ServerName::m_type, p1, p2, p3, p4, p5); \
+@@ -479,6 +520,7 @@
+ 
+ #define FUNC5SC(m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5) const override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH_AND_SYNC) { \
+ 			command_queue.push_and_sync(server_name, &ServerName::m_type, p1, p2, p3, p4, p5); \
+ 			SYNC_DEBUG \
+@@ -491,6 +533,7 @@
+ 
+ #define FUNC5(m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH) { \
+ 			command_queue.push(server_name, &ServerName::m_type, p1, p2, p3, p4, p5); \
+@@ -502,6 +545,7 @@
+ 
+ #define FUNC5C(m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5) const override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH) { \
+ 			command_queue.push(server_name, &ServerName::m_type, p1, p2, p3, p4, p5); \
+ 		} else { \
+@@ -512,6 +556,7 @@
+ 
+ #define FUNC6R(m_r, m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5, m_arg6) \
+ 	virtual m_r m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5, m_arg6 p6) { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH_AND_RET) { \
+ 			m_r ret; \
+@@ -527,6 +572,7 @@
+ 
+ #define FUNC6RC(m_r, m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5, m_arg6) \
+ 	virtual m_r m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5, m_arg6 p6) const override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH_AND_RET) { \
+ 			m_r ret; \
+ 			command_queue.push_and_ret(server_name, &ServerName::m_type, &ret, p1, p2, p3, p4, p5, p6); \
+@@ -541,6 +587,7 @@
+ 
+ #define FUNC6S(m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5, m_arg6) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5, m_arg6 p6) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH_AND_SYNC) { \
+ 			command_queue.push_and_sync(server_name, &ServerName::m_type, p1, p2, p3, p4, p5, p6); \
+@@ -554,6 +601,7 @@
+ 
+ #define FUNC6SC(m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5, m_arg6) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5, m_arg6 p6) const override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH_AND_SYNC) { \
+ 			command_queue.push_and_sync(server_name, &ServerName::m_type, p1, p2, p3, p4, p5, p6); \
+ 			SYNC_DEBUG \
+@@ -566,6 +614,7 @@
+ 
+ #define FUNC6(m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5, m_arg6) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5, m_arg6 p6) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH) { \
+ 			command_queue.push(server_name, &ServerName::m_type, p1, p2, p3, p4, p5, p6); \
+@@ -577,6 +626,7 @@
+ 
+ #define FUNC6C(m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5, m_arg6) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5, m_arg6 p6) const override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH) { \
+ 			command_queue.push(server_name, &ServerName::m_type, p1, p2, p3, p4, p5, p6); \
+ 		} else { \
+@@ -587,6 +637,7 @@
+ 
+ #define FUNC7R(m_r, m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5, m_arg6, m_arg7) \
+ 	virtual m_r m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5, m_arg6 p6, m_arg7 p7) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH_AND_RET) { \
+ 			m_r ret; \
+@@ -602,6 +653,7 @@
+ 
+ #define FUNC7RC(m_r, m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5, m_arg6, m_arg7) \
+ 	virtual m_r m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5, m_arg6 p6, m_arg7 p7) const override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH_AND_RET) { \
+ 			m_r ret; \
+ 			command_queue.push_and_ret(server_name, &ServerName::m_type, &ret, p1, p2, p3, p4, p5, p6, p7); \
+@@ -616,6 +668,7 @@
+ 
+ #define FUNC7S(m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5, m_arg6, m_arg7) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5, m_arg6 p6, m_arg7 p7) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH_AND_SYNC) { \
+ 			command_queue.push_and_sync(server_name, &ServerName::m_type, p1, p2, p3, p4, p5, p6, p7); \
+@@ -629,6 +682,7 @@
+ 
+ #define FUNC7SC(m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5, m_arg6, m_arg7) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5, m_arg6 p6, m_arg7 p7) const override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH_AND_SYNC) { \
+ 			command_queue.push_and_sync(server_name, &ServerName::m_type, p1, p2, p3, p4, p5, p6, p7); \
+ 			SYNC_DEBUG \
+@@ -641,6 +695,7 @@
+ 
+ #define FUNC7(m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5, m_arg6, m_arg7) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5, m_arg6 p6, m_arg7 p7) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH) { \
+ 			command_queue.push(server_name, &ServerName::m_type, p1, p2, p3, p4, p5, p6, p7); \
+@@ -652,6 +707,7 @@
+ 
+ #define FUNC7C(m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5, m_arg6, m_arg7) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5, m_arg6 p6, m_arg7 p7) const override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH) { \
+ 			command_queue.push(server_name, &ServerName::m_type, p1, p2, p3, p4, p5, p6, p7); \
+ 		} else { \
+@@ -662,6 +718,7 @@
+ 
+ #define FUNC8R(m_r, m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5, m_arg6, m_arg7, m_arg8) \
+ 	virtual m_r m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5, m_arg6 p6, m_arg7 p7, m_arg8 p8) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH_AND_RET) { \
+ 			m_r ret; \
+@@ -677,6 +734,7 @@
+ 
+ #define FUNC8RC(m_r, m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5, m_arg6, m_arg7, m_arg8) \
+ 	virtual m_r m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5, m_arg6 p6, m_arg7 p7, m_arg8 p8) const override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH_AND_RET) { \
+ 			m_r ret; \
+ 			command_queue.push_and_ret(server_name, &ServerName::m_type, &ret, p1, p2, p3, p4, p5, p6, p7, p8); \
+@@ -691,6 +749,7 @@
+ 
+ #define FUNC8S(m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5, m_arg6, m_arg7, m_arg8) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5, m_arg6 p6, m_arg7 p7, m_arg8 p8) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH_AND_SYNC) { \
+ 			command_queue.push_and_sync(server_name, &ServerName::m_type, p1, p2, p3, p4, p5, p6, p7, p8); \
+@@ -704,6 +763,7 @@
+ 
+ #define FUNC8SC(m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5, m_arg6, m_arg7, m_arg8) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5, m_arg6 p6, m_arg7 p7, m_arg8 p8) const override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH_AND_SYNC) { \
+ 			command_queue.push_and_sync(server_name, &ServerName::m_type, p1, p2, p3, p4, p5, p6, p7, p8); \
+ 			SYNC_DEBUG \
+@@ -716,6 +776,7 @@
+ 
+ #define FUNC8(m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5, m_arg6, m_arg7, m_arg8) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5, m_arg6 p6, m_arg7 p7, m_arg8 p8) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH) { \
+ 			command_queue.push(server_name, &ServerName::m_type, p1, p2, p3, p4, p5, p6, p7, p8); \
+@@ -727,6 +788,7 @@
+ 
+ #define FUNC8C(m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5, m_arg6, m_arg7, m_arg8) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5, m_arg6 p6, m_arg7 p7, m_arg8 p8) const override { \
++		SERVER_ACCESS_GUARD \
+ 		if (ASYNC_COND_PUSH) { \
+ 			command_queue.push(server_name, &ServerName::m_type, p1, p2, p3, p4, p5, p6, p7, p8); \
+ 		} else { \
+@@ -737,6 +799,7 @@
+ 
+ #define FUNC9(m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5, m_arg6, m_arg7, m_arg8, m_arg9) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5, m_arg6 p6, m_arg7 p7, m_arg8 p8, m_arg9 p9) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH) { \
+ 			command_queue.push(server_name, &ServerName::m_type, p1, p2, p3, p4, p5, p6, p7, p8, p9); \
+@@ -748,6 +811,7 @@
+ 
+ #define FUNC10(m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5, m_arg6, m_arg7, m_arg8, m_arg9, m_arg10) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5, m_arg6 p6, m_arg7 p7, m_arg8 p8, m_arg9 p9, m_arg10 p10) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH) { \
+ 			command_queue.push(server_name, &ServerName::m_type, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10); \
+@@ -759,6 +823,7 @@
+ 
+ #define FUNC11(m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5, m_arg6, m_arg7, m_arg8, m_arg9, m_arg10, m_arg11) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5, m_arg6 p6, m_arg7 p7, m_arg8 p8, m_arg9 p9, m_arg10 p10, m_arg11 p11) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH) { \
+ 			command_queue.push(server_name, &ServerName::m_type, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11); \
+@@ -770,6 +835,7 @@
+ 
+ #define FUNC12(m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5, m_arg6, m_arg7, m_arg8, m_arg9, m_arg10, m_arg11, m_arg12) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5, m_arg6 p6, m_arg7 p7, m_arg8 p8, m_arg9 p9, m_arg10 p10, m_arg11 p11, m_arg12 p12) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH) { \
+ 			command_queue.push(server_name, &ServerName::m_type, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12); \
+@@ -781,6 +847,7 @@
+ 
+ #define FUNC13(m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5, m_arg6, m_arg7, m_arg8, m_arg9, m_arg10, m_arg11, m_arg12, m_arg13) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5, m_arg6 p6, m_arg7 p7, m_arg8 p8, m_arg9 p9, m_arg10 p10, m_arg11 p11, m_arg12 p12, m_arg13 p13) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH) { \
+ 			command_queue.push(server_name, &ServerName::m_type, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13); \
+@@ -792,6 +859,7 @@
+ 
+ #define FUNC14(m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5, m_arg6, m_arg7, m_arg8, m_arg9, m_arg10, m_arg11, m_arg12, m_arg13, m_arg14) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5, m_arg6 p6, m_arg7 p7, m_arg8 p8, m_arg9 p9, m_arg10 p10, m_arg11 p11, m_arg12 p12, m_arg13 p13, m_arg14 p14) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH) { \
+ 			command_queue.push(server_name, &ServerName::m_type, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14); \
+@@ -803,6 +871,7 @@
+ 
+ #define FUNC15(m_type, m_arg1, m_arg2, m_arg3, m_arg4, m_arg5, m_arg6, m_arg7, m_arg8, m_arg9, m_arg10, m_arg11, m_arg12, m_arg13, m_arg14, m_arg15) \
+ 	virtual void m_type(m_arg1 p1, m_arg2 p2, m_arg3 p3, m_arg4 p4, m_arg5 p5, m_arg6 p6, m_arg7 p7, m_arg8 p8, m_arg9 p9, m_arg10 p10, m_arg11 p11, m_arg12 p12, m_arg13 p13, m_arg14 p14, m_arg15 p15) override { \
++		SERVER_ACCESS_GUARD \
+ 		WRITE_ACTION \
+ 		if (ASYNC_COND_PUSH) { \
+ 			command_queue.push(server_name, &ServerName::m_type, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15); \

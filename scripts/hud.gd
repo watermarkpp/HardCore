@@ -245,18 +245,67 @@ var _safe_area_size_changed_callable := Callable()
 var _center_exempt_controls: Array[Control] = []
 var _panel_script_warm_refs: Array[Script] = []
 var _panel_script_pending: Dictionary = {}
+var _original_source_prewarm_closing := false
+
+
+# Main callback depth only. No new gameplay/IO owner or timer.
+var _original_main_callback_ledger: Dictionary = {}
 
 
 func _ready() -> void:
+	_original_main_callback_ledger["_ready"] = int(_original_main_callback_ledger.get("_ready",0)) + 1
+	_original_source_hud__ready()
+	_original_main_callback_ledger["_ready"] -= 1
+
+
+func _original_source_hud__ready() -> void:
 	_build_approved_hud()
 
 
 func _process(_delta: float) -> void:
+	_original_main_callback_ledger["_process"] = int(_original_main_callback_ledger.get("_process",0)) + 1
+	_original_source_hud__process(_delta)
+	_original_main_callback_ledger["_process"] -= 1
+
+
+func _original_source_hud__process(_delta: float) -> void:
 	if _catalog_icon_prewarm_in_progress:
 		_advance_catalog_icon_prewarm()
 
 
 func _exit_tree() -> void:
+	_original_main_callback_ledger["_exit_tree"] = int(_original_main_callback_ledger.get("_exit_tree",0)) + 1
+	_original_source_hud__exit_tree()
+	_original_main_callback_ledger["_exit_tree"] -= 1
+
+
+func begin_actual_original_source_prewarm_close() -> bool:
+	if OS.get_thread_caller_id() != OS.get_main_thread_id() or not is_inside_tree(): return false
+	_original_source_prewarm_closing = true
+	# These paths are only future optional requests. Already accepted loader
+	# requests remain in their original pending ledgers until terminal status.
+	_catalog_icon_prewarm_in_progress = false
+	_catalog_icon_prewarm_paths.clear()
+	return true
+
+func service_actual_original_source_prewarm_close() -> Dictionary:
+	if OS.get_thread_caller_id() != OS.get_main_thread_id() or not is_inside_tree() or not _original_source_prewarm_closing: return {"success":false,"status":"INVALID"}
+	for path: String in _panel_script_pending.keys():
+		var status := ResourceLoader.load_threaded_get_status(path)
+		if status == ResourceLoader.THREAD_LOAD_IN_PROGRESS: continue
+		if status in [ResourceLoader.THREAD_LOAD_LOADED, ResourceLoader.THREAD_LOAD_FAILED]:
+			var script: Script = ResourceLoader.load_threaded_get(path) as Script
+			if script != null: _panel_script_warm_refs.append(script)
+		elif status != ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+			return {"success":false,"status":"INVALID","path":path,"native_status":status}
+		_panel_script_pending.erase(path)
+	UIItemTextureCacheScript.poll_threaded_paths()
+	var depth := 0
+	for value: Variant in _original_main_callback_ledger.values(): depth += int(value)
+	var drained: bool = depth == 0 and not _panel_prewarm_in_progress and _panel_script_pending.is_empty() and UIItemTextureCacheScript.threaded_pending_count() == 0
+	return {"success":true,"status":"READY" if drained else "PENDING","actual_hud_id":get_instance_id(),"callback_depth":depth,"accepted_panel_requests":_panel_script_pending.size(),"accepted_icon_requests":UIItemTextureCacheScript.threaded_pending_count(),"prewarm_completed":_all_panels_prewarmed}
+
+func _original_source_hud__exit_tree() -> void:
 	_cancel_all_item_slot_presses()
 	_catalog_icon_prewarm_in_progress = false
 	_catalog_icon_prewarm_paths.clear()
@@ -297,6 +346,12 @@ func _hud_loading_profile_mark(
 
 
 func _build_approved_hud() -> void:
+	_original_main_callback_ledger["_build_approved_hud"] = int(_original_main_callback_ledger.get("_build_approved_hud",0)) + 1
+	_original_source_hud__build_approved_hud()
+	_original_main_callback_ledger["_build_approved_hud"] -= 1
+
+
+func _original_source_hud__build_approved_hud() -> void:
 	var loading_profile_enabled := OS.is_debug_build()
 	var profile_started_usec := 0
 	if loading_profile_enabled:
@@ -848,6 +903,12 @@ func _build_bottom_chassis(root: Control) -> void:
 
 
 func _build_experience_bar(chassis_root: Control) -> void:
+	_original_main_callback_ledger["_build_experience_bar"] = int(_original_main_callback_ledger.get("_build_experience_bar",0)) + 1
+	_original_source_hud__build_experience_bar(chassis_root)
+	_original_main_callback_ledger["_build_experience_bar"] -= 1
+
+
+func _original_source_hud__build_experience_bar(chassis_root: Control) -> void:
 	var chassis_design: Dictionary = ChassisDesignsScript.active_design()
 	var experience_size: Vector2
 	var experience_position: Vector2
@@ -943,6 +1004,12 @@ static func experience_progress_ratio(experience_value: int, required_value: int
 
 
 func update_experience_bar() -> void:
+	_original_main_callback_ledger["update_experience_bar"] = int(_original_main_callback_ledger.get("update_experience_bar",0)) + 1
+	_original_source_hud_update_experience_bar()
+	_original_main_callback_ledger["update_experience_bar"] -= 1
+
+
+func _original_source_hud_update_experience_bar() -> void:
 	if experience_segments.is_empty():
 		return
 	var required := maxi(1, int(PlayerState.experience_to_next_level()))
@@ -1095,6 +1162,12 @@ func _item_slot_assignment_id(value: Variant) -> String:
 
 
 func update_item_quick_slots() -> void:
+	_original_main_callback_ledger["update_item_quick_slots"] = int(_original_main_callback_ledger.get("update_item_quick_slots",0)) + 1
+	_original_source_hud_update_item_quick_slots()
+	_original_main_callback_ledger["update_item_quick_slots"] -= 1
+
+
+func _original_source_hud_update_item_quick_slots() -> void:
 	for index in range(ITEM_QUICK_SLOT_COUNT):
 		var item_id := item_quick_slots[index] if index < item_quick_slots.size() else ""
 		var record := GameData.get_entity_record(item_id)
@@ -1140,6 +1213,12 @@ func update_item_quick_slots() -> void:
 # Convert viewport coordinates with the live Control transform exactly once;
 # held movement/attack pointers neither own nor cancel quick-item pointers.
 func _input(event: InputEvent) -> void:
+	_original_main_callback_ledger["_input"] = int(_original_main_callback_ledger.get("_input",0)) + 1
+	_original_source_hud__input(event)
+	_original_main_callback_ledger["_input"] -= 1
+
+
+func _original_source_hud__input(event: InputEvent) -> void:
 	if _item_slot_presses.is_empty() or event.device == InputEvent.DEVICE_ID_EMULATION:
 		return
 	var pointer := -2
@@ -1162,6 +1241,12 @@ func _input(event: InputEvent) -> void:
 
 
 func _notification(what: int) -> void:
+	_original_main_callback_ledger["_notification"] = int(_original_main_callback_ledger.get("_notification",0)) + 1
+	_original_source_hud__notification(what)
+	_original_main_callback_ledger["_notification"] -= 1
+
+
+func _original_source_hud__notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
 		_cancel_all_item_slot_presses()
 
@@ -1291,6 +1376,13 @@ func _open_item_quick_slot_menu() -> void:
 
 
 func _item_quick_slot_candidates() -> Array[Dictionary]:
+	_original_main_callback_ledger["_item_quick_slot_candidates"] = int(_original_main_callback_ledger.get("_item_quick_slot_candidates",0)) + 1
+	var original_result: Variant = _original_source_hud__item_quick_slot_candidates()
+	_original_main_callback_ledger["_item_quick_slot_candidates"] -= 1
+	return original_result
+
+
+func _original_source_hud__item_quick_slot_candidates() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	var seen: Dictionary = {}
 	for stack: Variant in PlayerState.inventory:
@@ -1881,13 +1973,19 @@ func _ensure_skill_panel() -> void:
 
 
 func start_budgeted_panel_prewarm(system_menu_panel: Control = null) -> void:
-	if _background_prewarm_requested or _all_panels_prewarmed:
+	if _original_source_prewarm_closing or _background_prewarm_requested or _all_panels_prewarmed:
 		return
 	_background_prewarm_requested = true
 	_run_panel_prewarm.call_deferred(system_menu_panel, true)
 
 
 func prewarm_all_panels(system_menu_panel: Control = null) -> void:
+	_original_main_callback_ledger["prewarm_all_panels"] = int(_original_main_callback_ledger.get("prewarm_all_panels",0)) + 1
+	await _original_source_hud_prewarm_all_panels(system_menu_panel)
+	_original_main_callback_ledger["prewarm_all_panels"] -= 1
+
+
+func _original_source_hud_prewarm_all_panels(system_menu_panel: Control = null) -> void:
 	await _run_panel_prewarm(system_menu_panel, false)
 
 
@@ -1897,14 +1995,23 @@ func _report_panel_prewarm_progress(background_mode: bool, completed: float, sta
 
 
 func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool = false) -> void:
-	if _all_panels_prewarmed:
+	_original_main_callback_ledger["_run_panel_prewarm"] = int(_original_main_callback_ledger.get("_run_panel_prewarm",0)) + 1
+	await _original_source_hud__run_panel_prewarm(system_menu_panel,background_mode)
+	_original_main_callback_ledger["_run_panel_prewarm"] -= 1
+
+
+func _original_source_hud__run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool = false) -> void:
+	if _original_source_prewarm_closing or _all_panels_prewarmed:
 		return
 	if _panel_prewarm_in_progress:
 		# Explicit load-time callers must not wait behind an optional UI idle gate.
 		if not background_mode:
 			_ui_l1_finish_explicit_prewarm = true
-		while _panel_prewarm_in_progress and is_inside_tree():
+		while _panel_prewarm_in_progress and is_inside_tree() and not _original_source_prewarm_closing:
 			await get_tree().process_frame
+			if _original_source_prewarm_closing:
+				_panel_prewarm_in_progress = false
+				return
 		if not background_mode:
 			_ui_l1_finish_explicit_prewarm = false
 		return
@@ -1917,6 +2024,9 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 		"background_mode": background_mode,
 	}
 	_panel_prewarm_diagnostic["script_prefetch"] = await _prefetch_panel_scripts(background_mode)
+	if _original_source_prewarm_closing:
+		_panel_prewarm_in_progress = false
+		return
 	_report_panel_prewarm_progress(background_mode, 0.84, "界面资源已准备")
 	_start_catalog_icon_prewarm.call_deferred(background_mode)
 	var panel_started_usec := 0
@@ -1930,6 +2040,9 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 	)
 	_report_panel_prewarm_progress(background_mode, 0.86, "背包已准备")
 	await get_tree().process_frame
+	if _original_source_prewarm_closing:
+		_panel_prewarm_in_progress = false
+		return
 	if not await _ui_l1_wait_for_background_slot(background_mode):
 		_panel_prewarm_in_progress = false
 		return
@@ -1940,6 +2053,9 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 	)
 	_report_panel_prewarm_progress(background_mode, 0.88, "强化界面已准备")
 	await get_tree().process_frame
+	if _original_source_prewarm_closing:
+		_panel_prewarm_in_progress = false
+		return
 	if not await _ui_l1_wait_for_background_slot(background_mode):
 		_panel_prewarm_in_progress = false
 		return
@@ -1950,6 +2066,9 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 	)
 	_report_panel_prewarm_progress(background_mode, 0.90, "商店已准备")
 	await get_tree().process_frame
+	if _original_source_prewarm_closing:
+		_panel_prewarm_in_progress = false
+		return
 	if not await _ui_l1_wait_for_background_slot(background_mode):
 		_panel_prewarm_in_progress = false
 		return
@@ -1960,6 +2079,9 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 	)
 	_report_panel_prewarm_progress(background_mode, 0.92, "仓库已准备")
 	await get_tree().process_frame
+	if _original_source_prewarm_closing:
+		_panel_prewarm_in_progress = false
+		return
 	if not await _ui_l1_wait_for_background_slot(background_mode):
 		_panel_prewarm_in_progress = false
 		return
@@ -1970,6 +2092,9 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 	)
 	_report_panel_prewarm_progress(background_mode, 0.93, "地图界面已准备")
 	await get_tree().process_frame
+	if _original_source_prewarm_closing:
+		_panel_prewarm_in_progress = false
+		return
 	if not await _ui_l1_wait_for_background_slot(background_mode):
 		_panel_prewarm_in_progress = false
 		return
@@ -1980,6 +2105,9 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 	)
 	_report_panel_prewarm_progress(background_mode, 0.94, "技能界面已准备")
 	await get_tree().process_frame
+	if _original_source_prewarm_closing:
+		_panel_prewarm_in_progress = false
+		return
 	if not await _ui_l1_wait_for_background_slot(background_mode):
 		_panel_prewarm_in_progress = false
 		return
@@ -1990,6 +2118,9 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 	)
 	_report_panel_prewarm_progress(background_mode, 0.95, "任务界面已准备")
 	await get_tree().process_frame
+	if _original_source_prewarm_closing:
+		_panel_prewarm_in_progress = false
+		return
 	if not await _ui_l1_wait_for_background_slot(background_mode):
 		_panel_prewarm_in_progress = false
 		return
@@ -2008,10 +2139,19 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 	skill_panel.refresh()
 	if inventory_panel.has_method("wait_until_runtime_ready"):
 		await inventory_panel.wait_until_runtime_ready()
+		if _original_source_prewarm_closing:
+			_panel_prewarm_in_progress = false
+			return
 	if enhancement_panel.has_method("wait_until_runtime_ready"):
 		await enhancement_panel.wait_until_runtime_ready()
+		if _original_source_prewarm_closing:
+			_panel_prewarm_in_progress = false
+			return
 	if warehouse_panel.has_method("wait_until_runtime_ready"):
 		await warehouse_panel.wait_until_runtime_ready()
+		if _original_source_prewarm_closing:
+			_panel_prewarm_in_progress = false
+			return
 	_panel_prewarm_diagnostic["construction_ms"] = (
 		(Time.get_ticks_usec() - prewarm_started_usec) / 1000.0
 	)
@@ -2046,6 +2186,9 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 	if is_instance_valid(system_menu_panel):
 		initial_profiles.append([system_menu_panel, "system_menu"])
 	var initial_wait_frames := await _wait_for_layout_profiles(initial_profiles)
+	if _original_source_prewarm_closing:
+		_panel_prewarm_in_progress = false
+		return
 	_panel_prewarm_diagnostic["initial_profiles_wait_frames"] = initial_wait_frames
 	_report_panel_prewarm_progress(background_mode, 0.98, "界面布局已就位")
 	_panel_prewarm_diagnostic["initial_profiles_elapsed_ms"] = (
@@ -2062,8 +2205,14 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 	if may_warm_alternate_shop:
 		shop_panel.call("_apply_layout_profile_once", "shop_sell")
 		shop_sell_wait_frames = await _wait_for_layout_profiles([[shop_panel, "shop_sell"]])
+		if _original_source_prewarm_closing:
+			_panel_prewarm_in_progress = false
+			return
 		shop_panel.call("_apply_layout_profile_once", "shop_buy")
 		shop_buy_wait_frames = await _wait_for_layout_profiles([[shop_panel, "shop_buy"]])
+		if _original_source_prewarm_closing:
+			_panel_prewarm_in_progress = false
+			return
 	_panel_prewarm_diagnostic["shop_sell_wait_frames"] = shop_sell_wait_frames
 	_panel_prewarm_diagnostic["shop_buy_wait_frames"] = shop_buy_wait_frames
 	_panel_prewarm_diagnostic["shop_alternate_profile_warmed"] = may_warm_alternate_shop
@@ -2077,9 +2226,15 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 	if is_instance_valid(quest_panel.abandon_confirmation):
 		confirmation_profiles.append([quest_panel.abandon_confirmation, "confirmation_dialog"])
 	var confirmation_wait_frames := await _wait_for_layout_profiles(confirmation_profiles)
+	if _original_source_prewarm_closing:
+		_panel_prewarm_in_progress = false
+		return
 	_panel_prewarm_diagnostic["confirmation_wait_frames"] = confirmation_wait_frames
 	# Flush deferred grid/list stabilizers once more while hidden.
 	await get_tree().process_frame
+	if _original_source_prewarm_closing:
+		_panel_prewarm_in_progress = false
+		return
 	if not background_mode:
 		for panel: Control in panels:
 			panel.hide()
@@ -2101,6 +2256,13 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 
 
 func _prefetch_panel_scripts(background_mode := false) -> Dictionary:
+	_original_main_callback_ledger["_prefetch_panel_scripts"] = int(_original_main_callback_ledger.get("_prefetch_panel_scripts",0)) + 1
+	var original_result: Variant = await _original_source_hud__prefetch_panel_scripts(background_mode)
+	_original_main_callback_ledger["_prefetch_panel_scripts"] -= 1
+	return original_result
+
+
+func _original_source_hud__prefetch_panel_scripts(background_mode := false) -> Dictionary:
 	var paths: Array[String] = [
 		INVENTORY_PANEL_SCRIPT_PATH,
 		ENHANCEMENT_PANEL_SCRIPT_PATH,
@@ -2114,6 +2276,7 @@ func _prefetch_panel_scripts(background_mode := false) -> Dictionary:
 	var request_failures: Array[String] = []
 	var covered_loads := 0
 	for path: String in paths:
+		if _original_source_prewarm_closing: break
 		# Godot 4.7's threaded GDScript dependency loader can leave zero-ref
 		# objects after every request was collected. Only explicit opaque
 		# Loading admits a main-thread script load; yield between scripts so
@@ -2143,7 +2306,7 @@ func _prefetch_panel_scripts(background_mode := false) -> Dictionary:
 	var waited_frames := 0
 	# Seven panels include the forge's large inherited inventory script. Keep
 	# polling while Loading covers construction, with a finite failure bound.
-	while not pending.is_empty() and waited_frames < 300 and is_inside_tree():
+	while not pending.is_empty() and waited_frames < 300 and is_inside_tree() and not _original_source_prewarm_closing:
 		for path: String in pending.keys().duplicate():
 			var status := ResourceLoader.load_threaded_get_status(path)
 			if status == ResourceLoader.THREAD_LOAD_LOADED:
@@ -2172,7 +2335,7 @@ func _prefetch_panel_scripts(background_mode := false) -> Dictionary:
 
 
 func _start_catalog_icon_prewarm(background_mode: bool = true) -> void:
-	if _catalog_icon_prewarm_complete or _catalog_icon_prewarm_in_progress:
+	if _original_source_prewarm_closing or _catalog_icon_prewarm_complete or _catalog_icon_prewarm_in_progress:
 		return
 	_catalog_icon_prewarm_in_progress = true
 	_catalog_icon_prewarm_background_mode = background_mode
@@ -2195,6 +2358,7 @@ func _start_catalog_icon_prewarm(background_mode: bool = true) -> void:
 
 
 func _advance_catalog_icon_prewarm() -> void:
+	if _original_source_prewarm_closing: return
 	# Run one batch per HUD frame. A suspended member coroutine would resume on
 	# a freed HUD when a map transition destroys this scene mid-prewarm.
 	if not is_inside_tree() or (
@@ -2228,9 +2392,16 @@ func _advance_catalog_icon_prewarm() -> void:
 
 
 func _wait_for_layout_profiles(profiles: Array) -> int:
+	_original_main_callback_ledger["_wait_for_layout_profiles"] = int(_original_main_callback_ledger.get("_wait_for_layout_profiles",0)) + 1
+	var original_result: Variant = await _original_source_hud__wait_for_layout_profiles(profiles)
+	_original_main_callback_ledger["_wait_for_layout_profiles"] -= 1
+	return original_result
+
+
+func _original_source_hud__wait_for_layout_profiles(profiles: Array) -> int:
 	var waited_frames := 0
 	for _frame in 30:
-		if _profiles_are_ready(profiles):
+		if _original_source_prewarm_closing or _profiles_are_ready(profiles):
 			break
 		await get_tree().process_frame
 		waited_frames += 1
@@ -2627,6 +2798,12 @@ func finish_loading_transition() -> void:
 
 
 func update_profile() -> void:
+	_original_main_callback_ledger["update_profile"] = int(_original_main_callback_ledger.get("update_profile",0)) + 1
+	_original_source_hud_update_profile()
+	_original_main_callback_ledger["update_profile"] -= 1
+
+
+func _original_source_hud_update_profile() -> void:
 	if profile_label == null:
 		return
 	var stats: Dictionary = PlayerState.computed_stats
@@ -2639,6 +2816,12 @@ func update_profile() -> void:
 
 
 func update_quest_tracker() -> void:
+	_original_main_callback_ledger["update_quest_tracker"] = int(_original_main_callback_ledger.get("update_quest_tracker",0)) + 1
+	_original_source_hud_update_quest_tracker()
+	_original_main_callback_ledger["update_quest_tracker"] -= 1
+
+
+func _original_source_hud_update_quest_tracker() -> void:
 	if quest_tracker_label == null:
 		return
 	var quest_id := PlayerState.current_bich_quest_id()
@@ -2931,6 +3114,13 @@ func update_quick_slots() -> void:
 
 
 func _skill_name_for_slot(slot_group: String, slot_index: int) -> String:
+	_original_main_callback_ledger["_skill_name_for_slot"] = int(_original_main_callback_ledger.get("_skill_name_for_slot",0)) + 1
+	var original_result: Variant = _original_source_hud__skill_name_for_slot(slot_group,slot_index)
+	_original_main_callback_ledger["_skill_name_for_slot"] -= 1
+	return original_result
+
+
+func _original_source_hud__skill_name_for_slot(slot_group: String, slot_index: int) -> String:
 	if not _skill_button_assignments.is_empty():
 		if _skill_button_assignments.has(slot_group):
 			return _skill_name_from_group(_skill_button_assignments.get(slot_group), slot_index)
@@ -2951,6 +3141,13 @@ func _skill_name_for_slot(slot_group: String, slot_index: int) -> String:
 
 
 func _active_skill_button_assignments() -> Dictionary:
+	_original_main_callback_ledger["_active_skill_button_assignments"] = int(_original_main_callback_ledger.get("_active_skill_button_assignments",0)) + 1
+	var original_result: Variant = _original_source_hud__active_skill_button_assignments()
+	_original_main_callback_ledger["_active_skill_button_assignments"] -= 1
+	return original_result
+
+
+func _original_source_hud__active_skill_button_assignments() -> Dictionary:
 	if not _skill_button_assignments.is_empty():
 		return _skill_button_assignments
 	if PlayerState.has_method("skill_button_assignments_snapshot"):
@@ -2990,6 +3187,12 @@ func _compact_skill_label(index: int, skill_name: String, marker: String, has_ic
 
 
 func update_warrior_states(snapshot: Dictionary) -> void:
+	_original_main_callback_ledger["update_warrior_states"] = int(_original_main_callback_ledger.get("update_warrior_states",0)) + 1
+	_original_source_hud_update_warrior_states(snapshot)
+	_original_main_callback_ledger["update_warrior_states"] -= 1
+
+
+func _original_source_hud_update_warrior_states(snapshot: Dictionary) -> void:
 	_warrior_snapshot = snapshot.duplicate(true)
 	if warrior_state_label == null:
 		return
@@ -3073,9 +3276,17 @@ func _ui_l1_background_blocked() -> bool:
 	return false
 
 func _ui_l1_wait_for_background_slot(background_mode: bool) -> bool:
+	_original_main_callback_ledger["_ui_l1_wait_for_background_slot"] = int(_original_main_callback_ledger.get("_ui_l1_wait_for_background_slot",0)) + 1
+	var original_result: Variant = await _original_source_hud__ui_l1_wait_for_background_slot(background_mode)
+	_original_main_callback_ledger["_ui_l1_wait_for_background_slot"] -= 1
+	return original_result
+
+
+func _original_source_hud__ui_l1_wait_for_background_slot(background_mode: bool) -> bool:
+	if _original_source_prewarm_closing: return false
 	if not background_mode:
-		return is_inside_tree()
-	while is_inside_tree() and not _ui_l1_finish_explicit_prewarm and _ui_l1_background_blocked():
+		return is_inside_tree() and not _original_source_prewarm_closing
+	while is_inside_tree() and not _original_source_prewarm_closing and not _ui_l1_finish_explicit_prewarm and _ui_l1_background_blocked():
 		await get_tree().process_frame
-	return is_inside_tree()
+	return is_inside_tree() and not _original_source_prewarm_closing
 # UI-L1 SUPPLEMENT END

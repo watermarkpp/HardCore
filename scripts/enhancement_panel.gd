@@ -47,7 +47,17 @@ var _forge_audio_plays_in_cycle := 0
 var _synthesis_audio_plays_in_cycle := 0
 
 
+# Callback depth is inherited from the actual InventoryPanel.
+
 func _ready() -> void:
+	# Keep the source inventory layout, including its calibrated BagPanel.
+	# Only the two paper-doll sections are retired from this derived page.
+	_original_main_callback_ledger["_ready"] = int(_original_main_callback_ledger.get("_ready",0)) + 1
+	_original_source_enhancement_panel__ready()
+	_original_main_callback_ledger["_ready"] -= 1
+
+
+func _original_source_enhancement_panel__ready() -> void:
 	# Keep the source inventory layout, including its calibrated BagPanel.
 	# Only the two paper-doll sections are retired from this derived page.
 	set_meta("calibration_retired_prefixes", ["AttributePanel", "EquipmentPanel"])
@@ -437,6 +447,12 @@ func preview_synthesis_animation() -> void:
 
 
 func _refresh_forge_information() -> void:
+	_original_main_callback_ledger["_refresh_forge_information"] = int(_original_main_callback_ledger.get("_refresh_forge_information",0)) + 1
+	_original_source_enhancement_panel__refresh_forge_information()
+	_original_main_callback_ledger["_refresh_forge_information"] -= 1
+
+
+func _original_source_enhancement_panel__refresh_forge_information() -> void:
 	if rules_label == null or chance_label == null or fee_label == null or forge_button == null:
 		return
 	_forge_quote.clear()
@@ -505,6 +521,12 @@ func _sync_forge_slot_visual(slot: Button, occupied: bool) -> void:
 
 
 func _on_forge_slot_pressed(index: int) -> void:
+	_original_main_callback_ledger["_on_forge_slot_pressed"] = int(_original_main_callback_ledger.get("_on_forge_slot_pressed",0)) + 1
+	await _original_source_enhancement_panel__on_forge_slot_pressed(index)
+	_original_main_callback_ledger["_on_forge_slot_pressed"] -= 1
+
+
+func _original_source_enhancement_panel__on_forge_slot_pressed(index: int) -> void:
 	if _forging:
 		return
 	var tray: Array[Dictionary] = PlayerState.workbench_tray(_mode)
@@ -536,6 +558,13 @@ func _on_forge_slot_pressed(index: int) -> void:
 	_show_forge_slot_detail(index, placed[index])
 
 func _can_receive_selected_item_to_index(index: int) -> bool:
+	_original_main_callback_ledger["_can_receive_selected_item_to_index"] = int(_original_main_callback_ledger.get("_can_receive_selected_item_to_index",0)) + 1
+	var original_result: Variant = _original_source_enhancement_panel__can_receive_selected_item_to_index(index)
+	_original_main_callback_ledger["_can_receive_selected_item_to_index"] -= 1
+	return original_result
+
+
+func _original_source_enhancement_panel__can_receive_selected_item_to_index(index: int) -> bool:
 	if _selected_workbench_slot < 0 or _forging:
 		return false
 	var tray: Array[Dictionary] = PlayerState.forge_tray if _mode == "forge" else PlayerState.synthesis_tray
@@ -544,11 +573,23 @@ func _can_receive_selected_item_to_index(index: int) -> bool:
 
 
 func _receive_selected_item_to_index(index: int) -> void:
+	_original_main_callback_ledger["_receive_selected_item_to_index"] = int(_original_main_callback_ledger.get("_receive_selected_item_to_index",0)) + 1
+	await _original_source_enhancement_panel__receive_selected_item_to_index(index)
+	_original_main_callback_ledger["_receive_selected_item_to_index"] -= 1
+
+
+func _original_source_enhancement_panel__receive_selected_item_to_index(index: int) -> void:
 	if _can_receive_selected_item_to_index(index):
 		await _take_selected_workbench_item(index)
 
 
 func _take_selected_workbench_item(destination_slot := -1) -> void:
+	_original_main_callback_ledger["_take_selected_workbench_item"] = int(_original_main_callback_ledger.get("_take_selected_workbench_item",0)) + 1
+	await _original_source_enhancement_panel__take_selected_workbench_item(destination_slot)
+	_original_main_callback_ledger["_take_selected_workbench_item"] -= 1
+
+
+func _original_source_enhancement_panel__take_selected_workbench_item(destination_slot := -1) -> void:
 	var source_mode := _mode
 	var source_slot := _selected_workbench_slot
 	var result: Dictionary = await PlayerState.transfer_workbench_immediate(source_mode, source_slot, -1, destination_slot)
@@ -599,6 +640,12 @@ func _ui_detail_region(context: Dictionary) -> Dictionary:
 
 
 func _on_forge_pressed() -> void:
+	_original_main_callback_ledger["_on_forge_pressed"] = int(_original_main_callback_ledger.get("_on_forge_pressed",0)) + 1
+	await _original_source_enhancement_panel__on_forge_pressed()
+	_original_main_callback_ledger["_on_forge_pressed"] -= 1
+
+
+func _original_source_enhancement_panel__on_forge_pressed() -> void:
 	if _forging:
 		return
 	_refresh_forge_information()
@@ -637,6 +684,12 @@ func _on_forge_pressed() -> void:
 
 
 func _play_forge_animation(result_artwork: String) -> void:
+	_original_main_callback_ledger["_play_forge_animation"] = int(_original_main_callback_ledger.get("_play_forge_animation",0)) + 1
+	await _original_source_enhancement_panel__play_forge_animation(result_artwork)
+	_original_main_callback_ledger["_play_forge_animation"] -= 1
+
+
+func _original_source_enhancement_panel__play_forge_animation(result_artwork: String) -> void:
 	_forging = true
 	forge_button.disabled = true
 	_show_forge_artwork("initial")
@@ -662,6 +715,12 @@ func _play_forge_animation(result_artwork: String) -> void:
 
 
 func _play_synthesis_animation() -> void:
+	_original_main_callback_ledger["_play_synthesis_animation"] = int(_original_main_callback_ledger.get("_play_synthesis_animation",0)) + 1
+	await _original_source_enhancement_panel__play_synthesis_animation()
+	_original_main_callback_ledger["_play_synthesis_animation"] -= 1
+
+
+func _original_source_enhancement_panel__play_synthesis_animation() -> void:
 	_forging = true
 	forge_button.disabled = true
 	var glow := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)

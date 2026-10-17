@@ -97,7 +97,17 @@ var _target_handoff_count := 0
 var _target_request_failure_injected := false
 
 
+# Main callback depth only. No new gameplay/IO owner or timer.
+var _original_main_callback_ledger: Dictionary = {}
+
+
 func _ready() -> void:
+	_original_main_callback_ledger["_ready"] = int(_original_main_callback_ledger.get("_ready",0)) + 1
+	_original_source_startup_loading__ready()
+	_original_main_callback_ledger["_ready"] -= 1
+
+
+func _original_source_startup_loading__ready() -> void:
 	_build_failure_overlay()
 	if not auto_start:
 		return
@@ -125,6 +135,12 @@ func _queue_authoritative_data_attempt() -> void:
 
 
 func _prepare_authoritative_data(attempt_generation: int) -> void:
+	_original_main_callback_ledger["_prepare_authoritative_data"] = int(_original_main_callback_ledger.get("_prepare_authoritative_data",0)) + 1
+	await _original_source_startup_loading__prepare_authoritative_data(attempt_generation)
+	_original_main_callback_ledger["_prepare_authoritative_data"] -= 1
+
+
+func _original_source_startup_loading__prepare_authoritative_data(attempt_generation: int) -> void:
 	if attempt_generation != _authoritative_data_attempt_generation:
 		return
 	# The autoloads deliberately stay cold on Android. Wait for a real authored
@@ -155,6 +171,13 @@ func _prepare_authoritative_data(attempt_generation: int) -> void:
 
 
 func _ensure_authoritative_step(step_id: String) -> bool:
+	_original_main_callback_ledger["_ensure_authoritative_step"] = int(_original_main_callback_ledger.get("_ensure_authoritative_step",0)) + 1
+	var original_result: Variant = _original_source_startup_loading__ensure_authoritative_step(step_id)
+	_original_main_callback_ledger["_ensure_authoritative_step"] -= 1
+	return original_result
+
+
+func _original_source_startup_loading__ensure_authoritative_step(step_id: String) -> bool:
 	_authoritative_data_step = step_id
 	_authoritative_data_ensure_counts[step_id] = int(_authoritative_data_ensure_counts.get(step_id, 0)) + 1
 	var success := false
@@ -205,6 +228,13 @@ func _finish_authoritative_data_attempt(
 
 
 func _authoritative_failure_message(step_id: String) -> String:
+	_original_main_callback_ledger["_authoritative_failure_message"] = int(_original_main_callback_ledger.get("_authoritative_failure_message",0)) + 1
+	var original_result: Variant = _original_source_startup_loading__authoritative_failure_message(step_id)
+	_original_main_callback_ledger["_authoritative_failure_message"] -= 1
+	return original_result
+
+
+func _original_source_startup_loading__authoritative_failure_message(step_id: String) -> String:
 	match step_id:
 		"content_layers":
 			return "权威内容层未准备完成，请检查安装后重试。"
@@ -339,11 +369,23 @@ func _on_failure_exit_pressed() -> void:
 
 
 func _notification(what: int) -> void:
+	_original_main_callback_ledger["_notification"] = int(_original_main_callback_ledger.get("_notification",0)) + 1
+	_original_source_startup_loading__notification(what)
+	_original_main_callback_ledger["_notification"] -= 1
+
+
+func _original_source_startup_loading__notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		_request_application_quit()
 
 
 func _request_application_quit() -> void:
+	_original_main_callback_ledger["_request_application_quit"] = int(_original_main_callback_ledger.get("_request_application_quit",0)) + 1
+	await _original_source_startup_loading__request_application_quit()
+	_original_main_callback_ledger["_request_application_quit"] -= 1
+
+
+func _original_source_startup_loading__request_application_quit() -> void:
 	if _startup_state == STARTUP_STATE_EXITING:
 		return
 	_exit_requested = true
@@ -373,6 +415,13 @@ func _request_application_quit() -> void:
 
 
 func startup_diagnostic() -> Dictionary:
+	_original_main_callback_ledger["startup_diagnostic"] = int(_original_main_callback_ledger.get("startup_diagnostic",0)) + 1
+	var original_result: Variant = _original_source_startup_loading_startup_diagnostic()
+	_original_main_callback_ledger["startup_diagnostic"] -= 1
+	return original_result
+
+
+func _original_source_startup_loading_startup_diagnostic() -> Dictionary:
 	return {
 		"contract_id": LOADING_CONTRACT_ID,
 		"state": _startup_state,
@@ -485,6 +534,12 @@ func _target_scene_path() -> String:
 
 
 func _recover_target_load(request_error: Error, generation: int) -> void:
+	_original_main_callback_ledger["_recover_target_load"] = int(_original_main_callback_ledger.get("_recover_target_load",0)) + 1
+	await _original_source_startup_loading__recover_target_load(request_error,generation)
+	_original_main_callback_ledger["_recover_target_load"] -= 1
+
+
+func _original_source_startup_loading__recover_target_load(request_error: Error, generation: int) -> void:
 	await get_tree().process_frame
 	if generation != _target_load_generation or not is_inside_tree() or _resource_ready:
 		return
@@ -502,6 +557,12 @@ func _recover_target_load(request_error: Error, generation: int) -> void:
 
 
 func _process(_delta: float) -> void:
+	_original_main_callback_ledger["_process"] = int(_original_main_callback_ledger.get("_process",0)) + 1
+	_original_source_startup_loading__process(_delta)
+	_original_main_callback_ledger["_process"] -= 1
+
+
+func _original_source_startup_loading__process(_delta: float) -> void:
 	if _startup_state == STARTUP_STATE_EXITING:
 		return
 	_poll_main_scene_prefetch()
@@ -633,6 +694,12 @@ func main_scene_prefetch_diagnostic() -> Dictionary:
 
 
 func _run_finite_loading_phase() -> void:
+	_original_main_callback_ledger["_run_finite_loading_phase"] = int(_original_main_callback_ledger.get("_run_finite_loading_phase",0)) + 1
+	await _original_source_startup_loading__run_finite_loading_phase()
+	_original_main_callback_ledger["_run_finite_loading_phase"] -= 1
+
+
+func _original_source_startup_loading__run_finite_loading_phase() -> void:
 	await get_tree().process_frame
 	if not is_inside_tree():
 		return
@@ -753,6 +820,12 @@ func _submit_prepared_main_scene_prefetch() -> void:
 
 
 func _prepare_target_scene(generation: int) -> void:
+	_original_main_callback_ledger["_prepare_target_scene"] = int(_original_main_callback_ledger.get("_prepare_target_scene",0)) + 1
+	await _original_source_startup_loading__prepare_target_scene(generation)
+	_original_main_callback_ledger["_prepare_target_scene"] -= 1
+
+
+func _original_source_startup_loading__prepare_target_scene(generation: int) -> void:
 	if generation != _target_load_generation:
 		return
 	if not is_inside_tree():
@@ -834,6 +907,12 @@ func is_code_preparation_loading_phase_current(generation: int) -> bool:
 	return is_code_preparation_generation_current(generation) and _startup_state in [STARTUP_STATE_LOADING, STARTUP_STATE_READY_TO_HANDOFF] and not _exit_requested
 
 func _prepare_main_scene_prefetch(generation: int) -> void:
+	_original_main_callback_ledger["_prepare_main_scene_prefetch"] = int(_original_main_callback_ledger.get("_prepare_main_scene_prefetch",0)) + 1
+	await _original_source_startup_loading__prepare_main_scene_prefetch(generation)
+	_original_main_callback_ledger["_prepare_main_scene_prefetch"] -= 1
+
+
+func _original_source_startup_loading__prepare_main_scene_prefetch(generation: int) -> void:
 	if not is_code_preparation_loading_phase_current(generation):
 		return
 	var began := Time.get_ticks_usec()
@@ -910,6 +989,12 @@ func retire_threaded_resource_claims() -> bool:
 
 
 func _exit_tree() -> void:
+	_original_main_callback_ledger["_exit_tree"] = int(_original_main_callback_ledger.get("_exit_tree",0)) + 1
+	_original_source_startup_loading__exit_tree()
+	_original_main_callback_ledger["_exit_tree"] -= 1
+
+
+func _original_source_startup_loading__exit_tree() -> void:
 	ContentLayers.cancel_internal_code_owner(self, _main_code_generation)
 	_main_code_generation += 1
 	# Final protection only: ordinary owner handoff is explicit, and no teardown

@@ -4,7 +4,8 @@
 # Usage: inject_sources_resign.ps1 -ApkPath <apk> -StageRoot <stage>
 param(
     [Parameter(Mandatory = $true)][string]$ApkPath,
-    [Parameter(Mandatory = $true)][string]$StageRoot
+    [Parameter(Mandatory = $true)][string]$StageRoot,
+    [string]$SigningToolRoot = ""
 )
 $ErrorActionPreference = "Stop"
 Add-Type -AssemblyName System.IO.Compression.FileSystem
@@ -33,6 +34,7 @@ try {
 } finally { $zip.Dispose() }
 
 $ProjectRoot = Split-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) -Parent
+if ($SigningToolRoot) { $ProjectRoot = (Resolve-Path -LiteralPath $SigningToolRoot).Path }
 $SdkBuildTools = Join-Path $ProjectRoot "tools\android-build\sdk\build-tools\35.0.1"
 $Keystore = Join-Path $ProjectRoot "tools\godot-4.7\editor_data\keystores\debug.keystore"
 if (-not (Test-Path -LiteralPath $Keystore -PathType Leaf)) { throw "APK signing keystore is missing from the current tool root." }

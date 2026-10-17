@@ -1,0 +1,467 @@
+extends RefCounted
+
+## Original queue on the single Source owner; actual ports hold qualification.
+## A soft time budget cannot preempt one Object.setup()/add_child().
+var _owner:=OS.get_thread_caller_id()
+var _ports: RefCounted
+var _source_scope: WeakRef
+var _configured:=false
+var _original_engine_clock: RefCounted:
+	get:return _ports.original_clock()
+var _original_wall_clock: RefCounted:
+	get:return _ports.original_clock()
+func owner_thread_id() -> int:return _owner
+func configure_owner(ports: RefCounted,scope: RefCounted) -> bool:
+	if _configured or _owner==OS.get_main_thread_id() or ports==null or scope==null or ports.owner_thread_id()!=_owner or scope.owner_thread_id()!=_owner or scope.inside_world:return false
+	_ports=ports;_source_scope=weakref(scope);_configured=true
+	return true
+func _set_original_physics_processing(value: bool) -> void:
+	if not _configured or OS.get_thread_caller_id()!=_owner or _source_scope.get_ref()==null:
+		if _ports!=null:_ports.fault("original_M30_scope_processing_missing")
+		return
+	_source_scope.get_ref().physics_processing_enabled=value
+
+const PROBES_PER_TICK := 8
+const MATERIALIZATIONS_PER_TICK := 1
+const MAX_ATTEMPTS_PER_CHILD := 96
+const MAX_PENDING_BATCHES := 256
+const SOFT_BUDGET_USEC := 1000
+const MONSTER_SUMMON_HARD_CAP := 5
+
+var _host_ref: WeakRef
+var _map_id: int = -1
+var _generation: int = -1
+var _jobs: Array[Dictionary] = []
+var _children: Dictionary = {} # stable owner spawn-slot -> {instance_id: WeakRef}
+var _reserved: Dictionary = {} # stable owner spawn-slot -> queued births
+var _cursor: int = 0
+var _last_pump_tick: int = -1
+var _queue_epoch: int = 0
+var _pump_active: bool = false
+var _materializing_job: Dictionary = {}
+var _materializing_epoch: int = -1
+var _stats: Dictionary = {
+	"reentrant_pump_rejected": 0, "stale_callback_rejections": 0,
+	"max_resolve_call_usec": 0, "max_probe_call_usec": 0,
+	"cancel_during_materialize": 0, "requests": 0, "admitted_children": 0, "spawned": 0,
+	"candidate_probes": 0, "materialization_attempts": 0,
+	"landing_exhausted": 0, "spawn_failed": 0,
+	"cancelled_children": 0, "duplicate_release": 0,
+	"capacity_rejected": 0, "max_tick_usec": 0,
+	"max_probes_in_tick": 0, "max_materializations_in_tick": 0,
+	"max_pending_batches": 0, "max_queue_age_ticks": 0,
+	"max_spawn_call_usec": 0, "last_probes_in_tick": 0,
+	"last_materializations_in_tick": 0,
+}
+
+static func effective_maximum(is_boss: bool, maximum: int) -> int:
+	return maximum if is_boss else mini(maximum,MONSTER_SUMMON_HARD_CAP)
+
+func configure(host: Object) -> void:
+	if not _configured or not _ports.host_present(host):
+		_ports.fault("original_M30_Source_host_missing");return
+	_host_ref = weakref(host)
+	_source_scope.get_ref().process_mode = Node.PROCESS_MODE_PAUSABLE
+	_source_scope.get_ref().effective_process_mode = Node.PROCESS_MODE_PAUSABLE
+	_sync_world(host)
+
+func original_ready() -> void:
+	_set_original_physics_processing(not _jobs.is_empty())
+
+func _host() -> Object:
+	return _host_ref.get_ref() as Object if _host_ref != null else null
+
+func _sync_world(host: Object) -> void:
+	var map_id: int = int(host.get("current_map_id"))
+	var generation: int = int(host.get("_zone_generation"))
+	if map_id == _map_id and generation == _generation:
+		return
+	cancel_all()
+	# An old world's in-flight birth cannot occupy a slot in the new world.
+	_reserved.clear()
+	_materializing_epoch = -1
+	_children.clear()
+	_map_id = map_id
+	_generation = generation
+	# Once per map/manager activation, not once per probe or summon request.
+	var existing: Dictionary = host.get("_active_enemy_cache")
+	for value: Variant in existing.values():
+		if _ports.actor_present(value) and _ports.is_enemy(value):
+			track_child(value as Object)
+
+func track_child(child: Object) -> void:
+	if not _ports.actor_present(child):
+		return
+	if child.runtime_map_id != _map_id:
+		return
+	if int(child.read_meta("zone_generation", -1)) != _generation:
+		return
+	var slot: String = str(child.read_meta("summoner_spawn_slot", ""))
+	if slot.is_empty():
+		return
+	var members: Dictionary = _children.get(slot, {})
+	if members.has(_ports.runtime_id(child)):
+		return
+	# Transfer the in-flight reservation to a live child atomically, including
+	# the factory's synchronous track_child callback. Never count that birth
+	# as both live and reserved, nor free its slot before it is registered.
+	if (
+		_materializing_epoch == _queue_epoch
+		and str(_materializing_job.get("slot", "")) == slot
+		and not bool(_materializing_job.get("birth_tracked", false))
+	):
+		_release_reservation(slot, 1)
+		_materializing_job["birth_tracked"] = true
+	members[_ports.runtime_id(child)] = weakref(child)
+	if not _ports.connect_child_signal(child,&"tree_exiting",_child_exiting.bind(_ports.runtime_id(child),slot),CONNECT_ONE_SHOT):
+		_ports.fault("original_M30_child_exit_subscription_failed");return
+	if not _ports.connect_child_signal(child,&"died",_child_died.bind(_ports.runtime_id(child),slot),CONNECT_ONE_SHOT):
+		_ports.fault("original_M30_child_death_subscription_failed");return
+	_children[slot] = members
+
+func _child_exiting(instance_id: int, slot: String) -> void:
+	if _source_scope.get_ref()==null or not _source_scope.get_ref().runtime_object_is_present():return
+	var members: Dictionary = _children.get(slot, {})
+	members.erase(instance_id)
+	if members.is_empty():
+		_children.erase(slot)
+
+func _child_died(_child: Object, _data: Dictionary, instance_id: int, slot: String) -> void:
+	_child_exiting(instance_id, slot)
+
+func _active(slot: String) -> int:
+	var members: Dictionary = _children.get(slot, {})
+	for id: Variant in members.keys():
+		var child_ref: WeakRef = members[id]
+		var child: Object = child_ref.get_ref() as Object
+		if not _ports.actor_present(child):
+			members.erase(id)
+		elif _ports.actor_queued(child) or child.current_hp <= 0 or child._death_pending or child._dying:
+			members.erase(id)
+		elif child.runtime_map_id != _map_id or int(child.read_meta("zone_generation", -1)) != _generation:
+			members.erase(id)
+	if members.is_empty():
+		_children.erase(slot)
+	return members.size()
+
+func _source_valid(source: Object, host: Object) -> bool:
+	# The existing producer/receiver authorizes the signal. Do not require an
+	# ordinary summon_rule here: a source-locked boss may use another producer.
+	return (
+		_ports.actor_present(source) and _ports.actor_inside(source)
+		and not _ports.actor_queued(source)
+		and _ports.actor_in_host(source,host)
+		and source.runtime_map_id == _map_id
+		and int(source.read_meta("zone_generation", -1)) == _generation
+		and source.current_hp > 0 and not source._death_pending and not source._dying
+		and source.combat_enabled and source.control_time <= 0.0
+		and source.charm_time <= 0.0 and not source.dormant and not source._burrowed
+	)
+
+func enqueue(source: Object, monster_ids: Array, count: int, max_active: int) -> void:
+	var host: Object = _host()
+	if not _ports.host_present(host):
+		return
+	_sync_world(host)
+	if bool(host.get("_map_transition_in_progress")) or bool(host.get("_world_bootstrap_in_progress")):
+		return
+	if not _source_valid(source, host) or monster_ids.is_empty() or count <= 0 or max_active <= 0:
+		return
+	if not host.has_method("_hc_m30_summon_request_valid") or not bool(host.call(
+		"_hc_m30_summon_request_valid", source, monster_ids, count, max_active)):
+		return
+	var serial: int = int(source.read_meta("m30_summon_release_serial", 0))
+	if serial <= 0:
+		return
+	_stats["requests"] = int(_stats["requests"]) + 1
+	# is_boss is compiled by Object.setup from the canonical ID classification.
+	# Bosses retain their authored cap; ordinary and elite summoners share cap 5.
+	var effective_max_active := effective_maximum(source.is_boss,max_active)
+	var slot: String = str(source.read_meta("spawn_slot_id", ""))
+	if slot.is_empty():
+		return
+	_stats["last_source_monster_id"] = source.monster_id
+	_stats["last_source_instance_id"] = _ports.runtime_id(source)
+	_stats["last_source_slot"] = slot
+	_stats["last_requested_count"] = count
+	_stats["last_max_active"] = max_active
+	_stats["last_effective_max_active"] = effective_max_active
+	_stats["last_child_ids"] = monster_ids.duplicate()
+	# The producer reserves its serial BEFORE emitting the synchronous signal.
+	var life: int = int(source.read_meta("hc_combat_life_epoch", 0))
+	var accepted: Vector2i = source.read_meta("m30_last_queued_release", Vector2i(-1, -1))
+	if serial > 0 and accepted == Vector2i(life, serial):
+		_stats["duplicate_release"] = int(_stats["duplicate_release"]) + 1
+		return
+	if serial > 0:
+		source.write_meta("m30_last_queued_release", Vector2i(life, serial))
+	if _jobs.size() >= MAX_PENDING_BATCHES:
+		_stats["capacity_rejected"] = int(_stats["capacity_rejected"]) + 1
+		return
+	# Keep the existing cap PER SPAWN SLOT, including previous-life survivors.
+	var allowed: int = mini(count, maxi(0, effective_max_active - _active(slot) - int(_reserved.get(slot, 0))))
+	if allowed <= 0:
+		return
+	_reserved[slot] = int(_reserved.get(slot, 0)) + allowed
+	_jobs.append({
+		"source": weakref(source), "life": life, "slot": slot,
+		"ids": monster_ids.duplicate(), "limit": effective_max_active,
+		"remaining": allowed, "index": 0, "attempts": 0,
+		"enqueued_tick": _original_engine_clock.get_physics_frames(), "serial": serial,
+		"monster": {},
+	})
+	_set_original_physics_processing(true)
+	_stats["admitted_children"] = int(_stats["admitted_children"]) + allowed
+	_stats["max_pending_batches"] = maxi(int(_stats["max_pending_batches"]), _jobs.size())
+
+func _job_source(job: Dictionary, host: Object) -> Object:
+	var source_ref: WeakRef = job["source"]
+	var source: Object = source_ref.get_ref() as Object
+	if not _source_valid(source, host):
+		return null
+	if str(source.read_meta("spawn_slot_id", "")) != str(job["slot"]):
+		return null
+	if int(source.read_meta("hc_combat_life_epoch", 0)) != int(job["life"]):
+		return null
+	return source
+
+func claim_birth(monster_id: int, candidate: Vector2, context: Dictionary) -> bool:
+	# The current original job owns this ordinal; labels or copied jobs cannot issue it.
+	var host := _host()
+	var job: Variant = context.get("_m30_job")
+	if not _pump_active or not job is Dictionary or job.is_empty() or not _ports.host_present(host):
+		return false
+	if _materializing_epoch != _queue_epoch or not is_same(job, _materializing_job):
+		return false
+	if _jobs.is_empty() or _cursor >= _jobs.size() or not is_same(job, _jobs[_cursor]):
+		return false
+	if int(host.get("current_map_id")) != _map_id or int(host.get("_zone_generation")) != _generation:
+		return false
+	if bool(host.get("_map_transition_in_progress")) or bool(host.get("_world_bootstrap_in_progress")):
+		return false
+	if bool(job.get("birth_claimed", false)) or int(job.get("remaining", 0)) <= 0:
+		return false
+	var slot := str(job.get("slot", ""))
+	if int(_reserved.get(slot, 0)) <= 0 or int(job.get("serial", 0)) <= 0:
+		return false
+	var source := _job_source(job, host)
+	if source == null or str(context.get("summoner_spawn_slot", "")) != slot:
+		return false
+	if int(context.get("m30_source_instance_id", -1)) != _ports.runtime_id(source) \
+		or int(context.get("m30_source_life", -1)) != int(job.life):
+		return false
+	if int(context.get("m30_release_serial", -1)) != int(job.serial) \
+		or int(context.get("m30_job_ordinal", -1)) != int(job.index):
+		return false
+	if candidate != job.get("candidate", Vector2.INF) or not candidate.is_finite():
+		return false
+	var monster: Dictionary = job.get("monster", {})
+	if monster_id != int(monster.get("monster_id", -1)) \
+		or monster_id != int(context.get("summon_monster_id", -1)):
+		return false
+	if str(context.get("spawn_group_id", "")) != "%s:summons" % slot \
+		or bool(context.get("respawn_enabled", true)) or context.has("spawn_slot_id"):
+		return false
+	# Consume before Object.setup/add_child can synchronously reenter the factory.
+	job["birth_claimed"] = true
+	return true
+
+func _release_reservation(slot: String, amount: int) -> void:
+	var remaining: int = maxi(0, int(_reserved.get(slot, 0)) - amount)
+	if remaining == 0:
+		_reserved.erase(slot)
+	else:
+		_reserved[slot] = remaining
+
+func _finish_child(job: Dictionary) -> void:
+	if not bool(job.get("birth_tracked", false)):
+		_release_reservation(str(job["slot"]), 1)
+	job["birth_tracked"] = false
+	job["birth_claimed"] = false
+	job.erase("candidate")
+	job["remaining"] = int(job["remaining"]) - 1
+	job["index"] = int(job["index"]) + 1
+	job["attempts"] = 0
+	job["monster"] = {}
+
+func _remove_job(index: int, cancelled: bool) -> void:
+	var job: Dictionary = _jobs[index]
+	var remaining: int = int(job["remaining"])
+	_release_reservation(str(job["slot"]), remaining)
+	if cancelled:
+		_stats["cancelled_children"] = int(_stats["cancelled_children"]) + remaining
+	_jobs.remove_at(index)
+	if _cursor >= _jobs.size():
+		_cursor = 0
+
+func cancel_all() -> void:
+	var in_flight_slot := ""
+	if _materializing_epoch == _queue_epoch and not bool(_materializing_job.get("birth_tracked", false)):
+		in_flight_slot = str(_materializing_job.get("slot", ""))
+	_queue_epoch += 1
+	for job: Dictionary in _jobs:
+		_stats["cancelled_children"] = int(_stats["cancelled_children"]) + int(job["remaining"])
+	_jobs.clear()
+	_set_original_physics_processing(false)
+	_reserved.clear()
+	# A synchronous factory callback can cancel and enqueue before registering
+	# its newborn. Keep that one admission occupied until the factory returns.
+	if not in_flight_slot.is_empty():
+		_reserved[in_flight_slot] = 1
+		_materializing_epoch = _queue_epoch
+	_cursor = 0
+
+func original_physics_pump(_delta: float) -> void:
+	pump()
+
+func pump() -> void:
+	# A host callback may pump/cancel/enqueue synchronously. Never run two cursors.
+	if _pump_active:
+		_stats["reentrant_pump_rejected"] = int(_stats["reentrant_pump_rejected"]) + 1
+		return
+	var tick: int = _original_engine_clock.get_physics_frames()
+	if _last_pump_tick == tick:
+		return
+	_last_pump_tick = tick
+	_pump_active = true
+	_pump_body(tick)
+	_pump_active = false
+
+func _callback_world_current(host: Object, epoch: int) -> bool:
+	if not _ports.host_present(host) or not _ports.host_inside(host) or _ports.host_queued(host):
+		cancel_all()
+		return false
+	_sync_world(host)
+	if bool(host.get("_map_transition_in_progress")) or bool(host.get("_world_bootstrap_in_progress")):
+		cancel_all()
+		return false
+	# Do NOT clear a new generation's queue because an old callback returned.
+	return epoch == _queue_epoch
+
+func _pump_body(tick: int) -> void:
+	_stats["last_probes_in_tick"] = 0
+	_stats["last_materializations_in_tick"] = 0
+	var host: Object = _host()
+	if not _ports.host_present(host) or not _ports.host_inside(host) or _ports.host_queued(host):
+		cancel_all()
+		return
+	_sync_world(host)
+	if bool(host.get("_map_transition_in_progress")) or bool(host.get("_world_bootstrap_in_progress")):
+		cancel_all()
+		return
+	var started: int = _original_wall_clock.get_ticks_usec()
+	var probes: int = 0
+	var materializations: int = 0
+	var visits: int = 0
+	while not _jobs.is_empty() and probes < PROBES_PER_TICK and materializations < MATERIALIZATIONS_PER_TICK:
+		if visits > 0 and _original_wall_clock.get_ticks_usec() - started >= SOFT_BUDGET_USEC:
+			break
+		if visits >= MAX_PENDING_BATCHES + PROBES_PER_TICK:
+			break
+		visits += 1
+		_cursor %= _jobs.size()
+		var job: Dictionary = _jobs[_cursor]
+		var epoch: int = _queue_epoch
+		var source: Object = _job_source(job, host)
+		if source == null:
+			_remove_job(_cursor, true)
+			continue
+		_stats["max_queue_age_ticks"] = maxi(int(_stats["max_queue_age_ticks"]), tick - int(job["enqueued_tick"]))
+		var slot: String = str(job["slot"])
+		if _active(slot) >= int(job["limit"]):
+			_remove_job(_cursor, true)
+			continue
+		var monster: Dictionary = job["monster"]
+		if monster.is_empty():
+			var ids: Array = job["ids"]
+			var resolve_started: int = _original_wall_clock.get_ticks_usec()
+			monster = host.call("_hc_m30_resolve_monster", ids[int(job["index"]) % ids.size()]) as Dictionary
+			_stats["max_resolve_call_usec"] = maxi(int(_stats["max_resolve_call_usec"]), _original_wall_clock.get_ticks_usec() - resolve_started)
+			if not _callback_world_current(host, epoch):
+				_stats["stale_callback_rejections"] = int(_stats["stale_callback_rejections"]) + 1
+				break
+			source = _job_source(job, host)
+			if source == null:
+				_remove_job(_cursor, true)
+				continue
+			job["monster"] = monster
+		if monster.is_empty():
+			_finish_child(job)
+		else:
+			probes += 1
+			job["attempts"] = int(job["attempts"]) + 1
+			var probe_started: int = _original_wall_clock.get_ticks_usec()
+			var candidate: Vector2 = host.call("_hc_m30_probe_landing", source.global_position)
+			_stats["max_probe_call_usec"] = maxi(int(_stats["max_probe_call_usec"]), _original_wall_clock.get_ticks_usec() - probe_started)
+			if not _callback_world_current(host, epoch):
+				_stats["stale_callback_rejections"] = int(_stats["stale_callback_rejections"]) + 1
+				break
+			source = _job_source(job, host)
+			if source == null or _active(slot) >= int(job["limit"]):
+				_remove_job(_cursor, true)
+				continue
+			if candidate.is_finite():
+				materializations += 1
+				var spawn_started: int = _original_wall_clock.get_ticks_usec()
+				job["candidate"] = candidate
+				_materializing_job = job
+				_materializing_epoch = epoch
+				var child: Object = host.call("_hc_m30_materialize", monster, candidate, {
+					"spawn_group_id": "%s:summons" % slot,
+					"respawn_enabled": false,
+					"summoner_spawn_slot": slot,
+					"summon_monster_id": int(monster.get("monster_id", -1)),
+					"m30_source_instance_id": _ports.runtime_id(source),
+					"m30_source_life": int(job["life"]),
+					"m30_release_serial": int(job["serial"]),
+					"m30_job_ordinal": int(job["index"]),
+					"_m30_job": job,
+				}) as Object
+				_stats["max_spawn_call_usec"] = maxi(int(_stats["max_spawn_call_usec"]), _original_wall_clock.get_ticks_usec() - spawn_started)
+				# Birth already returned from the formal factory. Source death during
+				# a child-ready callback does not retrospectively kill a live child.
+				if _ports.actor_present(child):
+					_stats["spawned"] = int(_stats["spawned"]) + 1
+				else:
+					_stats["spawn_failed"] = int(_stats["spawn_failed"]) + 1
+				if not _callback_world_current(host, epoch):
+					_stats["cancel_during_materialize"] = int(_stats["cancel_during_materialize"]) + 1
+					if _ports.actor_present(child):
+						track_child(child) # map/generation filter; never own an old child
+					elif _materializing_epoch == _queue_epoch and not bool(job.get("birth_tracked", false)):
+						_release_reservation(slot, 1)
+					_materializing_job = {}
+					_materializing_epoch = -1
+					break
+				if _ports.actor_present(child):
+					track_child(child)
+				_materializing_job = {}
+				_materializing_epoch = -1
+				_finish_child(job)
+			elif int(job["attempts"]) >= MAX_ATTEMPTS_PER_CHILD:
+				_stats["landing_exhausted"] = int(_stats["landing_exhausted"]) + 1
+				_finish_child(job)
+		if int(job["remaining"]) <= 0:
+			_remove_job(_cursor, false)
+		else:
+			_cursor = (_cursor + 1) % _jobs.size()
+	_stats["candidate_probes"] = int(_stats["candidate_probes"]) + probes
+	_stats["materialization_attempts"] = int(_stats["materialization_attempts"]) + materializations
+	_stats["last_probes_in_tick"] = probes
+	_stats["last_materializations_in_tick"] = materializations
+	_stats["max_probes_in_tick"] = maxi(int(_stats["max_probes_in_tick"]), probes)
+	_stats["max_materializations_in_tick"] = maxi(int(_stats["max_materializations_in_tick"]), materializations)
+	_stats["max_tick_usec"] = maxi(int(_stats["max_tick_usec"]), _original_wall_clock.get_ticks_usec() - started)
+	if _jobs.is_empty():
+		_set_original_physics_processing(false)
+
+func snapshot() -> Dictionary:
+	var result: Dictionary = _stats.duplicate()
+	result["last_pump_tick"] = _last_pump_tick
+	result["queue_epoch"] = _queue_epoch
+	result["map_id"] = _map_id
+	result["generation"] = _generation
+	result["pending_batches"] = _jobs.size()
+	result["reserved_by_slot"] = _reserved.duplicate()
+	result["tracked_slots"] = _children.size()
+	return result

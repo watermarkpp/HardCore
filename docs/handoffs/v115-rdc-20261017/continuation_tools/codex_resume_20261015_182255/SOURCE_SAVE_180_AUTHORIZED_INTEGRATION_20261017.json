@@ -1,0 +1,27 @@
+{
+  "status": "NOT_RUN",
+  "scope": "Exact human external functional diagnostic exception; no game deadlines/FPS/clock changes",
+  "authorization_id": "human_source_save_six_stages_180_20261017",
+  "human_answer": "批准每阶段180秒，继续验证",
+  "source_changes": [
+    {
+      "path": "tools/run_multicore_v115_tests.ps1",
+      "before": "a6cfffd7c5c2c94cac39664ac31e45400198c00109478ec2623512ede8203ce5",
+      "after": "64ef66c46f375549993b581109773c6e157c3d369339918cad75390f96893959"
+    },
+    {
+      "path": "tools/run_godot_tests.ps1",
+      "before": "99506e9e4d9f5b9515516926fabad44a329da507d8f2dbaddc9ef74c71eb30c7",
+      "after": "7f1a25b023237e98f30b084bb9d368818021be988076928957b6f3fb5cc47eeb"
+    },
+    {
+      "path": "tests/framework/source_save_roundtrip_20261017.gd",
+      "before": "03388323222097f484099afaf0cfbe31581387fffc21f9fe152d053a83b929da",
+      "after": "676f697f8656bb7800668830a8b89c874365bacb082b9e69ed6b7b5c7937f6e0"
+    }
+  ],
+  "tools": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\source_save_runtime_180_20261017",
+  "source_save_semantic_target_added": true,
+  "prior_tool_assertion": "Original planned SHA-row refresh found fixture absent from old semantic target list; stopped after tool files and binding written, no test or source rollback. Added exact fixture as new target instead of weakening/guessing old evidence.",
+  "World_and_save_runtime": "NOT_RUN"
+}

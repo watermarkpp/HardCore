@@ -1,4 +1,5 @@
 extends RefCounted
+const ProfileContent := preload("res://scripts/gameplay/profile/legacy_profile_content.gd")
 
 const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
 const Compiler := preload("res://scripts/features/compilation/feature_compiler.gd")
@@ -9,7 +10,7 @@ const SourceRules := preload("res://scripts/features/adapters/contribution_sourc
 # The caller supplies the existing strict item consumer and skill eligibility.
 # This provider owns no item attributes, progression, or saved equipment.
 static func collect(bindings: Array, enabled: Array, equipment: Dictionary, profile_id: String,
-	item_record: Callable, item_eligible: Callable, skill_learned: Callable) -> Dictionary:
+	item_record: Callable, item_eligible: Callable, skill_learned: Callable, content: ProfileContent.ContentPort = null) -> Dictionary:
 	var sources: Array = []
 	var errors: Array = []
 	for binding: Dictionary in bindings:
@@ -23,10 +24,10 @@ static func collect(bindings: Array, enabled: Array, equipment: Dictionary, prof
 				for slot: String in equipment:
 					var instance: Variant=equipment[slot]
 					if not instance is Dictionary or not bool(item_eligible.call(instance)): continue
-					var base:=Items.base_record(instance)
+					var base:=Items.base_record(instance, content)
 					# Legacy gear compatibility does not authorize new affix provenance.
 					# A claimed affix must retain its complete immutable drop contract.
-					if base.has("drop_affix") and not GameData.validate_item_drop_instance(base):
+					if base.has("drop_affix") and not ProfileContent.resolve(content).validate_item_drop_instance(base):
 						errors.append("invalid_feature_affix_source:"+slot); continue
 					var slot_id:=str(Ids.resolve(slot,"slot").get("id",""))
 					if slot_id.is_empty(): errors.append("unregistered_feature_slot:"+slot); continue
@@ -43,7 +44,7 @@ static func collect(bindings: Array, enabled: Array, equipment: Dictionary, prof
 					if slot_id.is_empty():
 						errors.append("unregistered_feature_slot:" + slot)
 						continue
-					for socket: Dictionary in Items.embedded_records(instance):
+					for socket: Dictionary in Items.embedded_records(instance, content):
 						var gem: Dictionary = socket.item
 						var record: Dictionary = item_record.call(gem)
 						if Ids.from_legacy("item", record.get("itemId", -1)) != binding.item_id: continue

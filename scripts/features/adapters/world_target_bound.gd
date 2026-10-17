@@ -171,6 +171,8 @@ static func _rejected(reason: String) -> Dictionary:
 
 func _capture_inputs(monster_id: int) -> RefCounted:
 	if _inputs.has(monster_id): return _inputs[monster_id]
+	if OS.get_thread_caller_id() != OS.get_main_thread_id():
+		return _owner_inputs.get(monster_id)
 	var inputs: RefCounted = Inputs.capture(monster_id,
 		EnemyActor._attack_range_policy_record_for_id(monster_id),
 		EnemyActor._movement_authority_record_for_id(monster_id))
@@ -260,3 +262,22 @@ static func _freeze(value: Variant) -> void:
 	elif value is Array:
 		for child: Variant in value: _freeze(child)
 		value.make_read_only()
+
+
+var _owner_inputs: Dictionary = {}
+func configure_owner_inputs(publication: Dictionary) -> bool:
+	if OS.get_thread_caller_id() == OS.get_main_thread_id() or not _owner_inputs.is_empty(): return false
+	if publication.get("contract_id") != "world.monster_inputs.publication.v1" or not publication.get("inputs") is Dictionary: return false
+	for id: Variant in publication.inputs:
+		if not id is int or id <= 0 or not publication.inputs[id] is Dictionary: return false
+		var snapshot: Dictionary = publication.inputs[id]
+		for key: String in ["entry", "appearance", "body", "behavior", "boss_rule", "attack_range_policy", "movement_policy", "drop"]:
+			if not snapshot.get(key) is Dictionary: return false
+		if snapshot.entry.get("monster_id") != id: return false
+		var copied := preload("res://scripts/features/contracts/plain_graph.gd").capture(snapshot)
+		if not copied.success: return false
+		var value := Inputs.new()
+		value._monster_id = id
+		value._snapshot = copied.value
+		_owner_inputs[id] = value
+	return true

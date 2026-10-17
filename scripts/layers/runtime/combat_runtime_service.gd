@@ -24,6 +24,7 @@ enum EnemyMagicDeliveryKind {
 }
 
 var _direct_spell_stats_scratch: Dictionary = {}
+var _feature_combat_core: RefCounted
 
 func face_target_screen_px(actor: Node2D, target: Node2D) -> Vector2:
 	if not is_instance_valid(actor) or not is_instance_valid(target):
@@ -173,63 +174,30 @@ func apply_enemy_direct_spell_damage(
 	return result
 
 
+func _feature_combat_core_for_main() -> RefCounted:
+	assert(OS.get_thread_caller_id() == OS.get_main_thread_id())
+	if _feature_combat_core == null:
+		_feature_combat_core = load("res://scripts/features/runtime/domain_combat_port.gd").new(null,self)
+	return _feature_combat_core
+
 func apply_feature_source_restore(source_ref: RefCounted, recipient: Dictionary, amount: int) -> Dictionary:
-	if source_ref == null or source_ref.get_script() != preload("res://scripts/features/contracts/actor_ref.gd") \
-		or source_ref.identity() != recipient or amount <= 0:
-		return {"success":false,"reason":"feature_restore_identity","actual_gain":0}
-	var source: Node = source_ref.resolve()
-	if source == null or not source.has_method("restore_health") \
-		or (source.has_method("combat_transition_is_active") and source.combat_transition_is_active()):
-		return {"success":true,"reason":"source_unavailable","actual_gain":0}
-	# Player and Summon authorities return their own committed gain, captured
-	# before observers run. Reading HP here afterwards would mix other writes.
-	var actual_gain: int = source.restore_health(amount)
-	return {"success":true,"reason":"","actual_gain":actual_gain}
+	return _feature_combat_core_for_main().apply_feature_source_restore(source_ref,recipient,amount)
 
 func apply_feature_periodic_damage(target: Node, raw_damage: int, source_actor: Node2D,
 	tick_rng: RandomNumberGenerator, historical_credit: Dictionary) -> Dictionary:
-	return _apply_feature_magic_damage(target,raw_damage,source_actor,tick_rng,historical_credit,null,"periodic")
+	return _feature_combat_core_for_main().apply_feature_periodic_damage(target,raw_damage,source_actor,tick_rng,historical_credit)
 
 func apply_feature_periodic_chain_damage(target: Node, raw_damage: int, source_actor: Node2D,
 	tick_rng: RandomNumberGenerator, historical_credit: Dictionary, batch: RefCounted) -> Dictionary:
-	if batch == null:
-		return {"success":false,"reason":"periodic_batch_contract","actual_loss":0}
-	return _apply_feature_magic_damage(target,raw_damage,source_actor,tick_rng,historical_credit,batch,"periodic")
+	return _feature_combat_core_for_main().apply_feature_periodic_chain_damage(target,raw_damage,source_actor,tick_rng,historical_credit,batch)
 
 func apply_feature_child_damage(target: Node, raw_damage: int, source_actor: Node2D,
 	child_rng: RandomNumberGenerator, historical_credit: Dictionary, batch: RefCounted) -> Dictionary:
-	if batch == null:
-		return {"success":false,"reason":"child_batch_contract","actual_loss":0}
-	return _apply_feature_magic_damage(target,raw_damage,source_actor,child_rng,historical_credit,batch,"child")
+	return _feature_combat_core_for_main().apply_feature_child_damage(target,raw_damage,source_actor,child_rng,historical_credit,batch)
 
 func _apply_feature_magic_damage(target: Node, raw_damage: int, source_actor: Node2D,
 	tick_rng: RandomNumberGenerator, historical_credit: Dictionary, batch: RefCounted, source_class: String) -> Dictionary:
-	var method := "take_feature_periodic_damage" if source_class == "periodic" else "take_feature_child_damage"
-	if source_class == "periodic" and batch != null: method = "take_feature_periodic_chain_damage"
-	if not is_instance_valid(target) or _target_rejects_damage(target) or not target.has_method(method) \
-		or not target.has_method("has_actor_capability") or tick_rng == null:
-		return {"success":false,"reason":source_class+"_target_contract","actual_loss":0}
-	if batch != null:
-		if batch.get_script() != preload("res://scripts/features/runtime/damage_batch.gd") or not batch.requires_commit_context():
-			return {"success":false,"reason":source_class+"_batch_contract","actual_loss":0}
-		var prepared: Dictionary = batch.prepare_commit_context(target,{"source_class":source_class,"damage_channel":"magic_defense"})
-		if not bool(prepared.get("success",false)):
-			return {"success":false,"reason":source_class+"_batch_context","actual_loss":0}
-	if raw_damage <= 0 or (source_class == "periodic" and bool(target.call("has_actor_capability","hc.immune.periodic"))):
-		return {"success":true,"reason":"zero_or_immune","actual_loss":0}
-	var stats: Dictionary = {}
-	if not _target_stats_with_runtime_buffs_into(target,stats):
-		return {"success":false,"reason":source_class+"_target_stats","actual_loss":0}
-	var low := int(stats.get("magic_defense_min",-1))
-	var high := int(stats.get("magic_defense_max",-1))
-	if low < 0 or high < low:
-		return {"success":false,"reason":source_class+"_mac_bounds","actual_loss":0}
-	var resolved := maxi(0,raw_damage-tick_rng.randi_range(low,high))
-	var receipt := {"hp_before":0,"hp_after":0,"actual_loss":0}
-	if resolved > 0:
-		if batch == null: target.call(method,resolved,source_actor,historical_credit,receipt)
-		else: target.call(method,resolved,source_actor,historical_credit,receipt,batch)
-	return {"success":true,"reason":"","actual_loss":receipt.actual_loss,"resolved_damage":resolved}
+	return _feature_combat_core_for_main()._apply_feature_magic_damage(target,raw_damage,source_actor,tick_rng,historical_credit,batch,source_class)
 
 
 ## source176 docs/02 C1: resolve/validate the delivery stage of the current

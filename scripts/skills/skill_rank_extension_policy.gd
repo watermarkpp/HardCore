@@ -1,6 +1,8 @@
 class_name SkillRankExtensionPolicy
 extends RefCounted
 
+const CatalogGate := preload("res://scripts/gameplay/content/catalog_publication_gate.gd")
+
 ## Machine-checkable policy for extending skill ranks above the frozen
 ## 0..3 base ranks (skills_source_of_truth_v1.json). This file is the single
 ## authority for extension semantics; gameplay code must not use generic
@@ -10,12 +12,17 @@ const POLICY_PATH := "res://assets/data/vanilla_176/skill_rank_extension_policy.
 const CONTRACT_ID := "skills.rank_extension.v2"
 const MODES := ["DAMAGE_MORE", "HEAL_MORE", "PASSIVE_BASIC_ACCURACY", "PASSIVE_SLAYING", "PASSIVE_SPIRITUAL_WARFARE", "POISON_NATIVE_FORMULA", "SUMMON_SKELETON_COUNT", "SUMMON_DIVINE_DAMAGE_MORE", "EXCLUDED"]
 
-static var _policy: Dictionary = {}
-static var _validation: Dictionary = {}
+static var _policy: Dictionary = {}:
+	set(value):
+		if CatalogGate.write_allowed(): _policy = value
+static var _validation: Dictionary = {}:
+	set(value):
+		if CatalogGate.write_allowed(): _validation = value
 
 
 static func policy() -> Dictionary:
 	if _policy.is_empty():
+		if not CatalogGate.write_allowed(): return {}
 		var file := FileAccess.open(
 			POLICY_PATH,
 			FileAccess.READ
@@ -122,5 +129,6 @@ static func skeleton_count_cap() -> int:
 
 
 static func clear_cache_for_tests() -> void:
+	if not CatalogGate.write_allowed(): return
 	_policy.clear()
 	_validation.clear()

@@ -1,0 +1,1242 @@
+{
+  "status": "NOT_RUN",
+  "scope": "Current Map lifecycle, current cold Loading witness, real audio delivery and Main input staging; prepared inputs are not runtime acceptance",
+  "targets": [
+    {
+      "path": "scripts/gameplay/world/world_caster_presentation_port.gd",
+      "sha256": "7fd69834e2b2dd70d6b7479b4b3c4bf3daff0506f0baf549a1e4d546e7121fcc"
+    },
+    {
+      "path": "scripts/gameplay/world/world_root_death_owner.gd",
+      "sha256": "3c0af482f549be0a5c966977a9b8ce93ff8b6e00956658eb7196cfe744b866ac"
+    },
+    {
+      "path": "scripts/gameplay/world/world_root_numeric.gd",
+      "sha256": "5e290837aa52ae019c238f59829c8dd8c0c46f772df6857234bdf4cbd520de71"
+    },
+    {
+      "path": "scripts/gameplay/world/world_root_source_callbacks.gd",
+      "sha256": "d3688403277bd491844293f2d00204147154dcf2454dbefaa68de29fbc3e1d89"
+    },
+    {
+      "path": "scripts/gameplay/world/world_root_phase_adapter.gd",
+      "sha256": "899145476b960d0803952a3d99cc1a7c9daf6e6933731cc2511e4652c001a222"
+    },
+    {
+      "path": "scripts/gameplay/world/world_root_view_helpers.gd",
+      "sha256": "82aa96165877e43f384f4c64ee7137a0b58f886684a9ab371018211b49f499b7"
+    },
+    {
+      "path": "scripts/gameplay/world/world_root_map_loading.gd",
+      "sha256": "d19b61e8f3f9b98b914d616bda57417a24898ae06ab73957529f831701d18962"
+    },
+    {
+      "path": "scripts/audio_runtime_service.gd",
+      "sha256": "069add8b7d3a9afcf799d2d1daf7665e4e06230d6cccf986a96b7ae84bffa43e"
+    },
+    {
+      "path": "scripts/features/runtime/feature_resource_main_primitives.gd",
+      "sha256": "e6ed41a4444084e8892818c68adb96a3c5895559774d88b7b210b41461d509e6"
+    },
+    {
+      "path": "scripts/features/runtime/feature_resource_owner_coordinator.gd",
+      "sha256": "6ba6941921d31088d12ad4233697336ec839ea65c79f307b4c69d38de8bc9efa"
+    },
+    {
+      "path": "scripts/features/runtime/feature_resource_owner_primitives.gd",
+      "sha256": "a47b48f0038ad2fc40b5fe9bf415588bee738443f8306bb2bda73511dc01738d"
+    },
+    {
+      "path": "scripts/features/runtime/issued_claim_identity.gd",
+      "sha256": "b724a2b47347b1d47d9d7724f8ce33c87b835b56b1ae4b4856318c28fb129de3"
+    },
+    {
+      "path": "scripts/features/runtime/source_feature_live_provider.gd",
+      "sha256": "4824b805333da2361f4287cdfcd92f8af458aa99e4946093363b062659dc3c5e"
+    },
+    {
+      "path": "scripts/game_root.gd",
+      "sha256": "e148e75952a3dfae5b2256075ccdd00253e5f8eecc575d6823c83084edd06121"
+    },
+    {
+      "path": "scripts/gameplay/actors/actor_runtime_factory.gd",
+      "sha256": "e232dcf880cce0a913c53028aab22dae9fae8c90aeebb81b85f2780c83cd608b"
+    },
+    {
+      "path": "scripts/gameplay/enemy/enemy_main_resource_primitives.gd",
+      "sha256": "c4dbcfaf5441421afedf63affcf0361be81b250329b019545d603c198d5f7567"
+    },
+    {
+      "path": "scripts/gameplay/enemy/enemy_main_visual_renderer.gd",
+      "sha256": "af38740fc4c6a1db1d337b4311bc80ee729f6c57b4df664a5e13f399f90efa65"
+    },
+    {
+      "path": "scripts/gameplay/foundation/actor_handle.gd",
+      "sha256": "aa188bb5db0cb9aee1fe3792a64ce1c58e84c6aa4d6385364d3b2a3e0c9c9c69"
+    },
+    {
+      "path": "scripts/gameplay/presentation/actor_asset_main_ledger.gd",
+      "sha256": "1fd59c2e84ab524c63d5a1369d09abe4263eb34fb1a7baefc7ae5d947f261a4b"
+    },
+    {
+      "path": "scripts/gameplay/presentation/actor_main_asset_port.gd",
+      "sha256": "bec230d43338e12902f689328f67e166ce23ae6f3060924140e8992c80366767"
+    },
+    {
+      "path": "scripts/gameplay/presentation/actor_main_visual_journal_consumer.gd",
+      "sha256": "8e4c411f4e0f3bda3995648276fce27996848ba9c11d4b1fba85b4f2e4a4151c"
+    },
+    {
+      "path": "scripts/gameplay/presentation/actor_main_visual_shell.gd",
+      "sha256": "3a1afc92f4a501b0c3f0a80446795b2c17c83b231446db23ba2f85de69052918"
+    },
+    {
+      "path": "scripts/gameplay/presentation/actor_visual_projection_contract.gd",
+      "sha256": "eeb006e05a612c30748d752bdf25f043f2ebd755dfbbeac0db1081c83f10e05b"
+    },
+    {
+      "path": "scripts/gameplay/presentation/enemy_birth_structural_header.gd",
+      "sha256": "d679f2e472e5667fc5bad12b800009380405ee9515c0117a970dd825c412b747"
+    },
+    {
+      "path": "scripts/gameplay/presentation/enemy_main_overhead_projection.gd",
+      "sha256": "b08f285730da4b5e1784fbac59a2e6d7c429c5e5f43fc30c221dc023d93b9858"
+    },
+    {
+      "path": "scripts/gameplay/presentation/enemy_main_visual_projection.gd",
+      "sha256": "61af26d9bd06d7f2b6f1703a30651f7c397dbfab3e62278aeb68ad79830fc74f"
+    },
+    {
+      "path": "scripts/gameplay/presentation/main_actor_visual_registry.gd",
+      "sha256": "cc8144880a13a22af0e9760760c846d840aaec3526f4b39cdddd009ed93e9c6a"
+    },
+    {
+      "path": "scripts/gameplay/presentation/main_original_visual_phase_bridge.gd",
+      "sha256": "c3692d7014c9ff090674d84a897b81ede14ac8dd6ce114919ce989066e186cf1"
+    },
+    {
+      "path": "scripts/gameplay/presentation/player_main_health_bar.gd",
+      "sha256": "064792eacf5fd3eeda2b4df973df17b4fa6caa2bfeb85a9befab0b96e7d489c9"
+    },
+    {
+      "path": "scripts/gameplay/presentation/player_main_status_marker_strip.gd",
+      "sha256": "3f2cf4dea405f7df6819af931e921bf9fe5ffbc7d74f995920258e00cd36a3de"
+    },
+    {
+      "path": "scripts/gameplay/presentation/player_main_visual_projection.gd",
+      "sha256": "0ba0c12962c1a5c0ad54e217385885009fe7f6640a2d87f4d5cf1b44c594bc11"
+    },
+    {
+      "path": "scripts/gameplay/presentation/source_actor_visual_publication.gd",
+      "sha256": "16ce017aa6828e2ad45b5f920f2c7daaeaceaf6767531a861678ee8bc40260cf"
+    },
+    {
+      "path": "scripts/gameplay/source/main_boot_application.gd",
+      "sha256": "91b8e514a5ae9eaa68b28f8f9f81d5aed722160fdf2e24b04c1b924c1cb6e812"
+    },
+    {
+      "path": "scripts/gameplay/source/main_boot_launch_loading.gd",
+      "sha256": "488c4e540a737b6c09cfe15389480d58b2707b21676cbba8742141fb2a57d7cc"
+    },
+    {
+      "path": "scripts/gameplay/source/main_boot_main_composition.gd",
+      "sha256": "52f633bd0decb4cbd5a099d45340df6df194e33406f68521738850c1eb926e97"
+    },
+    {
+      "path": "scripts/gameplay/source/main_boot_root_transport.gd",
+      "sha256": "a4c5cbd1aaa962b3d519acc86b3447a3ab93fa694411da24c7218e967baf4731"
+    },
+    {
+      "path": "scripts/gameplay/source/main_boot_source_observations.gd",
+      "sha256": "85909f62d4b674a80b38470cd118d2f3964b290bbc704fc3c9758600d8cff7be"
+    },
+    {
+      "path": "scripts/gameplay/source/main_close_process_frame_listener.gd",
+      "sha256": "85550bb86ed2a5e1dfeeb93254c85a9294f7d5b8eabb12316ec14883822db24d"
+    },
+    {
+      "path": "scripts/gameplay/source/main_close_process_frame_producer.gd",
+      "sha256": "532286a36821f3f0a7daf72e26b67365818f761710a316f553c870795526e9eb"
+    },
+    {
+      "path": "scripts/gameplay/source/main_map_loading_producer.gd",
+      "sha256": "112ec6ac507d7c4bbec1c2c39a75eac335361e3e292f960a6569ba573f5702d9"
+    },
+    {
+      "path": "scripts/gameplay/source/main_original_actor_birth_templates.gd",
+      "sha256": "5524fbd0d2fed51a4bb2b66bfd3c6b3b94412382311bf7c9464d6869ae27132c"
+    },
+    {
+      "path": "scripts/gameplay/source/main_original_blueprint_provider.gd",
+      "sha256": "bbf79463cee7773649f2753b0712dc290285fd13566a31039dffb7030b40c16d"
+    },
+    {
+      "path": "scripts/gameplay/source/main_original_boot_provider_factory.gd",
+      "sha256": "9c190803c4c835e81cbc0b0df904710a69b6e0bf24eaf6b3c20c8d1c94ff0528"
+    },
+    {
+      "path": "scripts/gameplay/source/main_original_boot_publisher.gd",
+      "sha256": "4b0838ffe3fee9263f9a3f667b456396ec23cdc0f940b5ec5a4f07b3a314a9da"
+    },
+    {
+      "path": "scripts/gameplay/source/main_original_host_config_provider.gd",
+      "sha256": "f8c2dbaff1ee78a697e78f7f248aa73a2881296e66dfc7e5a8bbfa9ce951b850"
+    },
+    {
+      "path": "scripts/gameplay/source/main_original_loading_pin_provider.gd",
+      "sha256": "2b78f108d8b5f6c60460158add7d27a5f16b24f99a21f7a43a965fed85afce25"
+    },
+    {
+      "path": "scripts/gameplay/source/main_original_process_scope.gd",
+      "sha256": "d4766baf9b4ec2fb92bc6c03e0cca806f5acb325085b0d7613462c4eba2d1740"
+    },
+    {
+      "path": "scripts/gameplay/source/main_original_resource_pump.gd",
+      "sha256": "ca099a50446aee024076c5ca51609e955f8029e9e23ec8d61ab5c71575fce226"
+    },
+    {
+      "path": "scripts/gameplay/source/main_original_service_birth_capture.gd",
+      "sha256": "373b328f26bb729f42b5f01026746b0243620642d4c6d89d31f48de90e0e6c1b"
+    },
+    {
+      "path": "scripts/gameplay/source/main_original_session_publication_provider.gd",
+      "sha256": "1e870751d687f3d05025f5f4622e8651ae4f61c160bc4a99074186cee4a9d525"
+    },
+    {
+      "path": "scripts/gameplay/source/main_original_world_input.gd",
+      "sha256": "871ab80bb36d133c12d65334bee06e18d4971f364fab4a31cc995093a8da9af6"
+    },
+    {
+      "path": "scripts/gameplay/source/main_original_world_publication_provider.gd",
+      "sha256": "9b9a0a6cf14266b5a4159a89d0bd005596619b9eee45ca4257a77a849d373714"
+    },
+    {
+      "path": "scripts/gameplay/source/main_profile_source_gate.gd",
+      "sha256": "c57e73f94389cd071d0a132579e160a470a7475f571fc09fca053aa5197344a3"
+    },
+    {
+      "path": "scripts/gameplay/source/main_root_checkpoint_ports.gd",
+      "sha256": "dd3127f4dcaee5ba05f4fcccaca8e946a0b975c8e348bfe026089cbb090f140e"
+    },
+    {
+      "path": "scripts/gameplay/source/main_root_checkpoint_router.gd",
+      "sha256": "6c519177e3b0e9bd85ccfec0b31cbc4a8ae419687aba99a4585fcf7287bb0d95"
+    },
+    {
+      "path": "scripts/gameplay/source/main_session_transport.gd",
+      "sha256": "fb86e1fe5e4a25db590c87d911cbac7ae8a1fd01caac303e0641ec9b4f4d35b9"
+    },
+    {
+      "path": "scripts/gameplay/source/main_session_transport_listener.gd",
+      "sha256": "f47eb1aa6bac3fdfe655e6d352f27e9a67bd01c411f94bfec441ac88d39d37c6"
+    },
+    {
+      "path": "scripts/gameplay/source/main_source_admission.gd",
+      "sha256": "2026d83bd7676e703313c7021d27091911f9bfb19a29ce474730d297e1e06172"
+    },
+    {
+      "path": "scripts/gameplay/source/main_source_closing_io_producer.gd",
+      "sha256": "8884d1b1ebe232f10605cdea0eced15b686244c45f677ebfb59fd078387bfae1"
+    },
+    {
+      "path": "scripts/gameplay/source/main_source_failure.gd",
+      "sha256": "662eb16af67ba2bdba31804b3e12b1f0c91fe98c61c3026aa4ad70865f6236c3"
+    },
+    {
+      "path": "scripts/gameplay/source/main_source_lifecycle_driver.gd",
+      "sha256": "de3275c7f374e3f70317e75ee8fec46e4c131f4b287417f5e906708a4927501f"
+    },
+    {
+      "path": "scripts/gameplay/source/main_source_tree_publication.gd",
+      "sha256": "ce2002c7ff1804892906842a5003f7b90f5b222dbb7badbe10adb3b186bcb817"
+    },
+    {
+      "path": "scripts/gameplay/source/main_world_content_publication.gd",
+      "sha256": "5989629492e65839da8260c7809ef400c67be0346eefa962de87fff4768df090"
+    },
+    {
+      "path": "scripts/gameplay/source/main_world_source_fields_capture.gd",
+      "sha256": "bf89bdc7701487f236fb3573bf8560cec1597c3554e021f704ae0b3167d32b1c"
+    },
+    {
+      "path": "scripts/gameplay/source/profile_original_command_catalog.gd",
+      "sha256": "3a47df8f565d55b7f445f455b6506d35cfd4c5807786234e82667aa2c57cfa71"
+    },
+    {
+      "path": "scripts/gameplay/source/profile_source_admission_port.gd",
+      "sha256": "3efbf1f912bd2cd14e9885e4755cc64b2a3c50b16bb08b07d30ce8eddaa20791"
+    },
+    {
+      "path": "scripts/gameplay/source/profile_source_command_consumer.gd",
+      "sha256": "5437ac3e1220c5a975c1115fbf3b7bedef9dba3ada3b563eb1ee24ee0759d1f0"
+    },
+    {
+      "path": "scripts/gameplay/source/source_application_live_call.gd",
+      "sha256": "27395737e238d8ecc646778158e4466e9647637e792a59b9388af523b875f58b"
+    },
+    {
+      "path": "scripts/gameplay/source/source_application_providers.gd",
+      "sha256": "f1b3b9e31d297e6890619f65b92ef881591e679ccdc63e5959d95c39b05db9df"
+    },
+    {
+      "path": "scripts/gameplay/source/source_close_process_dispatcher.gd",
+      "sha256": "8e642a0c4ba1661a9551bcaf38fa363ff0b48f6ca7833cc3b4b40f05e85e4b41"
+    },
+    {
+      "path": "scripts/gameplay/source/source_command_digest.gd",
+      "sha256": "da3498b78eaa6e5efd5ba2824bbdd91f816fa2b2293cc42c147bd69099ee6fb6"
+    },
+    {
+      "path": "scripts/gameplay/source/source_constructor_value_codec.gd",
+      "sha256": "be5c8f4992316fc069617363cf03ed8b1219fd37f95a5fe0ae32f485a40fafbf"
+    },
+    {
+      "path": "scripts/gameplay/source/source_original_frame_dispatcher.gd",
+      "sha256": "7448f6c4bd521a2f012d8ddafa10cfc16c146e2f59bb346a2f2a60dc11e1c835"
+    },
+    {
+      "path": "scripts/gameplay/source/source_path_state_graph.gd",
+      "sha256": "d8224d6399701dce0a937a996b91e0294ad351dda99bebef8ebed7480c7b2e01"
+    },
+    {
+      "path": "scripts/gameplay/source/source_persistent_path_bindings.gd",
+      "sha256": "40ec0b8ba5e383caa5d642e6b25de44e6aa1708dc747d6e7ad4b397f49aec43b"
+    },
+    {
+      "path": "scripts/gameplay/source/source_persistent_path_main.gd",
+      "sha256": "b4461e3ea1af7126de9577d5b2d1ee8e734cba0274599e5a4fbce07227c9da48"
+    },
+    {
+      "path": "scripts/gameplay/source/source_persistent_path_tree.gd",
+      "sha256": "e2cd65b3bc83e3ca50c6ca4f9ce3c1da6ebf6730c640176de8263f9c32aeda0e"
+    },
+    {
+      "path": "scripts/gameplay/source/source_profile_command_owner.gd",
+      "sha256": "b5fbc0a0c7f58fbfad90b1a1312e35ff9fc6c7dc998a65b54574e29d339a688a"
+    },
+    {
+      "path": "scripts/gameplay/source/source_profile_session_hooks.gd",
+      "sha256": "d34a3352d3c4eac322ba2221c3a1e1fa74ade8a608d7bbf4b704fd2b9f253977"
+    },
+    {
+      "path": "scripts/gameplay/source/source_session.gd",
+      "sha256": "4b03fdd897836f19f5c91b2f77e2a30cd28b5d9a816a802d809c7e57ee1c1304"
+    },
+    {
+      "path": "scripts/gameplay/source/source_session_actor_router.gd",
+      "sha256": "babedef48ba402290ce39a2a466d21cf99c3b6b1c1bc888cd26ea69abb9853ac"
+    },
+    {
+      "path": "scripts/gameplay/source/source_session_budget.gd",
+      "sha256": "d84b8092e3b5a00c0043f0af280a80ca9b971b5d3ddb6a92495b938de208d42c"
+    },
+    {
+      "path": "scripts/gameplay/source/source_session_clock.gd",
+      "sha256": "c3148b6521881d325f6cb5bbac3c1deaa8f73fe5d6e956bed6878572016ce353"
+    },
+    {
+      "path": "scripts/gameplay/source/source_session_factory.gd",
+      "sha256": "d3f748c570ffa2cf31d7bb16e6860a622ef3fef757e95f14060a62d17788dea9"
+    },
+    {
+      "path": "scripts/gameplay/source/source_session_runtime.gd",
+      "sha256": "8db4765069463a4b6dd55357124892bea0545dd29a7de42c2e3c4743a3bdde04"
+    },
+    {
+      "path": "scripts/gameplay/source/source_session_runtime_installation.gd",
+      "sha256": "fce552dbaf70cdbe9f4e0321c12aa693d5afbe32d0a4c2af87fe763e7f3d9b40"
+    },
+    {
+      "path": "scripts/gameplay/source/source_session_transport.gd",
+      "sha256": "4a8d2d16e4e34b0a2d09cc9dd909770bbe20b554e1255345c5e0fbec754d1c3c"
+    },
+    {
+      "path": "scripts/gameplay/source/source_tree_root_ordinal_port.gd",
+      "sha256": "fe65d2fd852baf393b0277d273c5f716c6c27f11ea20dcba59fcce6a6557b70d"
+    },
+    {
+      "path": "scripts/gameplay/world/legacy_world_skill_ports.gd",
+      "sha256": "55b9cc9adbb1606c3a8eea83e530c5c0c71c61c1a7d793944b18f7d89f484c7f"
+    },
+    {
+      "path": "scripts/gameplay/world/legacy_world_skill_timing_profiles.gd",
+      "sha256": "31cdeaa34a2e02dcbf1d56043b3fe5a62faa0fff95d388aefbf02f23560c95e9"
+    },
+    {
+      "path": "scripts/gameplay/world/ordinary_pursuit_pipeline.gd",
+      "sha256": "c17ec0640e9af701a39057a5f17c848ea72aac63782e8e973158812e9edf8584"
+    },
+    {
+      "path": "scripts/gameplay/world/ordinary_pursuit_source_snapshot.gd",
+      "sha256": "da2f103a8b23eae1b60d1de490e02ea839ae8f062945aa61b57d0c6d130efb36"
+    },
+    {
+      "path": "scripts/gameplay/world/source_session_path_jobs.gd",
+      "sha256": "0ef5a14713308779b4fbecaeadce518147e4a3fc4e760caf032c802af95b991a"
+    },
+    {
+      "path": "scripts/gameplay/world/source_session_path_slot.gd",
+      "sha256": "0c04d8e1eab22516c6c2dac7532e1b687ab79287694b1753bd0aa9ae6748b6a1"
+    },
+    {
+      "path": "scripts/gameplay/world/world_audio_owner_primitives.gd",
+      "sha256": "b5737af0c7833f5393f6962aa5e45833383351fbd9c29c2a5f79a53896520321"
+    },
+    {
+      "path": "scripts/gameplay/world/world_bootstrap_pipeline_warm.gd",
+      "sha256": "72d51ea029012e13f59cc8533428682c91f615a72ce582fd13f00be168d20d01"
+    },
+    {
+      "path": "scripts/gameplay/world/world_camera_constraint_owner.gd",
+      "sha256": "f5ed9f1fad322bddf88ea2b4f3e06e98573823663c2373e0504234d785aa0436"
+    },
+    {
+      "path": "scripts/gameplay/world/world_camera_constraint_publication.gd",
+      "sha256": "9b7e5c3fa6563ec660654ea241edba3146414859dac4e68e68d1572857a0bd26"
+    },
+    {
+      "path": "scripts/gameplay/world/world_canonical_actor_access.gd",
+      "sha256": "54caee533613fcd6036f7eabc282cdc66c0b276845fa856fa42b8180cebdb1e0"
+    },
+    {
+      "path": "scripts/gameplay/world/world_caster_direction_numeric.gd",
+      "sha256": "efa5add3e9058ab1971b4ea2807a18ff3450f00451daa1d13d37affd89f468e1"
+    },
+    {
+      "path": "scripts/gameplay/world/world_caster_display_model.gd",
+      "sha256": "6900a901d2f9b7e2aae84aae029e72558168e8283224f54e86578c52b9786163"
+    },
+    {
+      "path": "scripts/gameplay/world/world_caster_ground_display.gd",
+      "sha256": "eb097f623edf197ce76eb8d02c443b5d86f31e68b53f9204ebefed4888d2061e"
+    },
+    {
+      "path": "scripts/gameplay/world/world_caster_main_executor.gd",
+      "sha256": "0799dac41e4b88f47c22a01dc49bcfccaba5b753e2879b7571485e659c1686e8"
+    },
+    {
+      "path": "scripts/gameplay/world/world_caster_projectile_display.gd",
+      "sha256": "ab854c3719307dd5557d384915fcb8007107f80794206158332b02cd36c44ea4"
+    },
+    {
+      "path": "scripts/gameplay/world/world_caster_visual_port.gd",
+      "sha256": "743eed780c9920846d249bc4c4f7c776ab8e831f35b9de2474e2186b6a866d71"
+    },
+    {
+      "path": "scripts/gameplay/world/world_caster_visual_publication.gd",
+      "sha256": "6f2f4e453a4ddaf05260185ea5ff334d613f22aefcc188908bb75b9a8ae60258"
+    },
+    {
+      "path": "scripts/gameplay/world/world_caster_visual_structure.gd",
+      "sha256": "97c8e066ad3d4267583520768bde81eb537837a28fac3d8623f5a0d66c4d2ffd"
+    },
+    {
+      "path": "scripts/gameplay/world/world_caster_warm_main.gd",
+      "sha256": "5cae0c8d8e39d93fa5230bd9ca2543b43512acbecafa13c41f27e36cc9fff65c"
+    },
+    {
+      "path": "scripts/gameplay/world/world_caster_warm_port.gd",
+      "sha256": "148c2e8d4c3e7dc8ccac844426e37014022a1304b2e9fe2185f0cad9b733a3d5"
+    },
+    {
+      "path": "scripts/gameplay/world/world_combat_log_owner.gd",
+      "sha256": "14522ebd08c3b1d696b75b39d5fd387f1ae63c685395fff068011a2f23bea748"
+    },
+    {
+      "path": "scripts/gameplay/world/world_crowd_geometry_mirror.gd",
+      "sha256": "056cf9e4e83828015de9caacc1873a3e9ccb012059c4322fd2f3cda29ec65c32"
+    },
+    {
+      "path": "scripts/gameplay/world/world_enemy_native_motion.gd",
+      "sha256": "d42ac190a282c4acd5de97f6ed7ff01217046f653967dddd6367d8ea20a2596e"
+    },
+    {
+      "path": "scripts/gameplay/world/world_enemy_runtime_instance.gd",
+      "sha256": "4b91e26b4f66fe250af597c48fc90d31ac682b54b516829f9804959a3a8155d7"
+    },
+    {
+      "path": "scripts/gameplay/world/world_enemy_runtime_ports.gd",
+      "sha256": "ad0e5396d931dcc87feb28e43a823e9b95f84db6ec28f68518ab6124b10211cb"
+    },
+    {
+      "path": "scripts/gameplay/world/world_environment_boot_loader.gd",
+      "sha256": "9f1360036c5033ad87621468e9f03522825b82102033057a673d27259b5f7e40"
+    },
+    {
+      "path": "scripts/gameplay/world/world_environment_boot_publication.gd",
+      "sha256": "0dead2d64fecb4a86dc61880fc9232bf488197f4baf15acf27808360bcb56999"
+    },
+    {
+      "path": "scripts/gameplay/world/world_environment_catalog.gd",
+      "sha256": "61a45dfd40df6880297423105ab15bba18f750e4427fe2d45ca63a488e748421"
+    },
+    {
+      "path": "scripts/gameplay/world/world_environment_collision_geometry.gd",
+      "sha256": "49ec2e1f5807a68fa288c9e6cf8c23087f3121f3974b351a30ef30e10b4c85d2"
+    },
+    {
+      "path": "scripts/gameplay/world/world_environment_coordinate_mapper.gd",
+      "sha256": "c4d5bd668c6748a31674c6cb6670c2441fd0b2f6b410a8c0fd1f2d99e0469e8d"
+    },
+    {
+      "path": "scripts/gameplay/world/world_environment_factory.gd",
+      "sha256": "973f14aa3b0afa0b57e9e6a67139f18eeeaf6502a563bd7197dad26a81216e7b"
+    },
+    {
+      "path": "scripts/gameplay/world/world_environment_footprint_query.gd",
+      "sha256": "2b2af3cac67f54e4035bd07012c6552fa24c66b024c79dfaaacb8b55275d533c"
+    },
+    {
+      "path": "scripts/gameplay/world/world_environment_geometry_port.gd",
+      "sha256": "88bc00de7673f63cceff83d8b3f30e4721f0f1e4ab91df96bb278d5b3020468c"
+    },
+    {
+      "path": "scripts/gameplay/world/world_environment_mask_values.gd",
+      "sha256": "545c37511dfe247c75e75bb1be4cd0e1de24443a900578e3e9c75321a401ac82"
+    },
+    {
+      "path": "scripts/gameplay/world/world_environment_math_validator.gd",
+      "sha256": "4a097ddfd2781529c6fe88f6f452aa65b1a3244588ab0796cbb4ee2e44ba5cf5"
+    },
+    {
+      "path": "scripts/gameplay/world/world_environment_model.gd",
+      "sha256": "3c0a716970ce7b82f03e70b87bb065416803694725834c454073c0bc7a27c4b7"
+    },
+    {
+      "path": "scripts/gameplay/world/world_environment_native_bodies.gd",
+      "sha256": "577b5bd1c57d6e2fb07b3b14a19058f4bd1f2c29c73cad834fc3cfd1cde38792"
+    },
+    {
+      "path": "scripts/gameplay/world/world_environment_native_value_graph.gd",
+      "sha256": "50dc034b0a29caf0085ba6ab8c84b5114a7efc274ce4d1b1dfa9d28383597adb"
+    },
+    {
+      "path": "scripts/gameplay/world/world_environment_publication.gd",
+      "sha256": "9ec39a6d20f1b94ef1fad7cd8d530e5989eef212e1ffe8b727d01ed282d9435a"
+    },
+    {
+      "path": "scripts/gameplay/world/world_environment_runtime_maps.gd",
+      "sha256": "3d188f971015b6fd9966c12a4c6c9bf5684a528c788560ee3d9a0b481b4ae3da"
+    },
+    {
+      "path": "scripts/gameplay/world/world_environment_spatial_rules.gd",
+      "sha256": "457db357e1f689826eafbb00a5d7a61eca42f718b324811e4a04a9acc295f061"
+    },
+    {
+      "path": "scripts/gameplay/world/world_environment_transport_codec.gd",
+      "sha256": "c1c8baedf046470bb9facc6613109b832c10bdc7a665ea92600cfbd8ec70e16b"
+    },
+    {
+      "path": "scripts/gameplay/world/world_environment_value_graph.gd",
+      "sha256": "8d307aa5c8e556a02bfbffb68dcbcbecb7bbc0bdb0471b38b9973982a3d4f174"
+    },
+    {
+      "path": "scripts/gameplay/world/world_follow_landing_authority.gd",
+      "sha256": "94711f8268e5e60491e5e0a3681b6740f1b42b0a02105f222a5cc1179dd11c97"
+    },
+    {
+      "path": "scripts/gameplay/world/world_footprint_log_owner.gd",
+      "sha256": "55ce324133d02da7c1b4bf285c6de15a92ce05bc63b1128ed0420c4d4122a701"
+    },
+    {
+      "path": "scripts/gameplay/world/world_interactable_owner_port.gd",
+      "sha256": "db53cbdf80f52a002f805a5ddd5f8b4925d160cc8cfd61e542004fb556789247"
+    },
+    {
+      "path": "scripts/gameplay/world/world_interactable_visual_main.gd",
+      "sha256": "4f0b5a6eca78948019e0614c4dd9397b650f6662ad01ef80f70a59207ea5f688"
+    },
+    {
+      "path": "scripts/gameplay/world/world_interactable_workset.gd",
+      "sha256": "6e54e86d5410dd1e5978d2313685f1c1e404bdd44cf419f706fe75f9950bfbf1"
+    },
+    {
+      "path": "scripts/gameplay/world/world_live_close_phase.gd",
+      "sha256": "26b3035fc4204bbc27fbdb8f80dadc739ab184051bf9ba8d1cb71065ab3d2b6b"
+    },
+    {
+      "path": "scripts/gameplay/world/world_loot_actor_factory.gd",
+      "sha256": "6f659da4470b9b1c0885e842553adf4d004acd9a1de4a8d6ae22c2e5298d600d"
+    },
+    {
+      "path": "scripts/gameplay/world/world_loot_descriptors.gd",
+      "sha256": "1d1998a3af21961efbd68a2e70ed4cdb39da88cdb123b790499db5efa0d5d06c"
+    },
+    {
+      "path": "scripts/gameplay/world/world_loot_pickup_model.gd",
+      "sha256": "ecd8c943a22ce6cf3d6bfc9fe67dad2582b196a57ca9c01a3173c9bd93d3e742"
+    },
+    {
+      "path": "scripts/gameplay/world/world_loot_preferences.gd",
+      "sha256": "3093759664984fb8aa71b1bf8ad56b13e9a176ac9d946c2db6ac02199aac7611"
+    },
+    {
+      "path": "scripts/gameplay/world/world_loot_runtime_manager.gd",
+      "sha256": "140bbeeb0554698127a9a31e556efafce991f1c32c23b004d21d61ef7daf0493"
+    },
+    {
+      "path": "scripts/gameplay/world/world_loot_spatial_index.gd",
+      "sha256": "be50d68e25e9ef06190de4c4ba2737dc888fe75ec02a25f9c35953c6f751b32d"
+    },
+    {
+      "path": "scripts/gameplay/world/world_loot_trace_owner.gd",
+      "sha256": "202fc88eb18eb32b5bfbb78d39c8fd031c652a6c5f843c4aac7a26d1740a28bf"
+    },
+    {
+      "path": "scripts/gameplay/world/world_main_background.gd",
+      "sha256": "dea14ebeb508cba70e3f3fd94fa894f957f97a4bf0098dca6f5b83d0f26fd0af"
+    },
+    {
+      "path": "scripts/gameplay/world/world_main_hud.gd",
+      "sha256": "71290d4bdbb0396a48af57d60d20338e0fac25baceb70f84254b07e5794d6e47"
+    },
+    {
+      "path": "scripts/gameplay/world/world_main_prefix_consumer.gd",
+      "sha256": "6d41a2969585a39e148969da3a9c319ad5aeb7b12f36d51433424782058e8c66"
+    },
+    {
+      "path": "scripts/gameplay/world/world_main_root_attachment.gd",
+      "sha256": "4b6d6e2429585eccf7fe0b4e1274c3bdbca257cbbaac49868206e53e345ce730"
+    },
+    {
+      "path": "scripts/gameplay/world/world_main_service_ports.gd",
+      "sha256": "3ac015a5fe077c6a08ce96ebf86553a89940ea301f404f045c1a2edde8f8a54e"
+    },
+    {
+      "path": "scripts/gameplay/world/world_main_service_support.gd",
+      "sha256": "fbd164575c87ca7ae195a9ef8ea57e0a273a060cad46bfafbcfc19608867c218"
+    },
+    {
+      "path": "scripts/gameplay/world/world_main_view_facade.gd",
+      "sha256": "9db7cf9086df5f6b95e8971f6fd6ed396b6a0da83b125bcce4d6a3b46d962a63"
+    },
+    {
+      "path": "scripts/gameplay/world/world_main_views.gd",
+      "sha256": "aa94398834ba614631103fef5dc3bd4ed07b86bfa2b8046a225a762d4aec056e"
+    },
+    {
+      "path": "scripts/gameplay/world/world_map_build_owner.gd",
+      "sha256": "99f676157c5dc6df3cf910ee4f8f84ddb97c20a263aad22bd610fb6d4a685ab3"
+    },
+    {
+      "path": "scripts/gameplay/world/world_map_event_main.gd",
+      "sha256": "58d93c0c7bd0cf21848d16d5cb5f47ef4d53b164fe8ed1af518952ab6f7156d5"
+    },
+    {
+      "path": "scripts/gameplay/world/world_map_gothic_visual.gd",
+      "sha256": "fa277ddeabc2c0ecccb47b14c47fb1d6379090b5c725006fd172d7350dbb6a96"
+    },
+    {
+      "path": "scripts/gameplay/world/world_map_loading_coordinator.gd",
+      "sha256": "66391139b77f36dc627d597193243b86011569a5077a5fd3ad687d09f7c3e097"
+    },
+    {
+      "path": "scripts/gameplay/world/world_map_loading_port.gd",
+      "sha256": "114ab82d30834b04c1177eae9e9467254fa9ffadd25f1e576b03a331e7ad696b"
+    },
+    {
+      "path": "scripts/gameplay/world/world_map_loading_transport.gd",
+      "sha256": "ce29e83170efa896cb6ca47aec28efb67afbbf71ed3ebb38a79477e99e3af037"
+    },
+    {
+      "path": "scripts/gameplay/world/world_map_teleport_policy_owner.gd",
+      "sha256": "a7c79721cf03407df414ee82d0eb595f1616725a90dcbb0c8a6fde3cb36e55be"
+    },
+    {
+      "path": "scripts/gameplay/world/world_map_visual_main.gd",
+      "sha256": "5ffe195c334121baf62ec5f7937aa828c9deab59208b555da7f2971fdefbbbd5"
+    },
+    {
+      "path": "scripts/gameplay/world/world_npc_pinned_visual.gd",
+      "sha256": "3785196ab4739b01020dfd1c38a7587d8e5aa26d61265dbdcff01d6e6109459d"
+    },
+    {
+      "path": "scripts/gameplay/world/world_npc_visual_shell.gd",
+      "sha256": "12f4f994e2b48ded17774505bbe69d9d469d724314086623e8e2e6eb9cbdc301"
+    },
+    {
+      "path": "scripts/gameplay/world/world_original_event_journal.gd",
+      "sha256": "9b2b2ed637db7e33f036dea6089de97a7d6e8c2c1661baa07c9c728211083892"
+    },
+    {
+      "path": "scripts/gameplay/world/world_original_map_arrival_contract.gd",
+      "sha256": "a8d52e86ae073676e4a05cf6bd9047395c317e55b4e4c7f9936f534d540ad8b4"
+    },
+    {
+      "path": "scripts/gameplay/world/world_original_map_warm_main.gd",
+      "sha256": "4a8db273d5c30d4988a28f49bc3a7e26ff9685ef250c71c45b61f3e2309c4488"
+    },
+    {
+      "path": "scripts/gameplay/world/world_original_node_timer.gd",
+      "sha256": "bea1370a19339d169ef1085dcf889680ff4320f1f6e5a41f4321399761b2ceae"
+    },
+    {
+      "path": "scripts/gameplay/world/world_original_primitive_port.gd",
+      "sha256": "cc419723b30f844da1549fdd683dbedd3b5a5317d78b231f1f34e5932e9e89e4"
+    },
+    {
+      "path": "scripts/gameplay/world/world_original_source_tree.gd",
+      "sha256": "ca51916d30e3f71b360d7a1e9f1f9d3b4133a06ee177b5610ec196dd2b39776f"
+    },
+    {
+      "path": "scripts/gameplay/world/world_owner_art_rules.gd",
+      "sha256": "58ceb6d49f78797dfa1a9581b9942061432c2002f7bc4b1df1b34c7f6db5d080"
+    },
+    {
+      "path": "scripts/gameplay/world/world_owner_body_rules.gd",
+      "sha256": "81d4a87affbce995ead7c64519886af6c9dcca34d5fb8f390bb5408484e9e45b"
+    },
+    {
+      "path": "scripts/gameplay/world/world_owner_bootstrap_coordinator.gd",
+      "sha256": "324db310faedadd43a0c58c41effb85420421c0eb365eea3353971a3a0696b80"
+    },
+    {
+      "path": "scripts/gameplay/world/world_owner_clock_ports.gd",
+      "sha256": "fef212dd980399c8f56e2d11024c429c136e7d41010377ecdda057b689357775"
+    },
+    {
+      "path": "scripts/gameplay/world/world_owner_content_services.gd",
+      "sha256": "98d88982fb52d0df42e6f2fb46fc06194e8db6f0614c40697491937498ceb78d"
+    },
+    {
+      "path": "scripts/gameplay/world/world_owner_damage_observer.gd",
+      "sha256": "e5a0c7849822d0acffa4be9b2bb1bbeff50a9b95930a14cd58d2072d4d44f767"
+    },
+    {
+      "path": "scripts/gameplay/world/world_owner_diagnostics.gd",
+      "sha256": "91b16c2a26a91ae4a6cd3266d65b5af8d16d6439da94c37b5cce84f13ef95848"
+    },
+    {
+      "path": "scripts/gameplay/world/world_owner_enemy_audio_shared.gd",
+      "sha256": "26dd735878fb37ce340be82a8b4105b8484eb00e03a1de51955aeb11bfe015cd"
+    },
+    {
+      "path": "scripts/gameplay/world/world_owner_enemy_presentation.gd",
+      "sha256": "d3472b0924e3d9b924820f26a94dbbf2f01a480035c39f003f90648d46b252a5"
+    },
+    {
+      "path": "scripts/gameplay/world/world_owner_enemy_shared.gd",
+      "sha256": "0bfef8c4fb187b107ae63290a05548e28cf76237f5408c770e63067019ff3ab2"
+    },
+    {
+      "path": "scripts/gameplay/world/world_owner_engagement_window.gd",
+      "sha256": "aea3f0242f59b9051f1840cd82c6d976f2b4d1298e1066d37cd21cd02c0b8d82"
+    },
+    {
+      "path": "scripts/gameplay/world/world_owner_full_ports.gd",
+      "sha256": "b4b626846f18e10c5ae02c3cf3cd05ce9b1196d20684ba6133c50553dcd968ef"
+    },
+    {
+      "path": "scripts/gameplay/world/world_owner_granted_rules.gd",
+      "sha256": "56e5e3b1a7e48675e8c3c3d573803758d8e2aebde7f473e2a24a581f3e5179bf"
+    },
+    {
+      "path": "scripts/gameplay/world/world_owner_group_order.gd",
+      "sha256": "4bab278cfce5ade70dbea21b82b5b73269ee6a0c375c35df54c1baf44332d7d0"
+    },
+    {
+      "path": "scripts/gameplay/world/world_owner_input.gd",
+      "sha256": "bd3aec4f4c7a2d31f3530dba8fe90746348d5b0bf2a798d9a5c614669378b030"
+    },
+    {
+      "path": "scripts/gameplay/world/world_owner_monster_identity.gd",
+      "sha256": "5f76c93457542755b59fd47223e6fe4ec626435a24f887383123d3922e6d4d07"
+    },
+    {
+      "path": "scripts/gameplay/world/world_owner_path_services.gd",
+      "sha256": "69cedda69c52fc4c3461289cc1442973d72e801bc38bb3366fbf767129cc7e97"
+    },
+    {
+      "path": "scripts/gameplay/world/world_owner_profile_services.gd",
+      "sha256": "b042f94adb738a0f58c1dffc2017bdbcf9fef614ced07641796e044f0979e79c"
+    },
+    {
+      "path": "scripts/gameplay/world/world_owner_source_text.gd",
+      "sha256": "23a836fda644f3f358b6f460e9abf24ad898f9356d872def84f6a3b9248861be"
+    },
+    {
+      "path": "scripts/gameplay/world/world_owner_target_ring.gd",
+      "sha256": "63fd0064284bcb1efb2690afdcf690471a02811a6d4f3843c0838d7aa6308a3c"
+    },
+    {
+      "path": "scripts/gameplay/world/world_owner_time_domains.gd",
+      "sha256": "b080e4aaae4a401318a8744820d9efb63560feb1bb38c427fb239d0efa0b461a"
+    },
+    {
+      "path": "scripts/gameplay/world/world_owner_warrior_rules.gd",
+      "sha256": "ad3aa47fb317300df16cc8cda3380f29c92313ca7f9d74d9a3ec2ece16c7749d"
+    },
+    {
+      "path": "scripts/gameplay/world/world_portal_visual_shell.gd",
+      "sha256": "3119c04b3165c6b417fabb359f617ebd0238d48d694444d946d00c1e530bd237"
+    },
+    {
+      "path": "scripts/gameplay/world/world_profile_budget_port.gd",
+      "sha256": "56c5f320ec4ebc49ccc8f05e8eb4776dea0b3bd5ae98866c3dc62c37dc934824"
+    },
+    {
+      "path": "scripts/gameplay/world/world_profile_ui_view.gd",
+      "sha256": "9b79fea8ebced115a4a53b728ea1134a971ab9ac986586af3c12b7a4624f854c"
+    },
+    {
+      "path": "scripts/gameplay/world/world_profile_view_publisher.gd",
+      "sha256": "fe17fff02415c1e88b822848cd213ce73b8685850c599e75bd93081720e81193"
+    },
+    {
+      "path": "scripts/gameplay/world/world_resource_prefix_transport.gd",
+      "sha256": "04beeb2c8ff8a9638f827e3b84f5f6cb3a5a04ee4f532466ca8c8d8ba6bf476d"
+    },
+    {
+      "path": "scripts/gameplay/world/world_root_interactable_loading.gd",
+      "sha256": "71ad27c38aa6bccb3c516ce48e6e8c8705f5aed16f8d3a0f236163a1ec1656cd"
+    },
+    {
+      "path": "scripts/gameplay/world/world_runtime_working_graph.gd",
+      "sha256": "6c2d39218c56fe058cbbdd8abd60b0df41cd61df925a07996f8c0de26de014bc"
+    },
+    {
+      "path": "scripts/gameplay/world/world_session_services.gd",
+      "sha256": "febb3bf9876f2ef229ce160c1e3d092b82aba334a52b08ddd50858dec9db860b"
+    },
+    {
+      "path": "scripts/gameplay/world/world_simulation_core.gd",
+      "sha256": "f3ba95aec2dcc9b41b022ad1086d8faed040f82cda7315e59890aabbf9216e39"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_action_timing.gd",
+      "sha256": "186b808db666bee6e823a9c692871bca86f5d6ed9c36066856b02655ba3cc3a2"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_actor_port.gd",
+      "sha256": "a6bf53dcc45a7849197506196b97d54437caef0058a06f1e7371e6779767981c"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_cast_factory.gd",
+      "sha256": "5fe3fd9f8120519b856d07982005962426423b2586a276760ea9f9740c8a0250"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_combat_rules.gd",
+      "sha256": "1e85998c981b7bae2f3776f00b7a75b35be4c98f753d04e2a44f80269de8c143"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_combat_runtime.gd",
+      "sha256": "2e7076cd5873d46710b2b836d4b28de76ec4e66cc29b744499963e2233eabd0e"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_effect_model.gd",
+      "sha256": "a008bbe572a066380f3d2e390ef5a752984a69ead3a0a7d5260e20f7e7e18061"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_fields.gd",
+      "sha256": "727c366e1330005359843b700b3202b41065a67d222644848c7c23fc9578c39b"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_fire_wall_model.gd",
+      "sha256": "abf6b22b6b0c354b53cbfe0149e5e00286f7496e5a1e72192b05b20941b7c86a"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_full_fields.gd",
+      "sha256": "4f06a5691190d8dc475a4a5b64dfa16e8b3ca756cedadcccb857e47cafa60efd"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_full_model.gd",
+      "sha256": "a8d57bb583d27363ba9570720a320ef16727b96a52ba5f21c7331dc4d6302639"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_ground_claims.gd",
+      "sha256": "ce7b6decf8f4cd8f7ebfb077a87ecb509e619e4562855167997ea3eaa1e520dd"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_ground_manager.gd",
+      "sha256": "49b8a023849aa2f389432e87d914bb94bc56598ccaba9fb8e68ca7a32ba459ee"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_ground_model.gd",
+      "sha256": "ad0ba22a4a726e80eac3bf53b9ccc6f15cf95737aee0ec0254e0e9e46e9c43b6"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_legacy_actor_link.gd",
+      "sha256": "bac59b150e36a1bb5a12a004d9fbbea8a27b734c11edb071baf4558022b9febf"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_legacy_full_ports.gd",
+      "sha256": "6cd04cd6f6f83dfc23ae40e68198f99a73f41bc22c02af5f38b960cd19b16934"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_legacy_global_random.gd",
+      "sha256": "cd49fcdd81add0ba25933b7aaf7196e31ee06937ecd33944068557247fdf9cf5"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_legacy_link_map.gd",
+      "sha256": "8d61ca04e0e5a5e577b1fa139fd69451c8a8a812e49e65daedea6254795533a6"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_legacy_link_sequence.gd",
+      "sha256": "33cab8ea2fab3f73b79d538c5a0105491b7330fc045b25403def5e1c5e62735d"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_link_map.gd",
+      "sha256": "700a2f3d1797fbd06bbe3aae4b099adf9f932dea6c94d2210d403f4db9771a26"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_link_sequence.gd",
+      "sha256": "d7b5df7c57b865df25975171da8d0e75cd6aac695ba82191851560928167662a"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_plan_contract.gd",
+      "sha256": "ad8b7002c7a84111290eb28fda388fdac71658e70327dac710a81dfe2a9a9f75"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_planner.gd",
+      "sha256": "f25c473941f21c55f05cf1ae248b12d0b6cb0e39e81a5b0030bbd70a64ccdfd7"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_projectile_model.gd",
+      "sha256": "8e3d51caa5a24ef933c54117881edd2155693e9a12774e7f7fb2f1dc9ea5ca96"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_runtime.gd",
+      "sha256": "3eca98fa5415a6830b05483da4133cc9e5b3905a5bb36f1a39207509a74b9fa4"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_spatial_index.gd",
+      "sha256": "b913e21e6ae430a23551e9c61370c69b23ec59f9e73e2ab9199a9697258bb9aa"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_target_query.gd",
+      "sha256": "0ff04d3d1151ba2d994ec938ce623486d1ac4acc62ffa9cea70ec11e656b59ed"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_timing_port.gd",
+      "sha256": "707c57d6c6eaff04cce4261a5d95b5f2c0a7a9f91b7c2a5e6ac3999a442221d2"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_timing_profiles.gd",
+      "sha256": "0d29db6e622f9f86a765dd6e7b0785ba2407e072f4ec6f39aa35fa0ae96ae716"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_timing_publication.gd",
+      "sha256": "c034ea15c92118cad13f348c92764ff7a34b189b5e419ad19d3ce2dfcf729cee"
+    },
+    {
+      "path": "scripts/gameplay/world/world_skill_warrior_rules.gd",
+      "sha256": "67da085b75238abe3f54bb3d9604e49aa5de70384db5df710be1ffe483167aee"
+    },
+    {
+      "path": "scripts/gameplay/world/world_source_application_contract.gd",
+      "sha256": "d1c175d29cc18c6c9d72c7cd74d50ad18c8b82ff4fcb8caabbef180a3a4773cd"
+    },
+    {
+      "path": "scripts/gameplay/world/world_source_application_main.gd",
+      "sha256": "1cbffe8ab5807b77b9c3658921c40b2f9a7fd151d5634682b28468d871f113de"
+    },
+    {
+      "path": "scripts/gameplay/world/world_source_checkpoint.gd",
+      "sha256": "a3d3585d4e29fd7ac825fe815cbc68bd0c41c2f8c5c59e373bea02220e49377d"
+    },
+    {
+      "path": "scripts/gameplay/world/world_source_field_port.gd",
+      "sha256": "36bef1e64163a71122f20ab76cbe71e9628d8cbacc9c5bb8ebb31db6f478cc03"
+    },
+    {
+      "path": "scripts/gameplay/world/world_source_frames_owner.gd",
+      "sha256": "e9d68e049bff42349292e74113b56d7d79638f23b14ee936601933d37ec89a29"
+    },
+    {
+      "path": "scripts/gameplay/world/world_source_rule_ports.gd",
+      "sha256": "5ed6362cef4e6806755306c2dc9b590d1babc9c7d510677d62fc6964b481b2db"
+    },
+    {
+      "path": "scripts/gameplay/world/world_summon_queue_model.gd",
+      "sha256": "78fa6da37f4e9f0571daea648890bdbf885e1dd3f6daa72b284c58af28225558"
+    },
+    {
+      "path": "scripts/gameplay/world/world_summon_queue_ports.gd",
+      "sha256": "b686e568dac2fc5c9db9802cbc316853cc934d20ccc39f725ab647076e737f49"
+    },
+    {
+      "path": "scripts/gameplay/world/world_temporal_scope.gd",
+      "sha256": "983f00f77688f6b4759b9dee91db9970cbf2e21b71c513244cf83e39e44182e7"
+    },
+    {
+      "path": "scripts/gameplay/world/world_ui_command_owner.gd",
+      "sha256": "7f07da99db40bdf30c934b32e45a834d4295ee57e82c154f3586fbae1f073053"
+    },
+    {
+      "path": "scripts/gameplay/world/world_visual_viewport_port.gd",
+      "sha256": "8e9ee1fad2cf899404932f3ced9aa1e53833ff5a7654245219f78fed77b6b3eb"
+    },
+    {
+      "path": "scripts/monster_source_frames.gd",
+      "sha256": "ed5f3d19e532e34874ce6703faff92265512db3e81f2b30e49c7f65cffedefac"
+    },
+    {
+      "path": "scripts/gameplay/world/world_audio_source_contract.gd",
+      "sha256": "81fd62f766c296cdc5a210242c6a94e3ad7b9b21b3d8839c29afe7100be20cbe"
+    },
+    {
+      "path": "scripts/gameplay/source/main_original_map_loading_owner.gd",
+      "sha256": "5a5e11b56e3c8e26d2ed3e474cedc4f10b05cec159f8a4c4729b299f15e45e36"
+    },
+    {
+      "path": "tests/framework/main_audio_delivery_20261016.gd",
+      "sha256": "24881cd91dfb0571f17b14fcd72a270fe5d82abae8e8db7d97940b6852b82ef9"
+    },
+    {
+      "path": "tests/framework/helpers/main_audio_delivery_source_20261016.gd",
+      "sha256": "b9874d8b12df66643f30181b082ce0dfb2773e08c0a9602177a61ef249021842"
+    },
+    {
+      "path": "tests/framework/map_owner_physical_lifecycle_20261016.gd",
+      "sha256": "fc0e0fdaf2548f4fdde6278d1a360a64833b29da31c5a7b7cf0280a2b8155aa5"
+    },
+    {
+      "path": "tests/framework/feature_actual_lease_publication_20261016.gd",
+      "sha256": "07054fa77661a375d55812a99fa3a12d16f01225e57bd24c0a348bd4b8ca24ba"
+    },
+    {
+      "path": "scripts/gameplay/enemy/enemy_owner_resource_primitives.gd",
+      "sha256": "f9708ce902aa6ef783e82efaab082cc40c0b298461b101336948fc6b3424a553"
+    },
+    {
+      "path": "scripts/gameplay/enemy/enemy_owner_streaming_coordinator.gd",
+      "sha256": "9606e86241a7770715204816bf54e3e7dec9f3fdd73c4edff162ca30fd25d346"
+    },
+    {
+      "path": "tests/framework/renderer_retirement_physical_20261016.gd",
+      "sha256": "e1d434679e3e8fa74154f9cc065fd86455abcf85f0ff9dcb0578f465e386599b"
+    },
+    {
+      "path": "tests/framework/helpers/renderer_retirement_source_20261016.gd",
+      "sha256": "5be037031e9b7caec0e75544b0d14478c1b5285e02972a1e38486f37c109a8e2"
+    },
+    {
+      "path": "scripts/gameplay/foundation/actor_registry.gd",
+      "sha256": "86ce6143d0fb62a7883c5ed47e8c4ee8dc286486d70b8e6e9ce8f1cfc3504879"
+    },
+    {
+      "path": "scripts/gameplay/foundation/service_registry.gd",
+      "sha256": "8e4e120774e629f6397941b3e26f967e93f7497bbd0e0e4cc94e785d8d69c79f"
+    },
+    {
+      "path": "scripts/gameplay/foundation/service_handle.gd",
+      "sha256": "660127dbc97e2abba988642f98f496bc90b79af66e3d178be9f815cf58cdc8e4"
+    },
+    {
+      "path": "scripts/features/runtime/feature_resource_live_rpc.gd",
+      "sha256": "360f87c2a5ca1b51f23bb13c09c74c5e5690b9c2b2af4b4b35a239203a3f954a"
+    },
+    {
+      "path": "scripts/gameplay/source/source_feature_command_transport.gd",
+      "sha256": "5380d2bce14d61cc9681ab2426afa9c3032d92ba04af781f90a52db88a88fdc8"
+    },
+    {
+      "path": "scripts/gameplay/source/feature_original_command_catalog.gd",
+      "sha256": "a78418b1a2718926597e827771a3efdb3165e4e78c894fb1dd383132ff11c138"
+    },
+    {
+      "path": "scripts/features/runtime/feature_resource_main_facade.gd",
+      "sha256": "0a07e60fcba10a479c36ff056119758f2a9be5cb6c0a9c96c332c19090927c63"
+    },
+    {
+      "path": "scripts/features/contracts/feature_resource_lease.gd",
+      "sha256": "9fefe64f82a43271e50dc7cfb007e50bf913acdf67577a400a8bd87070c990f8"
+    },
+    {
+      "path": "tests/framework/main_feature_command_loans_20261016.gd",
+      "sha256": "d30148f6d4e301bc0f1005332177d3e57458b3e532059f532f934e51ed43dc82"
+    },
+    {
+      "path": "tests/framework/feature_live_jobs_actual_20261016.gd",
+      "sha256": "4e7d93b9a2bcbb93bd1fdb8bc2180e32298ab55e14ce80be29d43bba8ea66b5f"
+    },
+    {
+      "path": "tests/framework/helpers/feature_live_jobs_source_20261016.gd",
+      "sha256": "2d24f4654d256040c437f84e5f442f7d8b6258a7a2bdf1c9692231e89d55c19a"
+    },
+    {
+      "path": "scripts/gameplay/source/main_startup_application_producer.gd",
+      "sha256": "dc2834464d6f9198cc0967da945abd33dfa9e425518f7488c06fe5cd7ec2af58"
+    },
+    {
+      "path": "tests/framework/main_startup_application_producer_20261016.gd",
+      "sha256": "11f0daf24249c73d4729ec313d1d4857231aac52eb7f03992299ac91d560c87e"
+    },
+    {
+      "path": "scripts/gameplay/profile/profile_publication.gd",
+      "sha256": "6a6f1f3241d9c7dbee1f44fc6a143242fa63227efcf8efe7f280e72daf3096c9"
+    },
+    {
+      "path": "scripts/character_select.gd",
+      "sha256": "3fe860c17362595677a93b90e9a0b2a8a992d473e018c8d49cc78332e9d8e5b9"
+    },
+    {
+      "path": "tests/framework/character_source_launch_entry_20261016.gd",
+      "sha256": "e06e01fd350769c785e0bd4018a3dfe9e06960f6ece6e7bcb9822e0489e5a4e1"
+    },
+    {
+      "path": "tests/framework/character_source_full_world_20261016.gd",
+      "sha256": "38d5060edf557fbe7e1696860438142c4db8f1265ac03a67715b7d083cdc52ca"
+    },
+    {
+      "path": "scripts/gameplay/source/main_boot_trace.gd",
+      "sha256": "99dda6ca86ad67bffe065602ef829f3ffa6959d17c139efcd1952cd0682683fe"
+    },
+    {
+      "path": "tests/framework/environment_graph_identity_memo_20261017.gd",
+      "sha256": "da124928257fe4d368f3f3e49ff1cb6f15943cabb9b3933a57a92e72c5015c66"
+    },
+    {
+      "path": "tests/framework/helpers/world_environment_value_graph_original_20261017.gd",
+      "sha256": "5ef9099f766ab9c9434fa86fb5ae3ba4f422fa16d7769430f3e68f7db9716d98"
+    },
+    {
+      "path": "tests/framework/profile_canonical_preparation_memo_20261017.gd",
+      "sha256": "c6e35bb26fd6d89977f68468b36f0677ee06c5b0d49ff071717b445a60745eed"
+    },
+    {
+      "path": "tests/framework/helpers/profile_publication_original_20261017.gd",
+      "sha256": "573541bf100546ee12de43948fcd75bb3d33305ddbc0267c78a42f68fe8151ae"
+    },
+    {
+      "path": "tests/framework/boot_validation_without_copy_20261017.gd",
+      "sha256": "3a1673d0aa340ba6f2e8fd13de408f375acf42cb8832efe0be481f6106f4029b"
+    },
+    {
+      "path": "tests/framework/character_launch_cover_camera_20261017.gd",
+      "sha256": "6aeeabfcc5128d444da9ca1a038f22f426b46ef6f3c86b273ef2b9c24a41a220"
+    },
+    {
+      "path": "tests/framework/main_static_catalog_startup_20261017.gd",
+      "sha256": "78f352ccf8e38d1d74a3d5dd0e63cd707689d6d072e4dfd3d01ef7bc0684619a"
+    },
+    {
+      "path": "scripts/features/contracts/loading_preparation_scope.gd",
+      "sha256": "2eccb0c37013c4e1f729172f0816487aadd127ed8682c2371e255f2824fb98c6"
+    },
+    {
+      "path": "scripts/gameplay/source/source_path_object_codec.gd",
+      "sha256": "cc6c38efb1ace4e571b89f2710d5e5efda2cc375bafccade11a3197fef67bc75"
+    },
+    {
+      "path": "tests/framework/path_object_handoff_20261017.gd",
+      "sha256": "f07b920a49d9130dd14e3f311532e7d74afeeccff97584c116ff0f9fdaacf9ab"
+    },
+    {
+      "path": "scripts/gameplay/enemy/enemy_owner_visual.gd",
+      "sha256": "70c19f6389409eeec75dec0a03fea2b97c85913e77b9cf5accb76ca5e9390f58"
+    },
+    {
+      "path": "scripts/gameplay/actors/player_actor_model.gd",
+      "sha256": "e3237e2eadde199f4ae1fe1fcaf63c75c2bd6bc84d2e987852e2d3ebae22dc6f"
+    },
+    {
+      "path": "tests/framework/service_birth_capture_20261016.gd",
+      "sha256": "2dd256ee77048821ca954d6a5280e0f283df28f0414b53a34b7a04452e529ddc"
+    },
+    {
+      "path": "scripts/game_data.gd",
+      "sha256": "f60978951677a1b27bf159b0daea9bc2a0d5903a5b09ebd54fd1e0e91e852322"
+    },
+    {
+      "path": "scripts/gameplay/content/content_query_core.gd",
+      "sha256": "2018f8d7eb83a1a3668b323245afd54566b20f0f5dc075be4f7abb6c903153e6"
+    },
+    {
+      "path": "tests/framework/multicore_content_query_20261014.gd",
+      "sha256": "f5f0380b13b48a7f3a99b751ef8639d867c6733761a73fbf81e09c73d9a8a9c5"
+    },
+    {
+      "path": "tests/framework/v115_main_exit_guards_20261017.gd",
+      "sha256": "34efb9aae014c112bcda843150322070bd4258fc66f2204b2e4af8f894bcc86f"
+    },
+    {
+      "path": "tests/framework/multicore_world_environment_owner_20261014.gd",
+      "sha256": "dd3d12e2b3f0ddf17fa89d70b551e292105d12bc844c760c44afeb2973fc927d"
+    },
+    {
+      "path": "tests/framework/helpers/premap_environment_source_20261015.gd",
+      "sha256": "49c39fd22143583e36aeea0a816323132334ee7993a089480e98bfeb2f0880d8"
+    },
+    {
+      "path": "tests/framework/actor_visual_projection_contract_20261015.gd",
+      "sha256": "c545be742da2def7d5feb557a9feaa9905f5471de475f43a5bc43387469845c4"
+    },
+    {
+      "path": "scripts/gameplay/profile/profile_terminal_return.gd",
+      "sha256": "5c7501c6d21c3ec8a02fd162b75bdde41e3fdee08970a4f330ba7977256fa229"
+    },
+    {
+      "path": "scripts/gameplay/presentation/main_loot_display.gd",
+      "sha256": "8c7e43d3c9166b3c8e0f89949eb0fe10cf5db2807208a1b55aa32a14dd13f8dc"
+    },
+    {
+      "path": "scripts/gameplay/presentation/main_loot_visual_registry.gd",
+      "sha256": "0e2e58a41b1e832de3fca3d6c25d4da7cc36e959066a0ff5064fe9e325a4da6b"
+    },
+    {
+      "path": "tests/framework/v115_terminal_rng_guards_20261017.gd",
+      "sha256": "e5d445a3e644adeef10968e5eb40203944597046b01f3096dbfc031cb028c3a8"
+    },
+    {
+      "path": "tests/framework/helpers/numeric_point_source_core_20261017.gd",
+      "sha256": "f8f6e1e2a4e83e7689809b89a5d94fffd2a21a65ea3c979c8ba08c05a7a4885d"
+    },
+    {
+      "path": "tests/framework/numeric_point_native_fixture_20261017.gd",
+      "sha256": "82477469920cb3cdfcb43c65bc3dacda9bcd4372bf88c6f8e7c4a561c6861d24"
+    },
+    {
+      "path": "tests/framework/journal_overlap_native_20261017.gd",
+      "sha256": "1b473db484fc8c69e2f0fc180efaa20c6e1158f528471c4b7fc87b28d474dcdc"
+    },
+    {
+      "path": "tests/framework/helpers/journal_overlap_source_20261017.gd",
+      "sha256": "522c27ab80f3d4688739c69ffab5f707824852b4c4de6ade129836fa56429f94"
+    },
+    {
+      "path": "scripts/gameplay/actors/enemy_actor_model.gd",
+      "sha256": "f8f98670ccc7673e5cf8c967acfdaede2bb468915b71b315e94167ff98187407"
+    },
+    {
+      "path": "scripts/gameplay/presentation/main_enemy_effect_registry.gd",
+      "sha256": "d62f15b37bad22d2582a9e3ba38a6afeabb5a8b7911d14957779a3fc3101437f"
+    },
+    {
+      "path": "scripts/gameplay/presentation/main_enemy_projectile_preview.gd",
+      "sha256": "e3ee1086fee3a1b2706be666a1f8bf6eb03bbf5fa6b50329673cad19e57ccc88"
+    },
+    {
+      "path": "scripts/gameplay/presentation/main_enemy_target_magic_preview.gd",
+      "sha256": "1ab3479bbb22cdd8a2d7013658a9cc59ca4bae89c0ad3c7490dd5b1fbc4e0573"
+    },
+    {
+      "path": "scripts/gameplay/presentation/main_original_pick_input.gd",
+      "sha256": "bd1faf60bf191cfacfa2db5ec26b1d3e3e711c8df611929fdd1a97abb4764d95"
+    },
+    {
+      "path": "scripts/gameplay/presentation/original_melee_presentation_context.gd",
+      "sha256": "6beb94f4d0f731f47576ee1985e1c81cca5baee74318064783d9c0f478bc4edf"
+    },
+    {
+      "path": "scripts/gameplay/world/world_enemy_projectile_effect_model.gd",
+      "sha256": "424344e3b247531fc4f757da01eec86b76a74c7c162a9ef3d60f2700e8c8a8cf"
+    },
+    {
+      "path": "scripts/gameplay/world/world_enemy_target_magic_model.gd",
+      "sha256": "c416be7b1ee6116b18cca0b6e47a15626714c538ce1f380ccaa086ea5e797e4d"
+    },
+    {
+      "path": "tests/framework/enemy_presentation_20261017.gd",
+      "sha256": "48e19ba62bc5d1a0b509d8216fb0fe4f4ea8c18a47bbcc8ac536a1b2e8b4cc50"
+    },
+    {
+      "path": "tests/framework/helpers/enemy_presentation_source_20261017.gd",
+      "sha256": "5c970d52d56e161edcde75fae5acaf8297a7f50303df62d79904b831363e1cf9"
+    },
+    {
+      "path": "tests/framework/source_save_roundtrip_20261017.gd",
+      "sha256": "676f697f8656bb7800668830a8b89c874365bacb082b9e69ed6b7b5c7937f6e0"
+    }
+  ]
+}

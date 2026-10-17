@@ -1,0 +1,2363 @@
+- link "跳转到内容":
+  - /url: "#_r_a9_"
+- complementary:
+  - navigation "应用导航":
+    - button "首页":
+      - generic: 首页
+    - button "空间":
+      - generic: 空间
+    - button "定时任务":
+      - generic: 定时任务
+    - button "插件":
+      - generic: 插件
+    - button "探索":
+      - generic: 探索
+    - button "站点":
+      - generic: 站点
+    - button "打开个人资料菜单"
+  - navigation "首页":
+    - link "首页":
+      - /url: /
+      - generic: ChatGPT
+    - button "搜索":
+    - button "显示/隐藏侧边栏" [expanded]:
+    - button "新聊天":
+      - generic: 新聊天
+    - button "小可爱":
+      - generic: 小可爱
+    - button "项目" [expanded]:
+      - generic: 项目
+    - button "项目侧边栏选项":
+    - button "添加新项目":
+    - list:
+      - button "游戏制作项目" [expanded]:
+        - generic: 游戏制作项目
+        - button "游戏制作项目 的项目操作":
+        - button "在 游戏制作项目 中开启新聊天":
+      - list "游戏制作项目 中的聊天":
+        - group "修改战斗减伤公式":
+          - link "修改战斗减伤公式":
+            - /url: /g/g-p-6a489c5ed68481919473c4a1128c4a54/c/6acc864e-64dc-83ea-8f7e-6122a51d2697
+            - generic: 修改战斗减伤公式
+          - button "聊天操作":
+          - button "置顶聊天":
+        - group "重构命中敏捷体系":
+          - link "重构命中敏捷体系":
+            - /url: /g/g-p-6a489c5ed68481919473c4a1128c4a54/c/6acc70d9-221c-83ea-bc63-46b919d6b1b6
+            - generic: 重构命中敏捷体系
+          - button "聊天操作":
+          - button "置顶聊天":
+        - group "护身符系统设计":
+          - link "护身符系统设计":
+            - /url: /g/g-p-6a489c5ed68481919473c4a1128c4a54/c/6acc6df5-9b38-83ea-95cc-ddbf06d5b052
+            - generic: 护身符系统设计
+          - button "聊天操作":
+          - button "置顶聊天":
+        - group "继续验收APK":
+          - link "继续验收APK":
+            - /url: /g/g-p-6a489c5ed68481919473c4a1128c4a54/c/6aca28d1-3f6c-83e9-8361-ce3514706f2b
+            - generic: 继续验收APK
+          - button "聊天操作":
+          - button "置顶聊天":
+        - group "开始B07A审查":
+          - link "开始B07A审查":
+            - /url: /g/g-p-6a489c5ed68481919473c4a1128c4a54/c/6ac98ae4-67cc-83ea-8ad0-c1dc7789c5f8
+            - generic: 开始B07A审查
+          - button "聊天操作":
+          - button "置顶聊天":
+        - button "展开显示":
+          - generic: 展开显示
+      - status
+      - button "blues学习":
+        - generic: blues学习
+        - button "blues学习 的项目操作":
+        - button "在 blues学习 中开启新聊天":
+      - button "ai使用学习":
+        - generic: ai使用学习
+        - button "ai使用学习 的项目操作":
+        - button "在 ai使用学习 中开启新聊天":
+      - button "电吉他学习":
+        - generic: 电吉他学习
+        - button "电吉他学习 的项目操作":
+        - button "在 电吉他学习 中开启新聊天":
+      - button "作业":
+        - generic: 作业
+        - button "作业 的项目操作":
+        - button "在 作业 中开启新聊天":
+    - button "最近" [expanded]:
+      - generic: 最近
+    - button "聊天侧边栏选项":
+    - button "筛选聊天和工作":
+    - button "新聊天":
+    - list:
+      - group "研究HardCore v113性能":
+        - link "研究HardCore v113性能":
+          - /url: /c/6acddd90-6e4c-83e9-86f0-a3932a895d6c
+          - generic: 研究HardCore v113性能
+        - button "聊天操作":
+        - button "置顶聊天":
+      - group "修改战斗减伤公式":
+        - link "修改战斗减伤公式":
+          - /url: /g/g-p-6a489c5ed68481919473c4a1128c4a54/c/6acc864e-64dc-83ea-8f7e-6122a51d2697
+          - generic: 修改战斗减伤公式
+        - button "聊天操作":
+        - button "置顶聊天":
+      - group "右佐匹克隆副作用":
+        - link "右佐匹克隆副作用":
+          - /url: /c/6accad49-1fdc-83ea-b622-3982817e6acf
+          - generic: 右佐匹克隆副作用
+        - button "聊天操作":
+        - button "置顶聊天":
+      - group "制作项目工资表":
+        - link "制作项目工资表":
+          - /url: /c/6accb2f8-8dc4-83e9-97b8-e7f7f87d722b
+          - generic: 制作项目工资表
+        - button "聊天操作":
+        - button "置顶聊天":
+      - group "重构命中敏捷体系":
+        - link "重构命中敏捷体系":
+          - /url: /g/g-p-6a489c5ed68481919473c4a1128c4a54/c/6acc70d9-221c-83ea-bc63-46b919d6b1b6
+          - generic: 重构命中敏捷体系
+        - button "聊天操作":
+        - button "置顶聊天":
+      - group "护身符系统设计":
+        - link "护身符系统设计":
+          - /url: /g/g-p-6a489c5ed68481919473c4a1128c4a54/c/6acc6df5-9b38-83ea-95cc-ddbf06d5b052
+          - generic: 护身符系统设计
+        - button "聊天操作":
+        - button "置顶聊天":
+      - group "继续验收APK":
+        - link "继续验收APK":
+          - /url: /g/g-p-6a489c5ed68481919473c4a1128c4a54/c/6aca28d1-3f6c-83e9-8361-ce3514706f2b
+          - generic: 继续验收APK
+        - button "聊天操作":
+        - button "置顶聊天":
+      - group "数据泄露风险分析":
+        - link "数据泄露风险分析":
+          - /url: /c/6acafe03-c160-83e9-9863-231c7947268b
+          - generic: 数据泄露风险分析
+        - button "聊天操作":
+        - button "置顶聊天":
+      - group "研究AOE性能方案":
+        - link "研究AOE性能方案":
+          - /url: /c/6acaf015-fab4-83ea-ba61-ce2a0009cf7a
+          - generic: 研究AOE性能方案
+        - button "聊天操作":
+        - button "置顶聊天":
+      - group "重新设计旅游海报":
+        - link "重新设计旅游海报":
+          - /url: /c/6aca52d6-7750-83ea-b4e6-5c393ca51fbd
+          - generic: 重新设计旅游海报
+        - button "聊天操作":
+        - button "置顶聊天":
+      - group "核对 HardCore 施工交接":
+        - generic: 未读
+        - link "核对 HardCore 施工交接":
+          - /url: /local/01a12529-0aab-76cf-bcb6-9d4c24aa9029
+          - generic: 核对 HardCore 施工交接
+        - button "聊天操作":
+      - group "连接 HardCore 工作线程":
+        - link "连接 HardCore 工作线程":
+          - /url: /local/01a12428-5ebd-7695-8d73-eed6d298a03d
+          - generic: 连接 HardCore 工作线程
+        - button "聊天操作":
+      - group "开始B07A审查":
+        - link "开始B07A审查":
+          - /url: /g/g-p-6a489c5ed68481919473c4a1128c4a54/c/6ac98ae4-67cc-83ea-8ad0-c1dc7789c5f8
+          - generic: 开始B07A审查
+        - button "聊天操作":
+        - button "置顶聊天":
+      - group "项目助手工作线程":
+        - link "项目助手工作线程":
+          - /url: /g/g-p-6a489c5ed68481919473c4a1128c4a54/c/6ac7b7b6-ae40-83e8-aca5-b501acacc462
+          - generic: 项目助手工作线程
+        - button "聊天操作":
+        - button "置顶聊天":
+      - group "游戏稳定性设计":
+        - link "游戏稳定性设计":
+          - /url: /g/g-p-6a489c5ed68481919473c4a1128c4a54/c/6abbcea3-5fb4-83ea-8732-0cf95e1c4583
+          - generic: 游戏稳定性设计
+        - button "聊天操作":
+        - button "置顶聊天":
+  - separator
+- main:
+  - button "分享":
+    - text: 分享
+  - button "切换摘要面板固定状态":
+  - button "更多":
+  - region "对话":
+    - status:
+      - generic: 正在加载更早的消息…
+    - heading "你说：" [level=4]
+    - generic: 这是第二轮，也是本轮架构讨论的收束。第一轮已实际读到：你选择《深岩银河：幸存者》Android，引用2026-09-18 Piktiv访谈和Mindustry v160.3，并建议原生连续数组的群怪任务流水线、原顺序提交、依赖局部修复。页面正文目前止于4.4“新进入者/范围变更”段，尚未见独立模拟线程路线、成本模型和完整最终方案；若这些内容确实未输出，请在本轮补齐。 用户刚连续明确了真正的架构目标，必须纳入最终设计： - 主线程负责接输入、按时钟安排什么时候要什么结果、读取并呈现完成的状态；不是继续把战斗计算和全部结算挤在画面线程里。 - 计算按模块/数据任务交其他线程，形成正确的主线程、模拟所有者和工作线程协作。结果什么时候生效由统一调度决定，worker不能各自决定。 - 每个工作线程不要过载，要在设计截止时点交付；任务应按工作量拆块、均衡，不能机械十怪一线程或一模块永占一核。 - 300ms只是过去为了减少计算量设置的参数，没有架构意义，不再纠结它或把它当线程方案前提。 - 不再跑重复小核/泛化对比实验，也不再要求手机复现；现在需要完整可施工架构。不能仅以“再测量再考虑”为最终答案。 请把设计扩大到【画面主线程 + 唯一权威模拟调度线程 + 真实批量工作线程池】，认真裁决是否适合作为目标；如你推荐更好的等价结构，请具体替代，而不是退回几个小函数worker。先沿现有算法，不更换流场/空间索引，不减少怪物、不改移动速度、攻击节拍、碰撞规则、立即攻击与唯一HP/技能/存档权威。 我们需要的具体交付： 1. 一个推荐线程图和职责表。画面/输入、统一调度、模拟权威、路径/候选/动态几何、状态/命中数值、表现准备分别归谁。模拟线程可拥有原HP/移动权威，画面节点成为表现代理；不能建立两份同时推进的HP/位置。不要简单说活动Node不能在worker用就结束，应说明哪些现有Node行为需抽成纯数据，哪些可保留正式PhysicsServer能力，Godot场景线程组及服务器线程安全与一般worker区别。 2. 统一时钟与截止方案：逻辑tick、显示帧、release time、input sampled time、deadline、effective tick、presentation time的职责。主线程决定何时需要结果应怎样实现才不被渲染掉帧反向拖慢模拟？各worker不自己扣时间或拖改生效时点。分清决策计划频率、连续移动、事件触发和显示频率，现300ms仅参数。不允许画面靠旧状态顺滑但战斗/输入持续落后。 3. 负载与过载设计：有界任务、计算量分块、ready依赖、优先级/最早截止、worker领取/负载均衡、不可抢占任务大小、最迟启动和安全余量。手机大小核非等速、4或8逻辑线程不等于4或8等速核。主控想得出一个明确的可持续方案而非“不能保证”；请给必要期限不等式和真正能控制的约束。不创造无穷队列、业务降频或无限同步回退到画面主线程。截止失败如何处理及何时判定方案不满足目标，明确不要用插值掩盖。 4. 保持结果规则：我们原执行顺序是前一个actor移动后，后一个actor读取更新位置；同bucket位置更新不提高membership revision。并行计划 + 原序提交/局部修复怎样避免对所有候选重算？计划需带什么读集合、哪些变更会影响原短路/方向首选、新进入者如何捕捉？若严守逐顺序结果使可并行规模受限，坦诚列出需要用户选择的真正产品语义，不偷改、不因此把整个架构否决。 5. 从当前Godot逐Actor脚本到目标架构的迁移顺序，给最小模块和接口清单，阶段1必须有实际重工作搬出（不是只建立空框架）；列哪些模块可原生C++/GDExtension，哪些在GD保留，Android ABI/build要点。不要要求为了线程换引擎或整套ECS。严格区分你的设计和DRG已公开实现，实际worker数、固定逻辑Hz、完整源码未知继续注明。 6. 收束结论：目标可行吗，推荐怎样实施，能承诺到什么层次？使用变量/示例解释主线程与4/8worker截止路径（示例不是REA实测），说明为什么时钟+分工成立但不能先声称一定60fps。 当前精确源码事实（主控本轮只读核对）：enemy.gd SHA256 d8f73dc3c9dcc17f81a4031d19154544ce3f89b5a3e945c51f9caa10b01653f3；project.godot当前owner_decision_interval_ms=300，普通怪该门只控rich observation/retarget/planning，逐physics移动碰撞/攻击未由此门控。之前旧包哈希不同，不能说本轮完整审过114。当前是架构讨论，不施工，无新增native。 请只围绕这六项集中回答，优先完成时钟和线程完整配合的科学设计，避免扩大再次搜索和重做第一轮。请给可直接保存的中文设计正文。 用户最新强调：优先找并沿用一个真正相似游戏的成熟方案，减少自行发明。请把‘可以从已核查游戏直接借鉴的成熟模式/已有引擎机制’和‘为了HardCore必须新增的专用部分’列成对照；DRG没有公开具体线程/时钟的部分不能编成现成方案。若有更贴近且可核对完整实现的Survival安卓项目，集中提供一个，不扩大搜集一堆demo，不用PC自报几万怪冒充Android证明。最终方向应明确采用成熟实现模式，避免自制通用调度器/任务图过度设计。
+    - generic: …
+    - button "显示更多":
+      - generic: 显示更多
+    - button "复制消息":
+    - button "共享提示":
+    - button "编辑消息":
+    - button "思考了 15m 46s"
+    - generic: 思考了 15m 46s
+    - button "分析已暂停"
+    - generic: 分析已暂停
+    - heading "ChatGPT 说：" [level=4]
+    - heading "HardCore 多核架构：第二轮最终设计" [level=1]
+    - paragraph:
+      - strong: 最终建议：采用“画面主线程＋唯一权威模拟线程＋真实批量工作线程池”作为目标架构。
+    - paragraph: 需要纠正第一轮方案的一个限制：**原顺序提交必须保留，但没有理由要求它继续留在画面线程。**真实移动、立即攻击、HP、技能时序、死亡及同步玩法回调，应迁给唯一模拟所有者；画面线程负责输入交接、UI、读取已提交状态和呈现，不能继续成为战斗结算的汇聚点。
+    - paragraph: 这次选择的是完整的运行时分工，不是几个小函数的 worker 化。
+    - paragraph:
+      - text: 本轮以你提供的当前事实为设计依据：114 交付提交 10daa4d…、维护场地 45170d0…、当前 enemy.gd 指纹 d8f73dc3…。
+      - strong: 没有读取这些完整源码字节，不声称已审过 114 全文；没有新增 native、修改代码或运行设备测试。
+    - separator
+    - heading "一、推荐线程图、职责与成熟方案来源" [level=2]
+    - heading "1.1 目标线程图" [level=3]
+    - generic: 纯文本
+    - button "启用自动换行":
+    - button "复制代码":
+    - code: Android / Godot 输入入口 │ 带时间戳、顺序号及输入路由身份的命令 ▼ 画面主线程 M ── 时钟/呈现需求合同 ──► 唯一模拟所有者 S │ │ │ UI、场景/资源生命周期 │ 唯一世界状态 │ 读取已提交表现包 │ 统一时钟、原执行顺序 │ 提交画面 │ 移动、立即攻击、HP、技能 │ │ 死亡、同步玩法回调 │ │ │ ├─ 准备数值输入 │ ├─ 派发固定阶段批次 │ ▼ │ Godot WorkerThreadPool │ W0 W1 W2 … Wp-1 │ 纯计算、独占输出 │ │ │ ▼ │ S：原序消费／局部修复 │ │ └──────────── 已提交状态与有序表现事件 ◄──┘ Godot 渲染/物理服务、Android driver、GPU： 继续承担引擎和平台服务，不算作项目能任意占用的空闲 worker。
+    - paragraph:
+      - text: "**S 使用一个独立、长期运行的线程，不放进工作池长期占槽；工作池只执行有限的计算块。**Godot 分别提供独立 Thread 和批量 WorkerThreadPool，不需要先自制线程库。"
+      - 'link "Godot Engine documentation: https://docs.godotengine.org/en/stable/classes/class_thread.html, https://docs.godotengine.org/en/stable/classes/class_thread.html, 另外 1 个来源"':
+        - /url: https://docs.godotengine.org/en/stable/classes/class_thread.html
+        - generic: Godot Engine documentation
+        - generic: "+1"
+    - table:
+      - rowgroup:
+        - row "工作 最终归属 不能越过的边界":
+          - columnheader "工作"
+          - columnheader "最终归属"
+          - columnheader "不能越过的边界"
+      - rowgroup:
+        - row "输入路由、UI、场景和渲染资源生命周期 画面主线程 M；必要时增加平台输入邮箱桥 不在 worker 中操纵活动 UI":
+          - cell "输入路由、UI、场景和渲染资源生命周期"
+          - cell "画面主线程 M；必要时增加平台输入邮箱桥"
+          - cell "不在 worker 中操纵活动 UI"
+        - row "逻辑时间推进、任务释放、截止及生效位置 模拟所有者 S worker 不自行扣时间或决定生效 tick":
+          - cell "逻辑时间推进、任务释放、截止及生效位置"
+          - cell "模拟所有者 S"
+          - cell "worker 不自行扣时间或决定生效 tick"
+        - row "位置、原空间索引、目标、HP、技能、现有状态 S 唯一写入 画面节点不能再独立推进一份":
+          - cell "位置、原空间索引、目标、HP、技能、现有状态"
+          - cell "S 唯一写入"
+          - cell "画面节点不能再独立推进一份"
+        - row "路径、候选、动态几何、静态地图查询 worker 批算，S 决定消费和选择 保留原算法、索引语义、精度和候选顺序":
+          - cell "路径、候选、动态几何、静态地图查询"
+          - cell "worker 批算，S 决定消费和选择"
+          - cell "保留原算法、索引语义、精度和候选顺序"
+        - row "命中、伤害数值 独立数值可由 worker 算；live 条件和正式提交在 S 不按完成顺序扣血，不提前消耗共享 RNG":
+          - cell "命中、伤害数值"
+          - cell "独立数值可由 worker 算；live 条件和正式提交在 S"
+          - cell "不按完成顺序扣血，不提前消耗共享 RNG"
+        - row "动画帧、方向、UV、排序键、绘制参数 可批量准备；M/引擎提交 动画完成不能成为新的攻击时点":
+          - cell "动画帧、方向、UV、排序键、绘制参数"
+          - cell "可批量准备；M/引擎提交"
+          - cell "动画完成不能成为新的攻击时点"
+        - row "存档 S 产生一致状态；原存储服务序列化、落盘并确认 异步 I/O 不等于可以提前宣布保存成功":
+          - cell "存档"
+          - cell "S 产生一致状态；原存储服务序列化、落盘并确认"
+          - cell "异步 I/O 不等于可以提前宣布保存成功"
+    - button "复制表格":
+    - button "展开表格":
+    - heading "1.2 哪些是成熟模式，哪些必须为 HardCore 新增" [level=3]
+    - paragraph:
+      - text: 本轮重新核对了 Piktiv 访谈。DRG 移动版明确采用连续原生容器、批量运动任务链和批量画面处理，不要求整个游戏改成 ECS；但它没有公布完整的模拟时钟、HP 所有权、实际 worker 数及全部提交顺序。
+      - 'link "Unity: https://unity.com/blog/optimizing-deep-rock-galactic-survivor-for-mobile, https://unity.com/blog/optimizing-deep-rock-galactic-survivor-for-mobile"':
+        - /url: https://unity.com/blog/optimizing-deep-rock-galactic-survivor-for-mobile
+        - generic: Unity
+    - table:
+      - rowgroup:
+        - row "来源 直接借鉴 不能冒充已经公开或现成":
+          - columnheader "来源"
+          - columnheader "直接借鉴"
+          - columnheader "不能冒充已经公开或现成"
+      - rowgroup:
+        - 'row "DRG: Survivor 移动版 连续原生数据贯穿运动任务链；批量表现；不做全量 ECS 重写 本方案的独立 S、精确时钟、原序修复不是 DRG 已公开源码"':
+          - 'cell "DRG: Survivor 移动版"':
+            - strong: "DRG: Survivor 移动版"
+          - cell "连续原生数据贯穿运动任务链；批量表现；不做全量 ECS 重写"
+          - cell "本方案的独立 S、精确时钟、原序修复不是 DRG 已公开源码"
+        - row "Godot Thread / WorkerThreadPool 专用线程、批量任务、完成与回收 不提供本游戏的原序语义，也不是硬实时 EDF 调度器":
+          - cell "Godot Thread / WorkerThreadPool":
+            - strong: Godot Thread / WorkerThreadPool
+          - cell "专用线程、批量任务、完成与回收"
+          - cell "不提供本游戏的原序语义，也不是硬实时 EDF 调度器"
+        - row "Godot 场景线程组、Servers 有管理的线程组和低层服务器入口 不等于任意线程能随时查询或推进活动世界":
+          - cell "Godot 场景线程组、Servers":
+            - strong: Godot 场景线程组、Servers
+          - cell "有管理的线程组和低层服务器入口"
+          - cell "不等于任意线程能随时查询或推进活动世界"
+        - row "HardCore 专用适配 原执行相位、读集合、范围变更、原序修复、权威迁移、输入和存档交接 这些需要实现，不能宣传成直接复制 DRG 即可":
+          - cell "HardCore 专用适配":
+            - strong: HardCore 专用适配
+          - cell "原执行相位、读集合、范围变更、原序修复、权威迁移、输入和存档交接"
+          - cell "这些需要实现，不能宣传成直接复制 DRG 即可"
+    - button "复制表格":
+    - button "展开表格":
+    - paragraph: "**选择成熟的执行模式，不复制对方已经改过的游戏算法。**本轮不换流场、不换空间索引、不改碰撞器。"
+    - paragraph: 本轮没有取得一个更贴近、且已经核对完整 Android 战斗源码的替代。因此继续以 DRG 为主参照，不用 demo 或 PC 自报实体数量替换证据，也不重新扩搜一堆游戏。
+    - heading "1.3 Node 行为怎样真正迁移" [level=3]
+    - paragraph:
+      - text: 需要抽出的不是几个位置字段，而是
+      - strong: 产生和消费这些字段的行为
+      - text: ：
+    - list:
+      - listitem: 战斗位置、目标、速度、身体半径、冷却、HP、技能进度及现有状态，转为 S 独占的数据。
+      - listitem: 攻击、伤害、吸血、死亡、掉落事实等会影响本次战斗的同步回调，也迁入 S。
+      - listitem: Sprite、血条、音画、UI 等保留为表现代理。显示节点的 transform 不再被战斗逻辑读回，充当“真实位置”。
+      - listitem: 同一会话切换所有者时，旧节点的移动、计时和伤害写入口停止。不能让新旧双方同时运行，再覆盖字段“同步”。
+    - paragraph:
+      - text: 只读表现副本、worker 输入和存档快照不是第二权威；
+      - strong: 能否独立接受写入和推进状态，才是区别。
+    - heading "1.4 Godot 场景线程组、服务器与普通 worker 的区别" [level=3]
+    - paragraph:
+      - text: process_thread_group=SUB_THREAD 可以让一组节点在子线程处理，并用 group order 安排前后关系；但它仍属于引擎 _process/_physics_process 调度，
+      - strong: 不等于独立于画面主循环的时钟
+      - text: 。跨组访问也有限制。因此它适合作为过渡工具，不作为最终 S 的实现。
+      - 'link "Godot Engine documentation: https://docs.godotengine.org/en/stable/classes/class_node.html, https://docs.godotengine.org/en/stable/classes/class_node.html"':
+        - /url: https://docs.godotengine.org/en/stable/classes/class_node.html
+        - generic: Godot Engine documentation
+    - paragraph:
+      - text: 服务器线程能力也不能泛化：活动 SceneTree 不是普通 worker 的共享工作区；服务器需要相应配置，直接 GPU 操作还可能造成同步等待。
+      - 'link "Godot Engine documentation: https://docs.godotengine.org/en/stable/tutorials/performance/thread_safe_apis.html, https://docs.godotengine.org/en/stable/tutorials/performance/thread_safe_apis.html"':
+        - /url: https://docs.godotengine.org/en/stable/tutorials/performance/thread_safe_apis.html
+        - generic: Godot Engine documentation
+    - paragraph:
+      - strong: 正式 PhysicsServer 能力可以保留，但必须分两类：
+    - paragraph: "**当前自定义群怪运动／几何。**原样抽成数值模块，继续用原规则计算，不因为线程而改用另一套物理。"
+    - paragraph:
+      - text: "**真正依赖活动 PhysicsSpace 的操作。**通过带 tick 身份的 PhysicsPort，在引擎合法同步阶段执行和取结果。Godot 对直接空间查询有明确的物理同步限制，不能让普通 worker 任意调用。"
+      - 'link "Godot Engine documentation: https://docs.godotengine.org/en/stable/tutorials/physics/ray-casting.html, https://docs.godotengine.org/en/stable/tutorials/physics/ray-casting.html"':
+        - /url: https://docs.godotengine.org/en/stable/tutorials/physics/ray-casting.html
+        - generic: Godot Engine documentation
+    - paragraph: 这里存在一个必须说透的工程边界：
+    - blockquote:
+      - paragraph: 如果某个即时移动或攻击必须等“由画面主循环启动的物理 step”，那么保留这条依赖，就仍然存在主循环耦合。
+    - paragraph:
+      - text: 普通 GDExtension 加一个“separate thread”设置，不能被假定能独立驱动默认物理世界。目标版本必须消除这项关键路径依赖，或另做
+      - strong: 保持原求解器、唯一 step 所有者
+      - text: 的引擎驱动适配；没有完成，就不能签收“完全独立模拟”。这不是否决目标，而是明确不能伪装完成的适配项。
+    - separator
+    - heading "二、统一时钟：主线程制定需求，模拟线程独立执行" [level=2]
+    - heading "2.1 不能每帧由 M 发放“模拟许可”" [level=3]
+    - paragraph: 推荐 M 设置一次有版本的 ClockPolicy：
+    - generic: 纯文本
+    - button "启用自动换行":
+    - button "复制代码":
+    - code: 单调时钟基准 原逻辑步长、倍率与暂停规则 目标呈现节奏 要求的状态新鲜度 模拟和呈现的截止预算
+    - paragraph: S 按这个合同独立运行，只在暂停、恢复、策略变化等时接收更新。
+    - paragraph:
+      - strong: 不采用：
+    - generic: 纯文本
+    - button "启用自动换行":
+    - button "复制代码":
+    - code: M._process() → 请求S算一步 → 等结果
+    - paragraph: 这会把显示掉帧重新传递给模拟。
+    - paragraph:
+      - text: 也不采用“工作完成后再 sleep 固定时长”。S 应按
+      - strong: 绝对 release 时刻
+      - text: 等待，避免工作时间不断累积成时钟漂移。
+    - heading "2.2 七个时间概念必须分别定义" [level=3]
+    - table:
+      - rowgroup:
+        - row "概念 含义与决定者":
+          - columnheader "概念"
+          - columnheader "含义与决定者"
+      - rowgroup:
+        - row "逻辑 tick S 唯一推进的逻辑步；步长沿当前规则，不默认改成 60 Hz":
+          - cell "逻辑 tick":
+            - strong:
+              - text: 逻辑 tick
+              - math:
+                - generic: k
+              - generic: k
+          - cell "S 唯一推进的逻辑步；步长沿当前规则，不默认改成 60 Hz"
+        - row "显示帧 画面呈现编号，与逻辑 tick 分开":
+          - cell "显示帧":
+            - strong:
+              - text: 显示帧
+              - math:
+                - generic: r
+              - generic: r
+          - cell "画面呈现编号，与逻辑 tick 分开"
+        - row "input sampled time 平台事件到达时间、S 在原采样位置接受时间，分别记录":
+          - cell "input sampled time":
+            - strong: input sampled time
+          - cell "平台事件到达时间、S 在原采样位置接受时间，分别记录"
+        - row "release time 任务输入及前置结果确定后，最早可开始的时间":
+          - cell "release time":
+            - strong:
+              - text: release time
+              - math:
+                - generic: R
+                - generic: j
+              - text: R
+              - generic: j
+          - cell "任务输入及前置结果确定后，最早可开始的时间"
+        - row "deadline 为不耽误原消费者，要求该任务完成的期限":
+          - cell "deadline":
+            - strong:
+              - text: deadline
+              - math:
+                - generic: D
+                - generic: j
+              - text: D
+              - generic: j
+          - cell "为不耽误原消费者，要求该任务完成的期限"
+        - row "effective tick / phase / ordinal 游戏事实应生效的位置，由 S 决定":
+          - cell "effective tick / phase / ordinal":
+            - strong: effective tick / phase / ordinal
+          - cell "游戏事实应生效的位置，由 S 决定"
+        - row "presentation time 状态实际交给显示系统的时间，不反向改写逻辑时间":
+          - cell "presentation time":
+            - strong:
+              - text: presentation time
+              - math:
+                - generic: F
+                - generic: r
+              - text: F
+              - generic: r
+          - cell "状态实际交给显示系统的时间，不反向改写逻辑时间"
+    - button "复制表格":
+    - button "展开表格":
+    - paragraph: "**早算完不提前生效，迟到也不偷偷改到下一 tick。**worker 可以记录执行耗时，但不能自行推进 cooldown、持续时间或世界时钟。"
+    - paragraph: 统一调度也不意味着把旧 simulation 时间、wall-time 到期和暂停补偿悄悄改成同一种语义。旧合同通过时钟适配保留，同时停掉重复推进者。
+    - heading "2.3 规划、连续移动、事件与显示分别调度" [level=3]
+    - paragraph: 依据你本轮给出的当前源码事实：
+    - list:
+      - listitem: rich observation、retarget、planning 按原决策门处理。
+      - listitem: 移动、碰撞、攻击继续沿原每 physics-step 合同。
+      - listitem: 命中、死亡等事件保留原事件位置。
+      - listitem: 显示按呈现帧消费已提交状态。
+    - paragraph: "**300 ms 只是第一项的当前参数，对线程架构没有特殊意义。**不能拿它当作整个敌人只更新一次的周期，也不需要先修改它才能迁移。"
+    - heading "2.4 输入链必须一起处理" [level=3]
+    - paragraph:
+      - text: 一个容易遗漏的问题是：
+      - strong: 模拟独立了，不代表新输入自动独立。
+    - paragraph:
+      - text: Godot 默认输入积累可能把相似输入合并到渲染帧结束时发送。关闭积累可改善反应，但不能保证一个已经被驱动阻塞的主循环仍然及时处理输入。
+      - 'link "Godot Engine documentation: https://docs.godotengine.org/en/stable/classes/class_input.html, https://docs.godotengine.org/en/stable/classes/class_input.html"':
+        - /url: https://docs.godotengine.org/en/stable/classes/class_input.html
+        - generic: Godot Engine documentation
+    - paragraph: 目标输入邮箱应保存：
+    - generic: 纯文本
+    - button "启用自动换行":
+    - button "复制代码":
+    - code: 平台时间戳、到达顺序 按下/抬起及动作值 UI路由身份 必要的视图/相机身份
+    - paragraph: S 在原采样相位消费。不能用模拟中的“未来相机”解释用户点在已显示画面上的位置；也不能把 UI 已消费的触摸再次当作战斗输入。
+    - paragraph: 正常 Godot 输入入口能满足期限，就复用它。**若要求渲染阻塞时输入仍及时送达，需在 Android 已有输入转发链增加小型原生邮箱桥。**它保留原路由规则，不建立第二份输入系统；这属于项目适配，不声称已有一个插件开关能直接完成。
+    - paragraph: 迟交输入不能回写已提交 tick。应记录迟交，进入下一合法采样位置，而不是伪称按原时间处理过。
+    - heading "2.5 呈现截止与新鲜度" [level=3]
+    - paragraph:
+      - text: 设原逻辑步长为
+      - math:
+        - generic: h
+      - generic: h
+      - text: ，本次 tick 在
+      - math:
+        - generic: R
+        - generic: k
+      - text: R
+      - generic: k
+      - text: 释放，目标呈现时刻为
+      - math:
+        - generic: F
+        - generic: r
+      - text: F
+      - generic: r
+      - text: 。可以保守安排：
+    - math:
+      - generic: D
+      - generic: sim
+      - generic: ","
+      - generic: k
+      - generic: ≤
+      - generic: min
+      - generic: ⁡
+      - generic: (
+      - generic: R
+      - generic: k
+      - generic: +
+      - generic: h
+      - generic: ","
+      - generic: F
+      - generic: r
+      - generic: −
+      - generic: C
+      - generic: M,late
+      - generic: −
+      - generic: C
+      - generic: GPU,tail
+      - generic: −
+      - generic: margin
+      - generic: )
+    - text: D
+    - generic: sim
+    - text: ",k"
+    - text: ≤
+    - text: min
+    - text: (
+    - text: R
+    - generic: k
+    - text: + h,
+    - text: F
+    - generic: r
+    - text: −
+    - text: C
+    - generic: M,late
+    - text: −
+    - text: C
+    - generic: GPU,tail
+    - text: −
+    - generic: margin
+    - text: )
+    - paragraph:
+      - text: 其中
+      - math:
+        - generic: C
+        - generic: M,late
+      - text: C
+      - generic: M,late
+      - text: 是必须拿到新状态才能做的画面工作。
+    - paragraph:
+      - text: 每个 worker 的截止还要进一步为
+      - strong: 原序提交、冲突修复和发布
+      - text: 留下时间，不能统一写成“帧末之前完成就行”。
+    - paragraph: 表现桥建议使用带明确所有权的三个缓冲槽，防止生产者覆盖正在读取的数据。**三个槽不意味着故意延迟三帧。**只发布完整已提交状态，不发布半个世界。
+    - paragraph: 每帧要求的最低 tick 必须由呈现合同预先确定，不能把“碰巧完成的最新 tick”重新定义成要求。拿不到符合要求的新状态，就记录新鲜度失败。
+    - paragraph:
+      - text: M 不忙等模拟；偶发迟到可能真实重复旧帧，这是失败记录，不用插值遮盖。Android 显示系统本身也可能在迟交时重复旧帧，而帧节奏控制不能代替模拟服务。
+      - 'link "Android Developers: https://developer.android.com/games/optimize/frame-pacing, https://developer.android.com/games/optimize/frame-pacing"':
+        - /url: https://developer.android.com/games/optimize/frame-pacing
+        - generic: Android Developers
+    - separator
+    - heading "三、真实批量线程池：有界、按工作量拆块、按期限派发" [level=2]
+    - heading "3.1 使用引擎执行器，不自制通用调度器" [level=3]
+    - paragraph:
+      - text: 推荐使用 Godot WorkerThreadPool.add_group_task。每个 element 是一块原生计算，不是一只怪；明确设置参与线程上限，不默认占满所有池线程。每个任务最终都要正式完成回收。
+      - 'link "Godot Engine documentation: https://docs.godotengine.org/en/stable/classes/class_workerthreadpool.html, https://docs.godotengine.org/en/stable/classes/class_workerthreadpool.html"':
+        - /url: https://docs.godotengine.org/en/stable/classes/class_workerthreadpool.html
+        - generic: Godot Engine documentation
+    - paragraph: HardCore 自己只维护固定流水线：
+    - generic: 纯文本
+    - button "启用自动换行":
+    - button "复制代码":
+    - code: 输入与查询准备 → 批量数值计算 → 原序消费／局部修复 → 表现准备／发布
+    - paragraph: 依赖关系是这几类固定阶段和当前执行窗口，不建设能运行任意脚本的通用任务图。
+    - paragraph:
+      - text: S 在本项目 ready 队列中按“
+      - strong: 最早消费者截止 → 关键路径 → 工作量
+      - text: ”选取任务。Godot 公开的 high/low 优先级不是 EDF，不能把它说成硬实时调度；已运行的其他长任务仍会造成干扰。
+      - 'link "Godot Engine documentation: https://docs.godotengine.org/en/stable/classes/class_workerthreadpool.html, https://docs.godotengine.org/en/stable/classes/class_workerthreadpool.html"':
+        - /url: https://docs.godotengine.org/en/stable/classes/class_workerthreadpool.html
+        - generic: Godot Engine documentation
+    - heading "3.2 真正能控制的约束" [level=3]
+    - table:
+      - rowgroup:
+        - row "项目 设计约束":
+          - columnheader "项目"
+          - columnheader "设计约束"
+      - rowgroup:
+        - row "在途范围 默认当前 tick 一个窗口；可增加一个同 tick 前瞻窗口，不积压多个未完成模拟 tick":
+          - cell "在途范围"
+          - cell "默认当前 tick 一个窗口；可增加一个同 tick 前瞻窗口，不积压多个未完成模拟 tick"
+        - row "任务容量 固定槽、预分配缓冲；满时停止投机准备，不截断合法实体和事件":
+          - cell "任务容量"
+          - cell "固定槽、预分配缓冲；满时停止投机准备，不截断合法实体和事件"
+        - row "分块依据 候选—peer 判断数、地图边测试数、原索引遍历工作量等":
+          - cell "分块依据"
+          - cell "候选—peer 判断数、地图边测试数、原索引遍历工作量等"
+        - row "不可抢占块 限定单块工作量；大循环保留原游标和顺序分块，不丢迭代":
+          - cell "不可抢占块"
+          - cell "限定单块工作量；大循环保留原游标和顺序分块，不丢迭代"
+        - row "负载均衡 块数多于 worker，较快线程自然多完成一些块，不绑定模块永占一核":
+          - cell "负载均衡"
+          - cell "块数多于 worker，较快线程自然多完成一些块，不绑定模块永占一核"
+        - row "数据交换 不可变输入、独占输出、短发布同步；不持世界锁做计算":
+          - cell "数据交换"
+          - cell "不可变输入、独占输出、短发布同步；不持世界锁做计算"
+        - row "依赖处理 只派发 ready 块；worker 不互相等待，不嵌套阻塞整个池":
+          - cell "依赖处理"
+          - cell "只派发 ready 块；worker 不互相等待，不嵌套阻塞整个池"
+        - row "回收 已退休 world 的输入也保留到在途读取结束，不直接释放":
+          - cell "回收"
+          - cell "已退休 world 的输入也保留到在途读取结束，不直接释放"
+    - button "复制表格":
+    - button "展开表格":
+    - paragraph: "**“连续数组”不代表 S 和 worker 可以同时读写同一份可变数组。**S 写权威数据，worker 读其持有的不可变版本或独占输入页；结果槽也不能提前复用。"
+    - paragraph:
+      - text: 不能把“平均一个块很快”当作上界。块的工作量上限应按慢核能力、调度干扰及温控余量换算。Android 的核利用率和线程调度是独立因素，逻辑线程数不代表同速算力。
+      - 'link "Android Developers: https://developer.android.com/agi/sys-trace/threads-scheduling, https://developer.android.com/agi/sys-trace/threads-scheduling"':
+        - /url: https://developer.android.com/agi/sys-trace/threads-scheduling
+        - generic: Android Developers
+    - heading "3.3 最迟启动与必要期限条件" [level=3]
+    - paragraph:
+      - text: 任务
+      - math:
+        - generic: j
+      - generic: j
+      - text: 的最迟启动时刻：
+    - math:
+      - generic: L
+      - generic: S
+      - generic: j
+      - generic: =
+      - generic: D
+      - generic: j
+      - generic: −
+      - generic: C
+      - generic: ^
+      - generic: j
+      - generic: −
+      - generic: J
+      - generic: j
+      - generic: −
+      - generic: M
+      - generic: j
+    - text: L
+    - text: S
+    - generic: j
+    - text: =
+    - text: D
+    - generic: j
+    - text: −
+    - generic: C
+    - generic: j
+    - text: −
+    - text: J
+    - generic: j
+    - text: −
+    - text: M
+    - generic: j
+    - paragraph: 其中：
+    - list:
+      - math:
+        - generic: C
+        - generic: ^
+        - generic: j
+      - generic: C
+      - generic: j
+      - text: ：设计运行包络下，本块执行成本的保守界；
+      - math:
+        - generic: J
+        - generic: j
+      - text: J
+      - generic: j
+      - text: ：不可抢占任务、系统调度等干扰；
+      - math:
+        - generic: M
+        - generic: j
+      - text: M
+      - generic: j
+      - text: ：安全余量。
+    - paragraph:
+      - text: 到
+      - math:
+        - generic: L
+        - generic: S
+        - generic: j
+      - text: L
+      - text: S
+      - generic: j
+      - text: 还没启动，应立即记录预计 miss，不能把 deadline 向后改来改善统计。
+    - paragraph: 一个逻辑步至少需要满足：
+    - math:
+      - generic: C
+      - generic: S,serial
+      - generic: +
+      - generic: P
+      - generic: +
+      - generic: D
+      - generic: +
+      - generic: V
+      - generic: +
+      - generic: R
+      - generic: conflict
+      - generic: +
+      - generic: T
+      - generic: pool
+      - generic: +
+      - generic: C
+      - generic: publish
+      - generic: ≤
+      - generic: D
+      - generic: sim
+      - generic: −
+      - generic: R
+      - generic: k
+    - text: C
+    - generic: S,serial
+    - text: +
+    - generic: P +
+    - generic: D +
+    - generic: V +
+    - text: R
+    - generic: conflict
+    - text: +
+    - text: T
+    - generic: pool
+    - text: +
+    - text: C
+    - generic: publish
+    - text: ≤
+    - text: D
+    - generic: sim
+    - text: −
+    - text: R
+    - generic: k
+    - paragraph: 并且：
+    - math:
+      - generic: T
+      - generic: pool
+      - generic: ≥
+      - generic: max
+      - generic: ⁡
+      - generic: (
+      - generic: W
+      - generic: p
+      - generic: effective
+      - generic: ","
+      - generic: L
+      - generic: dependency
+      - generic: )
+    - text: T
+    - generic: pool
+    - text: ≥
+    - text: max
+    - generic: (
+    - text: p
+    - generic: effective
+    - generic: W
+    - text: ","
+    - text: L
+    - generic: dependency
+    - generic: )
+    - paragraph: 第二式只是下界，不是充分保证。还有内存带宽、引擎竞争和服务器同步。
+    - paragraph:
+      - strong:
+        - text: 这里的
+        - math:
+          - generic: p
+          - generic: effective
+        - text: p
+        - generic: effective
+        - text: 是扣除 M、S、渲染／引擎工作后，可持续获得的等效能力，不是创建了几个线程。
+    - heading "3.4 截止失败怎么处理" [level=3]
+    - paragraph: 需要明确区别“恢复正确性”和“该帧达标”。
+    - paragraph:
+      - text: 临近期限时，停止尚未领取、当前消费者不需要的投机块；S 可以领取未执行的关键块，或者用原生串行路径完成剩余原序后缀。
+      - strong: 不回退到画面主线程，不反复重算已提交前缀。
+    - paragraph: 已经运行的块不强杀、不覆盖内存；它必须有限结束。不能一边串行补算，一边不断派发同一旧任务。已提交事实不回滚、不重复扣血，未完成 tick 不冒充完成。
+    - paragraph: "**持续超载不能靠队列策略解决。**当输入工作量长期超过可持续处理能力时："
+    - blockquote:
+      - paragraph: 不减少工作、不降低频率、不产生滞后、资源有限，这几项不可能仅靠“调度聪明一点”同时成立。
+    - paragraph: 此时应判定该实现或并行配置不满足目标，继续压缩真实关键路径或提高有效能力。默认慢放、无限积压、插值遮盖或静默暂停，都不属于本方案。
+    - paragraph: 这不妨碍现在确定架构；它给出了架构实施后不能绕过的失败判据。
+    - separator
+    - heading "四、原序结果：怎样只修复受影响的计算" [level=2]
+    - heading "4.1 正确性目标" [level=3]
+    - paragraph: 原执行可以写成：
+    - math:
+      - generic: W
+      - generic: i
+      - generic: +
+      - generic: "1"
+      - generic: =
+      - generic: F
+      - generic: i
+      - generic: (
+      - generic: W
+      - generic: i
+      - generic: ","
+      - generic: I
+      - generic: k
+      - generic: )
+    - text: W
+    - generic: i+1
+    - text: =
+    - text: F
+    - generic: i
+    - text: (
+    - text: W
+    - generic: i
+    - text: ","
+    - text: I
+    - generic: k
+    - text: )
+    - paragraph:
+      - math:
+        - generic: F
+        - generic: i
+      - text: F
+      - generic: i
+      - text: 包含当前 actor 的原候选顺序、短路、移动发布、立即攻击和同步回调。
+    - paragraph:
+      - text: 新结构仍由 S 按同一序列执行
+      - math:
+        - generic: F
+        - generic: i
+      - text: F
+      - generic: i
+      - text: 。worker 只替代其中
+      - strong: 输入可证明相同的数值子表达式
+      - text: 。
+    - paragraph:
+      - strong: 顺序化的是权威状态变更，不是所有数学计算。
+    - paragraph: 不能将所有怪都基于 tick 开始时的位置算好最终位移，再一次性写入。那会把原来的逐序观察改成同时观察旧世界。
+    - heading "4.2 计划需要携带什么" [level=3]
+    - table:
+      - rowgroup:
+        - row "紧凑数据 作用":
+          - columnheader "紧凑数据"
+          - columnheader "作用"
+      - rowgroup:
+        - row "world/life 身份、tick、phase、actor 与候选 ordinal 防止错生命期、错世界、错消费位置":
+          - cell "world/life 身份、tick、phase、actor 与候选 ordinal"
+          - cell "防止错生命期、错世界、错消费位置"
+        - row "self/target 的位置、半径、动作参数依赖 识别会改变整段候选准备的变化":
+          - cell "self/target 的位置、半径、动作参数依赖"
+          - cell "识别会改变整段候选准备的变化"
+        - row "原 slot 对齐的 peer 身份、读版本和几何结果 修复受影响的 peer—候选关系":
+          - cell "原 slot 对齐的 peer 身份、读版本和几何结果"
+          - cell "修复受影响的 peer—候选关系"
+        - row "查询覆盖范围及其变更见证 捕捉不在旧候选池中的新进入者":
+          - cell "查询覆盖范围及其变更见证"
+          - cell "捕捉不在旧候选池中的新进入者"
+        - row "地图、投影、环境的真实依赖 防止复用旧地图或旧规则结果":
+          - cell "地图、投影、环境的真实依赖"
+          - cell "防止复用旧地图或旧规则结果"
+        - row "原方向、阶段及谓词次序 修复后仍从原首选方向开始":
+          - cell "原方向、阶段及谓词次序"
+          - cell "修复后仍从原首选方向开始"
+    - button "复制表格":
+    - button "展开表格":
+    - paragraph: 这些记录使用连续数组、范围索引和位图，而不是每个 pair 建一个 Dictionary。
+    - paragraph: 版本由唯一 S 在正式写入口维护，只用于证明派生结果是否有效，不成为第二套位置或 HP 权威。
+    - heading "4.3 为什么不必每次重算全部候选" [level=3]
+    - paragraph: S 维护当前窗口的变更集合；每个计划维护读取集合。
+    - paragraph:
+      - text: "**不相交：**按原控制流消费已有数值。"
+      - text: "**相交：**只修复受影响的数值元素，再按原顺序消费。"
+    - paragraph: 例如，某 actor 有 20 个 peer 候选，而期间只有 A 改变位置；self、target、候选身份顺序和地图均未变，则只重新计算 A 与该 actor 实际需要轨迹的关系，不重算另外 19 个 peer 和静态地图。
+    - paragraph:
+      - text: 这只是结构例子，不是实际候选量或收益测量。
+      - strong:
+        - text: 第
+        - math:
+          - generic: i
+        - generic: i
+        - text: 个 actor 可能面对前面
+        - math:
+          - generic: i
+          - generic: −
+          - generic: "1"
+        - generic: i −
+        - generic: "1"
+        - text: 个 actor 的变化，局部修复没有恒定“一只 peer”的上界。
+    - heading "4.4 同 bucket、新进入者和短路" [level=3]
+    - paragraph: "**同 bucket 移动：**正式位置写入必须进入 pose 变更记录。membership revision 不变，没有豁免权。移动后又移回也不能用最终字段相等抹掉期间的同步行为。"
+    - paragraph:
+      - strong:
+        - text: 新进入者：
+        - strong: 记录移动、出生、死亡、传送、半径／地图／资格变化的旧新覆盖。若可能影响某查询，且身份原本不在候选池，就重新执行该范围的
+        - text: 原 Index 查询
+      - text: ，恢复原身份与次序。
+    - paragraph: 不能简单将新 ID 附到旧数组末尾，因为这可能改变原短路和优先选择。如果原 Index 本身还做位置筛选，该层也必须重新验证。这是给现有索引增加变更记录，不是换索引算法。
+    - paragraph: "**短路：**第一方向过去被阻挡、现在可能放行，就必须从原首选方向重新走。不能只验证旧时最后选中的方向。原本未计算的后续分支按需要补齐；三个不同 predicate 也不能共用一个 bool。"
+    - paragraph: worker 可提前计算最终未被采用的纯数值，但不能提前执行 RNG、资格回调、移动或伤害。必要的 live 条件仍由 S 在原位置读取。
+    - heading "4.5 密集冲突很高时的裁决" [level=3]
+    - paragraph:
+      - text: 密集堵口确实可能使每次移动都影响后续大量结果。此时应缩短前瞻窗口、减少低采用率的投机准备，保留静态和未变化数据的并行，让不可避免的顺序后缀在
+      - strong: S 的紧凑原生实现
+      - text: 中完成。
+    - paragraph: 这限制并行规模，但不否定独立模拟和批量工作池。
+    - paragraph:
+      - text: 真正需要用户另选的产品语义是：全体从同一旧状态决策、统一群体求解替代逐序规则、移动／攻击晚一 tick、按完成顺序提交、降频或少更新。
+      - strong: 最终方案不采用这些替代。
+    - separator
+    - heading "五、最小模块和迁移顺序：阶段一必须搬出真实重工作" [level=2]
+    - heading "5.1 五个模块足够，不建设整套 ECS" [level=3]
+    - table:
+      - rowgroup:
+        - row "模块 最小接口示意 实现安排":
+          - columnheader "模块"
+          - columnheader "最小接口示意"
+          - columnheader "实现安排"
+      - rowgroup:
+        - row "SimulationHost / WorldState start_world、set_clock_policy、submit_command、内部 step_tick C++ 拥有线程、状态、时钟与原序提交":
+          - cell "SimulationHost / WorldState"
+          - cell "start_world、set_clock_policy、submit_command、内部 step_tick"
+          - cell "C++ 拥有线程、状态、时钟与原序提交"
+        - row "CombatKernels prepare_range、evaluate_range、repair_changed 原算法原生化，连续数值输入输出":
+          - cell "CombatKernels"
+          - cell "prepare_range、evaluate_range、repair_changed"
+          - cell "原算法原生化，连续数值输入输出"
+        - row "BatchExecutor dispatch_ready、poll_published、retire_completed 薄封装 Godot 工作池，固定阶段和容量":
+          - cell "BatchExecutor"
+          - cell "dispatch_ready、poll_published、retire_completed"
+          - cell "薄封装 Godot 工作池，固定阶段和容量"
+        - row "PresentationBridge acquire_frame(min_tick)、release_frame、drain_events 原生缓冲，GD 保留场景和 UI":
+          - cell "PresentationBridge"
+          - cell "acquire_frame(min_tick)、release_frame、drain_events"
+          - cell "原生缓冲，GD 保留场景和 UI"
+        - row "Platform / TransactionPorts input、physics、save、load/retire 必要的平台、服务器与事务适配":
+          - cell "Platform / TransactionPorts"
+          - cell "input、physics、save、load/retire"
+          - cell "必要的平台、服务器与事务适配"
+    - button "复制表格":
+    - button "展开表格":
+    - paragraph: 高频循环优先转 C++。纯 GD 规则在能够单线程独占、且不依赖活动 Node 或共享可变资源时可以保留。UI、编辑器和内容配置不要求全改 C++。
+    - heading "5.2 阶段一：当前群怪战斗的闭合纵向切片" [level=3]
+    - paragraph: 第一阶段的交付必须包含：
+    - generic: 纯文本
+    - button "启用自动换行":
+    - button "复制代码":
+    - code: 真实输入 → 玩家与群怪追击 → 原绕路 / 碰撞 → 原移动发布 → 立即攻击 → HP / 死亡及同步回调 → 已提交表现状态
+    - paragraph: S 运行这个闭环，worker 真实承担批量候选和几何，M 只做表现交接。
+    - paragraph: "**不能只搬怪物，玩家 HP 和伤害回调仍在 M，再同步等 M 答复。**需要进入该链的玩家、怪物、宠物、投射物和现有回调，都必须形成单一所有权闭包。"
+    - paragraph: 首个闭环可以用当前真实“引怪即掉帧”场景进入，但未迁移的玩法不能在同一会话中偷偷继续用第二份权威。未闭合的会话保持整个旧运行模式；不能通过禁止用户原有技能来宣称完整迁移成功。
+    - paragraph:
+      - text: 阶段一内部可以先形成可比较的串行原生通路，再接工作池；
+      - strong: 阶段一交付条件包含真实重计算和真实提交已经离开 M，不是空 Host 或假数据演示。
+    - heading "5.3 阶段二：接全当前玩法和事务边界" [level=3]
+    - paragraph: 扩展到当前已经实装的职业、技能、召唤、换图、复活、装备变化、旧状态与存档。
+    - paragraph: 重点不是“所有函数都转 C++”，而是每个写入口明确：
+    - list:
+      - listitem: 谁拥有状态；
+      - listitem: 在哪个 tick/phase 采样；
+      - listitem: 同步回调的顺序；
+      - listitem: 哪些输出只是表现。
+    - paragraph: 原来依赖主线程 ID、渲染帧号或主循环预算的运行时需要显式适配。**不能把“每渲染帧”机械改成“每逻辑 tick”，然后宣称行为没变。**如果某个旧玩法真正以显示帧数决定结果，那是与独立模拟存在冲突的合同，应单独裁决。
+    - paragraph: 存档继续使用原 schema 与持久化规则。S 在原事务边界产生一致快照，I/O 服务负责写入；需要等待持久化确认的操作，不能因为有后台线程就提前返回成功。
+    - heading "5.4 阶段三：批量表现和期限闭合" [level=3]
+    - paragraph: 将动画帧、方向、绘制参数、飘字等准备批量化，减少逐 Node 调用。
+    - paragraph: 等距遮挡顺序不能为了合批重排；攻击、受击和死亡时点仍由 S 产生。完善输出缓冲、输入桥和 PhysicsPort 的独立性后，按完整截止路径确定生产并行度。
+    - paragraph:
+      - text: 这不是回到泛化微基准，而是对
+      - strong: 已经搬出的真实链条
+      - text: 验收。
+    - heading "5.5 Android 构建要点" [level=3]
+    - paragraph:
+      - text: 使用正式 GDExtension；需要平台输入接入时采用 Godot Android v2 插件/AAR 路径，官方已有模板，无需换引擎。
+      - 'link "Godot Engine documentation: https://docs.godotengine.org/en/stable/tutorials/platform/android/android_plugin.html, https://docs.godotengine.org/en/stable/tutorials/platform/android/android_plugin.html"':
+        - /url: https://docs.godotengine.org/en/stable/tutorials/platform/android/android_plugin.html
+        - generic: Godot Engine documentation
+    - paragraph: 构建应固定实际 Godot、godot-cpp/API、NDK、导出模板和浮点精度。提供 arm64-v8a；原产品仍支持的其他 ABI 也需对应处理。C++ 的标量、Vector2、EPS、分支和运算顺序照原合同，不能为了向量化擅自开启 fast-math 或重排归约。
+    - paragraph:
+      - text: .so 和依赖还需满足目标 Android 的 ELF/APK 对齐要求，包括 16 KB 页兼容。
+      - 'link "Android Developers: https://developer.android.com/guide/practices/page-sizes, https://developer.android.com/guide/practices/page-sizes"':
+        - /url: https://developer.android.com/guide/practices/page-sizes
+        - generic: Android Developers
+    - paragraph:
+      - text: 保持
+      - strong: com.personal.mafaoffline、原签名／安装身份、存档目录和 schema
+      - text: 。不能用换包名或清档掩盖兼容问题。
+    - separator
+    - heading "六、4／8 worker 的截止模型与最终承诺" [level=2]
+    - heading "6.1 要同时考察三条期限" [level=3]
+    - paragraph: 目标不是只让 M 的 CPU 数字下降，而是同时满足：
+    - paragraph:
+      - strong: S 的合法 tick 和输入按期服务；M 与 GPU 按期呈现；状态新鲜度不持续落后。
+    - paragraph: 定义：
+    - list:
+      - math:
+        - generic: M
+        - generic: e
+      - text: M
+      - generic: e
+      - text: ：与当前模拟结果无关的画面／输入工作；
+      - math:
+        - generic: M
+        - generic: l
+      - text: M
+      - generic: l
+      - text: ：拿到本次状态后才可做的画面提交；
+      - math:
+        - generic: S
+      - generic: S
+      - text: ：模拟线程准备、顺序提交和发布成本；
+      - math:
+        - generic: W
+      - generic: W
+      - text: ：独立数值工作在参考单核上的总成本；
+      - math:
+        - generic: L
+      - generic: L
+      - text: ：数值任务最长依赖链；
+      - math:
+        - generic: R
+      - generic: R
+      - text: ：局部修复与失效额外成本；
+      - math:
+        - generic: G
+      - generic: G
+      - text: ：新状态对应的 GPU 尾部；
+      - math:
+        - generic: J
+      - generic: J
+      - text: ：调度、同步和安全余量。
+    - paragraph: 在这些阶段确实能够重叠、且没有其他服务器等待时：
+    - math:
+      - generic: T
+      - generic: frame,model
+      - generic: =
+      - generic: max
+      - generic: ⁡
+      - generic: (
+      - generic: M
+      - generic: e
+      - generic: ","
+      - generic: S
+      - generic: +
+      - generic: max
+      - generic: ⁡
+      - generic: (
+      - generic: W
+      - generic: /
+      - generic: p
+      - generic: effective
+      - generic: ","
+      - generic: L
+      - generic: )
+      - generic: +
+      - generic: R
+      - generic: )
+      - generic: +
+      - generic: M
+      - generic: l
+      - generic: +
+      - generic: G
+      - generic: +
+      - generic: J
+    - text: T
+    - generic: frame,model
+    - text: =
+    - text: max
+    - text: (
+    - text: M
+    - generic: e
+    - text: ", S + max(W/"
+    - text: p
+    - generic: effective
+    - text: ", L) + R)"
+    - text: +
+    - text: M
+    - generic: l
+    - text: +
+    - generic: G +
+    - generic: J
+    - paragraph:
+      - text: 这与“所有时间全部除以线程数”不同。
+      - strong: 顺序提交、最长任务、输入准备、修复、画面后半段和 GPU，都有各自下界。
+    - heading "6.2 明确标为假设的算例" [level=3]
+    - paragraph: 以下仅演示一次逻辑步与一个呈现期限对齐，不意味着实际逻辑 Hz 等于显示 Hz，更不是 REA-AN00 实测。
+    - paragraph: 假设：
+    - math:
+      - generic: M
+      - generic: e
+      - generic: =
+      - generic: "2"
+      - generic: ","
+      - generic: S
+      - generic: =
+      - generic: "4"
+      - generic: ","
+      - generic: W
+      - generic: =
+      - generic: "32"
+      - generic: ","
+      - generic: L
+      - generic: =
+      - generic: "3"
+      - generic: ","
+      - generic: M
+      - generic: l
+      - generic: =
+      - generic: "1.5"
+      - generic: ","
+      - generic: G
+      - generic: =
+      - generic: "3"
+      - generic: ","
+      - generic: J
+      - generic: =
+      - generic: "1"
+    - text: M
+    - generic: e
+    - text: =
+    - generic: 2, S =
+    - generic: 4, W =
+    - generic: 32, L =
+    - text: 3,
+    - text: M
+    - generic: l
+    - text: =
+    - generic: 1.5, G =
+    - generic: 3, J =
+    - generic: "1"
+    - paragraph: 单位均为毫秒。
+    - table:
+      - rowgroup:
+        - row "假设条件 模型结果 对照 16.67 ms":
+          - columnheader "假设条件"
+          - columnheader "模型结果"
+          - columnheader "对照 16.67 ms"
+      - rowgroup:
+        - row "4 条等速有效通道， 17.5 ms 未达标":
+          - cell "4 条等速有效通道，":
+            - text: 4 条等速有效通道，
+            - math:
+              - generic: R
+              - generic: =
+              - generic: "0"
+            - generic: R =
+            - generic: "0"
+          - cell "17.5 ms"
+          - cell "未达标"
+        - row "8 条等速有效通道， 13.5 ms 模型内有余量":
+          - cell "8 条等速有效通道，":
+            - text: 8 条等速有效通道，
+            - math:
+              - generic: R
+              - generic: =
+              - generic: "0"
+            - generic: R =
+            - generic: "0"
+          - cell "13.5 ms"
+          - cell "模型内有余量"
+        - row "8 条等速有效通道， ms 17.5 ms 再次未达标":
+          - cell "8 条等速有效通道， ms":
+            - text: 8 条等速有效通道，
+            - math:
+              - generic: R
+              - generic: =
+              - generic: "4"
+            - generic: R =
+            - generic: "4"
+            - text: ms
+          - cell "17.5 ms"
+          - cell "再次未达标"
+    - button "复制表格":
+    - button "展开表格":
+    - paragraph:
+      - text: 八核手机不代表可以同时给八个 worker、M、S、渲染和系统线程各一颗等速核心。实际
+      - math:
+        - generic: p
+        - generic: effective
+      - text: p
+      - generic: effective
+      - text: 可能明显低于线程数；增加线程也可能增加竞争。
+    - paragraph: 但是这个模型同样说明：**只要把足够大的独立工作真正拆出，并把准备、顺序段和冲突成本控制住，多核确实可以改变截止结果。**不能因为存在串行提交，就否定整个方案。
+    - heading "6.3 最终验收边界" [level=3]
+    - table:
+      - rowgroup:
+        - row "层次 必须达到":
+          - columnheader "层次"
+          - columnheader "必须达到"
+      - rowgroup:
+        - row "架构 S 独立推进、唯一写状态；M 不再承担当帧战斗结算；worker 执行真实重工作":
+          - cell "架构":
+            - strong: 架构
+          - cell "S 独立推进、唯一写状态；M 不再承担当帧战斗结算；worker 执行真实重工作"
+        - row "规则 相同合法输入及时间事件序列下，方向首选、短路、碰撞、立即攻击、HP、技能、RNG、死亡和存档事实一致":
+          - cell "规则":
+            - strong: 规则
+          - cell "相同合法输入及时间事件序列下，方向首选、短路、碰撞、立即攻击、HP、技能、RNG、死亡和存档事实一致"
+        - row "期限 分列任务完成、tick 完成、输入服务、呈现时间和状态年龄，不能用 ready 代替":
+          - cell "期限":
+            - strong: 期限
+          - cell "分列任务完成、tick 完成、输入服务、呈现时间和状态年龄，不能用 ready 代替"
+        - row "资源 有界在途、无无限队列、无迟到重复提交、无两份同时推进的权威":
+          - cell "资源":
+            - strong: 资源
+          - cell "有界在途、无无限队列、无迟到重复提交、无两份同时推进的权威"
+        - row "引擎适配 不非法跨线程使用 Node；输入积累和强 PhysicsServer 依赖有明确闭合方案":
+          - cell "引擎适配":
+            - strong: 引擎适配
+          - cell "不非法跨线程使用 Node；输入积累和强 PhysicsServer 依赖有明确闭合方案"
+        - row "完整性能 M、S、全部 worker、修复成本、driver/GPU 等待和持续热状态共同结算":
+          - cell "完整性能":
+            - strong: 完整性能
+          - cell "M、S、全部 worker、修复成本、driver/GPU 等待和持续热状态共同结算"
+    - button "复制表格":
+    - button "展开表格":
+    - heading "收束裁决" [level=2]
+    - paragraph: "**目标可行，推荐实施。**采用成熟的“原生数据批处理＋唯一写者＋引擎线程池＋明确交接缓冲”模式；HardCore 只新增保留自身语义必须具备的时钟映射、依赖记录、原序修复与平台适配，不建设自制通用调度器或整套 ECS。"
+    - paragraph:
+      - strong: 第一步就搬出当前群怪战斗的完整重工作和真实提交闭环，不再停在小核实验；最终让画面线程成为输入与呈现入口，而不是战斗执行中心。
+    - paragraph:
+      - text: 现在能够确定的是架构方向、施工边界、正确性合同和期限失败判据。
+      - strong: 不能在尚未实现时声称四／八线程必定达到 60 FPS；也不能用旧状态插值、少怪、降频或晚一 tick 来补造这个结论。
+      - button "查看分析":
+    - button "打开 HardCore_multicore_architecture_round2_zh.md 的预览"
+    - generic "HardCore_multicore_architecture_round2_zh.md"
+    - generic: 文档
+    - button "下载文件":
+    - button "复制":
+    - button "分享":
+    - button "朗读":
+    - button "重新生成回复":
+    - button "更多操作":
+    - button "来源":
+    - heading "你说：" [level=4]
+    - generic: "两轮总设计已经回读。施工前源码核对找到一个决定性问题，需要你给出最终物理闭合裁决，而不是泛泛PhysicsPort。仍然只做设计，不运行实验。 当前生产Player._physics_process调用move_and_collide(velocity*delta)与零位移分离；Enemy._move_with_spatial_rules调用零分离、move_and_collide或move_and_slide并更新索引；攻击LOS用活动World2D.direct_space_state.intersect_ray。我们不能改变旧碰撞/滑动/LOS顺序和玩法。 刚读取官方Godot 4.7-stable源，实际下载文件事实：main/main.cpp 4992-4997 sync→flush_queries→SceneTree.physics_process，5036-5037 end_sync→step；servers/physics_2d/physics_server_2d.h 612-615内部virtual step/sync/flush_queries/end_sync，但.cpp完整_bind_methods没有绑定这四个；普通GDExtension公开API不能当成默认world手动step口。PhysicsServer2D构造.cpp904 singleton=this，GodotPhysicsServer2D构造.cpp1394 godot_singleton=this；不能简单new第二个backend声称独立不影响原世界。CharacterBody2D.move_and_slide .cpp45读取Engine.is_in_physics_frame和process delta，平台碰撞走PhysicsServer2D singleton。官方源链接 https://github.com/godotengine/godot/tree/4.7-stable 。 请核对官方源，决定主路线怎样关闭这条依赖：A提取当前确实使用的原Godot运动测试/滑动与静态世界规则到独占原生模拟物理域，不访问activeNode，不改求解；B维护极小Godot engine/module适配，把同一物理服务器或隔离空间的唯一step与同步交给S，彻底停止Main重复step、proxy变换回写，不调用M Node回调；C若前两条不可可靠实现，明确保守分期及最终独立架构前置门，不能把依赖留作模糊待定。请选定一条，并列出具体引擎文件/钩子、谁拥有singleton/space、查询相位、碰撞事件/初始化/换图/关停、标准Android模板是否仍能用、同算法同结果怎样验收。 还有现有唯一ActorRef身份已经是{world,runtime_id,life_generation}，world_context有contract_id/world_runtime_id/world_epoch/runtime_map_id/profile_id。保留这个schema和release_id/fact_id/credit/chain/死亡去重键；S registry替代Node resolve后端，不新增第二身份或HP。 如果需要自编模板请坦率说明成本。我的用户要求这次是成熟大施工方案，不能拿“线程安全PhysicsPort”遮住关键主循环依赖。给出足够工程化的封口设计与证据边界，并保存一份最终补充Markdown。"
+    - generic: …
+    - button "显示更多":
+      - generic: 显示更多
+    - button "复制消息":
+    - button "共享提示":
+    - button "编辑消息":
+    - button "思考了 17m 32s"
+    - generic: 思考了 17m 32s
+    - heading "ChatGPT 说：" [level=4]
+    - heading "最终物理闭合裁决：选择 B，必须自编 Godot 模板" [level=1]
+    - paragraph:
+      - strong: 主路线确定为 B：保留原来的单一 GodotPhysics2D 后端，将它的同步、查询服务、原序运动消费和物理步进，统一交给唯一模拟线程 S。
+    - paragraph:
+      - strong: 不创建第二个后端，不让 Main 与 S 分别推进同一服务器的不同 space，也不再把这件事留成笼统的“线程安全 PhysicsPort”。
+    - paragraph:
+      - text: 这意味着：
+      - strong: 前两轮设计中“普通 GDExtension＋服务器接口可能足以闭合”的余地应当删除。当前这些生产调用要彻底离开画面主循环，必须修改引擎内部驱动与访问边界，并自编运行模板。
+    - paragraph: 本轮已通过官方源码页面及 GitHub 文件分段读取核对相关实现；没有修改、构建或运行实验，也没有读取当前 114 完整源码。生产 Player、Enemy 和 LOS 的调用情况，以及当前 enemy.gd 指纹，按你本轮提供的核对事实使用。
+    - separator
+    - heading "一、源码核对结果：你的判断成立，还需要补上三个关键限制" [level=2]
+    - heading "1. 主循环确实拥有当前物理相位" [level=3]
+    - paragraph: 我补读了 main/main.cpp 原始行区间 4870–5060，确认其骨架是：
+    - generic: 纯文本
+    - button "启用自动换行":
+    - button "复制代码":
+    - code: sync flush_queries SceneTree / MainLoop.physics_process …… end_sync step
+    - paragraph:
+      - text: 其中还包含 transform、消息队列、导航和 iteration 边界。
+      - strong: 不能只挪走最后的 step()，留下前面的查询服务和游戏回调继续由 Main 执行。
+    - paragraph:
+      - text: PhysicsServer2D 的内部声明与公开绑定也支持你的结论：这四个内部驱动方法不能当成普通 GDExtension 已有的默认世界手动步进口。
+      - 'link "GitHub: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/servers/physics_2d/physics_server_2d.h, https://raw.githubusercontent.com/godotengine/godot/4.7-stable/servers/physics_2d/physics_server_2d.h, 另外 1 个来源"':
+        - /url: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/servers/physics_2d/physics_server_2d.h
+        - generic: GitHub
+        - generic: "+1"
+    - heading "2. 包装层不只是“加锁转发”" [level=3]
+    - paragraph: 这是必须新增到补丁清单里的限制：
+    - list:
+      - listitem: PhysicsServer2DWrapMT::init() 在不启动内建独立线程时，将 server_thread 设为 MAIN_ID。
+      - listitem: body_test_motion()、space_get_direct_state()、body_get_direct_state() 等手写入口，具有明确的主线程检查。
+      - listitem: 异步分派宏还特殊允许 Main 在同步阶段直接访问。
+    - paragraph:
+      - text: 因此，
+      - strong: 关闭 run_on_separate_thread，再由 S 调用同一个 singleton，并不能自然成立。
+      - 'link "GitHub: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/servers/physics_2d/physics_server_2d_wrap_mt.cpp, https://raw.githubusercontent.com/godotengine/godot/4.7-stable/servers/physics_2d/physics_server_2d_wrap_mt.cpp, 另外 2 个来源"':
+        - /url: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/servers/physics_2d/physics_server_2d_wrap_mt.cpp
+        - generic: GitHub
+        - generic: "+2"
+    - heading "3. “只读查询”也不是普通 worker 可并发调用的纯函数" [level=3]
+    - paragraph: GodotSpace2D 内有共享的 intersection_query_results 和 subindex 缓冲；ray、shape、motion 等查询使用这些空间内部存储。body_test_motion() 还会先处理 pending shape 更新。
+    - paragraph:
+      - text: "**所以本次闭合版本中，活动 space 的运动测试与 LOS 由 S 原序调用，不能直接分给多个普通 worker 并发运行。**这修正了前两轮“批量几何”边界中过于宽泛的可能解释。"
+      - 'link "GitHub: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/modules/godot_physics_2d/godot_space_2d.h, https://raw.githubusercontent.com/godotengine/godot/4.7-stable/modules/godot_physics_2d/godot_space_2d.h, 另外 2 个来源"':
+        - /url: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/modules/godot_physics_2d/godot_space_2d.h
+        - generic: GitHub
+        - generic: "+2"
+    - heading "4. 游戏位置与后端物理位置并非始终同一时态" [level=3]
+    - paragraph: 这是最容易在迁移中无意改变玩法的地方：
+    - paragraph:
+      - text: GodotBody2D::set_state(BODY_STATE_TRANSFORM) 对 kinematic body 通常先写 new_transform；后续积分阶段才更新后端当前 transform。原 move_and_collide() 又可以使用控制器提供的 from 进行运动测试。
+      - 'link "GitHub: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/modules/godot_physics_2d/godot_body_2d.cpp, https://raw.githubusercontent.com/godotengine/godot/4.7-stable/modules/godot_physics_2d/godot_body_2d.cpp, 另外 2 个来源"':
+        - /url: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/modules/godot_physics_2d/godot_body_2d.cpp
+        - generic: GitHub
+        - generic: "+2"
+    - paragraph: 因此：
+    - blockquote:
+      - paragraph:
+        - strong: “前一个 actor 已更新逻辑位置和自定义索引”，不等于“所有后端 ray/motion 查询已经立即看到同一个新 transform”。
+    - paragraph: 新实现不能为了数据整齐，直接把后端 _set_transform()、broadphase 和逻辑位置强行每 actor 同步。这可能改变旧碰撞和 LOS 结果。
+    - separator
+    - heading "二、为什么选择 B，而不选择 A 或模糊的 C" [level=2]
+    - table:
+      - rowgroup:
+        - row "选项 最终裁决":
+          - columnheader "选项"
+          - columnheader "最终裁决"
+      - rowgroup:
+        - row "A：复制／提取原物理为独立原生域 不作为主路线。需要另外隔离并维护形状、broadphase、接触状态、对象解析和 singleton 依赖，验证面更大。":
+          - cell "A：复制／提取原物理为独立原生域":
+            - strong: A：复制／提取原物理为独立原生域
+          - cell "不作为主路线。需要另外隔离并维护形状、broadphase、接触状态、对象解析和 singleton 依赖，验证面更大。"
+        - row "B：保留原后端，迁移唯一驱动与消费所有权 **采用。**最大限度保留成熟物理实现，只改变执行所有者和非物理依赖。":
+          - cell "B：保留原后端，迁移唯一驱动与消费所有权":
+            - strong: B：保留原后端，迁移唯一驱动与消费所有权
+          - cell "**采用。**最大限度保留成熟物理实现，只改变执行所有者和非物理依赖。"
+        - row "C：保持 Main 物理服务的保守阶段 只作为未通过切换门禁时的旧版发布备份，不能宣称独立模拟已经交付。":
+          - cell "C：保持 Main 物理服务的保守阶段":
+            - strong: C：保持 Main 物理服务的保守阶段
+          - cell "只作为未通过切换门禁时的旧版发布备份，不能宣称独立模拟已经交付。"
+    - button "复制表格":
+    - button "展开表格":
+    - paragraph: B 仍需要将 CharacterBody 的控制逻辑去 Node 化，但这与 A 不同：
+    - paragraph:
+      - strong: B 不复制出第二套 broadphase／接触求解器／物理世界。它保留原后端，只把原运动控制器改造成既能由 Node adapter、也能由 S adapter 调用的同源实现。
+    - paragraph:
+      - text: “极小适配”应理解为
+      - strong: 补丁边界受控
+      - text: ，不能理解成两三行修改。控制器、回调、地图资源和生命周期迁移都是真实施工量。
+    - separator
+    - heading "三、明确所有权：一套服务器，整个运行期由 S 管理" [level=2]
+    - heading "3.1 singleton 和 space 的归属" [level=3]
+    - paragraph: 保留标准创建链中的一套对象：
+    - generic: 纯文本
+    - button "启用自动换行":
+    - button "复制代码":
+    - code: PhysicsServer2D::singleton ↓ 统一服务包装层 ↓ 原 GodotPhysicsServer2D 后端 ↑ GodotPhysicsServer2D::godot_singleton
+    - paragraph:
+      - text: 包装层和内部后端是正常的一套服务器，不是两个独立物理实例。原工厂就是这样创建的。
+      - 'link "GitHub: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/modules/godot_physics_2d/register_types.cpp, https://raw.githubusercontent.com/godotengine/godot/4.7-stable/modules/godot_physics_2d/register_types.cpp"':
+        - /url: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/modules/godot_physics_2d/register_types.cpp
+        - generic: GitHub
+    - paragraph: "**运行模式下，整个进程的这一套 2D 物理服务器由 S 独占。**可以有多个 space，但全部活动 space 由 S 调度。"
+    - paragraph:
+      - text: 原因是原 step() 遍历所有 active_spaces，同步状态也属于服务器。不能 Main 以为自己推进 space A，S 以为自己推进 space B，却都调用同一个全局 step()。
+      - 'link "GitHub: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/modules/godot_physics_2d/godot_physics_server_2d.cpp, https://raw.githubusercontent.com/godotengine/godot/4.7-stable/modules/godot_physics_2d/godot_physics_server_2d.cpp"':
+        - /url: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/modules/godot_physics_2d/godot_physics_server_2d.cpp
+        - generic: GitHub
+    - table:
+      - rowgroup:
+        - row "操作 唯一执行方":
+          - columnheader "操作"
+          - columnheader "唯一执行方"
+      - rowgroup:
+        - row "游戏物理 RID 的创建、修改、销毁 S":
+          - cell "游戏物理 RID 的创建、修改、销毁"
+          - cell "S"
+        - row "活动空间的 motion test、direct body state、LOS S，在原合法查询相位":
+          - cell "活动空间的 motion test、direct body state、LOS"
+          - cell "S，在原合法查询相位"
+        - row "sync / flush_queries / end_sync / step S":
+          - cell "sync / flush_queries / end_sync / step"
+          - cell "S"
+        - row "原序移动、立即攻击、HP、技能、死亡和同步玩法回调 S":
+          - cell "原序移动、立即攻击、HP、技能、死亡和同步玩法回调"
+          - cell "S"
+        - row "已冻结的候选数值、自定义几何和表现准备 W 工作池":
+          - cell "已冻结的候选数值、自定义几何和表现准备"
+          - cell "W 工作池"
+        - row "画面节点、UI、渲染资源和呈现 M":
+          - cell "画面节点、UI、渲染资源和呈现"
+          - cell "M"
+        - row "物理统计、调试碰撞显示 M 读取 S 发布的数值，不现场访问 live backend":
+          - cell "物理统计、调试碰撞显示"
+          - cell "M 读取 S 发布的数值，不现场访问 live backend"
+    - button "复制表格":
+    - button "展开表格":
+    - heading "3.2 不做隐式跨线程转发" [level=3]
+    - paragraph: 外部 owner 模式下，Main 对游戏物理的非法访问不能：
+    - list:
+      - listitem: 悄悄排队等待 S；
+      - listitem: 自动退回 Main 执行；
+      - listitem: 返回 false 并被当成“没有碰撞”；
+      - listitem: 返回空查询并被当成“LOS 畅通”。
+    - paragraph:
+      - text: 应明确报访问合同错误，并阻止该会话被签收为已闭合。
+      - strong: 否则所有权漏洞会变成隐蔽玩法错误。
+    - paragraph: S 也不能假冒 MAIN_ID，不能修改 M 正在使用的 Engine::_in_physics 或 process delta 来骗过原检查。
+    - separator
+    - heading "四、具体引擎文件与钩子" [level=2]
+    - paragraph: 下面是确定的补丁面；新接口名称属于设计，不是现有 API。
+    - heading "4.1 驱动和包装层" [level=3]
+    - table:
+      - rowgroup:
+        - row "文件 必须处理的钩子":
+          - columnheader "文件"
+          - columnheader "必须处理的钩子"
+      - rowgroup:
+        - row "main/main.cpp initialize_physics() 的单次初始化与移交；Main::iteration() 中全部 2D sync/flush/end/step，包括提前退出分支；finalize_physics() 防止重复 finish。":
+          - cell "main/main.cpp"
+          - cell "initialize_physics() 的单次初始化与移交；Main::iteration() 中全部 2D sync/flush/end/step，包括提前退出分支；finalize_physics() 防止重复 finish。"
+        - row "servers/physics_2d/physics_server_2d_wrap_mt.h/.cpp external-owner 模式；server thread 绑定；异步分派宏；手写查询检查；所有 live 读写的 owner/phase 门禁。":
+          - cell "servers/physics_2d/physics_server_2d_wrap_mt.h/.cpp"
+          - cell "external-owner 模式；server thread 绑定；异步分派宏；手写查询检查；所有 live 读写的 owner/phase 门禁。"
+        - row "servers/server_wrap_mt_common.h 仅在需要覆盖生成方法时增加默认不改变原行为的可选访问 hook，不能影响其他服务器。":
+          - cell "servers/server_wrap_mt_common.h"
+          - cell "仅在需要覆盖生成方法时增加默认不改变原行为的可选访问 hook，不能影响其他服务器。"
+        - row "modules/godot_physics_2d/register_types.cpp 仍创建唯一原后端，只选择支持 external-owner 的包装模式；不新增第二个同时运行的后端。":
+          - cell "modules/godot_physics_2d/register_types.cpp"
+          - cell "仍创建唯一原后端，只选择支持 external-owner 的包装模式；不新增第二个同时运行的后端。"
+    - button "复制表格":
+    - button "展开表格":
+    - paragraph: "**推荐启动方式：**沿原 Main bootstrap 完成一次创建和初始化，再在没有在途 step、队列为空、游戏物理尚未启动的安全边界，把服务责任移交 S。"
+    - paragraph: 进入该模式后，不再启动 WrapMT 自己那条独立 command-pump。S 是驱动者；原 GodotStep2D 内部并行仍保留。
+    - heading "4.2 同源非 Node 运动控制器" [level=3]
+    - paragraph: 涉及：
+    - generic: 纯文本
+    - button "启用自动换行":
+    - button "复制代码":
+    - code: scene/2d/physics/physics_body_2d.cpp/.h scene/2d/physics/character_body_2d.cpp/.h 拟新增共同内部 character_motion_2d 实现
+    - paragraph: 推荐将原控制逻辑抽成共同实现，而不是在 HardCore 中手写一份“类似 Godot 的滑动”。
+    - paragraph: 共同实现需要显式取得：
+    - generic: 纯文本
+    - button "启用自动换行":
+    - button "复制代码":
+    - code: 控制器 transform double delta 原运动配置及历史状态 原 body RID 原 motion test 平台 direct state 原对象类型判定
+    - paragraph: S adapter 读取自己的唯一角色记录，不访问活动 Node。传统 Node adapter 可以继续调用同一实现，作为迁移对照入口。
+    - paragraph: 必须保留的内容包括：
+    - paragraph: "**move_and_collide：**原 MotionParameters、recovery、cancel-sliding 修正、travel/remainder 和变换提交；不是只调用 body_test_motion() 就结束。"
+    - paragraph:
+      - text: "**move_and_slide：**grounded/floating、safe margin、max slides、snap、floor/wall/ceiling、平台过滤与离台速度、previous position、real velocity 和每次滑动结果次序。原函数确实依赖 Engine/Node delta 和平台 direct state，需要把依赖替换为显式访问，而不是改变公式。"
+      - 'link "GitHub: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/scene/2d/physics/physics_body_2d.cpp, https://raw.githubusercontent.com/godotengine/godot/4.7-stable/scene/2d/physics/physics_body_2d.cpp, 另外 2 个来源"':
+        - /url: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/scene/2d/physics/physics_body_2d.cpp
+        - generic: GitHub
+        - generic: "+2"
+    - paragraph: "**零位移分离原样保留。**不得以 motion == 0 提前返回，不合并两次原本独立执行的恢复。"
+    - heading "4.3 场景和世界侧" [level=3]
+    - table:
+      - rowgroup:
+        - row "文件／部分 闭合要求":
+          - columnheader "文件／部分"
+          - columnheader "闭合要求"
+      - rowgroup:
+        - row "collision_object_2d.cpp 原变换通知、入树／退树对后端的影响，映射为 S 中同相位的物理命令。":
+          - cell "collision_object_2d.cpp"
+          - cell "原变换通知、入树／退树对后端的影响，映射为 S 中同相位的物理命令。"
+        - row "world_2d.cpp M 不再惰性创建游戏物理 space；S 建立原默认 area 参数与地图空间。":
+          - cell "world_2d.cpp"
+          - cell "M 不再惰性创建游戏物理 space；S 建立原默认 area 参数与地图空间。"
+        - row "scene_tree.cpp Main 的 pause/suspend 不再并发写物理 set_active()；游戏计时、deferred 和 transform flush 有明确的 S 相位。":
+          - cell "scene_tree.cpp"
+          - cell "Main 的 pause/suspend 不再并发写物理 set_active()；游戏计时、deferred 和 transform flush 有明确的 S 相位。"
+        - row "Viewport physics picking 当前确实使用的部分转为 S 输入查询；不能暗中继续 Main live raycast。":
+          - cell "Viewport physics picking"
+          - cell "当前确实使用的部分转为 S 输入查询；不能暗中继续 Main live raycast。"
+        - row "地图、TileMap、Shape 资源 表现代理不能自动重复生成碰撞；运行期物理资源由 S 唯一修改。":
+          - cell "地图、TileMap、Shape 资源"
+          - cell "表现代理不能自动重复生成碰撞；运行期物理资源由 S 唯一修改。"
+    - button "复制表格":
+    - button "展开表格":
+    - paragraph:
+      - text: 这些不是假想入口。World2D 确实惰性创建并激活 space，CollisionObject2D 会在变换通知中写服务器，SceneTree 也会直接控制物理活动状态。
+      - 'link "GitHub: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/scene/resources/world_2d.cpp, https://raw.githubusercontent.com/godotengine/godot/4.7-stable/scene/resources/world_2d.cpp, 另外 2 个来源"':
+        - /url: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/scene/resources/world_2d.cpp
+        - generic: GitHub
+        - generic: "+2"
+    - separator
+    - heading "五、正式查询相位：保留原时序，不重新定义“即时”" [level=2]
+    - heading "5.1 S 每个逻辑步的顺序" [level=3]
+    - generic: 纯文本
+    - button "启用自动换行":
+    - button "复制代码":
+    - code: 原 prepare／前置命令边界 ↓ sync() ↓ flush_queries() └─ 在原位置执行上一物理步产生的状态与监控回调 ↓ 原 physics_process 等价相位 ├─ 原输入／physics_frame 观察点 ├─ 原 actor 次序 │ ├─ 零分离及原 move_and_collide / move_and_slide │ ├─ 原逻辑位置与自定义索引发布 │ ├─ 原位置的 LOS │ └─ 立即攻击、真实 HP、同步触发 ├─ 原 gameplay deferred／timer／transform 边界 └─ 原删除、退休边界 ↓ 原 pre-step 命令边界 ↓ end_sync() ↓ step(原物理 delta × 原 time_scale) ↓ 原 post-step／iteration_end 等价边界 ↓ 发布完整状态
+    - paragraph:
+      - text: 这是
+      - strong: 原相位的迁移合同
+      - text: ，不是把整个 SceneTree::physics_process() 直接放进后台。SceneTree 当前包含信号、picking、节点处理、消息 flush、timer/tween、transform flush 和删除队列，不能压缩成“所有 actor 算完，统一清一次队列”。
+      - 'link "GitHub: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/scene/main/scene_tree.cpp, https://raw.githubusercontent.com/godotengine/godot/4.7-stable/scene/main/scene_tree.cpp"':
+        - /url: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/scene/main/scene_tree.cpp
+        - generic: GitHub
+    - paragraph: S 不得 flush 引擎全局 MessageQueue，进而在后台执行 M Node 回调。属于玩法的 deferred 工作要有 S-owned 对应队列，并保留原可见性边界。
+    - heading "5.2 三个禁止" [level=3]
+    - paragraph: "**禁止 step 前移到 actor 之前。**那会改变运动查询观察到的世界。"
+    - paragraph: "**禁止 step 后额外 flush 一次来“拿到最新事件”。**那可能把原本下一次服务的碰撞事件提前。"
+    - paragraph: "**禁止把所有服务器 transform 写入提前到每 actor 末尾。**原来的通知去重、显式刷新和后端 kinematic 积分时态必须保留。"
+    - paragraph:
+      - text: 当前生产中具体有哪些 force_update_transform、手动 flush 和 deferred 调用，本轮尚无完整清单。
+      - strong: 这属于固定方案的必需映射输入，不是可以省略的未知项，也不改变本次 B 的选择。
+    - heading "5.3 与原序索引的关系" [level=3]
+    - paragraph: S 中同时维护的是原本就存在的两层关系：
+    - list:
+      - listitem: 控制器逻辑位置及 HardCore 自定义空间索引；
+      - listitem: Godot 后端按原相位维护的物理状态。
+    - paragraph: 它们不是两份独立推进的 gameplay 位置权威，而是原控制器—物理服务流程的不同阶段。
+    - paragraph:
+      - strong: 同 bucket 更新仍必须被原自定义位置读取观察到；与此同时，Godot 查询应看见什么，以原物理相位为准，而不是强迫它与自定义索引永远同步。
+    - separator
+    - heading "六、LOS 与碰撞回调：需要真正关闭 Node 依赖" [level=2]
+    - heading "6.1 LOS 保留原求交实现" [level=3]
+    - paragraph: 原攻击链迁到 S 后，在同一个执行位置调用同一个活动 space 的 ray 实现，保留：
+    - paragraph: from/to、mask、exclude、body/area 选择、hit_from_inside、shape 顺序、最近命中规则。
+    - paragraph: 不改成 tick 开始时统一预判，不用自定义地图点线检查替代正式 LOS。
+    - paragraph:
+      - text: 但需要处理一个隐藏尾部：官方 ray 命中后会调用 ObjectDB::get_instance(collider_id)。
+      - 'link "GitHub: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/modules/godot_physics_2d/godot_space_2d.cpp, https://raw.githubusercontent.com/godotengine/godot/4.7-stable/modules/godot_physics_2d/godot_space_2d.cpp"':
+        - /url: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/modules/godot_physics_2d/godot_space_2d.cpp
+        - generic: GitHub
+    - paragraph: "**建议增加内部数值返回适配：**复用同一求交循环，只让 S 消费 RID、原 collider_id、shape、position、normal，再交给 S registry 解析。不能 resolve 活动 M Node，也不能把 collider_id 清零来绕过问题。"
+    - paragraph:
+      - text: CharacterBody 中“命中对象是不是 CharacterBody2D”的分类也须由原类型登记重现；不能一律当普通障碍，否则平台／墙面速度行为可能改变。
+      - 'link "GitHub: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/scene/2d/physics/character_body_2d.cpp, https://raw.githubusercontent.com/godotengine/godot/4.7-stable/scene/2d/physics/character_body_2d.cpp"':
+        - /url: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/scene/2d/physics/character_body_2d.cpp
+        - generic: GitHub
+    - heading "6.2 flush_queries 的玩法回调必须同步留在 S" [level=3]
+    - paragraph:
+      - text: GodotSpace2D::call_queries() 先服务 body state 列表，再服务 area monitor 列表；body 和 area 内部随后执行各自回调。
+      - 'link "GitHub: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/modules/godot_physics_2d/godot_space_2d.cpp, https://raw.githubusercontent.com/godotengine/godot/4.7-stable/modules/godot_physics_2d/godot_space_2d.cpp, 另外 2 个来源"':
+        - /url: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/modules/godot_physics_2d/godot_space_2d.cpp
+        - generic: GitHub
+        - generic: "+2"
+    - paragraph:
+      - text: 这些回调改为
+      - strong: S-owned 原生端点，在原遍历位置执行
+      - text: ：
+    - list:
+      - listitem: 不把所有回调先收集起来、最后一次性应用；
+      - listitem: 不将真实碰撞后果 deferred 到 M；
+      - listitem: 不保留指向 M Node 的 Callable；
+      - listitem: 原 flush 期间禁止的修改仍禁止，原本需要 deferred 的保持原 deferred 边界。
+    - paragraph: 前一个回调可能改变后一个回调观察到的生命期、资格或世界状态，因此“最后统一提交”并不等价。
+    - paragraph: 只有音效、特效和 UI 通知进入表现输出。回调中死亡或换图时，继续沿原重入／退休检查处理，不能在正在遍历的 space 中直接销毁世界。
+    - separator
+    - heading "七、ActorRef、HP 和历史事实完全沿用现有合同" [level=2]
+    - paragraph:
+      - strong: 不新增第二身份。
+    - generic: 纯文本
+    - button "启用自动换行":
+    - button "复制代码":
+    - code: "ActorRef: { world, runtime_id, life_generation } world_context: contract_id world_runtime_id world_epoch runtime_map_id profile_id"
+    - paragraph: release_id、fact_id、credit、chain 和死亡去重键全部保留。
+    - paragraph: S registry 只替换 resolve 后端：
+    - generic: 纯文本
+    - button "启用自动换行":
+    - button "复制代码":
+    - code: 原 ActorRef → 原唯一 S record
+    - paragraph: 内部 RID 或数组 slot 到 ActorRef 的映射只是查找关系，不写回 runtime_id，不产生“sim_actor_id”平行命名空间。
+    - paragraph: 原 is_inside_tree、world owner、alive 等 Node 条件不能简单删除，应映射为原生命周期的登记、激活、退休和死亡状态。已接受的身份不重编号；新出生仍沿原 runtime_id 发放／退役合同。
+    - paragraph: "**真实 HP、技能、伤害与死亡只有 S 这一处提交。**表现节点不保留可独立变动的第二份 HP；存档也只从同一权威的原事务边界取一致数据，不改变落盘确认、schema 或历史来源规则。"
+    - separator
+    - heading "八、初始化、换图与关停的明确处理" [level=2]
+    - table:
+      - rowgroup:
+        - row "阶段 实施合同":
+          - columnheader "阶段"
+          - columnheader "实施合同"
+      - rowgroup:
+        - row "Bootstrap 创建、初始化唯一原后端；固定物理配置；在无在途物理工作时将 owner 移交 S。不能 init 两遍。":
+          - cell "Bootstrap":
+            - strong: Bootstrap
+          - cell "创建、初始化唯一原后端；固定物理配置；在无在途物理工作时将 owner 移交 S。不能 init 两遍。"
+        - row "建图 S 按原顺序建立 shape/body/area/space，保留默认 area、局部变换、mask、exception、one-way 参数和初始状态。M 仅建无重复碰撞的表现。":
+          - cell "建图":
+            - strong: 建图
+          - cell "S 按原顺序建立 shape/body/area/space，保留默认 area、局部变换、mask、exception、one-way 参数和初始状态。M 仅建无重复碰撞的表现。"
+        - row "运行 M 发有序控制命令；S 独占 live 物理；W 不持可直接访问的 live space 指针。":
+          - cell "运行":
+            - strong: 运行
+          - cell "M 发有序控制命令；S 独占 live 物理；W 不持可直接访问的 live space 指针。"
+        - row "换图 按原 world_context 退休；停止旧域新派发；回调退到安全边界后断开并释放旧资源；保留同一个 backend，只更换所属空间和对象。":
+          - cell "换图":
+            - strong: 换图
+          - cell "按原 world_context 退休；停止旧域新派发；回调退到安全边界后断开并释放旧资源；保留同一个 backend，只更换所属空间和对象。"
+        - row "暂停／后台 S 在规定相位处理活动状态和原时钟补偿；M 不并发 set_active()。":
+          - cell "暂停／后台":
+            - strong: 暂停／后台
+          - cell "S 在规定相位处理活动状态和原时钟补偿；M 不并发 set_active()。"
+        - row "退出 S 停止派发、回收有限在途工作、释放资源并执行一次 finish；M 在 S 完成并 join 后才销毁包装层与后端。":
+          - cell "退出":
+            - strong: 退出
+          - cell "S 停止派发、回收有限在途工作、释放资源并执行一次 finish；M 在 S 完成并 join 后才销毁包装层与后端。"
+    - button "复制表格":
+    - button "展开表格":
+    - paragraph:
+      - text: 换图不能靠额外 step／flush“清干净”，否则可能制造新的事件。释放 space 时还要遵守原后端对默认 area 的销毁关系，避免重复 free。
+      - 'link "GitHub: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/modules/godot_physics_2d/godot_physics_server_2d.cpp, https://raw.githubusercontent.com/godotengine/godot/4.7-stable/modules/godot_physics_2d/godot_physics_server_2d.cpp"':
+        - /url: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/modules/godot_physics_2d/godot_physics_server_2d.cpp
+        - generic: GitHub
+    - paragraph: "**finalize_physics() 必须识别 S 已执行 finish，不能再执行第二遍。**正常帧不引入 M 等 S 的逐 tick 屏障；关闭程序时的有限 join 则属于正确资源回收。"
+    - separator
+    - heading "九、是否仍是多核方案：是，但不伪造 live-query 并行" [level=2]
+    - paragraph: B 的首个闭合版本中，原序运动与 LOS 由 S 执行。这确实是一个串行部分，但已经离开画面线程；候选、自定义数值几何和表现准备继续使用工作池。
+    - paragraph:
+      - text: 更重要的是，原 GodotStep2D::step()
+      - strong: 已经
+      - text: 对 constraint setup 和 island solve 使用工作池，并在对应位置等待完成；pre-solve 保留串行。这里应复用原实现，不另写并行求解器。
+      - 'link "GitHub: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/modules/godot_physics_2d/godot_step_2d.cpp, https://raw.githubusercontent.com/godotengine/godot/4.7-stable/modules/godot_physics_2d/godot_step_2d.cpp"':
+        - /url: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/modules/godot_physics_2d/godot_step_2d.cpp
+        - generic: GitHub
+    - paragraph: S 应是独立线程，不能自己占一个工作池槽，再等同一个被长任务占满的池完成 step。
+    - paragraph:
+      - text: 这些原内部屏障属于求解依赖，
+      - strong: 在 S 上发生、计入逻辑期限
+      - text: ；不能谎称物理链“完全没有等待”，也不应误删它们来追求无等待。
+    - paragraph: 必要成本仍包括：
+    - math:
+      - generic: T
+      - generic: S
+      - generic: ≥
+      - generic: T
+      - generic: sync/flush
+      - generic: +
+      - generic: T
+      - generic: 原序运动/LOS
+      - generic: +
+      - generic: T
+      - generic: 原序提交
+      - generic: +
+      - generic: T
+      - generic: step及内部屏障
+      - generic: +
+      - generic: T
+      - generic: 收尾
+      - generic: +
+      - generic: 新增开销
+    - text: T
+    - generic: S
+    - text: ≥
+    - text: T
+    - generic: sync/flush
+    - text: +
+    - text: T
+    - generic: 原序运动/LOS
+    - text: +
+    - text: T
+    - generic: 原序提交
+    - text: +
+    - text: T
+    - generic: step及内部屏障
+    - text: +
+    - text: T
+    - generic: 收尾
+    - text: +
+    - generic: 新增开销
+    - paragraph:
+      - text: 独立数值工作能重叠多少，按真实依赖计算。
+      - strong: 该结构能关闭画面主线程的关键依赖，但不能预先保证 S 一定满足手机期限。S 持续落后时，显示六十帧也不能算验收通过。
+    - separator
+    - heading "十、自编模板的成本必须接受，不能用插件包装隐藏" [level=2]
+    - heading "标准 Android 模板能否继续用？" [level=3]
+    - paragraph:
+      - strong: 不能用来运行新的物理 owner 模式。
+    - paragraph:
+      - text: 普通 GDExtension .so 不会改变 Main 内部 step 分支、WrapMT 的硬线程检查和新控制器接入。可以继续使用 Godot 原导出／Gradle流程，但必须使用同源自编模板。官方构建流程支持 debug/release 模板和 android_source.zip 等配套产物。
+      - 'link "Godot Engine documentation: https://docs.godotengine.org/en/stable/engine_details/development/compiling/compiling_for_android.html, https://docs.godotengine.org/en/stable/engine_details/development/compiling/compiling_for_android.html, 另外 1 个来源"':
+        - /url: https://docs.godotengine.org/en/stable/engine_details/development/compiling/compiling_for_android.html
+        - generic: Godot Engine documentation
+        - generic: "+1"
+    - paragraph: 需要维护：
+    - table:
+      - rowgroup:
+        - row "产物或工作 原因":
+          - columnheader "产物或工作"
+          - columnheader "原因"
+      - rowgroup:
+        - row "Android Debug／Release 模板及 native 库 内含引擎补丁和 module":
+          - cell "Android Debug／Release 模板及 native 库"
+          - cell "内含引擎补丁和 module"
+        - row "arm64-v8a，及原产品仍支持的其他 ABI 不能只编桌面扩展":
+          - cell "arm64-v8a，及原产品仍支持的其他 ABI"
+          - cell "不能只编桌面扩展"
+        - row "同补丁集桌面运行时 验证同源行为，不以官方引擎替代":
+          - cell "同补丁集桌面运行时"
+          - cell "验证同源行为，不以官方引擎替代"
+        - row "必要时配套自编编辑器 编辑器需识别 module 类或直接运行新模式":
+          - cell "必要时配套自编编辑器"
+          - cell "编辑器需识别 module 类或直接运行新模式"
+        - row "引擎／补丁／编译配置／符号／模板指纹 引擎升级后可复核、可回滚":
+          - cell "引擎／补丁／编译配置／符号／模板指纹"
+          - cell "引擎升级后可复核、可回滚"
+    - button "复制表格":
+    - button "展开表格":
+    - paragraph:
+      - text: 保持 com.personal.mafaoffline、原签名、存档目录和 schema。
+      - strong: 换包名、卸载清档不是兼容方案。
+    - paragraph: 本轮读取 4.7-stable，不等于确认当前 APK 的所有编译参数。真正施工先固定生产实际引擎及浮点设置，不把迁移与求解器升级混为一项。
+    - separator
+    - heading "十一、同算法、同结果怎样验收" [level=2]
+    - paragraph:
+      - text: 以下是
+      - strong: 未来正式施工验收门
+      - text: ，不是本轮要求运行实验。
+    - heading "11.1 不只验收最后位置" [level=3]
+    - table:
+      - rowgroup:
+        - row "门禁 必须对照":
+          - columnheader "门禁"
+          - columnheader "必须对照"
+      - rowgroup:
+        - row "驱动唯一性 每 tick 的 sync/flush/end_sync/step 次数、线程、次序；Main 游戏物理调用为零；覆盖退出分支。":
+          - cell "驱动唯一性":
+            - strong: 驱动唯一性
+          - cell "每 tick 的 sync/flush/end_sync/step 次数、线程、次序；Main 游戏物理调用为零；覆盖退出分支。"
+        - row "运动完整迹线 每次零分离、from/motion/delta、margin、test_only、recovery、travel/remainder、safe/unsafe fraction、normal/depth、命中对象／shape和滑动次序。":
+          - cell "运动完整迹线":
+            - strong: 运动完整迹线
+          - cell "每次零分离、from/motion/delta、margin、test_only、recovery、travel/remainder、safe/unsafe fraction、normal/depth、命中对象／shape和滑动次序。"
+        - row "时态和后续行为 逻辑 transform、通知／flush、backend new_transform／积分分别在原相位比较；再比自定义索引、首选方向、立即攻击和 HP。":
+          - cell "时态和后续行为":
+            - strong: 时态和后续行为
+          - cell "逻辑 transform、通知／flush、backend new_transform／积分分别在原相位比较；再比自定义索引、首选方向、立即攻击和 HP。"
+        - row "LOS 完整输入参数、命中／无命中、具体对象与 shape、交点、法线、inside/exclude 和等距离候选。":
+          - cell "LOS":
+            - strong: LOS
+          - cell "完整输入参数、命中／无命中、具体对象与 shape、交点、法线、inside/exclude 和等距离候选。"
+        - row "回调与事实 body/area 回调次序、同步重入、原 deferred 边界、死亡换图、原 ActorRef、release/fact/credit/chain及去重。":
+          - cell "回调与事实":
+            - strong: 回调与事实
+          - cell "body/area 回调次序、同步重入、原 deferred 边界、死亡换图、原 ActorRef、release/fact/credit/chain及去重。"
+        - row "生命周期 无第二碰撞世界、无 proxy 回写、无残留 M Node Callable、无重复 init/finish/step、无悬空 RID。":
+          - cell "生命周期":
+            - strong: 生命周期
+          - cell "无第二碰撞世界、无 proxy 回写、无残留 M Node Callable、无重复 init/finish/step、无悬空 RID。"
+    - button "复制表格":
+    - button "展开表格":
+    - heading "11.2 共用代码降低漂移，但不自动证明同结果" [level=3]
+    - paragraph: 传统 Node adapter 与 S adapter 应调用同源运动实现。在相同平台、编译设置、输入与创建顺序下，优先要求数值和离散决定一致；不先放宽 epsilon，不用 fast-math／重排掩盖差异。
+    - paragraph: 原后端的对象创建、shape 插入和遍历次序也要保留。对照可以显式映射纯内部 RID 地址，但不能把真实命中身份差异“归一化掉”。
+    - heading "11.3 明确不能投产的条件" [level=3]
+    - paragraph: 以下任意一项存在，新模式就不能以“物理已独立”交付：
+    - list:
+      - listitem: 实时 LOS／运动仍要回 Main 执行；
+      - listitem: 保留 Main 的自动 step 或第二份活动碰撞世界；
+      - listitem: 有 gameplay 回调仍依赖 M Node；
+      - listitem: 修改了零分离、滑动、transform 可见相位或原命中顺序；
+      - listitem: 活动 space 被普通 worker 并发查询；
+      - listitem: 只在 PC 启动成功，没有通过完整语义和目标设备的期限验收。
+    - paragraph: 未达门禁时，整个会话继续旧运行模式，不运行两份权威，也不把局部完成标成完整独立架构。
+    - separator
+    - heading "封口结论" [level=2]
+    - paragraph:
+      - strong: 采用 B：同一后端、S 唯一驱动、同源非 Node 运动控制器、原查询与回调相位、既有 ActorRef 和事实合同、自编 Godot 模板。
+    - paragraph: 成熟部分继续使用 Godot 原物理与其内部并行；HardCore 专用新增部分只负责所有权、相位、控制器访问、回调与资源生命周期适配。
+    - paragraph: "**代价是维护一套范围受控但真实存在的引擎补丁和模板构建链。这个代价不能由“线程安全 PhysicsPort”四个字省掉。**本次已把这条依赖的目标处理方式确定，不再留作模糊待定；实现、同结果验证及手机收益仍未发生。"
+    - button "打开 HardCore_Physics_Closure_Final_B_zh.md 的预览"
+    - generic "HardCore_Physics_Closure_Final_B_zh.md"
+    - generic: 文档
+    - button "下载文件":
+    - button "复制":
+    - button "分享":
+    - button "朗读":
+    - button "重新生成回复":
+    - button "更多操作":
+    - button "来源":
+    - heading "你说：" [level=4]
+    - generic: B物理封口报告已经完整读完并下载，准备按同backend/S唯一step/同源非Node运动/自编模板实施。用户现在授权持续施工并交付115 APK，优先原包名签名旧存档；若兼容冲突过多允许另起可并装测试系列。工程已开隔离树，正在准备官方4.7自编依赖，生产writer迁移前仍需一个时钟设计封口。 独立复核找到物理以外的真实冲突：GameRoot._process:1948-1950处理技能输入和持续治疗；_tick_ongoing_heals:11950-11969按process delta累积elapsed并while扣interval。Player:1300/1360 accepted attack/skill windup await SceneTree.create_timer(windup,false)，默认process_in_physics=false、pause-aware；替代动作不能取消已接受release，death/map/combat_epoch才能失效。SceneTree.cpp639-671physics group→physics timers；688-736process group→process timers；793-825原timer list初始last边界、暂停false保剩余、process中新增timer当帧扣delta、timeout内新增timer当帧不扣。还有玩家death恢复0.8默认always timer、Enemy尸体消失/respawn timers。paused_receipt_pump.gd确保暂停也服务已不可逆durable receipt。原Godot.Main物理可能多个step再一次process，process delta被max_steps夹限。 请给最终明确释放/交错/暂停/积压政策和表，不再说“原相位适配”就结束：S应保留独立logic-physics和logic-process/timer两个domain吗？各自释放源、同时间顺序、step后process、已接受windup/timer首次扣时、wall到期、paused always receipt怎么定？让M渲染延迟不决定这些时钟，但是不能把攻击windup挪到physics起点或制造默认晚一tick。严格重现旧低fps的render回调事件序列与独立render根本有冲突，需明确等价比较的有效合法时钟序列和名义游戏时长合同，而非暗改time_scale/frequency。给一个可实现、可测试的最终决定。 保存已补为S prepared plan→immutable I/O→durable receipt回S→原context/sequence/并发消耗delta验证→live提交/watermarks→通知，暂停receipt继续服务。动态spawn计划新模式创建Node-free原生RefCounted SimActorHandle以真实ObjectID沿既有runtime_id发放，M proxy ID仅展示；旧mode不混。ObjectDB官方add/remove有spin_lock；handle不另存HP，life/alive唯一registry，所有Node instance_from_id消费者迁移。请核验此安排是否与B/既有identity冲突。 请用简明工程表和明确例子封口；此后按设计施工/必要验证，不靠重复微基准、少怪或禁止原技能交付。
+    - generic: …
+    - button "显示更多":
+      - generic: 显示更多
+    - button "复制消息":
+    - button "共享提示":
+    - button "编辑消息":
+    - button "思考了 16m 49s"
+    - generic: 思考了 16m 49s
+    - heading "ChatGPT 说：" [level=4]
+    - heading "115 时钟封口：双服务域、统一释放源，保留原 timer 语义" [level=1]
+    - paragraph:
+      - strong: 最终决定：S 内保留 logic-physics（H） 和 logic-process（P） 两个服务域；由同一个独立调度源释放，严格执行“物理步完成后 process，process 回调后 process timer”。另设不推进时间的持久回执入口 U。
+    - paragraph: "**不能把 GameRoot 的技能输入、持续治疗和 accepted windup 全塞进 physics 起点。**那会改变当前已经存在的执行顺序。"
+    - paragraph: 本轮复读了官方 4.7-stable 的 SceneTree、Main、ObjectDB 相关区间；生产函数与新保存方案按你提供的核对事实使用。没有修改生产代码、运行原生验证或构建 115 APK。
+    - separator
+    - heading "一、先明确接受哪一种“等价”" [level=2]
+    - paragraph: "**独立于渲染的模拟，不能同时逐次复现任意旧低 FPS 造成的 process 调用序列。**这一冲突现在必须作出选择，而不是藏在实现里。"
+    - heading "115 正常运行采用以下明确合同" [level=3]
+    - table:
+      - rowgroup:
+        - row "项目 最终政策":
+          - columnheader "项目"
+          - columnheader "最终政策"
+      - rowgroup:
+        - row "H 频率 取当前正式项目的 physics_ticks_per_second = F，不改变该配置；h = 1/F。":
+          - cell "H 频率"
+          - cell "取当前正式项目的 physics_ticks_per_second = F，不改变该配置；h = 1/F。"
+        - row "P 名义频率 首次明确规范为同一 F，每个完整 H 后执行一次 P，但 P 仍是独立相位。":
+          - cell "P 名义频率"
+          - cell "首次明确规范为同一 F，每个完整 H 后执行一次 P，但 P 仍是独立相位。":
+            - strong: 首次明确规范为同一 F
+            - text: ，每个完整 H 后执行一次 P，但 P 仍是独立相位。
+        - row "释放源 S 使用绝对单调时刻 Rₙ = origin + n·h，不等待 M 的 _process() 发放许可。":
+          - cell "释放源"
+          - cell "S 使用绝对单调时刻 Rₙ = origin + n·h，不等待 M 的 _process() 发放许可。"
+        - row "生效位置 (epoch, domain, 原执行顺序) 决定；worker 完成时间不决定。":
+          - cell "生效位置"
+          - cell "(epoch, domain, 原执行顺序) 决定；worker 完成时间不决定。"
+        - row "time_scale 每个 epoch 入口取样，保持原 double 运算；本轮已经取得的 delta 不因回调中改变倍率而重新计算。":
+          - cell "time_scale"
+          - cell "每个 epoch 入口取样，保持原 double 运算；本轮已经取得的 delta 不因回调中改变倍率而重新计算。"
+        - row "世界 simulation 时间 唯一所有者推进一次；不能 H、P 各向同一个世界时钟加一次 h。":
+          - cell "世界 simulation 时间"
+          - cell "唯一所有者推进一次；不能 H、P 各向同一个世界时钟加一次 h。":
+            - text: 唯一所有者推进一次；
+            - strong: 不能 H、P 各向同一个世界时钟加一次 h
+            - text: 。
+        - row "300 ms 继续只作为原 planning 门参数，不参与线程或 timer 时钟定义。":
+          - cell "300 ms"
+          - cell "继续只作为原 planning 门参数，不参与线程或 timer 时钟定义。"
+    - button "复制表格":
+    - button "展开表格":
+    - paragraph: 这里必须直说：**P 固定为 F 是 115 的新调度合同，不是声称旧 _process 原来就有 F Hz。**保留的是原延迟数值、暂停属性、首次扣时和执行顺序；不保留由画面卡顿偶然产生的少调用、大 delta 和时间夹限。
+    - heading "等价验证分成两层" [level=3]
+    - paragraph:
+      - strong:
+        - text: 语义回放层：
+        - strong: 向旧参考消费者和新 S 消费者提供
+        - text: 同一合法时钟序列
+      - text: ，包含每轮多少次 H、H/P 的各自 delta、未缩放 process step、暂停变更、输入采样点、wall 读取值及 I/O 交付位置，再比较游戏事实。旧序列中“多次 H 后一次 P”必须能被正确回放。
+    - paragraph: "**115 运行层：**执行上述独立、规范化的 H/P 序列，验证它按期服务，不再让 M 的掉帧改变游戏时间。"
+    - paragraph:
+      - text: 原 Main 确实先取得 process step，再因 max_steps 调整传给 process 的值；保存的原始 process step与调整后的值不能混用。回放中也不能简单用 scaled_delta / time_scale 推回所有 timer 的未缩放时间。
+      - 'link "GitHub: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/main/main.cpp, https://raw.githubusercontent.com/godotengine/godot/4.7-stable/main/main.cpp, 另外 1 个来源"':
+        - /url: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/main/main.cpp
+        - generic: GitHub
+        - generic: "+1"
+    - separator
+    - heading "二、固定执行顺序：不是笼统的“原相位适配”" [level=2]
+    - table:
+      - rowgroup:
+        - row "顺序 S 执行的工作":
+          - columnheader "顺序"
+          - columnheader "S 执行的工作"
+      - rowgroup:
+        - row "U_begin 接受有序控制命令；在非重入事务边界服务可消费的 durable receipt。这里只交接输入，不提前执行 P 中的技能调用。":
+          - cell "U_begin":
+            - strong: U_begin
+          - cell "接受有序控制命令；在非重入事务边界服务可消费的 durable receipt。这里只交接输入，不提前执行 P 中的技能调用。"
+        - row "H_prepare 原 prepare，sync → flush_queries，同步执行原碰撞回调。":
+          - cell "H_prepare":
+            - strong: H_prepare
+          - cell "原 prepare，sync → flush_queries，同步执行原碰撞回调。"
+        - row "H_group 原 physics 输入采样、actor 次序、移动、碰撞、立即攻击，以及原 deferred 边界。":
+          - cell "H_group":
+            - strong: H_group
+          - cell "原 physics 输入采样、actor 次序、移动、碰撞、立即攻击，以及原 deferred 边界。"
+        - row "H_tail process_in_physics=true 的 timer；原关联 tween、transform、删除边界。":
+          - cell "H_tail":
+            - strong: H_tail
+          - cell "process_in_physics=true 的 timer；原关联 tween、transform、删除边界。"
+        - row "H_step end_sync → 唯一 step → 原 post-step/iteration_end。":
+          - cell "H_step":
+            - strong: H_step
+          - cell "end_sync → 唯一 step → 原 post-step/iteration_end。"
+        - row "P_group 原 process 前输入采样，然后原 process 组件顺序；GameRoot 的技能输入与持续治疗留在这里，保持 1948–1950 的原先后关系。":
+          - cell "P_group":
+            - strong: P_group
+          - cell "原 process 前输入采样，然后原 process 组件顺序；GameRoot 的技能输入与持续治疗留在这里，保持 1948–1950 的原先后关系。":
+            - text: 原 process 前输入采样，然后原 process 组件顺序；
+            - strong: GameRoot 的技能输入与持续治疗留在这里，保持 1948–1950 的原先后关系
+            - text: 。
+        - row "P_tail process_in_physics=false 的 timer；timeout 同步恢复 accepted continuation；随后原收尾边界。":
+          - cell "P_tail":
+            - strong: P_tail
+          - cell "process_in_physics=false 的 timer；timeout 同步恢复 accepted continuation；随后原收尾边界。"
+        - row "U_end / 发布 必要的持久回执服务，发布完整已提交状态。":
+          - cell "U_end / 发布":
+            - strong: U_end / 发布
+          - cell "必要的持久回执服务，发布完整已提交状态。"
+    - button "复制表格":
+    - button "展开表格":
+    - paragraph: 这与官方 SceneTree 的两个 timer 服务位置一致：physics timer 在 physics group 后，process timer 在 process group 后。
+    - paragraph:
+      - strong: 同名义时刻的顺序固定为：
+    - generic: 纯文本
+    - button "启用自动换行":
+    - button "复制代码":
+    - code:
+      - generic: H_group → H_timer → step → P_group → P_timer
+    - paragraph:
+      - text: P 的依赖是
+      - strong: 本轮 H 已完成
+      - text: ，不是“再等下一个物理 tick”。
+    - paragraph: 输入邮箱也要在原 H 采样点、P 前采样点分别截取有序输入；不能把整个 epoch 的输入都锁死在 U_begin，更不能把迟到输入回填已经完成的逻辑点。
+    - heading "对 B 物理封口再补一条" [level=3]
+    - paragraph:
+      - strong: 原来合法地发生在 P／P_timer continuation 中的 LOS，必须仍能在这个位置由 S 执行。
+    - paragraph: 此时唯一 step 已完成，没有并发 step；B 的 owner/phase 门禁不能只允许 H 查询。不得为了等下一个 H 的查询窗口而延迟攻击，也不得额外 step/flush_queries。原来因配置而拒绝的查询则不能借迁移悄悄变成成功。
+    - separator
+    - heading "三、accepted windup：保留第一次扣时与原列表边界" [level=2]
+    - heading "3.1 timer 第一版保留原遍历算法" [level=3]
+    - paragraph:
+      - strong: 不把 SceneTree timer 全部改造成一个按绝对 wall deadline 排序的新堆。
+    - paragraph: 原算法在每次扫描开始时截取原尾节点，按列表次序处理；扣减后 time_left <= 0 才触发。这个规则决定了“本轮新建 timer 是否扣时”。
+    - table:
+      - rowgroup:
+        - row "新 P timer 的创建位置 第一次扣时":
+          - columnheader "新 P timer 的创建位置"
+          - columnheader "第一次扣时"
+      - rowgroup:
+        - row "H_group、H_timer，或 P_group 中；尚未进入本轮 P timer 扫描 本轮 P_tail，扣完整本次适用 delta。":
+          - cell "H_group、H_timer，或 P_group 中；尚未进入本轮 P timer 扫描"
+          - cell "本轮 P_tail，扣完整本次适用 delta。":
+            - strong: 本轮 P_tail
+            - text: ，扣完整本次适用 delta。
+        - row "P_timer 的 timeout／同步 continuation 内 下一次 P_tail，不追着新列表尾继续扫。":
+          - cell "P_timer 的 timeout／同步 continuation 内"
+          - cell "下一次 P_tail，不追着新列表尾继续扫。":
+            - strong: 下一次 P_tail
+            - text: ，不追着新列表尾继续扫。
+        - row "本轮 P_tail 已结束以后 下一次 P_tail。":
+          - cell "本轮 P_tail 已结束以后"
+          - cell "下一次 P_tail。"
+        - row "暂停期间，且 process_always=false 保留剩余，恢复后第一次合法 P 才扣。":
+          - cell "暂停期间，且 process_always=false"
+          - cell "保留剩余，恢复后第一次合法 P 才扣。"
+    - button "复制表格":
+    - button "展开表格":
+    - paragraph:
+      - text: 注意：限制是
+      - strong: 同一次扫描中新加入的不处理
+      - text: ，不是“任何 timeout 里创建的 timer 都晚一整轮”。H_timer 创建的 P timer，可以参加稍后的同轮 P_tail。
+    - paragraph: 零时长 timer 不在 create 时直接执行，而在第一次合法扫描触发。较早 timeout 若改变暂停或较晚 timer，后续元素必须观察到这个变化。
+    - heading "3.2 accepted release 不跟“当前动作”走" [level=3]
+    - paragraph: 每一笔已经接受的攻击／技能，独立保留：
+    - generic: 纯文本
+    - button "启用自动换行":
+    - button "复制代码":
+    - code:
+      - generic: 原 release_id 已接受技能/输入绑定 原 world、life、combat_epoch 条件 一次性 continuation
+    - paragraph: "**换动作、重新瞄准、接受后续攻击，不得覆盖或取消旧 release。**只有原合同已有的 death、map、combat_epoch 等条件才能使它失效。"
+    - paragraph: timeout 在 P_tail 触发后，S 就在这里检查原合法性并执行释放。不能：
+    - list:
+      - listitem: 存成“每 actor 只保留最新一笔”的槽；
+      - listitem: 用最新动作 token 不匹配取消旧释放；
+      - listitem: 因 worker 尚未完成取消合法攻击；
+      - listitem: 将真实释放统一推迟到下一 H。
+    - heading "3.3 明确例子" [level=3]
+    - paragraph:
+      - text: 以下仅演示规则，
+      - strong: 不是把正式频率改为 100 Hz
+      - text: 。
+    - paragraph: 设每次 P 的 delta 为 10 ms，windup 为 25 ms，在 Pₙ_group 接受：
+    - table:
+      - rowgroup:
+        - row "相位 剩余时间 结果":
+          - columnheader "相位"
+          - columnheader "剩余时间"
+          - columnheader "结果"
+      - rowgroup:
+        - row "Pₙ_tail 25 → 15 ms 不释放":
+          - cell "Pₙ_tail"
+          - cell "25 → 15 ms"
+          - cell "不释放"
+        - row "Pₙ₊₁_tail 15 → 5 ms 不释放":
+          - cell "Pₙ₊₁_tail"
+          - cell "15 → 5 ms"
+          - cell "不释放"
+        - row "Pₙ₊₂_tail 5 → −5 ms 就在这里释放":
+          - cell "Pₙ₊₂_tail"
+          - cell "5 → −5 ms"
+          - cell "就在这里释放":
+            - strong: 就在这里释放
+    - button "复制表格":
+    - button "展开表格":
+    - paragraph: 不能再等 Hₙ₊₃。
+    - paragraph: 若 timer 是在 Pₙ_tail 的 timeout 内创建，第一次扣时才是 Pₙ₊₁_tail，相应晚一次扫描——这是原列表合同，不是线程添加的延迟。
+    - paragraph: "**也不能改成“接受时的 wall 时间＋25 ms”。**那会去掉原来的当轮完整 delta 扣减。名义 windup 应按原 timer 的合法扣时序列解释，不冒充“从接收瞬间精确等待同样长的墙钟时间”。"
+    - separator
+    - heading "四、暂停、持续治疗和 wall 到期的最终表" [level=2]
+    - paragraph:
+      - text: 官方默认 create_timer() 是 process_always=true、process_in_physics=false、ignore_time_scale=false。
+      - strong: always 不等于忽略倍率，也不等于 wall timer。
+      - 'link "Godot Engine documentation: https://docs.godotengine.org/en/stable/classes/class_scenetree.html, https://docs.godotengine.org/en/stable/classes/class_scenetree.html"':
+        - /url: https://docs.godotengine.org/en/stable/classes/class_scenetree.html
+        - generic: Godot Engine documentation
+    - table:
+      - rowgroup:
+        - row "对象 游戏暂停、进程仍运行 time_scale=0 恢复／服务规则":
+          - columnheader "对象"
+          - columnheader "游戏暂停、进程仍运行"
+          - columnheader "time_scale=0"
+          - columnheader "恢复／服务规则"
+      - rowgroup:
+        - row "普通移动、普通 GameRoot process 按原 process mode 停止 保留原零 delta 行为，不擅自等同 pause 不补扣暂停期间的游戏时间":
+          - cell "普通移动、普通 GameRoot process"
+          - cell "按原 process mode 停止"
+          - cell "保留原零 delta 行为，不擅自等同 pause"
+          - cell "不补扣暂停期间的游戏时间"
+        - row "accepted windup：create_timer(windup,false) 不扣剩余 正时长不推进 恢复后继续剩余，不重启完整 windup":
+          - cell "accepted windup：create_timer(windup,false)"
+          - cell "不扣剩余"
+          - cell "正时长不推进"
+          - cell "恢复后继续剩余，不重启完整 windup"
+        - row "玩家 death 恢复 0.8，默认 always timer 继续按 P 的缩放 delta 扣时 正时长不推进 不改成 pause-aware，也不改成 wall deadline":
+          - cell "玩家 death 恢复 0.8，默认 always timer"
+          - cell "继续按 P 的缩放 delta 扣时":
+            - strong: 继续按 P 的缩放 delta 扣时
+          - cell "正时长不推进"
+          - cell "不改成 pause-aware，也不改成 wall deadline"
+        - row "Enemy 尸体／respawn timer 逐调用保留原 flags 同左 不能因为都叫“清理”而统一修改暂停语义":
+          - cell "Enemy 尸体／respawn timer"
+          - cell "逐调用保留原 flags"
+          - cell "同左"
+          - cell "不能因为都叫“清理”而统一修改暂停语义"
+        - row "ignore_time_scale=true timer 仍先检查 always／paused 资格 获准后使用原未缩放字段 不用 scaled delta 反推替代":
+          - cell "ignore_time_scale=true timer"
+          - cell "仍先检查 always／paused 资格"
+          - cell "获准后使用原未缩放字段"
+          - cell "不用 scaled delta 反推替代"
+        - row "旧 wall 到期 原 wall 时基继续，原消费者处检查 不受倍率冻结 不搬成 simulation deadline":
+          - cell "旧 wall 到期"
+          - cell "原 wall 时基继续，原消费者处检查"
+          - cell "不受倍率冻结"
+          - cell "不搬成 simulation deadline"
+        - row "已不可逆 durable receipt U 必须继续服务 U 必须继续服务 不依赖 timer、physics 或 M 呈现":
+          - cell "已不可逆 durable receipt"
+          - cell "U 必须继续服务":
+            - strong: U 必须继续服务
+          - cell "U 必须继续服务":
+            - strong: U 必须继续服务
+          - cell "不依赖 timer、physics 或 M 呈现"
+    - button "复制表格":
+    - button "展开表格":
+    - paragraph: 暂停不停止独立调度基础，只按原资格停掉对应 gameplay；always 和回执仍有机会。若暂停在回调内改变，后面的消费者按原位置读新值，不能把 paused 值整轮锁死。
+    - paragraph:
+      - text: "**OS 真正挂起或终止进程是另一回事。**不能保证那时仍执行回执；恢复／重启使用原耐久协议与原 suspend/wake 补偿，不能补跑休眠期间的大量移动攻击。游戏 pause、Engine freeze 和 OS 不调度不能混成一个状态。"
+      - 'link "GitHub: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/scene/main/scene_tree.cpp, https://raw.githubusercontent.com/godotengine/godot/4.7-stable/scene/main/scene_tree.cpp"':
+        - /url: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/scene/main/scene_tree.cpp
+        - generic: GitHub
+    - heading "持续治疗仍是 P 中的原 while" [level=3]
+    - paragraph: _tick_ongoing_heals 保留：
+    - generic: 纯文本
+    - button "启用自动换行":
+    - button "复制代码":
+    - code:
+      - generic: elapsed += 本次 P delta while 达到 interval： 执行一次原治疗与回调 按原规则扣 interval
+    - paragraph: 例如在同一个回放 P 中：原 elapsed=90 ms，delta=250 ms，interval=100 ms，应处理三次，余40 ms。
+    - paragraph: "**不能合成一次三倍加血。**中间回调和资格变化可能有意义。新运行时通常由多个小 P 服务；比较是否等价必须使用同一时钟序列，不能只比较最后累计治疗数。"
+    - separator
+    - heading "五、积压政策：不复制旧渲染夹限，也不无限追债" [level=2]
+    - table:
+      - rowgroup:
+        - row "情况 明确处理":
+          - columnheader "情况"
+          - columnheader "明确处理"
+      - rowgroup:
+        - row "只有 M 迟到 不改 H/P release，不放大 delta，不让游戏少跑。":
+          - cell "只有 M 迟到":
+            - strong: 只有 M 迟到
+          - cell "不改 H/P release，不放大 delta，不让游戏少跑。"
+        - row "S 短时迟到 以原小步成对补做 H₁/P₁、H₂/P₂…，不合成大 P，不丢 timer、治疗或 accepted 义务。":
+          - cell "S 短时迟到":
+            - strong: S 短时迟到
+          - cell "以原小步成对补做 H₁/P₁、H₂/P₂…，不合成大 P，不丢 timer、治疗或 accepted 义务。"
+        - row "单次追赶占用过长 原 max_steps=M 改作一次 turn 最多服务 M 个完整 epoch 的工作界；每完成一个 epoch 可检查 U。":
+          - cell "单次追赶占用过长":
+            - strong: 单次追赶占用过长
+          - cell "原 max_steps=M 改作一次 turn 最多服务 M 个完整 epoch 的工作界；每完成一个 epoch 可检查 U。"
+        - row "欠账超限 115 初始故障线明确取 L_fault=M·h：超过 M 个完整 epoch 的欠账，进入 CLOCK_OVERRUN。":
+          - cell "欠账超限":
+            - strong: 欠账超限
+          - cell "115 初始故障线明确取 L_fault=M·h：超过 M 个完整 epoch 的欠账，进入 CLOCK_OVERRUN。":
+            - text: 115 初始故障线明确取
+            - strong: L_fault=M·h
+            - text: ：超过 M 个完整 epoch 的欠账，进入 CLOCK_OVERRUN。
+        - row "CLOCK_OVERRUN 在当前不可分提交结束后的安全边界进入显式故障状态；保留待办与耐久恢复责任，继续必要 U，不伪称正常战斗。该场景不通过115交付门。":
+          - cell "CLOCK_OVERRUN":
+            - strong: CLOCK_OVERRUN
+          - cell "在当前不可分提交结束后的安全边界进入显式故障状态；保留待办与耐久恢复责任，继续必要 U，不伪称正常战斗。该场景不通过115交付门。"
+    - button "复制表格":
+    - button "展开表格":
+    - paragraph: 这里明确改变了旧退化策略：**新模式的 max_steps 不再用来裁掉 process 时间或静默丢物理时间。**它不是玩法周期，也不是达到帧期限的证明。
+    - paragraph: 未服务时间以 epoch/debt 计数表示，不为每个欠帧分配一份世界快照。故障阈值可以通过发行配置事先版本化，但不能运行失败后自动放宽，更不能用插值、少怪或低频把故障藏起来。
+    - separator
+    - heading "六、保存回执方案成立，但必须保持不可逆事实的处理责任" [level=2]
+    - paragraph:
+      - text: 你补充的链条与 B
+      - strong: 一致，可以作为正式实现方向
+      - text: ：
+    - generic: 纯文本
+    - button "启用自动换行":
+    - button "复制代码":
+    - code:
+      - generic: S prepared plan → immutable I/O → durable receipt 回到 S → 原 context / sequence / 并发消耗 delta 验证 → live 提交及 watermarks → 通知
+    - paragraph: 必须保持以下边界：
+    - table:
+      - rowgroup:
+        - row "边界 裁决":
+          - columnheader "边界"
+          - columnheader "裁决"
+      - rowgroup:
+        - row "I/O 线程 只处理不可变计划和耐久结果，不修改 registry／HP。":
+          - cell "I/O 线程"
+          - cell "只处理不可变计划和耐久结果，不修改 registry／HP。"
+        - row "并发消耗 回执不能把准备之后已发生的合法消耗覆盖回旧快照。":
+          - cell "并发消耗"
+          - cell "回执不能把准备之后已发生的合法消耗覆盖回旧快照。"
+        - row "乱序／重复 按原 sequence、资源依赖和水位协议处理，不按完成速度越序提交。":
+          - cell "乱序／重复"
+          - cell "按原 sequence、资源依赖和水位协议处理，不按完成速度越序提交。"
+        - row "world/profile 已变化 不能把已发生的 durable 事实当作普通过期计算丢掉；持久侧交原事务 owner 恢复，live 侧不得污染新世界。":
+          - cell "world/profile 已变化"
+          - cell "不能把已发生的 durable 事实当作普通过期计算丢掉；持久侧交原事务 owner 恢复，live 侧不得污染新世界。":
+            - strong: 不能把已发生的 durable 事实当作普通过期计算丢掉
+            - text: ；持久侧交原事务 owner 恢复，live 侧不得污染新世界。
+        - row "暂停 U 继续完成已不可逆事务，不因此开放新的战斗更新。":
+          - cell "暂停"
+          - cell "U 继续完成已不可逆事务，不因此开放新的战斗更新。"
+        - row "M 旧 pump 新模式下不得继续做第二份 live 提交，至多负责投递。":
+          - cell "M 旧 pump"
+          - cell "新模式下不得继续做第二份 live 提交，至多负责投递。"
+    - button "复制表格":
+    - button "展开表格":
+    - paragraph: "**U 不推进 H/P，也不能调用 process(0) 或 process_timers(0)。**零 delta 扫描仍可能触发已为零的 timer，会错误夹入攻击或复活。"
+    - paragraph: U 在完整 epoch 的安全边界、以及空闲／暂停被 I/O 唤醒后服务；不重入一个正在提交的 actor、HP、timer continuation 或物理 step。
+    - paragraph:
+      - text: 原帧预算账本迁给 S 后，
+      - strong: 一次逻辑 epoch 只复位一次
+      - text: ，不能 H、P 各获得一份新额度；U 也不能靠伪造 epoch 为其他工作加预算。
+    - separator
+    - heading "七、SimActorHandle：与既有身份兼容，但有两个必须补的门" [level=2]
+    - heading "7.1 所有权安排正确" [level=3]
+    - paragraph: "**S 创建 Node-free 原生 handle，用它的真实 ObjectID 沿原 runtime_id 发放；M proxy ID 只用于显示。**这不建立第二身份，也不与 B 冲突。"
+    - paragraph: 继续保持：
+    - generic: 纯文本
+    - button "启用自动换行":
+    - button "复制代码":
+    - code:
+      - generic: "ActorRef = {world, runtime_id, life_generation}"
+    - paragraph: world_context、release_id/fact_id/credit/chain 和死亡去重键不新增平行体系。
+    - paragraph: handle 不另存 HP/alive；registry 是唯一游戏状态。即使某个 continuation 还持有 Ref，旧生命期或旧 world 的 resolve 仍应失败，不能以“对象尚未释放”代替“角色仍然有效”。
+    - heading "7.2 ObjectDB 的锁不等于对象可以随意跨线程使用" [level=3]
+    - paragraph:
+      - text: 官方 add/remove 确实加锁；get_instance() 也检查 slot/validator，但
+      - strong: 返回前已经解锁，不替调用者保持对象生命周期，也不保护后续方法和字段访问
+      - text: 。
+    - paragraph: 因此：
+    - list:
+      - listitem: S registry 持有有效生命周期；完整初始化后再发布身份。
+      - listitem: M/W 只拿身份或不可变数据，不拿 ObjectDB 裸指针做游戏调用。
+      - listitem: 最终销毁由 S 管理；不能让最后一个 M 引用释放时触发 gameplay 清理。
+      - listitem: 所有旧 instance_from_id(... ) as Node、Node 所属树／生命期判断，都迁成 registry 的等价规则，不能只删除检查。
+    - heading "7.3 RefCounted 的最高位是实际兼容风险" [level=3]:
+      - text: "7.3"
+      - strong: RefCounted 的最高位是实际兼容风险
+    - paragraph:
+      - text: 官方 ObjectID 用
+      - strong: bit 63 标识 RefCounted
+      - text: 。以有符号64位形式传递时，真实 ID 可能为负；所以不能沿用 runtime_id > 0 作为普遍有效性条件。
+      - link "GitHub, https://raw.githubusercontent.com/godotengine/godot/4.7-stable/core/object/object_id.h":
+        - /url: https://raw.githubusercontent.com/godotengine/godot/4.7-stable/core/object/object_id.h
+        - generic: GitHub
+    - paragraph: writer 切换前必须检查：PlainGraph、字典键、序列化／恢复、种子字符串化、C++／GD 边界是否无损保留64位。
+    - paragraph:
+      - strong: 不能用 abs()、清高位、32位截断或浮点中转“修正”这个 ID。
+    - paragraph: 固定替代也明确：**若现有不可变 schema 确实只接受正整数 runtime_id，就改用 Node-free 原生 Object handle，由 S 明确管理生命周期；不强推 RefCounted，不修改历史身份，不另造 actor 编号。**本轮未读取这些新传输代码，不能宣布该门已经通过。
+    - paragraph: 另外，全局 ObjectDB 发号会受对象创建交错影响，不提供跨运行相同 ID 的保证。语义回放要给两边相同的已接受身份和原 seed 输入，不能在结果之后任意归一化身份，掩盖 RNG 输入变化。
+    - separator
+    - heading "八、按此顺序进入施工，不再重复架构争论" [level=2]
+    - table:
+      - rowgroup:
+        - row "顺序 必须交付的内容 关键验证":
+          - columnheader "顺序"
+          - columnheader "必须交付的内容"
+          - columnheader "关键验证"
+      - rowgroup:
+        - row "1 S 的 H/P/U 相位与独立 release 同一 clock trace 的0／1／多H后P、raw/clipped delta；正常运行不受 M 驱动。":
+          - cell "1":
+            - strong: "1"
+          - cell "S 的 H/P/U 相位与独立 release"
+          - cell "同一 clock trace 的0／1／多H后P、raw/clipped delta；正常运行不受 M 驱动。"
+        - row "2 原 timer 遍历＋accepted continuation 当轮首次扣时、timeout 新 timer、跨 domain 创建、零值、暂停、动作替换不取消释放。":
+          - cell "2":
+            - strong: "2"
+          - cell "原 timer 遍历＋accepted continuation"
+          - cell "当轮首次扣时、timeout 新 timer、跨 domain 创建、零值、暂停、动作替换不取消释放。"
+        - row "3 GameRoot 真实技能输入、治疗和当前 death/respawn 迁移 不挪 H、不合并 while、不按表现节点消失取消游戏事实。":
+          - cell "3":
+            - strong: "3"
+          - cell "GameRoot 真实技能输入、治疗和当前 death/respawn 迁移"
+          - cell "不挪 H、不合并 while、不按表现节点消失取消游戏事实。"
+        - row "4 U 回执与 S-only resolve 暂停回执、重复／乱序／换 world 恢复、真实64位 ID、死亡重生与旧生命期拒绝。":
+          - cell "4":
+            - strong: "4"
+          - cell "U 回执与 S-only resolve"
+          - cell "暂停回执、重复／乱序／换 world 恢复、真实64位 ID、死亡重生与旧生命期拒绝。"
+        - row "5 接入 B 的生产 writer 和真实重计算 完整移动、碰撞、LOS、HP、技能、存档事实及期限验证，不以微基准代替。":
+          - cell "5":
+            - strong: "5"
+          - cell "接入 B 的生产 writer 和真实重计算"
+          - cell "完整移动、碰撞、LOS、HP、技能、存档事实及期限验证，不以微基准代替。"
+    - button "复制表格":
+    - button "展开表格":
+    - paragraph:
+      - strong: 封口结论：一位 S、两个服务域、一条独立释放源；step 后 process，process 后 timer；已接受释放保持原失效条件；暂停继续 always 与 durable receipt；不复刻旧渲染卡顿的退化序列。
+    - paragraph:
+      - text: 115 继续优先原包名、签名和旧档兼容。并装测试系列可以作为已授权的兼容备选，
+      - strong: 不能作为绕过时钟、身份或原技能正确性的办法。
+    - button "打开 HardCore_115_Clock_Release_Pause_Identity_Closure_zh.md 的预览"
+    - generic "HardCore_115_Clock_Release_Pause_Identity_Closure_zh.md"
+    - generic: 文档
+    - button "下载文件":
+    - button "复制":
+    - button "分享":
+    - button "朗读":
+    - button "重新生成回复":
+    - button "更多操作":
+    - button "来源":
+    - separator "今天 10:05":
+      - time: 今天 10:05
+    - heading "你说：" [level=4]
+    - generic: 115施工进度核对，2026-10-14。用户已重新登录Chrome，要求确认联系与双方进度，保护昨晚成果。本消息用于接续已完成的两轮架构+B物理+时钟封口，不重开泛化研究，不请求重复已通过实验。 本地实际：主树codex/integration仍HEAD45170d0，113备份只读；施工候选multicore-v115 detached同HEAD。官方Godot4.7源5b4e0cb0；单backend external-owner补丁、同源non-Node运动控制器、独立Host H/P/U和timer ledger、线程池批次/表现快照桥、原生内容图冻结器已实现。Windows自编运行时已构建，最近graph阶段174705664bytes SHA47f64d5bc7aa98b81df2f3b2e30a784d1b2ca4814c137ddf298334f5137ae58c。实际通过范围：12运动对照、Host时钟、14原生图检查、身份生命期测试；它们不证明生产物理owner已切换。 业务迁移：PlayerState 423函数/139字段迁成唯一ProfileModel，12动态规则owner cores；仓库late receipt/错线程拒绝/codec87项/500槽hot保存相关专项已通过；Player非视觉完整model16项通过；Summon目前只有唯一HP/growth/support state，完整AI攻击/Enemy/WorldCore未完成。GameRoot尚未改，真实生产S模拟循环、重W kernels、M纯表现代理还未接入。内容47查询、1023动作时长跨线程对照已过；内容快照Gd结构哈希对大量相同空容器O(k²)，原生alias-preserving图实现已经14项通过，GD fastpath尚待接入。27个World技能输入函数迁移仅在暂存文件，最新原始入口test因脚本错误强制退出FAIL，源码/索引保护PASS；不会把它算成功。 发现两个必须续修的真实问题：①Node最后删除时，externally-held PlayerModel未取消profile_changed订阅；需只在PREDELETE断开，不在exit_tree。②旧Summon的owner/current/pending target是Node式持久对象链接，不冻结life；不能直接换成冻结life的ActorRef，否则damage后death换generation会丢kill growth。准备S-owned runtime-handle lease ActorLink，原accepted action仍用既有ActorRef world/life guard，qualified release借同一Core完成damage后读hp/level。Handle已改为Node-free Object保持正64bit原ObjectID，life读取PlayerModel.current_life，不造第二计数器；Playercombat_epoch初值0仍保留，需要原begin_combat_transition后登记。 本地还有一个对你时钟报告的安全修正待复核：旧实现CLOCK_OVERRUN在debt>M时0 epoch并自动close，永久丢失继续服务责任。新实现保持origin与debt，turn最多M完整H/P，记录显式CLOCK_OVERRUN，继续U和有界小步恢复；不自动close，不重置delta、不丢accepted/timer、不隐藏期限FAIL。纯C++18回归+4/4/1恢复测试已过；新Host改动尚未重新编译。你原报告说安全边界显式故障且保留责任，是否允许这种继续有界恢复、记录故障并保持该场景交付FAIL的实现？若认为必须冻结战斗，请指出原报告的确切合同差异及保住accepted/耐久工作的处理方式。 请仅做进度回执与以上两处ActorLink/overrun边界复核，列出你本轮真正核验和未读源码的边界。无需再搜游戏或重算旧微基准。115APK与Android自编模板均NOT_RUN，目标包名签名旧档不变。现在请确认你已收到，并指出是否有明确设计冲突。
+    - generic: …
+    - button "显示更多":
+      - generic: 显示更多
+    - button "复制消息":
+    - button "共享提示":
+    - button "编辑消息":
+    - button "思考了 4m 20s"
+    - generic: 思考了 4m 20s
+    - heading "ChatGPT 说：" [level=4]
+    - paragraph:
+      - strong: 已收到这份 2026 年 10 月 14 日的 115 施工进度，本会话可以继续接续交叉复核。
+    - paragraph: "**裁决：你提出的 ActorLink 区分和 CLOCK_OVERRUN 有界恢复，没有与 B 的单一权威架构发生冲突，可以按下述边界继续。**其中 overrun 是对我原报告未写透的恢复策略作明确补充，不要求超线后永久冻结战斗，更不允许自动 close 丢失继续服务责任。"
+    - paragraph:
+      - text: 这只是本会话收发确认；
+      - strong: 我本轮没有另行验证 Chrome、RDC 或另一施工线程的连接状态。
+    - heading "一、进度回执：保留昨晚成果，不扩大通过范围" [level=2]
+    - paragraph:
+      - text: 以下是
+      - strong: 你提供的本地状态
+      - text: ，不是我本轮重新执行所得：
+    - table:
+      - rowgroup:
+        - row "部分 当前应记录的状态":
+          - columnheader "部分"
+          - columnheader "当前应记录的状态"
+      - rowgroup:
+        - row "基线与保护 主树 codex/integration、detached 候选 multicore-v115 均以 45170d0 为基线；113 备份只读。":
+          - cell "基线与保护"
+          - cell "主树 codex/integration、detached 候选 multicore-v115 均以 45170d0 为基线；113 备份只读。"
+        - row "引擎与基础设施 external-owner、同源 non-Node 运动、H/P/U、timer ledger、批次／表现桥、原生内容图已实现；12 运动、Host 时钟、14 图检查及身份专项分别通过。不等于生产 owner 已切换。":
+          - cell "引擎与基础设施"
+          - cell "external-owner、同源 non-Node 运动、H/P/U、timer ledger、批次／表现桥、原生内容图已实现；12 运动、Host 时钟、14 图检查及身份专项分别通过。不等于生产 owner 已切换。":
+            - text: external-owner、同源 non-Node 运动、H/P/U、timer ledger、批次／表现桥、原生内容图已实现；12 运动、Host 时钟、14 图检查及身份专项分别通过。
+            - strong: 不等于生产 owner 已切换。
+        - row "已构建运行时 graph 阶段 Windows 产物 174,705,664 bytes，SHA256 47f64d5bc7aa98b81df2f3b2e30a784d1b2ca4814c137ddf298334f5137ae58c。新 Host 恢复改动尚未编入这个产物。":
+          - cell "已构建运行时"
+          - cell "graph 阶段 Windows 产物 174,705,664 bytes，SHA256 47f64d5bc7aa98b81df2f3b2e30a784d1b2ca4814c137ddf298334f5137ae58c。新 Host 恢复改动尚未编入这个产物。":
+            - text: graph 阶段 Windows 产物
+            - strong: 174,705,664 bytes
+            - text: ，SHA256 47f64d5bc7aa98b81df2f3b2e30a784d1b2ca4814c137ddf298334f5137ae58c。
+            - strong: 新 Host 恢复改动尚未编入这个产物。
+        - row "业务迁移 ProfileModel、12 个规则 owner cores、Player 非视觉 model 及所列仓库／保存专项已有成果；Summon 仍是部分状态迁移。":
+          - cell "业务迁移"
+          - cell "ProfileModel、12 个规则 owner cores、Player 非视觉 model 及所列仓库／保存专项已有成果；Summon 仍是部分状态迁移。"
+        - row "内容与 World 入口 47 查询、1023 动作时长对照和原生图检查已有通过记录；GD fastpath 待接。27 个输入函数仍在暂存；最新原始入口测试 FAIL，源码／索引保护 PASS，两者不得混记。":
+          - cell "内容与 World 入口"
+          - cell "47 查询、1023 动作时长对照和原生图检查已有通过记录；GD fastpath 待接。27 个输入函数仍在暂存；最新原始入口测试 FAIL，源码／索引保护 PASS，两者不得混记。":
+            - text: 47 查询、1023 动作时长对照和原生图检查已有通过记录；GD fastpath 待接。27 个输入函数仍在暂存；最新原始入口测试
+            - strong: FAIL
+            - text: ，源码／索引保护
+            - strong: PASS
+            - text: ，两者不得混记。
+        - row "生产闭环与交付 GameRoot、完整 Enemy／WorldCore／Summon AI、真实 S 循环、重 W kernels、M 纯表现接线未完成；Android 自编模板、115 APK 均 NOT_RUN。":
+          - cell "生产闭环与交付"
+          - cell "GameRoot、完整 Enemy／WorldCore／Summon AI、真实 S 循环、重 W kernels、M 纯表现接线未完成；Android 自编模板、115 APK 均 NOT_RUN。":
+            - text: GameRoot、完整 Enemy／WorldCore／Summon AI、真实 S 循环、重 W kernels、M 纯表现接线未完成；
+            - strong: Android 自编模板、115 APK 均 NOT_RUN。
+    - button "复制表格":
+    - button "展开表格":
+    - paragraph: "**准确的总状态是：基础设施和多项业务模型迁移已形成成果，生产独立模拟闭环尚未接通。**本轮没有执行 Git、构建、清理或文件写入，不会覆盖昨晚成果，也不将“未触碰”说成“已另做备份”。"
+    - heading "二、ActorLink：认可，但不能拿它替代 accepted ActorRef" [level=2]
+    - paragraph:
+      - strong: 持续对象关系与已接受动作的生命期约束，确实需要分开。
+    - table:
+      - rowgroup:
+        - row "用途 应用的合同":
+          - columnheader "用途"
+          - columnheader "应用的合同"
+      - rowgroup:
+        - row "Summon 的 owner／current target／pending target 等原持久对象链接 ActorLink 指向同一个 runtime handle／Core，不冻结 life；在具体使用位置执行原有存活、地图、退役等检查。":
+          - cell "Summon 的 owner／current target／pending target 等原持久对象链接"
+          - cell "ActorLink 指向同一个 runtime handle／Core，不冻结 life；在具体使用位置执行原有存活、地图、退役等检查。":
+            - text: ActorLink 指向同一个 runtime handle／Core，
+            - strong: 不冻结 life
+            - text: ；在具体使用位置执行原有存活、地图、退役等检查。
+        - 'row "已接受攻击／技能及延迟 release 继续使用既有 ActorRef {world, runtime_id, life_generation} 和原 action guard。不能借 ActorLink 绕过失效条件。"':
+          - cell "已接受攻击／技能及延迟 release"
+          - 'cell "继续使用既有 ActorRef {world, runtime_id, life_generation} 和原 action guard。不能借 ActorLink 绕过失效条件。"':
+            - text: "继续使用既有 ActorRef {world, runtime_id, life_generation} 和原 action guard。"
+            - strong: 不能借 ActorLink 绕过失效条件。
+        - row "一次已经通过资格检查的同步 damage 调用及其返回后处理 在调用前借住同一个 Core；damage 返回后按原控制流读取该 Core 的 HP／level，不因这次伤害触发 death generation 变化，就重新解析旧 ActorRef 而误丢后处理。":
+          - cell "一次已经通过资格检查的同步 damage 调用及其返回后处理"
+          - cell "在调用前借住同一个 Core；damage 返回后按原控制流读取该 Core 的 HP／level，不因这次伤害触发 death generation 变化，就重新解析旧 ActorRef 而误丢后处理。"
+    - button "复制表格":
+    - button "展开表格":
+    - paragraph: 你指出的 kill growth 问题成立于这条语义区别：
+    - generic: 纯文本
+    - button "启用自动换行":
+    - button "复制代码":
+    - code: 原资格检查通过 → 借住目标 Core A → 对 A 执行原 damage → damage 内死亡并改变 life → 返回后仍按原分支读取 A 的 hp/level → 原 growth／归属处理
+    - paragraph:
+      - strong: 不能在最后一步改为 旧 ActorRef.resolve()，也不能重新查 current_target，误读已被回调换成的目标 B。
+    - paragraph: 同时保留三条硬边界：
+    - paragraph: "**lease 只保护对象／Core 的可访问生命周期，不证明角色仍活着、仍能受伤。**不能延长其游戏存活，也不能允许旧动作攻击重生后的生命期。"
+    - paragraph: "**后处理必须保留原回调后的检查。**若 damage 同步触发换图、目标替换、退休或复活，按原源码的分支处理；不能概括成“借住 Core 后无条件发 growth”，也不能提前快照 hp/level 取代原来的返回后 live 读取。"
+    - paragraph: "**读取权限与后续写入权限分开。**为了完成旧事实的返回后处理而持有 Core，不代表可以继续对退休世界或新生命期提交新动作。归属与去重仍沿原键，不新造一套。"
+    - paragraph:
+      - text: 你改用
+      - strong: Node-free 原生 Object、真实正64位 ObjectID
+      - text: ，与原报告给出的兼容替代一致；PlayerModel.current_life 作为唯一 life 来源、combat_epoch 初值仍为0，也没有冲突。**不能为了登记方便将0偷偷改成1；须经过原 begin_combat_transition 后按原资格登记。**原报告本就要求 registry 唯一保存游戏状态，并允许以普通 Object 避免改变原身份合法域。
+    - heading "PREDELETE 订阅修正" [level=3]
+    - paragraph:
+      - text: 按你定位的生命周期，
+      - strong: 只在最终 PREDELETE 幂等解除该 Node／适配器拥有的 profile_changed 订阅，不在 exit_tree 解除
+      - text: ，可以保留暂时离树后继续使用的原语义。
+    - paragraph:
+      - text: 但解除的是那条绑定，不是销毁 externally-held PlayerModel，也不是取消其 accepted／durable 工作。进入最终新模式后，
+      - strong: M proxy 的删除不能等同于 S actor 死亡，更不能直接修改 S 拥有的订阅或 registry
+      - text: ；相关清理由所属 owner 的安全边界处理。
+    - heading "三、CLOCK_OVERRUN：允许继续有界恢复，故障记录与交付 FAIL 必须保留" [level=2]
+    - paragraph: 我实际回读了原报告 §6.3。原文要求：
+    - blockquote:
+      - paragraph: “进入显式故障状态……不丢债……保留内存中已接受义务，继续必要 U 回执服务……该场景不通过115交付门。”
+    - paragraph: "**原文没有要求 debt > M 后自动 close，也没有明确写成“永久禁止后续 H/P”。**但故障后的恢复执行策略确实没有写透。"
+    - paragraph: 现在明确批准：
+    - blockquote:
+      - paragraph:
+        - strong: CLOCK_OVERRUN 是需要保留记录的期限故障，不是销毁 Host、撤销义务或强制永久冻结的指令。允许在故障状态下继续有界 H/P 恢复，同时服务 U；恢复成功不抹掉该次场景的 deadline FAIL。
+    - table:
+      - rowgroup:
+        - row "项目 最终边界":
+          - columnheader "项目"
+          - columnheader "最终边界"
+      - rowgroup:
+        - row "时间与欠账 保持原 origin、next epoch 和 debt；不重置时间基准、不扩大 delta、不跳 epoch。":
+          - cell "时间与欠账"
+          - cell "保持原 origin、next epoch 和 debt；不重置时间基准、不扩大 delta、不跳 epoch。"
+        - row "每个 turn 最多 M 个完整 H/P，保持相位与原消费顺序；不能为了追赶变成全部 H 后统一 P。":
+          - cell "每个 turn"
+          - cell "最多 M 个完整 H/P，保持相位与原消费顺序；不能为了追赶变成全部 H 后统一 P。"
+        - row "U 与控制 完整 epoch／原安全边界继续服务回执、暂停及退出；不能让持续追赶饿死 U。U 不伪造 epoch 或 timer 扫描。":
+          - cell "U 与控制"
+          - cell "完整 epoch／原安全边界继续服务回执、暂停及退出；不能让持续追赶饿死 U。U 不伪造 epoch 或 timer 扫描。"
+        - row "accepted／timer 保留剩余和原失效规则；只由合法执行、原取消条件或正式退出协议终止，不由 overrun 清空。":
+          - cell "accepted／timer"
+          - cell "保留剩余和原失效规则；只由合法执行、原取消条件或正式退出协议终止，不由 overrun 清空。"
+        - row "故障记录 本次运行发生过 overrun 的记录保留；分别记录“欠账已恢复”和“期限曾失败”。不得恢复后将同一测试改报整体 PASS。":
+          - cell "故障记录"
+          - cell "本次运行发生过 overrun 的记录保留；分别记录“欠账已恢复”和“期限曾失败”。不得恢复后将同一测试改报整体 PASS。":
+            - text: 本次运行发生过 overrun 的记录保留；分别记录“欠账已恢复”和“期限曾失败”。
+            - strong: 不得恢复后将同一测试改报整体 PASS。
+        - row "持续过载 每 turn 有界不等于长期实时达标。若债务持续增长，仍是方案／配置的交付 FAIL，不自动放宽 M、慢放或默认回填迟到输入。":
+          - cell "持续过载"
+          - cell "每 turn 有界不等于长期实时达标。若债务持续增长，仍是方案／配置的交付 FAIL，不自动放宽 M、慢放或默认回填迟到输入。"
+        - row "close 只走明确的退出／退休协议；未完成耐久责任必须完成或按原协议移交，不能由阈值分支直接丢弃。":
+          - cell "close"
+          - cell "只走明确的退出／退休协议；未完成耐久责任必须完成或按原协议移交，不能由阈值分支直接丢弃。"
+    - button "复制表格":
+    - button "展开表格":
+    - paragraph:
+      - text: 因此，在
+      - strong: 没有新增欠账
+      - text: 的受控情形中，9 个待服务 epoch 按
+      - strong: 4／4／1
+      - text: 完成，是符合该政策的恢复形态。实际运行继续产生 release 时，还要如实保留新增 debt；这个例子不证明持续处理能力足够。
+    - paragraph: "**不要求另加“必须冻结战斗”的门槛。**你描述的旧实现“超线零 epoch 然后自动 close，并永久失去服务责任”，才与原报告的“不丢债、保留已接受义务、继续 U”明确冲突。"
+    - heading "四、本轮核验边界与最终回执" [level=2]
+    - paragraph: "**我真正做了的核验：**完整读取本条进度；回读《HardCore_115_Clock_Release_Pause_Identity_Closure_zh.md》§6.3、§7及相邻交付条件；比较新政策与原书面合同，给出上述设计裁决。"
+    - paragraph: "**我没有核验的内容：**本地工作树／产物哈希、新 ActorLink 和 PREDELETE 实现、新 Host 源码、18 项 C++ 回归及 4／4／1 的原始日志。它们目前是你报告的本地证据，不能写成我已独立复测；尤其不能把新 Host 的源码级通过归到尚未重编的 Windows 产物上。"
+    - paragraph:
+      - strong: 最终回执：ActorLink 方向认可；PREDELETE 定点解除方向认可；overrun 的“显式故障＋有界继续恢复＋U 不断供＋该场景期限 FAIL 保留”认可。没有发现需要推翻 B、重开架构或重做旧实验的设计冲突。生产接线未完成、最新入口 FAIL、Android／115 APK NOT_RUN 的状态继续如实保留。
+    - button "复制":
+    - button "分享":
+    - button "朗读":
+    - button "重新生成回复":
+    - button "更多操作":
+    - generic: ChatGPT 可能会出错。请核查重要信息。
+    - button "滚动到底部":
+    - heading "最新一条回复" [level=4]
+    - status
+    - button "添加文件等内容":
+    - textbox "询问 ChatGPT":
+      - paragraph: 询问 ChatGPT
+    - button "选择 ChatGPT 模型":
+      - generic: Pro
+    - button "听写":
+    - button "开始语音":
+- status
+- status
+- status
+- status
+- status: 回答已完成

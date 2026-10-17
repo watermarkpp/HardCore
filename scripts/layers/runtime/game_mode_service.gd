@@ -5,7 +5,17 @@ var modes: Dictionary = {}
 var active_mode := "classic_176"
 
 
+# Main callback depth only. No new gameplay/IO owner or timer.
+var _original_main_callback_ledger: Dictionary = {}
+
+
 func _ready() -> void:
+	_original_main_callback_ledger["_ready"] = int(_original_main_callback_ledger.get("_ready",0)) + 1
+	_original_source_game_mode_service__ready()
+	_original_main_callback_ledger["_ready"] -= 1
+
+
+func _original_source_game_mode_service__ready() -> void:
 	var file := FileAccess.open(PATH, FileAccess.READ)
 	var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
 	if parsed is Dictionary:
@@ -50,6 +60,12 @@ func apply_prepared_mode_configuration(prepared: Dictionary) -> bool:
 
 
 func _commit_mode_fields(mode_id: String, later_enabled: bool) -> void:
+	_original_main_callback_ledger["_commit_mode_fields"] = int(_original_main_callback_ledger.get("_commit_mode_fields",0)) + 1
+	_original_source_game_mode_service__commit_mode_fields(mode_id,later_enabled)
+	_original_main_callback_ledger["_commit_mode_fields"] -= 1
+
+
+func _original_source_game_mode_service__commit_mode_fields(mode_id: String, later_enabled: bool) -> void:
 	active_mode = mode_id
 	if is_instance_valid(PlayerState):
 		PlayerState.game_mode_id = mode_id

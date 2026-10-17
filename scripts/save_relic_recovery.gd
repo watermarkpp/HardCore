@@ -1,5 +1,6 @@
 class_name SaveRelicRecovery
 extends RefCounted
+const ProfileContent := preload("res://scripts/gameplay/profile/legacy_profile_content.gd")
 
 ## Pure candidate planner for legacy flat relic/badge records.
 ##
@@ -20,7 +21,7 @@ const OWNER_FIELDS: Array[String] = [
 ]
 
 
-static func plan(document: Dictionary) -> Dictionary:
+static func plan(document: Dictionary, content: ProfileContent.ContentPort = null) -> Dictionary:
 	var removed: Array = []
 	var output := document
 	for field: String in ARRAY_FIELDS:
@@ -31,7 +32,7 @@ static func plan(document: Dictionary) -> Dictionary:
 		var changed := false
 		for index in range(value.size() - 1, -1, -1):
 			var record: Variant = value[index]
-			var candidate := _candidate(record, "%s[%d]" % [field, index])
+			var candidate := _candidate(record, "%s[%d]" % [field, index], content)
 			if bool(candidate.get("blocked", false)):
 				return _blocked_result(document, str(candidate.get("reason", "unsupported_relic_owner")))
 			if candidate.is_empty():
@@ -58,7 +59,7 @@ static func plan(document: Dictionary) -> Dictionary:
 	var equipment: Dictionary = equipment_value
 	for raw_slot: Variant in equipment.keys():
 		var slot := str(raw_slot)
-		var candidate := _candidate(equipment.get(raw_slot), "equipment.%s" % slot)
+		var candidate := _candidate(equipment.get(raw_slot), "equipment.%s" % slot, content)
 		if bool(candidate.get("blocked", false)):
 			return _blocked_result(document, str(candidate.get("reason", "unsupported_relic_owner")))
 		if candidate.is_empty():
@@ -87,7 +88,7 @@ static func _blocked_result(document: Dictionary, reason: String) -> Dictionary:
 	}
 
 
-static func _candidate(raw: Variant, location: String) -> Dictionary:
+static func _candidate(raw: Variant, location: String, content: ProfileContent.ContentPort = null) -> Dictionary:
 	if not raw is Dictionary or (raw as Dictionary).is_empty():
 		return {}
 	var record: Dictionary = raw
@@ -97,7 +98,7 @@ static func _candidate(raw: Variant, location: String) -> Dictionary:
 	if not owner_reason.is_empty():
 		return {"blocked": true, "reason": owner_reason}
 	var item_id := int(record.get("item_id", -1))
-	var identity := ItemIdentityCodec.normalize(record, false)
+	var identity := ItemIdentityCodec.normalize(record, false, content)
 	if str(identity.get("status", "")) != "KNOWN_VALID":
 		return {}
 	if not RelicRules.is_synthesis_item(item_id):

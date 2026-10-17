@@ -1,10 +1,13 @@
 param(
     [ValidateSet('critical', 'audit_upgrade_critical', 'warrior', 'bich', 'equipment', 'monster', 'pricing_authority', 'taoist_critical', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical', 'monster_streaming_critical', 'skill_execution_plan_critical', 'skill_production_migration_critical', 'skill_runtime_cleanup_critical', 'wizard_line_geometry_critical', 'combat_absolute_ground_critical', 'combat_projection_fail_closed_critical', 'formal_map_projection_critical', 'map_runtime_release_critical', 'map_runtime_release_transaction_critical', 'player_visual_contract_critical', 'skill_panel_layout_critical', 'device_lab_critical', 'source176_r3', 'user_feedback_20260930')]
     [string]$Suite = 'critical',
-    [ValidateRange(1, 90)]
+    [ValidateRange(1, 180)]
     [int]$TimeoutSeconds = 30,
+    [switch]$ApprovedFullWorld120,
+    [switch]$ApprovedSourceSave180,
     [switch]$Verbose,
-    [string[]]$TestPaths = @()
+    [string[]]$TestPaths = @(),
+    [string]$GodotExecutable = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -103,7 +106,10 @@ $ProjectRoot = Split-Path -Parent $PSScriptRoot
 $PreviousFrameworkRunId = [Environment]::GetEnvironmentVariable('HARDCORE_FRAMEWORK_RUN_ID', 'Process')
 $PreviousFrameworkInvocationId = [Environment]::GetEnvironmentVariable('HARDCORE_FRAMEWORK_INVOCATION_ID', 'Process')
 $FrameworkEnvironmentCaptured = $true
-$Godot = if ($RunnerIsLinux) { $env:HARDCORE_GODOT } else { Join-Path $ProjectRoot 'tools\godot-4.7\Godot_v4.7-stable_win64_console.exe' }
+$Godot = if ($GodotExecutable) {
+    if (-not [IO.Path]::IsPathRooted($GodotExecutable)) { throw 'GodotExecutable must be an absolute executable path.' }
+    [IO.Path]::GetFullPath($GodotExecutable)
+} elseif ($RunnerIsLinux) { $env:HARDCORE_GODOT } else { Join-Path $ProjectRoot 'tools\godot-4.7\Godot_v4.7-stable_win64_console.exe' }
 if ($RunnerIsLinux -and ([string]::IsNullOrEmpty($Godot) -or -not (Test-Path -LiteralPath $Godot -PathType Leaf))) {
     throw 'Linux requires an explicit existing HARDCORE_GODOT executable.'
 }
@@ -111,10 +117,21 @@ $GodotDirectory = Split-Path -Parent $Godot
 # Record the actual Windows console wrapper and native engine independently.
 # The externally verified freeze ledger owns the dirty source/input manifest.
 $EngineFingerprint = @()
+$EngineDisplayVersion = '4.7-stable (official)'
 if (-not $RunnerIsLinux) {
-    foreach ($enginePath in @($Godot, $Godot.Replace('_console.exe', '.exe')) | Select-Object -Unique) {
+    $NativeGodot = if ($Godot.EndsWith('.console.exe', [StringComparison]::OrdinalIgnoreCase)) {
+        $Godot.Substring(0, $Godot.Length - '.console.exe'.Length) + '.exe'
+    } else { $Godot.Replace('_console.exe', '.exe') }
+    foreach ($enginePath in @($Godot, $NativeGodot) | Select-Object -Unique) {
         if (-not (Test-Path -LiteralPath $enginePath -PathType Leaf)) { throw "Engine component missing: $enginePath" }
         $EngineFingerprint += [ordered]@{ path = $enginePath; sha256 = (Get-FileHash -LiteralPath $enginePath -Algorithm SHA256).Hash.ToLowerInvariant(); bytes = (Get-Item -LiteralPath $enginePath).Length }
+    }
+    if ($GodotExecutable) {
+        $EngineVersionOutput = (& $Godot --version | Out-String).Trim()
+        if ($LASTEXITCODE -ne 0 -or $EngineVersionOutput -cnotmatch '^4\.7\.stable\.(official|custom_build)\.5b4e0cb0f(?:\b|\.)') {
+            throw "Explicit engine must be the pinned Godot 4.7 source: $EngineVersionOutput"
+        }
+        $EngineDisplayVersion = '4.7-stable (' + $Matches[1] + ')'
     }
 }
 $LogRoot = if ($env:HARDCORE_AUDIT_LOG_ROOT) { $env:HARDCORE_AUDIT_LOG_ROOT } else { Join-Path $ProjectRoot 'outputs\test_logs' }
@@ -1346,7 +1363,17 @@ $AuthorizedSustainedColdScenes = @(
     'tests/framework/natural_sustained_chain_cold_test.tscn',
     'tests/framework/natural_sustained_resource_cold_test.tscn'
 )
-if ($TimeoutSeconds -gt 60) {
+if ($ApprovedSourceSave180 -or $TimeoutSeconds -eq 180) {
+    if (-not $ApprovedSourceSave180 -or $ApprovedFullWorld120 -or $TimeoutSeconds -ne 180 -or $EffectiveSuite -cne 'adhoc' -or
+        @($SelectedTests).Count -ne 1 -or @($SelectedTests)[0] -cne 'tests/framework/source_save_roundtrip_20261017.tscn') {
+        throw 'Only one explicitly approved Source save/warehouse roundtrip stage may use 180s.'
+    }
+} elseif ($ApprovedFullWorld120 -or $TimeoutSeconds -eq 120) {
+    if (-not $ApprovedFullWorld120 -or $TimeoutSeconds -ne 120 -or $EffectiveSuite -cne 'adhoc' -or
+        @($SelectedTests).Count -ne 1 -or @($SelectedTests)[0] -cne 'tests/framework/character_source_full_world_20261016.tscn') {
+        throw 'Only the explicitly approved single full-world cold-launch/exit diagnostic may use 120s.'
+    }
+} elseif ($TimeoutSeconds -gt 60) {
     if ($TimeoutSeconds -ne 90 -or $EffectiveSuite -cne 'adhoc' -or @($SelectedTests | Where-Object {
         $Authorized90SecondScenes -cnotcontains $_ -and $AuthorizedSustainedColdScenes -cnotcontains $_
     }).Count -gt 0) {
@@ -1465,6 +1492,8 @@ foreach ($testPath in $SelectedTests) {
     # also runs 1800 real frames and exits normally in roughly 38 seconds.
     # Keep ordinary scenes at 30 seconds.
     $HeavyR4Scenes = @(
+        # Full Source semantic compiler plus dependency teardown exceeded30s at310 targets.
+        'tests/framework/multicore_v115_script_semantic_20261015.tscn',
 		'tests/monster_streaming_scaling_test.tscn',
         'tests/hc_monster_ai/runtime_test.tscn',
         'tests/hc_monster_combat_r4/d3_motion_pressure_runtime_test.tscn',
@@ -1637,7 +1666,7 @@ foreach ($testPath in $SelectedTests) {
         if (-not $RunnerIsLinux -and $frameworkReceipt.valid) {
             $nativeReceipt = Get-Content -LiteralPath $frameworkReceiptPath -Raw -Encoding UTF8 | ConvertFrom-Json
             $receiptRuntime = $nativeReceipt.runtime_environment
-            if ($nativeReceipt.engine_version -cne '4.7-stable (official)' -or
+            if ($nativeReceipt.engine_version -cne $EngineDisplayVersion -or
                 $receiptRuntime.runtime_appdata -cne $RuntimeAppData -or
                 $receiptRuntime.native_process_id -le 0 -or
                 [string]::IsNullOrEmpty($receiptRuntime.project_root) -or

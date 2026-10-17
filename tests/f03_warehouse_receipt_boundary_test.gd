@@ -2,18 +2,26 @@ extends Node
 
 const OrderedStageFixture := preload("res://tests/helpers/ordered_json_stage_fixture.gd")
 
-class FixtureState extends "res://scripts/player_state.gd":
+class ObservedModel extends "res://scripts/gameplay/profile/profile_model.gd":
 	var blocking_boundaries := 0
 	func _before_state_transaction(include_world := false) -> void:
 		if _json_persistence.pending_count() > 0 or _item_save_revision > _item_saved_revision:
 			blocking_boundaries += 1
 		super._before_state_transaction(include_world)
 
+class FixtureState extends "res://scripts/player_state.gd":
+	var blocking_boundaries: int:
+		get: return _model.get("blocking_boundaries")
+		set(value): _model.set("blocking_boundaries", value)
+	func _init() -> void:
+		super(ObservedModel.new())
+
 	func _ready() -> void:
 		# Isolated paths are supplied by the fixture. Keep the older completion
 		# pending until the public transaction consumes it; prepared transfers
 		# still await this real SceneTree and use the actual worker and files.
 		set_process(false)
+
 var failures: Array[String] = []
 var observations: Array[Dictionary] = []
 

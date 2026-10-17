@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="Script" path="res://tests/framework/external_physics_unclaimed_exit_20261015.gd" id="1"]
+[node name="ExternalPhysicsUnclaimedExit" type="Node"]
+script = ExtResource("1")

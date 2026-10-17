@@ -1,0 +1,142 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "symbol probe keeps the real non-test setting",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal runner supplies isolated APPDATA and run identity",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "symbol producer binds invocation and exact tested content",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "only reviewed fixed-source candidate bytes can reach the compiler",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "source registration grants no binary availability",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "candidate official commit matches the executing binary version",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "executing native binary bytes have an exact SHA256",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "target Script remains cold before metadata compilation",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "bounded exact native candidates exclude object classes and project autoload symbols",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "source-derived native reference compiles: INF",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "source-derived native reference compiles: OK",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "source-derived native reference compiles: TAU",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "source-derived native reference compiles: TYPE_ARRAY",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "source-derived native reference compiles: TYPE_BOOL",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "source-derived native reference compiles: TYPE_DICTIONARY",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "source-derived native reference compiles: TYPE_FLOAT",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "source-derived native reference compiles: TYPE_INT",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "source-derived native reference compiles: TYPE_NIL",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "source-derived native reference compiles: TYPE_STRING",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "every candidate has one real compile result",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "in-memory symbol probes leave the target Script cold",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "native symbol artifact uses the formal evidence directory",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "native symbol evidence opens at one exact path",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "native symbol evidence has an exact byte SHA256",
+      "passed": true
+    }
+  ],
+  "count": 24,
+  "engine_version": "4.7-stable (custom_build)",
+  "failed": 0,
+  "invocation_id": "daf70158-e120-463d-a65e-b824fef3a3f5",
+  "passed": 24,
+  "reported_checks": 24,
+  "reported_failures": 0,
+  "run_id": "118f0ad9-1eed-4818-8068-b0b157f9b6b1",
+  "runtime_environment": {
+    "native_process_id": 8540,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/multicore-v115/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\.godot\\runtime_appdata\\multicore_v115\\runner_daf70158-e120-463d-a65e-b824fef3a3f5",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/multicore-v115/HardCore/.godot/runtime_appdata/multicore_v115/runner_daf70158-e120-463d-a65e-b824fef3a3f5/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "code_preparation_native_symbol_probe_test",
+  "schema_version": 1,
+  "source_content_sha256": "e2f403e5c062b0494e950a3c8347b288b1d77655721a526594c3b3c2c84ee8a5",
+  "status": "PASS"
+}

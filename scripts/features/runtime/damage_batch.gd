@@ -29,6 +29,8 @@ var errors: Array[String] = []
 static func create(world: RefCounted, release_id: String, skill_id: String, bindings: Array, credit: Dictionary, accepted_usec: int = 0, reservation: RefCounted = null, resources: RefCounted = null, chain: Dictionary = {}, source_class := "direct", binding_skill_id := "") -> Dictionary:
 	if resources != null and resources.get_script() != preload("res://scripts/features/contracts/feature_resource_lease.gd"):
 		return {"success":false,"reason":"invalid_batch_resources","batch":null}
+	if world != null and world.is_domain() and resources != null and not resources.is_domain():
+		return {"success":false,"reason":"main_resource_lease_in_simulation","batch":null}
 	var is_child: bool = skill_id == "hc.child.death_burst.v1" and source_class == "child" and not binding_skill_id.is_empty()
 	if world == null or world.capture_world().is_empty() or release_id.is_empty() or (Ids.resolve(skill_id,"skill").is_empty() and not is_child) \
 		or bindings.size() > 32 or accepted_usec < 0:
@@ -105,16 +107,13 @@ func requires_commit_context() -> bool: return not _chain_context.is_empty()
 
 # Only the actual actor HP boundary supplies the geometry. No release-time
 # target list or death observer can replace this commit-time mapped position.
-func prepare_commit_context(target: Node, context: Dictionary) -> Dictionary:
+func prepare_commit_context(target: Object, context: Dictionary) -> Dictionary:
 	if _chain_context.is_empty(): return {"success":true,"context":context}
 	if _depth <= 0 or _sealed or _consumed or not errors.is_empty() or _entries.size() >= _fact_limit \
-		or not _world.matches_world(_world_identity) or Actor.capture(_world,target) == null \
+		or not _world.matches_world(_world_identity) or _world.capture_feature_actor(target) == null \
 		or context.get("source_class") != _source_class or context.get("damage_channel") not in ["physical","magic_defense"]:
 		return {"success":false,"reason":"damage_chain_commit_context_rejected"}
-	if not target is Node2D or target.get("runtime_map_id") != _world_identity.runtime_map_id \
-		or not target.has_method("try_screen_position_px_to_ground_position_gu"):
-		return {"success":false,"reason":"damage_chain_commit_projection_rejected"}
-	var projection: Dictionary = target.call("try_screen_position_px_to_ground_position_gu",target.global_position)
+	var projection: Dictionary = _world.project_feature_commit(target)
 	var origin: Variant = projection.get("value")
 	if not bool(projection.get("success",false)) or not origin is Vector2 or not origin.is_finite():
 		return {"success":false,"reason":"damage_chain_commit_projection_rejected"}
@@ -163,7 +162,7 @@ func finish_base_scope() -> bool:
 
 # Called only immediately after the existing HP write. The returned plain
 # fact never rereads HP after a callback, heal, death or synchronous revival.
-func capture_commit(target: Node, source: Node, hp_before: int, hp_after: int, requested: int, context: Dictionary) -> bool:
+func capture_commit(target: Object, source: Object, hp_before: int, hp_after: int, requested: int, context: Dictionary) -> bool:
 	if _depth <= 0 or _sealed or _consumed or not errors.is_empty():
 		return false
 	if _entries.size() >= _fact_limit:
@@ -174,14 +173,14 @@ func capture_commit(target: Node, source: Node, hp_before: int, hp_after: int, r
 		or requested <= 0 or hp_before < 0 or hp_after < 0 or hp_after > hp_before:
 		errors.append("damage_fact_contract_rejected")
 		return false
-	var target_ref: RefCounted = Actor.capture(_world,target)
+	var target_ref: RefCounted = _world.capture_feature_actor(target)
 	if target_ref == null:
 		errors.append("damage_fact_target_identity_rejected")
 		return false
 	var source_ref: RefCounted = null
 	if is_instance_valid(source):
 		var life_authority: String = Actor.LIFE_PLAYER if source.has_method("combat_transition_is_active") else Actor.LIFE_METADATA
-		source_ref = Actor.capture(_world,source,life_authority)
+		source_ref = _world.capture_feature_actor(source,life_authority)
 	var source_identity: Dictionary = source_ref.identity() if source_ref != null else {}
 	var value := {"contract_id":"hardcore.combat.damage_fact.v1",
 		"fact_id":_release_id + ":hp:" + str(_entries.size()),"release_id":_release_id,"skill_id":_skill_id,"accepted_simulation_usec":_accepted_usec,

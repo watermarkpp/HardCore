@@ -1,0 +1,74 @@
+[
+  {
+    "before": "var _close_service_sequence := -1\n",
+    "after": "var _close_service_sequence := -1\n# Source-only observations. No timer, queue, publication or gameplay authority.\nvar _trace_enabled := false\nvar _trace_job: Dictionary = {}\n"
+  },
+  {
+    "before": "\t_budget = session.original_frame_budget(); _descriptor = descriptor.duplicate(true); _reservation_usec = reservation_usec\n",
+    "after": "\t_budget = session.original_frame_budget(); _descriptor = descriptor.duplicate(true); _reservation_usec = reservation_usec\n\t_trace_enabled = bool(world.clock_ports.get_setting(\"hardcore/diagnostics/main_boot_trace\", false))\n"
+  },
+  {
+    "before": "\t_exchange_running = true\n\tvar result: Dictionary = await _exchange_original_map_leaf(operation,arguments)\n\t_exchange_running = false\n",
+    "after": "\t_exchange_running = true\n\t_trace_begin(operation)\n\tvar result: Dictionary = await _exchange_original_map_leaf(operation,arguments)\n\t_trace_finish(result)\n\t_exchange_running = false\n"
+  },
+  {
+    "before": "\tvar copied: Dictionary = Graph.copy_and_seal(arguments)\n",
+    "after": "\tvar trace_copy_started: int = Time.get_ticks_usec() if _trace_enabled else 0\n\tvar copied: Dictionary = Graph.copy_and_seal(arguments)\n\tif _trace_enabled: _trace_job.argument_graph_copy_usec = Time.get_ticks_usec() - trace_copy_started\n"
+  },
+  {
+    "before": "\twhile int(_budget.snapshot().open_scopes) != 0: await _next_source_p()\n",
+    "after": "\twhile int(_budget.snapshot().open_scopes) != 0:\n\t\t_trace_step(\"budget_gate\", \"WAIT_OPEN_SCOPE\")\n\t\tawait _next_source_p()\n\t_trace_step(\"budget_gate\", \"READY\")\n"
+  },
+  {
+    "before": "\tvar reservation: Dictionary = _budget.reserve_live(\"map_loading:\" + operation, _budget.LANE_NECESSARY, _reservation_usec)\n",
+    "after": "\tvar reservation: Dictionary = _budget.reserve_live(\"map_loading:\" + operation, _budget.LANE_NECESSARY, _reservation_usec)\n\t_trace_step(\"budget_reserve\", \"INVALID\" if reservation.is_empty() else \"READY\")\n"
+  },
+  {
+    "before": "\t\tvar frozen_event: Dictionary = Graph.copy_and_seal(event)\n",
+    "after": "\t\tvar trace_event_started: int = Time.get_ticks_usec() if _trace_enabled and not _trace_job.has(\"first_event_graph_copy_usec\") else 0\n\t\tvar frozen_event: Dictionary = Graph.copy_and_seal(event)\n\t\tif trace_event_started != 0:\n\t\t\t_trace_job.first_event_graph_copy_usec = Time.get_ticks_usec() - trace_event_started\n\t\t\tif frozen_event.ok:\n\t\t\t\t# Once only. Godot Variant encoding size, not Native mailbox wire bytes.\n\t\t\t\tvar trace_encoding_started: int = Time.get_ticks_usec()\n\t\t\t\t_trace_job.request_variant_bytes = var_to_bytes(request).size()\n\t\t\t\t_trace_job.request_variant_encoding_usec = Time.get_ticks_usec() - trace_encoding_started\n"
+  },
+  {
+    "before": "\t\tvar reserved: Dictionary = _host.reserve_original_map_loading_event(ticket,event)\n",
+    "after": "\t\tvar reserved: Dictionary = _host.reserve_original_map_loading_event(ticket,event)\n\t\t_trace_step(\"reserve\", str(reserved.get(\"status\", \"MISSING\")))\n"
+  },
+  {
+    "before": "\t\t\t\t\tvar cancelled: Dictionary = _host.cancel_unaccepted_original_map_loading_event(ticket)\n",
+    "after": "\t\t\t\t\tvar cancelled: Dictionary = _host.cancel_unaccepted_original_map_loading_event(ticket)\n\t\t\t\t\t_trace_step(\"cancel\", str(cancelled.get(\"status\", \"MISSING\")))\n"
+  },
+  {
+    "before": "\t\t\tvar registered: Dictionary = _session.try_publish_original_event_prefix(_job.event)\n",
+    "after": "\t\t\tvar registered: Dictionary = _session.try_publish_original_event_prefix(_job.event)\n\t\t\t_trace_step(\"register\", str(registered.get(\"status\", \"MISSING\")))\n"
+  },
+  {
+    "before": "\t\tvar accepted: Dictionary = _host.accept_original_map_loading_event(_job.identity,_job.event,_job.prefix)\n",
+    "after": "\t\tvar accepted: Dictionary = _host.accept_original_map_loading_event(_job.identity,_job.event,_job.prefix)\n\t\t_trace_step(\"accept\", str(accepted.get(\"status\", \"MISSING\")))\n"
+  },
+  {
+    "before": "\t\tvar polled: Dictionary = _host.poll_original_map_loading_event(_job.identity)\n",
+    "after": "\t\tvar polled: Dictionary = _host.poll_original_map_loading_event(_job.identity)\n\t\t_trace_poll(polled)\n\t\t_trace_step(\"poll\", str(polled.get(\"status\", \"MISSING\")))\n"
+  },
+  {
+    "before": "\t\t\t\tawait _next_source_p()\n\t\t\t\tcontinue\n\t\t\tif int(_budget.snapshot().open_scopes) != 0:\n",
+    "after": "\t\t\t\t_trace_step(\"settle_gate\", \"WAIT_PHASE\")\n\t\t\t\tawait _next_source_p()\n\t\t\t\tcontinue\n\t\t\tif int(_budget.snapshot().open_scopes) != 0:\n"
+  },
+  {
+    "before": "\t\t\tif int(_budget.snapshot().open_scopes) != 0:\n\t\t\t\tawait _next_source_p()\n",
+    "after": "\t\t\tif int(_budget.snapshot().open_scopes) != 0:\n\t\t\t\t_trace_step(\"settle_gate\", \"WAIT_OPEN_SCOPE\")\n\t\t\t\tawait _next_source_p()\n"
+  },
+  {
+    "before": "\t\t\t# Frozen actual native observation and actual Main elapsed, not time at retry.\n",
+    "after": "\t\t\t_trace_step(\"settle_gate\", \"READY\")\n\t\t\t# Frozen actual native observation and actual Main elapsed, not time at retry.\n"
+  },
+  {
+    "before": "\t\t\t\tif charged.is_empty(): return {\"status\":\"INVALID\",\"error\":\"actual_map_budget_settlement\"}\n",
+    "after": "\t\t\t\t_trace_step(\"budget_settle\", \"INVALID\" if charged.is_empty() else \"READY\")\n\t\t\t\tif charged.is_empty(): return {\"status\":\"INVALID\",\"error\":\"actual_map_budget_settlement\"}\n"
+  },
+  {
+    "before": "\t\t\tvar committed: Dictionary = _host.settle_original_map_loading_event_status(_job.identity,_job.settlement)\n",
+    "after": "\t\t\tvar committed: Dictionary = _host.settle_original_map_loading_event_status(_job.identity,_job.settlement)\n\t\t\t_trace_step(\"settle\", str(committed.get(\"status\", \"MISSING\")))\n"
+  },
+  {
+    "before": "\t\t\tif _host.retire_original_map_loading_event(_job.identity, _job.reply):\n",
+    "after": "\t\t\tvar actual_retired: bool = _host.retire_original_map_loading_event(_job.identity, _job.reply)\n\t\t\t_trace_step(\"retire\", \"READY\" if actual_retired else \"PENDING_OR_REJECTED\")\n\t\t\tif actual_retired:\n"
+  }
+]

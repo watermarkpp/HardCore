@@ -2,6 +2,7 @@ extends Node
 
 const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
 const SCENE_ID := "code_preparation_engine_namespace_capture_test"
+const MUTEX_STATIC_PROBE := "extends RefCounted\nstatic var _mutex := Mutex.new()\nstatic func native_mutex() -> Mutex:\n\treturn _mutex\n"
 const TARGET_SCRIPT := "res://scripts/caster_skill_animation_player.gd"
 var proof := Proof.new()
 var checks := 0
@@ -43,6 +44,20 @@ func _capture() -> void:
 	var engine_path := OS.get_executable_path()
 	var engine_sha := FileAccess.get_sha256(engine_path)
 	check(engine_sha.length() == 64, "fixed executing engine bytes have a real FileAccess SHA256")
+	# Real native construction and static-member compilation. This grants only
+	# Mutex.new() with zero arguments, never arbitrary Object/Resource creation.
+	var constructor_proofs: Dictionary = {}
+	check(ClassDB.can_instantiate("Mutex") and ClassDB.get_parent_class("Mutex") == &"RefCounted","exact native Mutex is a constructible RefCounted")
+	var probe := GDScript.new()
+	probe.source_code = MUTEX_STATIC_PROBE
+	var compiled: bool = probe.reload() == OK
+	check(compiled,"actual GDScript compiler accepts the exact static native Mutex initializer")
+	var mutex: Variant = probe.call("native_mutex") if compiled else null
+	check(mutex is Mutex and mutex is RefCounted and mutex.get_script() == null,"compiled static initializer constructed a genuine scriptless native Mutex")
+	if mutex is Mutex and mutex.get_script() == null:
+		mutex.lock()
+		mutex.unlock()
+		constructor_proofs["Mutex.new"] = {"contract_id":"hc.code_preparation.native_static_mutex.probe.v1","class_name":"Mutex","operation":"new","argument_count":0,"context":"static_member_initializer","source_sha256":MUTEX_STATIC_PROBE.sha256_text(),"native_class_observed":mutex.get_class(),"native_scriptless":true,"reference_counted":mutex is RefCounted,"lock_roundtrip":true}
 	var target_cached_after := ResourceLoader.has_cached(TARGET_SCRIPT)
 	check(target_cached_after == target_cached_before,
 		"metadata enumeration does not change target Script cache state")
@@ -56,6 +71,7 @@ func _capture() -> void:
 		"runtime_environment": {"runtime_appdata": appdata, "user_data_directory": OS.get_user_data_dir(),
 			"project_root": ProjectSettings.globalize_path("res://"), "native_process_id": OS.get_process_id()},
 		"object_classes": object_names,
+		"native_static_initializers":constructor_proofs,
 		"variant_type_names": variants,
 		"singletons": singletons,
 		"global_functions": {"status": "MISSING", "names": [], "reason": "No verified public metadata API was used."},

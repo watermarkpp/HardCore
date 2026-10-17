@@ -8,6 +8,7 @@ const ProjectileVisual := preload("res://scripts/monster_ranged_projectile_effec
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
 const MonsterOverheadScript := preload("res://scripts/monster_overhead.gd")
 const MonsterStruckPolicyScript := preload("res://scripts/monster_struck_policy.gd")
+const ActionTimelineScript := preload("res://scripts/gameplay/actors/monster_action_timeline.gd")
 const OVERHEAD_ANCHOR_DATA_PATH := "res://assets/data/runtime/monster_overhead_anchors.json"
 const GROUND_CONTACT_DATA_PATH := "res://assets/data/runtime/monster_ground_contacts.json"
 const MANUAL_ALIGNMENT_DATA_PATH := (
@@ -83,11 +84,18 @@ var ground_contact_profile: Dictionary = {}
 var _has_authored_client_art := false
 var _elapsed := 0.0
 var _last_state := ""
-var _attack_remaining := 0.0
+# The domain object owns these values. Compatibility properties below expose
+# the historical test/render surface without copying authoritative state.
+var action_timeline := ActionTimelineScript.new()
+var _attack_remaining: float:
+	get: return action_timeline.attack_remaining
+	set(value): action_timeline.attack_remaining = value
 # R4 T1: strike-phase threshold frozen at action admission from the canonical
 # frame metadata; hot/cold resource residency cannot move the boundary.
 var _attack_strike_threshold_s := 0.0
-var _hit_remaining := 0.0
+var _hit_remaining: float:
+	get: return action_timeline.hit_remaining
+	set(value): action_timeline.hit_remaining = value
 # R1.2 vanilla presentation FIFO (review closure): struck and attack
 # presentation events queue in strict arrival order - exactly the original
 # client model where the next action message is consumed only after the
@@ -95,23 +103,35 @@ var _hit_remaining := 0.0
 # Fixed capacity, preallocated packed arrays, O(1) enqueue/dequeue, no
 # per-hit Timer/Node/Dictionary allocation. Gameplay authority (_attack_timer,
 # pending release records, WalkTick, damage) is untouched by this queue.
-const PRESENTATION_QUEUE_CAPACITY := 16
+const PRESENTATION_QUEUE_CAPACITY := ActionTimelineScript.QUEUE_CAPACITY
 
 enum PresentationAction {
 	STRUCK,
 	ATTACK,
 }
 
-var _presentation_kind := PackedByteArray()
-var _presentation_duration := PackedFloat32Array()
+var _presentation_kind: PackedByteArray:
+	get: return action_timeline.presentation_kind
+	set(value): action_timeline.presentation_kind = value
+var _presentation_duration: PackedFloat32Array:
+	get: return action_timeline.presentation_duration
+	set(value): action_timeline.presentation_duration = value
 # Legacy field retained for serialized/test compatibility. Authoritative combat
 # no longer waits for a movement-step barrier: a struck may begin as soon as
 # the committed attack (if any) has finished. Movement is paused by the owner
 # for the exact hit-animation slice through advance_struck_action().
-var _presentation_step_barrier := PackedInt32Array()
-var _presentation_head := 0
-var _presentation_tail := 0
-var _presentation_count := 0
+var _presentation_step_barrier: PackedInt32Array:
+	get: return action_timeline.presentation_step_barrier
+	set(value): action_timeline.presentation_step_barrier = value
+var _presentation_head: int:
+	get: return action_timeline.presentation_head
+	set(value): action_timeline.presentation_head = value
+var _presentation_tail: int:
+	get: return action_timeline.presentation_tail
+	set(value): action_timeline.presentation_tail = value
+var _presentation_count: int:
+	get: return action_timeline.presentation_count
+	set(value): action_timeline.presentation_count = value
 # R1.3 canonical hit-frame metadata (review closure): the ActStruck frame
 # count is appearance metadata from the monster animation catalog, NOT a
 # texture-residency state. Cached once at _ready so a struck enqueued during
@@ -121,7 +141,9 @@ var _canonical_struck_frame_count := 2
 # Acceleration/diagnostic counter only: the number of struck events WAITING
 # in the queue (the playing struck is dequeued first). It drives the vanilla
 # backlog 1.5x playback speed; it NEVER decides the action order anymore.
-var _pending_struck_count := 0
+var _pending_struck_count: int:
+	get: return action_timeline.pending_struck_count
+	set(value): action_timeline.pending_struck_count = value
 # HC-MONSTER-COMBAT-R1 Task 3: presentation-side identity of the critical
 # attack currently owning the body. Purely diagnostic (no gameplay reads).
 var _attack_action_serial := 0
@@ -131,7 +153,9 @@ var _attack_action_serial := 0
 # the visual replays that exact action. The presentation age is consumed from
 # the action's own start timestamp (logic clock), never by subtracting one
 # whole render delta that may predate the attack start.
-var _attack_action_id := -1
+var _attack_action_id: int:
+	get: return action_timeline.attack_action_id
+	set(value): action_timeline.attack_action_id = value
 var _attack_logic_started_at_ms := -1
 var _attack_started_at_ms := 0
 var _attack_facing_at_commit := Vector2.INF
@@ -146,13 +170,19 @@ var _clock_ms: Callable = Callable()
 # consulted for production combat timing. Unbound => legacy preview path.
 var _combat_clock_s: Callable = Callable()
 var _attack_action_start_game_time_s := -1.0
-var _motion_overridden_attack_action_id := -1
+var _motion_overridden_attack_action_id: int:
+	get: return action_timeline.motion_overridden_attack_action_id
+	set(value): action_timeline.motion_overridden_attack_action_id = value
 var _attack_overlay_node: Node = null
 var _death_remaining := 0.0
 var _death_pose_held := false
 var _action_duration := 0.0
-var _hc_m30_attack_duration: float = 0.46
-var _hc_m30_hit_duration: float = 0.22
+var _hc_m30_attack_duration: float:
+	get: return action_timeline.attack_duration
+	set(value): action_timeline.attack_duration = value
+var _hc_m30_hit_duration: float:
+	get: return action_timeline.hit_duration
+	set(value): action_timeline.hit_duration = value
 var _hc_m30_death_duration: float = 0.62
 var _hc_m30_last_geometry_origin: Vector2 = Vector2.INF
 var _hc_m30_last_geometry_radius: float = -1.0
@@ -170,14 +200,6 @@ var _selection_ring_direction_offsets: Dictionary = {}
 var _selection_ring_offset := Vector2.ZERO
 
 
-func _init() -> void:
-	# Preallocate the presentation FIFO once per visual (16 bytes + 16 floats
-	# + 16 ints for the movement-step barriers).
-	_presentation_kind.resize(PRESENTATION_QUEUE_CAPACITY)
-	_presentation_duration.resize(PRESENTATION_QUEUE_CAPACITY)
-	_presentation_step_barrier.resize(PRESENTATION_QUEUE_CAPACITY)
-
-
 static func configure_actor_y_sort_item(item: CanvasItem, role: String) -> void:
 	# Keep the complete monster composite under EnemyActor's GameRoot Y-sort key.
 	item.z_index = 0
@@ -192,6 +214,9 @@ static func configure_actor_y_sort_item(item: CanvasItem, role: String) -> void:
 
 func setup(owner_actor: EnemyActor) -> void:
 	actor = owner_actor
+	# Production visual observes the owner's one timeline; it has no second
+	# hit queue. Unbound preview fixtures retain their local data instance.
+	action_timeline = owner_actor.combat_actions.timeline
 	_selection_ring_direction_offsets = actor.MonsterTargetRingGeometryScript.direction_offsets(actor.monster_id)
 	_selection_ring_offset = Vector2.ZERO
 
@@ -410,24 +435,16 @@ func _advance_action_timers(delta: float) -> void:
 	# draw); subtracting that whole delta from a fresh action zeroed it. The
 	# attack's remaining time is `duration - age(now - action start)` instead.
 	if _attack_remaining > 0.0:
-		if _motion_overridden_attack_action_id == _attack_action_id:
-			_attack_remaining = 0.0
-		else:
-			_attack_remaining = maxf(
-				0.0,
-				_hc_m30_attack_duration - _attack_age_seconds()
-			)
+		action_timeline.advance_visual_attack_cache(
+			0.0 if _motion_overridden_attack_action_id == _attack_action_id else _attack_age_seconds()
+		)
 	# Production struck time is owned by EnemyActor's physics clock. Rendering
 	# may be throttled or absent, so it must never consume the authoritative hit
 	# interval or start a queued event. The unbound path remains for previews and
 	# isolated visual fixtures.
 	if not _combat_clock_s.is_valid():
-		_hit_remaining = maxf(
-			0.0,
-			_hit_remaining
-			- delta * MonsterStruckPolicyScript.struck_speed_multiplier(
-				_presentation_count
-			)
+		action_timeline.advance_preview_hit(
+			delta, MonsterStruckPolicyScript.struck_speed_multiplier(_presentation_count)
 		)
 	_death_remaining = maxf(0.0, _death_remaining - delta)
 	if not _combat_clock_s.is_valid():
@@ -1203,35 +1220,7 @@ func begin_attack_presentation(
 ## presentation (including preview attacks that a newer logical attack
 ## supersedes) is merged, never replayed.
 func _merge_pending_struck_feedback() -> int:
-	if _presentation_count <= 0:
-		return 0
-	var merged := 0
-	var kept_kind := -1
-	var kept_duration := 0.0
-	var kept_barrier := -1
-	for i in _presentation_count:
-		var idx := (_presentation_head + i) % PRESENTATION_QUEUE_CAPACITY
-		var kind: int = _presentation_kind[idx]
-		if kind == PresentationAction.STRUCK:
-			# Overwrite on every struck: iteration runs oldest -> newest, so
-			# the loop lands on the NEWEST struck item.
-			kept_kind = kind
-			kept_duration = _presentation_duration[idx]
-			kept_barrier = _presentation_step_barrier[idx]
-		merged += 1
-	_presentation_head = 0
-	_presentation_tail = 0
-	_presentation_count = 0
-	_pending_struck_count = 0
-	if kept_kind == PresentationAction.STRUCK:
-		_presentation_kind[0] = kept_kind
-		_presentation_duration[0] = kept_duration
-		_presentation_step_barrier[0] = kept_barrier
-		_presentation_head = 0
-		_presentation_tail = 1
-		_presentation_count = 1
-		_pending_struck_count = 1
-	return merged
+	return action_timeline.merge_pending_struck_feedback()
 
 
 func _start_attack_visual(duration: float) -> void:
@@ -1267,8 +1256,7 @@ func _start_attack_visual(duration: float) -> void:
 		overlay.setup(actor.monster_id, direction8, direction16, duration / float(frame_count_for_phase), Vector2(actor_ground_offset))
 		add_child(overlay)
 		_attack_overlay_node = overlay
-	_attack_remaining = duration
-	_hc_m30_attack_duration = float(duration)
+	action_timeline.start_attack(duration)
 	_action_duration = duration
 	_elapsed = 0.0
 
@@ -1290,54 +1278,30 @@ func mark_attack_motion_overridden(action_id: int) -> void:
 ## to clean up; only a backlog with no struck item left still drops the
 ## newest event and counts the overflow.
 func _enqueue_presentation(kind: PresentationAction, duration: float, step_barrier := -1) -> void:
-	if _presentation_count >= PRESENTATION_QUEUE_CAPACITY and _pending_struck_count > 0:
-		var collapsed := _merge_pending_struck_feedback()
-		if collapsed > 1:
-			RuntimeDiagnostics.increment_performance_counter(
-				&"monster_presentation_struck_backpressure_collapsed",
-				collapsed - 1
-			)
-	if _presentation_count >= PRESENTATION_QUEUE_CAPACITY:
+	action_timeline.enqueue(kind, duration, step_barrier)
+	if action_timeline.last_backpressure_collapsed > 0:
+		RuntimeDiagnostics.increment_performance_counter(
+			&"monster_presentation_struck_backpressure_collapsed",
+			action_timeline.last_backpressure_collapsed
+		)
+	if action_timeline.last_enqueue_overflow:
 		RuntimeDiagnostics.increment_performance_counter(
 			&"monster_presentation_queue_overflow"
 		)
-		return
-	_presentation_kind[_presentation_tail] = kind
-	_presentation_duration[_presentation_tail] = duration
-	_presentation_step_barrier[_presentation_tail] = step_barrier
-	_presentation_tail = (_presentation_tail + 1) % PRESENTATION_QUEUE_CAPACITY
-	_presentation_count += 1
-	if kind == PresentationAction.STRUCK:
-		_pending_struck_count += 1
-
 
 ## Dequeues and starts the next presentation event in strict arrival order.
 ## A struck waits only for the committed logical attack. Movement steps stay
 ## intact and pause in place while the owner consumes the authored hit time.
 func _try_start_next_presentation() -> void:
-	if _presentation_count <= 0:
+	var kind := action_timeline.try_start_next(
+		_combat_clock_s.is_valid(),
+		is_instance_valid(actor) and actor._attack_action_active,
+		_death_remaining > 0.0 or _death_pose_held,
+	)
+	if kind < 0:
 		return
-	if _hit_remaining > 0.0 or _attack_remaining > 0.0:
-		return
-	# The owner action clock is authoritative in production. The render cache
-	# can reach zero first when the logical attack duration is longer than the
-	# visual clip, so never start a queued hit while the committed action still
-	# owns the actor body.
-	if (
-		_combat_clock_s.is_valid()
-		and is_instance_valid(actor)
-		and actor._attack_action_active
-	):
-		return
-	if _death_remaining > 0.0 or _death_pose_held:
-		return
-	var kind: int = _presentation_kind[_presentation_head]
-	var duration := _presentation_duration[_presentation_head]
-	_presentation_head = (_presentation_head + 1) % PRESENTATION_QUEUE_CAPACITY
-	_presentation_count -= 1
 	if kind == PresentationAction.STRUCK:
-		_pending_struck_count -= 1
-		_start_struck_visual(duration)
+		_sync_started_struck_presentation()
 	else:
 		# A queued (legacy/preview) attack carries no parent action identity.
 		_attack_action_id = -1
@@ -1345,8 +1309,7 @@ func _try_start_next_presentation() -> void:
 		_attack_facing_at_commit = Vector2.INF
 		if _combat_clock_s.is_valid():
 			_attack_action_start_game_time_s = float(_combat_clock_s.call())
-		_start_attack_visual(duration)
-
+		_start_attack_visual(action_timeline.dequeued_duration)
 
 ## Vanilla R1 entry for monster struck visuals: enqueue one struck event in
 ## arrival order. O(1): three packed-array writes, no per-hit Timer/Node/
@@ -1382,10 +1345,7 @@ func queue_struck(monster_level := -1) -> void:
 	# _try_start_next_presentation until its logical action ends.
 	if _combat_clock_s.is_valid():
 		if not actor._attack_action_active:
-			_attack_remaining = maxf(
-				0.0,
-				_hc_m30_attack_duration - _attack_age_seconds()
-			)
+			action_timeline.refresh_attack_remaining(_attack_age_seconds())
 		_try_start_next_presentation()
 	RuntimeDiagnostics.record_performance_max(
 		&"monster_struck_visual_pending_max",
@@ -1398,12 +1358,16 @@ func pending_struck_count() -> int:
 
 
 func _start_struck_visual(duration: float) -> void:
-	_hc_m30_walk.interrupt_pose()
-	_hit_remaining = duration
-	_hc_m30_hit_duration = duration
-	_action_duration = duration
-	_elapsed = 0.0
+	action_timeline.start_struck(duration)
+	_sync_started_struck_presentation()
 
+
+func _sync_started_struck_presentation() -> void:
+	# These are idempotent render resets. A physics interval may begin several
+	# queued hits; only the last hit can be rendered after that interval.
+	_hc_m30_walk.interrupt_pose()
+	_action_duration = action_timeline.hit_duration
+	_elapsed = 0.0
 
 ## Authoritative physics owner entry for production struck presentation.
 ## Returns the exact portion of this actor's physics interval spent playing
@@ -1418,69 +1382,35 @@ func _start_struck_visual(duration: float) -> void:
 func advance_struck_action(delta: float) -> float:
 	if not _combat_clock_s.is_valid() or not is_instance_valid(actor):
 		return 0.0
-	var available := maxf(0.0, delta)
-	if available <= 0.0 or _death_remaining > 0.0 or _death_pose_held:
+	if maxf(0.0, delta) <= 0.0 or _death_remaining > 0.0 or _death_pose_held:
 		return 0.0
-	# EnemyActor advances and owns the combat clock before entering this method.
-	# If the logical action is still active, the current physics interval has not
-	# crossed its completion boundary; never let an overlap calculation or a
-	# stale visual cache dequeue/start a struck early.
-	if actor._attack_action_active:
-		_attack_remaining = 0.0 if _motion_overridden_attack_action_id == _attack_action_id else maxf(
-			0.0,
-			_hc_m30_attack_duration - _attack_age_seconds()
-		)
-		return 0.0
-
-	# Sync the visual cache from the owner's logical action before arbitration.
-	# The actor duration is authoritative: the visual clip may be shorter.
-	var clock_now := float(_combat_clock_s.call())
-	var interval_start := clock_now - available
-	var action_start := float(actor._attack_action_start_time_s)
-	var action_duration := maxf(0.0, float(actor._attack_action_duration_s))
-	var action_end := action_start + action_duration
-	var attack_left := 0.0
-	if action_duration > 0.0 and action_start >= 0.0:
-		# Use overlap with this physics interval rather than the active flag. The
-		# owner closes that flag while advancing its clock, so this also handles
-		# an attack whose logical end falls inside the interval.
-		var overlap_start := maxf(interval_start, action_start)
-		var overlap_end := minf(clock_now, action_end)
-		var attack_overlap := maxf(0.0, overlap_end - overlap_start)
-		attack_left = attack_overlap
-		# The visual cache follows the authored presentation clip for rendering;
-		# the actor overlap above remains the sole ordering barrier.
+	# Sample the clock in the same branches/order as the original owner path.
+	var owner_active := actor._attack_action_active
+	var clock_now := 0.0
+	var action_start := -1.0
+	var action_duration := 0.0
+	var visual_age := 0.0
+	if owner_active:
 		if _motion_overridden_attack_action_id != _attack_action_id:
-			_attack_remaining = maxf(0.0, _hc_m30_attack_duration - _attack_age_seconds())
-	if attack_left > 0.0:
-		available -= attack_left
-	if available <= 0.0:
-		return 0.0
-
-	var paused := 0.0
-	while available > 0.0:
-		if _hit_remaining <= 0.0:
-			if _presentation_count <= 0:
-				break
-			if _presentation_kind[_presentation_head] != PresentationAction.STRUCK:
-				break
-			var duration := _presentation_duration[_presentation_head]
-			_presentation_head = (_presentation_head + 1) % PRESENTATION_QUEUE_CAPACITY
-			_presentation_count -= 1
-			_pending_struck_count = maxi(0, _pending_struck_count - 1)
-			_start_struck_visual(duration)
-		var consumed := minf(available, _hit_remaining)
-		_hit_remaining = maxf(0.0, _hit_remaining - consumed)
-		available -= consumed
-		paused += consumed
-		if consumed <= 0.0:
-			break
+			visual_age = _attack_age_seconds()
+	else:
+		clock_now = float(_combat_clock_s.call())
+		action_start = float(actor._attack_action_start_time_s)
+		action_duration = maxf(0.0, float(actor._attack_action_duration_s))
+		if action_duration > 0.0 and action_start >= 0.0:
+			if _motion_overridden_attack_action_id != _attack_action_id:
+				visual_age = _attack_age_seconds()
+	var starts_before := action_timeline.hit_start_serial
+	var paused := action_timeline.advance_struck(
+		delta, clock_now, owner_active, action_start, action_duration, visual_age, false
+	)
+	if action_timeline.hit_start_serial != starts_before:
+		_sync_started_struck_presentation()
 	return paused
 
 
 func is_struck_action_active() -> bool:
-	return _hit_remaining > 0.000001
-
+	return action_timeline.is_struck_action_active()
 
 ## Canonical ActStruck frame count from the monster identity boundary (read
 ## once at _ready). Evidence note (R1.3): the runtime authority is
@@ -1509,8 +1439,7 @@ func play_hit(duration := 0.22) -> void:
 	_hc_m30_walk.interrupt_pose()
 	if _death_remaining > 0.0:
 		return
-	_hit_remaining = duration
-	_hc_m30_hit_duration = float(duration)
+	action_timeline.start_struck(duration)
 	# A hit cannot reset a higher-priority attack clock/fallback lunge.
 	if _attack_remaining <= 0.0:
 		_action_duration = duration
@@ -1535,14 +1464,8 @@ func play_death(duration := -1.0) -> float:
 	_death_pose_held = false
 	_death_remaining = resolved_duration
 	_hc_m30_death_duration = resolved_duration
-	_hit_remaining = 0.0
-	_attack_remaining = 0.0
-	# Death is the highest priority action: the whole presentation FIFO must
-	# not outlive the monster or play on the corpse.
-	_presentation_head = 0
-	_presentation_tail = 0
-	_presentation_count = 0
-	_pending_struck_count = 0
+	# The domain cancellation owns both countdowns and the entire FIFO.
+	action_timeline.cancel_for_death()
 	_action_duration = resolved_duration
 	_elapsed = 0.0
 	return resolved_duration

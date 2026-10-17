@@ -4,11 +4,19 @@ const OrderedStageFixture := preload("res://tests/helpers/ordered_json_stage_fix
 
 const State := preload("res://scripts/player_state.gd")
 const Ledger := preload("res://scripts/world_monster_clock_ledger.gd")
-class ObservedState extends State:
+class ObservedModel extends "res://scripts/gameplay/profile/profile_model.gd":
 	var synchronous_file_writes := 0
-	func _write_json_atomic(path: String, document: Dictionary, preserve_known_wire := false) -> bool:
+	func _write_json_atomic(path: String, document: Dictionary, preserve_known_wire := false, world_clock_identity: Dictionary = {}) -> bool:
 		synchronous_file_writes += 1
-		return super._write_json_atomic(path, document, preserve_known_wire)
+		return super._write_json_atomic(path, document, preserve_known_wire, world_clock_identity)
+
+class ObservedState extends State:
+	var synchronous_file_writes: int:
+		get: return _model.get("synchronous_file_writes")
+		set(value): _model.set("synchronous_file_writes", value)
+	func _init() -> void:
+		super(ObservedModel.new())
+
 var signals_seen := 0
 
 func _ready() -> void:

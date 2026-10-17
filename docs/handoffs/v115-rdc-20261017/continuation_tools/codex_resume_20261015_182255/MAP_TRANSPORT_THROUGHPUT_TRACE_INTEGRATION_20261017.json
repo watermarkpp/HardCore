@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "scope": "Parent one-file exact diff/apply review and bounded diagnostics integration; Godot/World runtime pending",
+  "binding": {
+    "production_path": "scripts/gameplay/world/world_map_loading_transport.gd",
+    "preimage_sha256": "3d3eee21b41983fbabd309433556838b604ef16d03223607f986d2a79497f959",
+    "candidate_sha256": "ce29e83170efa896cb6ca47aec28efb67afbbf71ed3ebb38a79477e99e3af037",
+    "patch_sha256": "e96e1f70d80b871af0550ec56e0190dffe6c50af517f459dfa045933edb183f8",
+    "native_aggregate": "58a1b306f62b5d805bd2ff282ab37367cc807e7dd2672c0fb265c2e2289de5f8",
+    "runtime_validation": "NOT_RUN",
+    "root_cause": "NOT_PROVEN; trace-only candidate"
+  },
+  "source_preimage": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\world_map_loading_transport.before_bounded_trace_20261017.gd",
+  "static_projection": "29/0 including6mutations; no behavioral change proof claimed beyond exact projection",
+  "fixture_sha256": "38d5060edf557fbe7e1696860438142c4db8f1265ac03a67715b7d083cdc52ca",
+  "native_unchanged": "58a169/five seals",
+  "index_sha256": "3180f91855b8bc8d7a22848592ff9f95f2d19574a73f7a3eea90e962f7151b22",
+  "initial_git_apply_check": {
+    "status": "FAIL",
+    "exit": 1,
+    "reason": "Explicit core.autocrlf=false disables canonical LF patch handling for CRLF working bytes; original255/255 and candidate363/363 line endings are both CRLF. Exact preimage/candidate SHA remained gated.",
+    "integration_method": "exact preimage SHA + preserved original bytes + reviewed candidate SHA copy; not a claimed git-apply PASS"
+  },
+  "line_ending_observation": {
+    "original_LF": 255,
+    "original_CRLF": 255,
+    "candidate_LF": 363,
+    "candidate_CRLF": 363
+  }
+}

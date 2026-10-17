@@ -1,0 +1,756 @@
+extends RefCounted
+
+var _owner_thread := OS.get_thread_caller_id()
+var _configured := false
+
+func owner_thread_id() -> int:
+	return _owner_thread
+
+func _valid_owner_port(port: Variant, methods: Array[String]) -> bool:
+	if not port is Object or port is Node or port is Resource or not port.has_method("owner_thread_id") or port.owner_thread_id() != _owner_thread:
+		return false
+	for method: String in methods:
+		if not port.has_method(method):
+			return false
+	return true
+
+var _spatial: Object
+func configure_owner(polygon: Object, spatial: Object) -> bool:
+	if _configured or OS.get_thread_caller_id() != _owner_thread or not _valid_owner_port(polygon, ["compile", "remember_validation", "seal_loaded"]) or not _valid_owner_port(spatial, ["actor_footprint_polygon_px"]):
+		push_error("Collision geometry requires shared owner PolygonRuntime")
+		return false
+	HCPPolyRuntime = polygon
+	_spatial = spatial
+	_configured = true
+	return true
+
+
+const CONTRACT_ID = "map_editor_runtime_collision_geometry_v3"
+const PHYSICS_SOURCE_ID = "published_blocked_cells_after_erasure_v1"
+const ACTOR_BOUNDARY_CONTRACT_ID = "map_visible_ground_footprint_boundary_v4"
+const PLAYER_FOOT_BOUNDARY_CONTRACT_ID = "map_player_foot_inside_visible_ground_v2"
+const ELLIPSE_SEGMENTS = 32
+const DEFAULT_BOUNDARY_MARGIN_GRID_STEPS = 8.0
+const DEFAULT_ACTOR_BOUNDARY_CLEARANCE_PX = 18.0
+const VISIBLE_BOUNDARY_PROJECTION_ITERATIONS = 32
+const VISIBLE_BOUNDARY_EPSILON_PX = 0.01
+
+
+## Compiles the published collision authority once at map-build time.  The
+## runtime JSON intentionally keeps its historical `x,y` strings; only this
+## build-time boundary is allowed to parse them.  `manual_shapes` is editor
+## provenance and is never consulted by the runtime occupancy query.
+func compile_runtime_collision(
+	runtime: Dictionary,
+	expected_runtime_map_id = -1
+) -> Dictionary:
+	# HC-POLY-R2
+	if HCPPolyGeo.runtime_enabled(runtime):
+		var hc_result = HCPPolyRuntime.compile(runtime, expected_runtime_map_id, false)
+		if hc_result.ok:
+			var hc_snapshot: Dictionary = hc_result.snapshot
+			hc_snapshot["boundary_world"] = map_actor_boundary_world(hc_snapshot.design_size)
+			hc_snapshot["outer_boundary_world"] = map_outer_boundary_world(hc_snapshot.design_size)
+		return hc_result
+	var errors: Array[String] = []
+	if runtime.is_empty():
+		errors.append("runtime_missing")
+		return {"ok": false, "errors": errors, "snapshot": {}}
+	var raw_build_sha: Variant = runtime.get("build_sha256", "")
+	var build_sha: String = str(raw_build_sha)
+	if not _is_sha256(build_sha):
+		errors.append("build_sha256_invalid")
+	var runtime_map_id = int(runtime.get("runtime_map_id", -1))
+	var source: Variant = runtime.get("source", {})
+	if source is Dictionary:
+		var source_map_id = int((source as Dictionary).get("runtime_map_id", -1))
+		if source_map_id <= 0:
+			errors.append("source_runtime_map_id_invalid")
+		if runtime_map_id <= 0:
+			runtime_map_id = source_map_id
+		elif source_map_id > 0 and source_map_id != runtime_map_id:
+			errors.append("runtime_map_id_mismatch")
+	else:
+		errors.append("source_missing")
+	if runtime_map_id <= 0:
+		errors.append("runtime_map_id_invalid")
+	if expected_runtime_map_id > 0 and runtime_map_id != expected_runtime_map_id:
+		errors.append("expected_runtime_map_id_mismatch")
+
+	var raw_design: Variant = runtime.get("design", {})
+	var design_size = _parse_design_size(
+		raw_design.get("design_size", []) if raw_design is Dictionary else []
+	)
+	if design_size == Vector2i.ZERO:
+		errors.append("design_size_invalid")
+
+	var raw_collision: Variant = runtime.get("collision", {})
+	if not raw_collision is Dictionary:
+		errors.append("collision_missing")
+		return {
+			"ok": false,
+			"errors": errors,
+			"snapshot": {},
+		}
+	var collision: Dictionary = raw_collision
+	if str(collision.get("coordinate_contract_id", "")) != CONTRACT_ID:
+		errors.append("collision_contract_invalid")
+	if str(collision.get("physics_source_id", "")) != PHYSICS_SOURCE_ID:
+		errors.append("physics_source_invalid")
+	var raw_blocked: Variant = collision.get("blocked_tiles", null)
+	if not raw_blocked is Array:
+		errors.append("blocked_tiles_missing")
+		return {
+			"ok": false,
+			"errors": errors,
+			"snapshot": {},
+		}
+	var blocked_tiles: Array = raw_blocked
+	var declared_count = int(collision.get("blocked_count", -1))
+	if declared_count != blocked_tiles.size():
+		errors.append("blocked_count_mismatch")
+	var blocked_cell_ids: Dictionary = {}
+	for raw_key: Variant in blocked_tiles:
+		if not raw_key is String:
+			errors.append("blocked_cell_not_string")
+			continue
+		var parts = (raw_key as String).split(",")
+		if parts.size() != 2 or not parts[0].is_valid_int() or not parts[1].is_valid_int():
+			errors.append("blocked_cell_invalid")
+			continue
+		var cell = Vector2i(int(parts[0]), int(parts[1]))
+		if (
+			design_size == Vector2i.ZERO
+			or cell.x < 0
+			or cell.y < 0
+			or cell.x >= design_size.x
+			or cell.y >= design_size.y
+		):
+			errors.append("blocked_cell_out_of_bounds")
+			continue
+		var cell_id = cell_id_for(cell, design_size)
+		if blocked_cell_ids.has(cell_id):
+			errors.append("blocked_cell_duplicate")
+			continue
+		blocked_cell_ids[cell_id] = true
+	if not errors.is_empty():
+		return {"ok": false, "errors": errors, "snapshot": {}}
+	var boundary_world = map_actor_boundary_world(design_size)
+	var outer_boundary_world = map_outer_boundary_world(design_size)
+	var snapshot = {
+		"contract_id": CONTRACT_ID,
+		"physics_source_id": PHYSICS_SOURCE_ID,
+		"runtime_map_id": runtime_map_id,
+		"build_sha256": build_sha,
+		"design_size": design_size,
+		"boundary_world": boundary_world,
+		"outer_boundary_world": outer_boundary_world,
+		"blocked_cell_ids": blocked_cell_ids,
+		"blocked_count": blocked_cell_ids.size(),
+	}
+	return {"ok": true, "errors": [], "snapshot": snapshot}
+
+
+func _is_sha256(value: String) -> bool:
+	if value.length() != 64:
+		return false
+	for character: String in value:
+		if character not in "0123456789abcdefABCDEF":
+			return false
+	return true
+
+
+func _parse_design_size(raw_size: Variant) -> Vector2i:
+	if not raw_size is Array or (raw_size as Array).size() != 2:
+		return Vector2i.ZERO
+	var values: Array = raw_size
+	for raw_value: Variant in values:
+		if not raw_value is int and not raw_value is float:
+			return Vector2i.ZERO
+		var numeric = float(raw_value)
+		if not is_finite(numeric) or numeric <= 0.0 or not is_equal_approx(numeric, round(numeric)):
+			return Vector2i.ZERO
+	return Vector2i(int(values[0]), int(values[1]))
+
+
+func cell_id_for(cell: Vector2i, design_size: Vector2i) -> int:
+	return cell.y * design_size.x + cell.x
+
+
+func compiled_collision_cell_blocked(
+	compiled_collision: Dictionary,
+	cell: Vector2i
+) -> bool:
+	# HC-POLY-R2
+	if compiled_collision.has("poly_index"):
+		return compiled_collision.poly_index.point_blocked(Vector2(cell) + Vector2(0.5, 0.5))
+	var raw_design_size: Variant = compiled_collision.get(
+		"design_size", Vector2i.ZERO
+	)
+	if not raw_design_size is Vector2i:
+		return true
+	var design_size: Vector2i = raw_design_size
+	if design_size.x <= 0 or design_size.y <= 0:
+		return true
+	if (
+		cell.x < 0
+		or cell.y < 0
+		or cell.x >= design_size.x
+		or cell.y >= design_size.y
+	):
+		# The caller has already accepted the fixed boundary polygon.  The
+		# historical query returns open for a boundary vertex whose floor cell
+		# is the exclusive [size] edge; preserve that exact parity here.
+		return false
+	var blocked_cell_ids: Variant = compiled_collision.get("blocked_cell_ids", {})
+	if not blocked_cell_ids is Dictionary:
+		return true
+	return (blocked_cell_ids as Dictionary).has(cell_id_for(cell, design_size))
+
+
+func compiled_collision_contains_world(
+	compiled_collision: Dictionary,
+	world: Vector2
+) -> bool:
+	# HC-POLY-R2
+	if compiled_collision.has("poly_index"):
+		return HCPPolyRuntime.point_world(compiled_collision, world)
+	if not world.is_finite():
+		return true
+	var boundary: Variant = compiled_collision.get("boundary_world", null)
+	var raw_design_size: Variant = compiled_collision.get(
+		"design_size", Vector2i.ZERO
+	)
+	if not boundary is PackedVector2Array or not raw_design_size is Vector2i:
+		return true
+	var design_size: Vector2i = raw_design_size
+	if design_size.x <= 0 or design_size.y <= 0:
+		return true
+	if not Geometry2D.is_point_in_polygon(world, boundary as PackedVector2Array):
+		return true
+	return compiled_collision_cell_blocked(
+		compiled_collision,
+		world_cell(world, design_size),
+	)
+
+
+func compiled_collision_contains_ground(
+	compiled_collision: Dictionary,
+	ground_position_gu: Vector2
+) -> bool:
+	# HC-POLY-R2
+	if compiled_collision.has("poly_index"):
+		return compiled_collision.poly_index.point_blocked(ground_position_gu)
+	if not ground_position_gu.is_finite():
+		return true
+	var raw_design_size: Variant = compiled_collision.get(
+		"design_size", Vector2i.ZERO
+	)
+	if not raw_design_size is Vector2i:
+		return true
+	var design_size: Vector2i = raw_design_size
+	if design_size.x <= 0 or design_size.y <= 0:
+		return true
+	var world = MapEditorCoordinate.ground_position_gu_to_screen_position_px(
+		ground_position_gu, design_size
+	)
+	if not world.is_finite():
+		return true
+	return compiled_collision_contains_world(compiled_collision, world)
+
+
+func map_inner_boundary_tile_polygon(
+	design_size: Vector2i
+) -> PackedVector2Array:
+	# The v2 ground canvas contains the complete authored cell union.  Its
+	# visible edge is therefore the logical vertex ring [0, design_size], which
+	# is also the coordinate ring used by cell polygons and runtime actors.
+	var minimum = Vector2.ZERO
+	var maximum = Vector2(design_size)
+	return PackedVector2Array([
+		minimum,
+		Vector2(maximum.x, minimum.y),
+		maximum,
+		Vector2(minimum.x, maximum.y),
+	])
+
+
+func map_outer_boundary_tile_polygon(
+	design_size: Vector2i,
+	margin_grid_steps = DEFAULT_BOUNDARY_MARGIN_GRID_STEPS
+) -> PackedVector2Array:
+	var margin = maxf(0.0, margin_grid_steps)
+	var minimum = Vector2.ZERO - Vector2.ONE * margin
+	var maximum = (
+		Vector2(design_size) + Vector2.ONE * margin
+	)
+	return PackedVector2Array([
+		minimum,
+		Vector2(maximum.x, minimum.y),
+		maximum,
+		Vector2(minimum.x, maximum.y),
+	])
+
+
+func tile_polygon_world(
+	tile_polygon: PackedVector2Array,
+	design_size: Vector2i
+) -> PackedVector2Array:
+	var result = PackedVector2Array()
+	for tile_point: Vector2 in tile_polygon:
+		result.append(
+			MapEditorCoordinate.ground_position_gu_to_screen_position_px(
+				tile_point, design_size
+			)
+		)
+	return result
+
+
+func map_inner_boundary_world(
+	design_size: Vector2i
+) -> PackedVector2Array:
+	return tile_polygon_world(
+		map_inner_boundary_tile_polygon(design_size), design_size
+	)
+
+
+func map_actor_boundary_world(
+	design_size: Vector2i,
+	_clearance_px = DEFAULT_ACTOR_BOUNDARY_CLEARANCE_PX
+) -> PackedVector2Array:
+	# The collision ring starts on the exact rendered-ground edge. CharacterBody2D
+	# contributes its own foot ellipse, so the resulting contact position keeps
+	# that complete ellipse on visible ground. Expanding this polygon by the
+	# actor radius created a second coordinate system and allowed feet into black.
+	return map_inner_boundary_world(design_size)
+
+
+func map_outer_boundary_world(
+	design_size: Vector2i,
+	clearance_px = DEFAULT_ACTOR_BOUNDARY_CLEARANCE_PX
+) -> PackedVector2Array:
+	var actor_boundary = map_actor_boundary_world(design_size, clearance_px)
+	return _expand_convex_polygon(
+		actor_boundary,
+		DEFAULT_BOUNDARY_MARGIN_GRID_STEPS * MapEditorCoordinate.GROUND_TILE_SIZE_PX.y
+	)
+
+
+func runtime_boundary_contains_world(
+	world: Vector2,
+	design_size: Vector2i,
+	clearance_px = DEFAULT_ACTOR_BOUNDARY_CLEARANCE_PX
+) -> bool:
+	return Geometry2D.is_point_in_polygon(
+		world, map_actor_boundary_world(design_size, clearance_px)
+	)
+
+
+func default_player_foot_envelope_world() -> PackedVector2Array:
+	# Only the foot contact ellipse is constrained to visible ground. The body,
+	# hair, weapon and health bar may naturally overhang a sloped map edge.
+	return _spatial.actor_footprint_polygon_px(
+		DEFAULT_ACTOR_BOUNDARY_CLEARANCE_PX
+	)
+
+
+func project_player_foot_inside_boundary(
+	world: Vector2,
+	design_size: Vector2i
+) -> Vector2:
+	return project_world_envelope_inside_visible_boundary(
+		world, design_size, default_player_foot_envelope_world()
+	)
+
+
+func project_world_envelope_inside_visible_boundary(
+	world: Vector2,
+	design_size: Vector2i,
+	envelope: PackedVector2Array
+) -> Vector2:
+	var boundary = map_inner_boundary_world(design_size)
+	if boundary.size() < 3 or envelope.is_empty():
+		return world
+	var signed_area = _signed_area(boundary)
+	var result = world
+	for _iteration in VISIBLE_BOUNDARY_PROJECTION_ITERATIONS:
+		var changed = false
+		for edge_index in boundary.size():
+			var following = (edge_index + 1) % boundary.size()
+			var edge = boundary[following] - boundary[edge_index]
+			var inward = Vector2(-edge.y, edge.x).normalized()
+			if signed_area < 0.0:
+				inward = -inward
+			var minimum_margin = INF
+			for offset: Vector2 in envelope:
+				minimum_margin = minf(
+					minimum_margin,
+					inward.dot(result + offset - boundary[edge_index])
+				)
+			if minimum_margin < -VISIBLE_BOUNDARY_EPSILON_PX:
+				result += inward * (
+					-minimum_margin + VISIBLE_BOUNDARY_EPSILON_PX
+				)
+				changed = true
+		if not changed:
+			break
+	return result
+
+
+func player_foot_inside_boundary(
+	world: Vector2,
+	design_size: Vector2i
+) -> bool:
+	return world_envelope_inside_visible_boundary(
+		world, design_size, default_player_foot_envelope_world()
+	)
+
+
+func world_envelope_inside_visible_boundary(
+	world: Vector2,
+	design_size: Vector2i,
+	envelope: PackedVector2Array
+) -> bool:
+	var boundary = map_inner_boundary_world(design_size)
+	if boundary.size() < 3 or envelope.is_empty():
+		return true
+	var signed_area = _signed_area(boundary)
+	for edge_index in boundary.size():
+		var following = (edge_index + 1) % boundary.size()
+		var edge = boundary[following] - boundary[edge_index]
+		var inward = Vector2(-edge.y, edge.x).normalized()
+		if signed_area < 0.0:
+			inward = -inward
+		for offset: Vector2 in envelope:
+			if (
+				inward.dot(world + offset - boundary[edge_index])
+				< -VISIBLE_BOUNDARY_EPSILON_PX
+			):
+				return false
+	return true
+
+
+func _expand_convex_polygon(
+	polygon: PackedVector2Array,
+	distance: float
+) -> PackedVector2Array:
+	if polygon.size() < 3 or distance <= 0.0:
+		return polygon
+	var signed_area = 0.0
+	for index in polygon.size():
+		var following = (index + 1) % polygon.size()
+		signed_area += _cross(polygon[index], polygon[following])
+	var result = PackedVector2Array()
+	for index in polygon.size():
+		var previous = (index - 1 + polygon.size()) % polygon.size()
+		var following = (index + 1) % polygon.size()
+		var previous_edge = polygon[index] - polygon[previous]
+		var next_edge = polygon[following] - polygon[index]
+		var previous_normal = Vector2(
+			previous_edge.y, -previous_edge.x
+		).normalized()
+		var next_normal = Vector2(next_edge.y, -next_edge.x).normalized()
+		if signed_area < 0.0:
+			previous_normal = -previous_normal
+			next_normal = -next_normal
+		var previous_line = polygon[index] + previous_normal * distance
+		var next_line = polygon[index] + next_normal * distance
+		var denominator = _cross(previous_edge, next_edge)
+		if absf(denominator) <= 0.0001:
+			result.append(polygon[index] + next_normal * distance)
+			continue
+		var ratio = _cross(next_line - previous_line, next_edge) / denominator
+		result.append(previous_line + previous_edge * ratio)
+	return result
+
+
+func _cross(a: Vector2, b: Vector2) -> float:
+	return a.x * b.y - a.y * b.x
+
+
+func _signed_area(polygon: PackedVector2Array) -> float:
+	var result = 0.0
+	for index in polygon.size():
+		result += _cross(
+			polygon[index],
+			polygon[(index + 1) % polygon.size()]
+		)
+	return result
+
+
+func cell_center_world(cell: Vector2i, design_size: Vector2i) -> Vector2:
+	return MapEditorCoordinate.grid_cell_to_screen_position_px(
+		Vector2(cell), design_size
+	)
+
+
+func blocked_cell_set(runtime_collision: Dictionary) -> Dictionary:
+	var result = {}
+	for raw_key: Variant in runtime_collision.get("blocked_tiles", []):
+		var parts = str(raw_key).split(",")
+		if parts.size() != 2:
+			continue
+		result["%d,%d" % [int(parts[0]), int(parts[1])]] = true
+	return result
+
+
+func blocked_cell_runs(runtime_collision: Dictionary) -> Array[Rect2i]:
+	var blocked_by_row = {}
+	for key: String in blocked_cell_set(runtime_collision):
+		var parts = key.split(",")
+		var y = int(parts[1])
+		var xs: Array = blocked_by_row.get(y, [])
+		xs.append(int(parts[0]))
+		blocked_by_row[y] = xs
+	var rows: Array = blocked_by_row.keys()
+	rows.sort()
+	var result: Array[Rect2i] = []
+	for raw_y: Variant in rows:
+		var y = int(raw_y)
+		var xs: Array = blocked_by_row[y]
+		xs.sort()
+		if xs.is_empty():
+			continue
+		var run_start = int(xs[0])
+		var previous = run_start
+		for index in range(1, xs.size() + 1):
+			if index == xs.size() or int(xs[index]) != previous + 1:
+				result.append(Rect2i(
+					run_start, y, previous - run_start + 1, 1
+				))
+				if index < xs.size():
+					run_start = int(xs[index])
+			if index < xs.size():
+				previous = int(xs[index])
+	return result
+
+
+## Build-time equivalent of blocked_cell_runs() for the integer-id snapshot.
+## This intentionally never converts a cell id back to the published string
+## form; all string parsing belongs exclusively to compile_runtime_collision().
+func compiled_collision_blocked_cell_runs(
+	compiled_collision: Dictionary
+) -> Array[Rect2i]:
+	# HC-POLY-R2
+	if compiled_collision.has("poly_index"):
+		return []
+	var design_size: Vector2i = compiled_collision.get(
+		"design_size", Vector2i.ZERO
+	)
+	var blocked_cell_ids: Variant = compiled_collision.get("blocked_cell_ids", {})
+	if design_size == Vector2i.ZERO or not blocked_cell_ids is Dictionary:
+		return []
+	var blocked_by_row: Dictionary = {}
+	for raw_cell_id: Variant in (blocked_cell_ids as Dictionary).keys():
+		var cell_id = int(raw_cell_id)
+		var y = cell_id / design_size.x
+		var x = posmod(cell_id, design_size.x)
+		var xs: Array = blocked_by_row.get(y, [])
+		xs.append(x)
+		blocked_by_row[y] = xs
+	var rows: Array = blocked_by_row.keys()
+	rows.sort()
+	var result: Array[Rect2i] = []
+	for raw_y: Variant in rows:
+		var y = int(raw_y)
+		var xs: Array = blocked_by_row[y]
+		xs.sort()
+		if xs.is_empty():
+			continue
+		var run_start = int(xs[0])
+		var previous = run_start
+		for index in range(1, xs.size() + 1):
+			if index == xs.size() or int(xs[index]) != previous + 1:
+				result.append(Rect2i(
+					run_start, y, previous - run_start + 1, 1
+				))
+				if index < xs.size():
+					run_start = int(xs[index])
+			if index < xs.size():
+				previous = int(xs[index])
+	return result
+
+
+func runtime_collision_contains_world(
+	runtime_collision: Dictionary,
+	world: Vector2,
+	design_size: Vector2i
+) -> bool:
+	return blocked_cells_contain_world(
+		blocked_cell_set(runtime_collision), world, design_size
+	)
+
+
+func blocked_cells_contain_world(
+	blocked_cells: Dictionary,
+	world: Vector2,
+	design_size: Vector2i
+) -> bool:
+	if not runtime_boundary_contains_world(world, design_size):
+		return true
+	var cell = world_cell(world, design_size)
+	return blocked_cells.has("%d,%d" % [cell.x, cell.y])
+
+
+func visible_ground_contains_tile(
+	tile: Vector2,
+	design_size: Vector2i
+) -> bool:
+	return (
+		tile.x >= 0.0 and tile.y >= 0.0
+		and tile.x < float(design_size.x)
+		and tile.y < float(design_size.y)
+	)
+
+
+func world_cell(world: Vector2, design_size: Vector2i) -> Vector2i:
+	return MapEditorCoordinate.screen_position_px_to_grid_cell(
+		world, design_size
+	)
+
+
+func cell_polygon_world(
+	cell: Vector2i,
+	design_size: Vector2i
+) -> PackedVector2Array:
+	return MapEditorCoordinate.grid_cell_polygon_screen_px(cell, design_size)
+
+
+func rect_tile_bounds(rect: Array) -> Rect2:
+	if rect.size() != 4:
+		return Rect2()
+	return Rect2(
+		float(rect[0]), float(rect[1]), float(rect[2]), float(rect[3])
+	)
+
+
+func rect_polygon_world(
+	rect: Array,
+	design_size: Vector2i
+) -> PackedVector2Array:
+	var bounds = rect_tile_bounds(rect)
+	if bounds.size.x <= 0.0 or bounds.size.y <= 0.0:
+		return PackedVector2Array()
+	var minimum = bounds.position
+	var maximum = bounds.end
+	return PackedVector2Array([
+		MapEditorCoordinate.ground_position_gu_to_screen_position_px(
+			minimum, design_size
+		),
+		MapEditorCoordinate.ground_position_gu_to_screen_position_px(
+			Vector2(maximum.x, minimum.y), design_size
+		),
+		MapEditorCoordinate.ground_position_gu_to_screen_position_px(
+			maximum, design_size
+		),
+		MapEditorCoordinate.ground_position_gu_to_screen_position_px(
+			Vector2(minimum.x, maximum.y), design_size
+		),
+	])
+
+
+func polygon_world(
+	points: Array,
+	design_size: Vector2i
+) -> PackedVector2Array:
+	var result = PackedVector2Array()
+	for raw: Variant in points:
+		if raw is Array and raw.size() == 2:
+			result.append(
+				MapEditorCoordinate.ground_position_gu_to_screen_position_px(
+					Vector2(float(raw[0]), float(raw[1])), design_size
+				)
+			)
+	return result
+
+
+func ellipse_polygon_world(
+	rect: Array,
+	design_size: Vector2i,
+	segments = ELLIPSE_SEGMENTS
+) -> PackedVector2Array:
+	var bounds = rect_tile_bounds(rect)
+	if bounds.size.x <= 0.0 or bounds.size.y <= 0.0:
+		return PackedVector2Array()
+	var center = bounds.position + bounds.size * 0.5
+	var radius = bounds.size * 0.5
+	var result = PackedVector2Array()
+	for index in range(maxi(8, segments)):
+		var angle = TAU * float(index) / float(maxi(8, segments))
+		var tile_point = center + Vector2(
+			cos(angle) * radius.x, sin(angle) * radius.y
+		)
+		result.append(
+			MapEditorCoordinate.ground_position_gu_to_screen_position_px(
+				tile_point, design_size
+			)
+		)
+	return result
+
+
+func manual_shape_polygon_world(
+	manual: Dictionary,
+	design_size: Vector2i
+) -> PackedVector2Array:
+	var data: Dictionary = manual.get("data", {})
+	match str(manual.get("shape", "")):
+		"cell":
+			var raw_cell: Array = data.get("cell", data.get("tile", []))
+			if raw_cell.size() == 2:
+				return cell_polygon_world(
+					Vector2i(int(raw_cell[0]), int(raw_cell[1])), design_size
+				)
+		"rect":
+			return rect_polygon_world(data.get("rect", []), design_size)
+		"ellipse":
+			return ellipse_polygon_world(data.get("rect", []), design_size)
+		"polygon":
+			return polygon_world(data.get("points", []), design_size)
+	return PackedVector2Array()
+
+
+func tile_shape_contains_world(
+	manual: Dictionary,
+	world: Vector2,
+	design_size: Vector2i
+) -> bool:
+	var tile = MapEditorCoordinate.screen_position_px_to_ground_position_gu(
+		world, design_size
+	)
+	var data: Dictionary = manual.get("data", {})
+	match str(manual.get("shape", "")):
+		"cell":
+			var raw_cell: Array = data.get("cell", data.get("tile", []))
+			return (
+				raw_cell.size() == 2
+				and Vector2i(floori(tile.x), floori(tile.y))
+				== Vector2i(int(raw_cell[0]), int(raw_cell[1]))
+			)
+		"rect":
+			return rect_tile_bounds(data.get("rect", [])).has_point(tile)
+		"ellipse":
+			var bounds = rect_tile_bounds(data.get("rect", []))
+			if bounds.size.x <= 0.0 or bounds.size.y <= 0.0:
+				return false
+			var normalized = (tile - (bounds.position + bounds.size * 0.5)) / (
+				bounds.size * 0.5
+			)
+			return normalized.length_squared() <= 1.0
+		"polygon":
+			return Geometry2D.is_point_in_polygon(
+				tile, _tile_polygon(data.get("points", []))
+			)
+	return false
+
+
+func _tile_polygon(points: Array) -> PackedVector2Array:
+	var result = PackedVector2Array()
+	for raw: Variant in points:
+		if raw is Array and raw.size() == 2:
+			result.append(Vector2(float(raw[0]), float(raw[1])))
+	return result
+
+
+# HC-POLY-R2 — appended integration adapter
+const HCPPolyGeo = preload("res://scripts/map_editor/polygon/poly_geometry.gd")
+var HCPPolyRuntime: Object

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/map_arrival_attached_registry_20261016.gd" id="1"]
+
+[node name="MapArrivalAttachedRegistry" type="Node"]
+script = ExtResource("1")

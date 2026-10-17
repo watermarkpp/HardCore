@@ -3,11 +3,19 @@ extends Node
 const StateScript := preload("res://scripts/player_state.gd")
 const Ledger := preload("res://scripts/world_monster_clock_ledger.gd")
 
-class ObservedState extends StateScript:
+class ObservedModel extends "res://scripts/gameplay/profile/profile_model.gd":
 	var synchronous_atomic_entries: Array[String] = []
-	func _write_json_atomic(target: String, document: Dictionary, preserve_known_wire := false) -> bool:
+	func _write_json_atomic(target: String, document: Dictionary, preserve_known_wire := false, world_clock_identity: Dictionary = {}) -> bool:
 		synchronous_atomic_entries.append(target)
-		return super._write_json_atomic(target, document, preserve_known_wire)
+		return super._write_json_atomic(target, document, preserve_known_wire, world_clock_identity)
+
+
+class ObservedState extends StateScript:
+	var synchronous_atomic_entries: Array[String]:
+		get: return _model.get("synchronous_atomic_entries")
+		set(value): _model.set("synchronous_atomic_entries", value)
+	func _init() -> void:
+		super(ObservedModel.new())
 
 var failures: Array[String] = []
 var measurements: Array[Dictionary] = []

@@ -29,6 +29,16 @@ SCENE_PASS checks=3
     foreach ($category in $allowed.allowlisted_errors.Values) { if ($category.count -ne 1) { throw 'allowlist category count mismatch' } }
     $records.Add([ordered]@{ case='four_allowlist_categories_and_objectdb_warning'; status='PASS'; counts=$allowed.allowlisted_errors })
 
+    $currentObjectDbText = @'
+WARNING: 1 ObjectDB instance was leaked at exit (run with `--verbose` for details).
+WARNING: 2 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+Leaked instance: RefCounted:9223372240983164763 - Reference count: 0
+'@
+    $paths = Write-Fixture 'current_objectdb' $currentObjectDbText $validReceipt
+    $currentObjectDb = Get-NativeLogEvidence -RawLogPaths @($paths[0]) -ReceiptPath $paths[1] -ExpectedSceneId 'scene_a' -ExpectedInvocationId 'invoke_a'
+    if ($currentObjectDb.objectdb_leak_warning_count -ne 3 -or $currentObjectDb.formal_evidence_status -ne 'MISSING') { throw 'current ObjectDB summary/detail evidence is missing or grants formal acceptance' }
+    $records.Add([ordered]@{ case='current_objectdb_singular_plural_and_verbose_detail'; status='PASS'; warning_lines=$currentObjectDb.objectdb_leak_warning_count })
+
     $paths = Write-Fixture 'unknown_legacy' "ERROR: Unknown failure from engine`nLEGACY_SCENE_PASS checks=2" $null
     $unknown = Get-NativeLogEvidence -RawLogPaths @($paths[0]) -ReceiptPath $paths[1] -ExpectedSceneId 'scene_b' -ExpectedInvocationId 'invoke_b'
     if ($unknown.status -ne 'FAIL' -or $unknown.formal_evidence_status -ne 'MISSING' -or -not $unknown.functional_marker_observed -or $unknown.formal_evidence_reason -ne 'legacy_run_bound_checks_missing') { throw 'unknown/legacy gating failed' }

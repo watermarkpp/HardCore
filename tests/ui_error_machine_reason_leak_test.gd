@@ -16,6 +16,7 @@ const SCANNED_FILES := [
 	"res://scripts/inventory_panel.gd",
 	"res://scripts/game_root.gd",
 	"res://scripts/player_state.gd",
+	"res://scripts/gameplay/profile/profile_model.gd",
 ]
 
 ## Retired player-visible reason interpolations. None of these may return.
@@ -167,7 +168,7 @@ func _run() -> void:
 		)
 
 	# --- R1.1 closure: item-use authority reports structured results ---------
-	var player_state := _read_script("res://scripts/player_state.gd")
+	var player_state := _read_script("res://scripts/gameplay/profile/profile_model.gd")
 	assert(
 		player_state.contains("func use_inventory_index_result(index: int, save_in_background := false) -> Dictionary:"),
 		"use authority must expose the structured result entrypoint"

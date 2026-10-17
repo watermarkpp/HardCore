@@ -2,6 +2,7 @@ extends Node
 
 var skin_manifest: Dictionary = {}
 var _cache: Dictionary = {}
+var _original_resource_observations: Dictionary = {}
 
 
 func _ready() -> void:
@@ -10,6 +11,7 @@ func _ready() -> void:
 
 func reload_skin() -> bool:
 	_cache.clear()
+	_original_resource_observations.clear()
 	var path := str(ContentLayers.active_skin().get("manifest", ""))
 	if path.is_empty() or not FileAccess.file_exists(path):
 		return false
@@ -55,9 +57,22 @@ func _resource(logical_path: String) -> Resource:
 		return _cache[logical_path]
 	var parts := logical_path.split("/")
 	var path := str(skin_manifest.get("runtimeAssets", {}).get(parts[0], {}).get(parts[1], ""))
-	var resource := load(path) if not path.is_empty() and ResourceLoader.exists(path) else null
+	var native_exists: bool = not path.is_empty() and ResourceLoader.exists(path)
+	var resource := load(path) if native_exists else null
 	_cache[logical_path] = resource
+	# Witness the same original branch, without another load or retry. A cached
+	# null without this observation is not evidence of original absence.
+	_original_resource_observations[logical_path] = {"logical_path":logical_path,"path":path,"native_exists":native_exists,
+		"status":"LOADED" if resource != null else ("FAILED" if native_exists else "ABSENT"),
+		"actual_resource_id":resource.get_instance_id() if resource != null else 0,"main_process_frame":Engine.get_process_frames()}
 	return resource
+
+func inspect_original_cached_resource(logical_path: String) -> Dictionary:
+	if OS.get_thread_caller_id() != OS.get_main_thread_id() or not _cache.has(logical_path) or not _original_resource_observations.has(logical_path): return {"status":"MISSING"}
+	var resource: Variant = _cache[logical_path]
+	var observed: Dictionary = _original_resource_observations[logical_path]
+	if observed.actual_resource_id != (resource.get_instance_id() if resource != null else 0): return {"status":"INVALID"}
+	return observed.duplicate(true)
 
 
 func cached_resource_count() -> int:

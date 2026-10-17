@@ -432,18 +432,11 @@ static func build_release_snapshot(
 			effective_cells,
 			absolute_context
 		)
-	var target: EnemyActor = context.get("target")
 	if TARGET_FOOTPRINT_SKILL_IDS.has(skill_id):
-		var target_actor: Node2D = (
-			target
-			if target != null and is_instance_valid(target)
-			else null
-		)
-		if target_actor == null and context.get("fallback_target_actor") != null:
-			target_actor = context.get("fallback_target_actor")
-		if target_actor == null:
+		var target_view := _plan_actor_view(context, "target_actor_view", "target", "fallback_target_actor", true)
+		if target_view.is_empty():
 			return {}
-		var target_ground_gu := _project(screen_to_ground, target_actor.global_position
+		var target_ground_gu := _project(screen_to_ground, target_view.position_screen_px
 		, map_id)
 		var target_context := SkillFootprintSnapshotScript.make_absolute_runtime_context(
 			map_id,
@@ -456,14 +449,14 @@ static func build_release_snapshot(
 			release_id,
 			target_ground_gu,
 			float(context.get("target_combat_radius_gu", 0.0)),
-			target_actor.get_instance_id(),
+			int(target_view.runtime_id),
 			target_context
 		)
 	if ATTACHED_STATE_SKILL_IDS.has(skill_id):
-		var player_actor: Node2D = context.get("player_actor")
-		if player_actor == null or not is_instance_valid(player_actor):
+		var player_view := _plan_actor_view(context, "player_actor_view", "player_actor")
+		if player_view.is_empty():
 			return {}
-		var player_ground_gu := _project(screen_to_ground, player_actor.global_position
+		var player_ground_gu := _project(screen_to_ground, player_view.position_screen_px
 		, map_id)
 		var player_context := SkillFootprintSnapshotScript.make_absolute_runtime_context(
 			map_id,
@@ -476,7 +469,7 @@ static func build_release_snapshot(
 			release_id,
 			player_ground_gu,
 			float(context.get("player_combat_radius_gu", 0.0)),
-			player_actor.get_instance_id(),
+			int(player_view.runtime_id),
 			player_context
 		)
 	if SUMMON_SKILL_IDS.has(skill_id):
@@ -488,11 +481,10 @@ static func build_release_snapshot(
 			Vector2.ZERO
 		)
 		if spawn_screen_px == Vector2.ZERO:
-			var summon_player: Node2D = context.get("player_actor")
-			if summon_player != null and is_instance_valid(summon_player):
-				spawn_screen_px = summon_player.global_position
-			else:
+			var player_view := _plan_actor_view(context, "player_actor_view", "player_actor")
+			if player_view.is_empty():
 				return {}
+			spawn_screen_px = player_view.position_screen_px
 		var spawn_center_ground_gu := _project(screen_to_ground, spawn_screen_px
 		, map_id)
 		var summon_template_id := ""
@@ -746,6 +738,35 @@ static func sentinel_diagnostics() -> Dictionary:
 		"cooldown_commit_count": cooldown_commit_count,
 	}
 
+
+static func _plan_actor_view(
+	context: Dictionary,
+	view_key: String,
+	legacy_key: String,
+	legacy_fallback_key := "",
+	legacy_enemy_only := false
+) -> Dictionary:
+	# The domain supplies a value captured at this original planner call point.
+	# An explicitly invalid domain view cannot fall through to a live Node.
+	if context.has(view_key):
+		var raw: Variant = context[view_key]
+		if not raw is Dictionary or not raw.get("runtime_id") is int \
+			or int(raw.runtime_id) <= 0 or not raw.get("position_screen_px") is Vector2 \
+			or not (raw.position_screen_px as Vector2).is_finite():
+			return {}
+		return raw
+	# Legacy capture is confined to the legacy caller. Snapshot construction
+	# below consumes exactly the same pose/id values in both owner modes.
+	var actor: Node2D = context.get(legacy_key) as Node2D
+	if legacy_enemy_only and not actor is EnemyActor:
+		actor = null
+	if not is_instance_valid(actor):
+		actor = null
+	if actor == null and not legacy_fallback_key.is_empty():
+		actor = context.get(legacy_fallback_key) as Node2D
+	if not is_instance_valid(actor):
+		return {}
+	return {"runtime_id":actor.get_instance_id(),"position_screen_px":actor.global_position}
 
 static func _project(callable: Callable, value: Vector2,
 	runtime_map_id: int

@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "scope": "Parent exact one-file diff and integration only; full World/exit verification pending",
+  "binding": {
+    "path": "scripts/gameplay/world/world_environment_publication.gd",
+    "preimage_sha256": "ee5f101add316a38658f8a61b93c9c49722974dc40934d4f401d16ed6e421c97",
+    "candidate_sha256": "9ec39a6d20f1b94ef1fad7cd8d530e5989eef212e1ffe8b727d01ed282d9435a",
+    "patch_sha256": "92f9a90d2aeeb016c0a031c767e69456fe400ff122f419217e9b3e6feaaed28b"
+  },
+  "preimage": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\world_environment_publication.before_formal_alias_20261017.gd",
+  "git_apply_check": 0,
+  "semantic_old_sha256": "ee5f101add316a38658f8a61b93c9c49722974dc40934d4f401d16ed6e421c97",
+  "semantic_new_sha256": "9ec39a6d20f1b94ef1fad7cd8d530e5989eef212e1ffe8b727d01ed282d9435a",
+  "native_project_rows_verified_unchanged": 74,
+  "five_roles_verified_unchanged": 5,
+  "real_index_sha256": "3180f91855b8bc8d7a22848592ff9f95f2d19574a73f7a3eea90e962f7151b22",
+  "child_component": "RED19/4 native1 -> GREEN19/0 native0; actual Native codec and nonMain Thread; no World acceptance"
+}

@@ -1,0 +1,909 @@
+extends RefCounted
+
+var _owner := OS.get_thread_caller_id()
+var _runtime: RefCounted
+var _resources: RefCounted
+var _claim_owner: RefCounted
+func owner_thread_id() -> int: return _owner
+func configure_owner(runtime: RefCounted, resources: RefCounted, claim_owner: RefCounted) -> bool:
+	if _runtime != null or _owner == OS.get_main_thread_id(): return false
+	for port: RefCounted in [runtime,resources,claim_owner]:
+		if port == null or port is Resource or not port.has_method("owner_thread_id"): return false
+		# ProfileRuntimePort uses its original _thread owner field.
+		if port.owner_thread_id() != _owner: return false
+	for method: String in ["next_service"]:
+		if not runtime.has_method(method): return false
+	for method: String in ["display_server_name","exists","load","load_threaded_request","load_threaded_get_status","load_threaded_get","is_original_resource_reference","blocking_original_loading_scope_allowed"]:
+		if not resources.has_method(method): return false
+	if not claim_owner.has_method("retire_threaded_resource_claims"): return false
+	_runtime = runtime
+	_resources = resources
+	_claim_owner = claim_owner
+	return true
+
+# ── P1-B / P1-004: Staged World Bootstrap Coordinator ──
+#
+# HC-P1-004 contract:
+#   * every bootstrap stage obtains formal resources through the unified
+#     prefetch cache (get_build_resource); a missing cache entry is recorded
+#     as an unexpected synchronous load and fails the bootstrap;
+#   * BUILD_MAP / BUILD_COLLISION are drained through frame-budget queues,
+#     one atomic unit per task, with real planned/built/slice metrics;
+#   * generation tokens guard every async resume point;
+#   * READY is only granted after the full collision/readiness contract.
+
+enum Stage {
+	IDLE,
+	SHOW_LOADING,
+	COLLECT_REQUIREMENTS,
+	REQUEST_RESOURCES,
+	WAIT_RESOURCES,
+	BUILD_MAP,
+	BUILD_COLLISION,
+	SPAWN_ACTORS,
+	FINALIZE,
+	READY,
+	FAILED,
+}
+
+const DEFAULT_SLICE_BUDGET_MS := 3.0
+const DEFAULT_MAX_ITEMS_PER_FRAME := 12
+const BUILD_STAGE_LABELS := {
+	"BUILD_MAP": "BUILD_MAP",
+	"BUILD_COLLISION": "BUILD_COLLISION",
+	"SPAWN_ACTORS": "SPAWN_ACTORS",
+}
+
+var stage := Stage.IDLE
+var generation := 0
+var _generation_valid := true
+var map_id := -1
+var mode := ""
+var started_at_usec := 0
+# P0-1/P0-3 audit trail: the most recent FAILED bootstrap, kept across
+# chained recovery transitions that overwrite stage/diagnostic.
+var last_failure: Dictionary = {}
+
+# When false the budget queues drain without yielding between slices. This is
+# the production adapter's test-mode fast path; slicing, metrics and per-item
+# handlers are identical to the yielding path.
+var defer_between_slices := true
+
+# ── queues ──
+var _map_build_queue: Array[Dictionary] = []
+var _collision_build_queue: Array[Dictionary] = []
+var _actor_spawn_queue: Array[Dictionary] = []
+var _actor_collection_open := false
+var _actor_collection_started := false
+var _actor_descriptor_validator := Callable()
+
+# ── resources ──
+var resource_manifest: Dictionary = {}
+var _prefetched_resources: Dictionary = {}
+var _consumed_paths: Dictionary = {}
+## Accepted threaded requests whose original generation was retired.  These
+## remain owned until a terminal ResourceLoader state is observed and its
+## retrieval right is consumed; starting a new world never drops them.
+var _retired_threaded_requests: Dictionary = {}
+var _sync_load_recorded: Dictionary = {}
+var target_region := ""
+
+# ── barriers ──
+var loading_frame_barrier: Callable = Callable()
+
+# ── diagnostics ──
+var diagnostic: Dictionary = {}
+var _synchronous_load_during_spawn := 0
+var _slice_count := 0
+var _max_slice_ms := 0.0
+var _total_slice_ms := 0.0
+
+var unexpected_sync_load_count := 0
+var unexpected_sync_load_count_build_map := 0
+var unexpected_sync_load_count_build_collision := 0
+var unexpected_sync_load_count_spawn_actors := 0
+var unexpected_sync_load_paths: Array = []
+var unexpected_sync_load_stages: Array = []
+
+var planned_map_item_count := 0
+var built_map_item_count := 0
+var map_slice_count := 0
+var map_max_items_in_slice := 0
+var map_max_slice_ms := 0.0
+
+var planned_collision_count := 0
+var built_collision_count := 0
+var failed_collision_count := 0
+var collision_slice_count := 0
+var collision_max_items_in_slice := 0
+var collision_max_slice_ms := 0.0
+
+var planned_actors := 0
+var spawned_actors := 0
+var deferred_actors := 0
+var duplicate_actors := 0
+var failed_actors := 0
+var actor_slice_count := 0
+var actor_max_items_in_slice := 0
+var actor_max_slice_ms := 0.0
+var actor_max_item_ms := 0.0
+var actor_total_ms := 0.0
+var _planned_actor_ids: Dictionary = {}
+
+var target_map_resource_count := 0
+var shared_resource_count := 0
+var cross_region_resource_count := 0
+var unused_prefetched_resource_count := 0
+
+
+func begin_initial_world(_map_id: int) -> void:
+	_internal_begin(_map_id, "initial_world")
+
+
+func begin_map_transition(_map_id: int) -> void:
+	_internal_begin(_map_id, "map_transition")
+
+
+func _internal_begin(_map_id: int, _mode: String) -> void:
+	_retire_pending_threaded_requests()
+	generation += 1
+	_generation_valid = true
+	map_id = _map_id
+	mode = _mode
+	stage = Stage.IDLE
+	started_at_usec = Time.get_ticks_usec()
+	_map_build_queue.clear()
+	_collision_build_queue.clear()
+	_actor_spawn_queue.clear()
+	_actor_collection_open = false
+	_actor_collection_started = false
+	_actor_descriptor_validator = Callable()
+	resource_manifest.clear()
+	_prefetched_resources.clear()
+	_consumed_paths.clear()
+	_sync_load_recorded.clear()
+	_synchronous_load_during_spawn = 0
+	_slice_count = 0
+	_max_slice_ms = 0.0
+	_total_slice_ms = 0.0
+	unexpected_sync_load_count = 0
+	unexpected_sync_load_count_build_map = 0
+	unexpected_sync_load_count_build_collision = 0
+	unexpected_sync_load_count_spawn_actors = 0
+	unexpected_sync_load_paths.clear()
+	unexpected_sync_load_stages.clear()
+	planned_map_item_count = 0
+	built_map_item_count = 0
+	map_slice_count = 0
+	map_max_items_in_slice = 0
+	map_max_slice_ms = 0.0
+	planned_collision_count = 0
+	built_collision_count = 0
+	failed_collision_count = 0
+	collision_slice_count = 0
+	collision_max_items_in_slice = 0
+	collision_max_slice_ms = 0.0
+	planned_actors = 0
+	spawned_actors = 0
+	deferred_actors = 0
+	duplicate_actors = 0
+	failed_actors = 0
+	actor_slice_count = 0
+	actor_max_items_in_slice = 0
+	actor_max_slice_ms = 0.0
+	actor_max_item_ms = 0.0
+	actor_total_ms = 0.0
+	_planned_actor_ids.clear()
+	target_map_resource_count = 0
+	shared_resource_count = 0
+	cross_region_resource_count = 0
+	unused_prefetched_resource_count = 0
+	target_region = ""
+	diagnostic = _empty_diagnostic()
+
+
+func _empty_diagnostic() -> Dictionary:
+	return {
+		"generation": generation,
+		"mode": mode,
+		"map_id": map_id,
+		"stage": "",
+		"success": true,
+		"failure_reason": "",
+		"loading_barrier_completed": false,
+		"resource_count": 0,
+		"prefetch_failure_count": 0,
+		"map_item_count": 0,
+		"collision_count": 0,
+		"planned_actors": 0,
+		"spawned_actors": 0,
+		"deferred_actors": 0,
+		"duplicate_actors": 0,
+		"failed_actors": 0,
+		"sync_load_spawn": 0,
+		"slice_count": 0,
+		"max_slice_ms": 0.0,
+		"avg_slice_ms": 0.0,
+		"target_map_resource_count": 0,
+		"shared_resource_count": 0,
+		"cross_region_resource_count": 0,
+		"unused_prefetched_resource_count": 0,
+		"planned_map_item_count": 0,
+		"built_map_item_count": 0,
+		"map_slice_count": 0,
+		"map_max_items_in_slice": 0,
+		"map_max_slice_ms": 0.0,
+		"planned_collision_count": 0,
+		"built_collision_count": 0,
+		"failed_collision_count": 0,
+		"collision_slice_count": 0,
+		"collision_max_items_in_slice": 0,
+		"collision_max_slice_ms": 0.0,
+		"actor_slice_count": 0,
+		"actor_max_items_in_slice": 0,
+		"actor_max_slice_ms": 0.0,
+		"actor_max_item_ms": 0.0,
+		"actor_total_ms": 0.0,
+		"unexpected_sync_load_count": 0,
+		"unexpected_sync_load_count_build_map": 0,
+		"unexpected_sync_load_count_build_collision": 0,
+		"unexpected_sync_load_count_spawn_actors": 0,
+		"unexpected_sync_load_paths": [],
+		"unexpected_sync_load_stages": [],
+		"stage_elapsed_ms": {},
+	}
+
+
+func advance(new_stage: Stage) -> void:
+	stage = new_stage
+	var stage_name := str(Stage.keys()[new_stage])
+	diagnostic["stage"] = stage_name
+	var elapsed_by_stage: Dictionary = diagnostic.get("stage_elapsed_ms", {})
+	elapsed_by_stage[stage_name] = (
+		(Time.get_ticks_usec() - started_at_usec) / 1000.0
+	)
+	diagnostic["stage_elapsed_ms"] = elapsed_by_stage
+
+
+func is_generation_current(gen: int) -> bool:
+	return _generation_valid and gen == generation
+
+
+func mark_heavy_work_started(gen: int) -> bool:
+	return is_generation_current(gen)
+
+
+func revoke_current_generation() -> void:
+	## Invalidates every suspended coroutine owned by the current transition.
+	## The numeric generation is retained for diagnostics; the next begin still
+	## advances it and re-arms the owner boundary.
+	_generation_valid = false
+
+
+func loading_barrier_completed() -> void:
+	diagnostic["loading_barrier_completed"] = true
+
+
+func finish(success: bool, reason: String) -> Dictionary:
+	_finalize_resource_scope()
+	_sync_diagnostics()
+	if success:
+		stage = Stage.READY
+	else:
+		stage = Stage.FAILED
+		# A FAILED owner must not remain eligible for an async resume after the
+		# caller clears its transition lock or starts recovery.
+		revoke_current_generation()
+		# P0-1/P0-3 audit trail: a FAILED bootstrap may be immediately
+		# followed by a chained recovery transition (central failure owner),
+		# which re-runs this coordinator and overwrites stage/diagnostic
+		# within the same frame. Keep the last FAILED record persistent so
+		# strict drivers and diagnostics can still attribute the failure.
+		last_failure = {
+			"generation": generation,
+			"map_id": int(diagnostic.get("map_id", -1)),
+			"reason": reason,
+			"total_duration_ms": float(diagnostic.get("total_duration_ms", 0.0)),
+		}
+	diagnostic["success"] = success
+	diagnostic["failure_reason"] = reason
+	diagnostic["sync_load_spawn"] = _synchronous_load_during_spawn
+	diagnostic["slice_count"] = _slice_count
+	diagnostic["max_slice_ms"] = _max_slice_ms
+	diagnostic["avg_slice_ms"] = _total_slice_ms / maxf(1.0, float(_slice_count))
+	diagnostic["total_duration_ms"] = (Time.get_ticks_usec() - started_at_usec) / 1000.0
+	return snapshot()
+
+
+func _sync_diagnostics() -> void:
+	diagnostic["target_map_resource_count"] = target_map_resource_count
+	diagnostic["shared_resource_count"] = shared_resource_count
+	diagnostic["cross_region_resource_count"] = cross_region_resource_count
+	diagnostic["unused_prefetched_resource_count"] = unused_prefetched_resource_count
+	diagnostic["planned_map_item_count"] = planned_map_item_count
+	diagnostic["built_map_item_count"] = built_map_item_count
+	diagnostic["map_slice_count"] = map_slice_count
+	diagnostic["map_max_items_in_slice"] = map_max_items_in_slice
+	diagnostic["map_max_slice_ms"] = map_max_slice_ms
+	diagnostic["planned_collision_count"] = planned_collision_count
+	diagnostic["built_collision_count"] = built_collision_count
+	diagnostic["failed_collision_count"] = failed_collision_count
+	diagnostic["collision_slice_count"] = collision_slice_count
+	diagnostic["collision_max_items_in_slice"] = collision_max_items_in_slice
+	diagnostic["collision_max_slice_ms"] = collision_max_slice_ms
+	diagnostic["planned_actors"] = planned_actors
+	diagnostic["spawned_actors"] = spawned_actors
+	diagnostic["deferred_actors"] = deferred_actors
+	diagnostic["duplicate_actors"] = duplicate_actors
+	diagnostic["failed_actors"] = failed_actors
+	diagnostic["actor_slice_count"] = actor_slice_count
+	diagnostic["actor_max_items_in_slice"] = actor_max_items_in_slice
+	diagnostic["actor_max_slice_ms"] = actor_max_slice_ms
+	diagnostic["actor_max_item_ms"] = actor_max_item_ms
+	diagnostic["actor_total_ms"] = actor_total_ms
+	diagnostic["unexpected_sync_load_count"] = unexpected_sync_load_count
+	diagnostic["unexpected_sync_load_count_build_map"] = unexpected_sync_load_count_build_map
+	diagnostic["unexpected_sync_load_count_build_collision"] = unexpected_sync_load_count_build_collision
+	diagnostic["unexpected_sync_load_count_spawn_actors"] = unexpected_sync_load_count_spawn_actors
+	diagnostic["unexpected_sync_load_paths"] = unexpected_sync_load_paths.duplicate()
+	diagnostic["unexpected_sync_load_stages"] = unexpected_sync_load_stages.duplicate()
+
+
+# ── Resource Collection ──
+
+func set_target_region(region: String) -> void:
+	target_region = region
+
+
+func collect_map_resources(map_data: Dictionary) -> void:
+	advance(Stage.COLLECT_REQUIREMENTS)
+	resource_manifest.clear()
+	diagnostic["resource_count"] = 0
+	target_map_resource_count = 0
+	shared_resource_count = 0
+	cross_region_resource_count = 0
+	unused_prefetched_resource_count = 0
+
+
+func _register_resource(
+	path: String,
+	kind: String,
+	required: bool,
+	owner_id: String,
+	scope := "target",
+	region := ""
+) -> void:
+	if path.is_empty():
+		return
+	if path in resource_manifest:
+		var entry: Dictionary = resource_manifest[path]
+		(entry["owners"] as Array).append(owner_id)
+		entry["required"] = entry["required"] or required
+		if scope == "shared":
+			entry["scope"] = "shared"
+		if region != "":
+			entry["region"] = region
+		return
+	var effective_scope := "shared" if scope == "shared" else "target"
+	var effective_region := region if region != "" else target_region
+	resource_manifest[path] = {
+		"path": path,
+		"kind": kind,
+		"required": required,
+		"owners": [owner_id],
+		"status": "pending",
+		"scope": effective_scope,
+		"region": effective_region,
+	}
+	if effective_scope == "shared":
+		shared_resource_count += 1
+	else:
+		target_map_resource_count += 1
+	diagnostic["resource_count"] += 1
+
+
+func register_resource(
+	path: String,
+	kind: String,
+	required: bool,
+	owner_id: String,
+	scope := "target",
+	region := ""
+) -> void:
+	_register_resource(path, kind, required, owner_id, scope, region)
+
+
+## WALL-P1R C3 narrow interface: best-effort threaded prefetch for derived
+## resources. Optional entries ARE prefetched (threaded request like any
+## other) but their failure never counts as a required-resource failure, so
+## a missing wall atlas/chunk degrades that map to legacy rendering instead
+## of blocking the map load. Required-resource semantics are untouched.
+func register_optional_prefetch_resource(
+	path: String,
+	kind: String,
+	owner_id: String,
+	scope := "target",
+	region := ""
+) -> void:
+	_register_resource(path, kind, false, owner_id, scope, region)
+	if resource_manifest.has(path):
+		resource_manifest[path]["optional_prefetch"] = true
+
+
+func _finalize_resource_scope() -> void:
+	cross_region_resource_count = 0
+	for _path: Variant in resource_manifest:
+		var entry: Dictionary = resource_manifest[_path]
+		if str(entry.get("scope", "target")) == "target":
+			var entry_region := str(entry.get("region", ""))
+			if target_region != "" and entry_region != target_region:
+				cross_region_resource_count += 1
+	unused_prefetched_resource_count = 0
+	for _path: Variant in resource_manifest:
+		var entry: Dictionary = resource_manifest[_path]
+		if str(entry.get("status", "")) == "ready" and not _consumed_paths.has(str(_path)):
+			unused_prefetched_resource_count += 1
+
+
+func resource_scope_summary() -> Dictionary:
+	_finalize_resource_scope()
+	return {
+		"target_map_resource_count": target_map_resource_count,
+		"shared_resource_count": shared_resource_count,
+		"cross_region_resource_count": cross_region_resource_count,
+		"unused_prefetched_resource_count": unused_prefetched_resource_count,
+		"target_region": target_region,
+	}
+
+
+# ── Unified resource acquisition / sync-load sentinel ──
+
+func get_build_resource(path: String, stage_name: String) -> RefCounted:
+	var res: RefCounted = get_prefetched_resource(path)
+	if res != null:
+		_consumed_paths[path] = true
+		return res
+	_record_unexpected_sync_load(path, stage_name)
+	return null
+
+
+func _record_unexpected_sync_load(path: String, stage_name: String) -> void:
+	if _sync_load_recorded.get(stage_name, {}).has(path):
+		return
+	if not _sync_load_recorded.has(stage_name):
+		_sync_load_recorded[stage_name] = {}
+	_sync_load_recorded[stage_name][path] = true
+	unexpected_sync_load_paths.append(path)
+	unexpected_sync_load_stages.append(stage_name)
+	unexpected_sync_load_count += 1
+	match stage_name:
+		"BUILD_MAP":
+			unexpected_sync_load_count_build_map += 1
+		"BUILD_COLLISION":
+			unexpected_sync_load_count_build_collision += 1
+		"SPAWN_ACTORS":
+			unexpected_sync_load_count_spawn_actors += 1
+
+
+func has_unexpected_sync_load() -> bool:
+	return unexpected_sync_load_count > 0
+
+
+func sync_load_summary() -> Dictionary:
+	return {
+		"count": unexpected_sync_load_count,
+		"build_map": unexpected_sync_load_count_build_map,
+		"build_collision": unexpected_sync_load_count_build_collision,
+		"spawn_actors": unexpected_sync_load_count_spawn_actors,
+		"paths": unexpected_sync_load_paths.duplicate(),
+		"stages": unexpected_sync_load_stages.duplicate(),
+	}
+
+
+func ready_contract_summary() -> Dictionary:
+	_sync_diagnostics()
+	return {
+		"generation": generation,
+		"stage": Stage.keys()[stage],
+		"map_id": map_id,
+		"planned_map_item_count": planned_map_item_count,
+		"built_map_item_count": built_map_item_count,
+		"planned_collision_count": planned_collision_count,
+		"built_collision_count": built_collision_count,
+		"failed_collision_count": failed_collision_count,
+		"planned_actors": planned_actors,
+		"spawned_actors": spawned_actors,
+		"deferred_actors": deferred_actors,
+		"duplicate_actors": duplicate_actors,
+		"failed_actors": failed_actors,
+		"unexpected_sync_load_count": unexpected_sync_load_count,
+		"resource_count": diagnostic.get("resource_count", 0),
+		"cross_region_resource_count": cross_region_resource_count,
+	}
+
+
+# ── Frame-Budget Queue Processor ──
+
+func process_queue_with_budget(
+	queue: Array,
+	handler: Callable,
+	max_items: int,
+	budget_ms: float
+) -> void:
+	await _process_staged_queue(queue, handler, max_items, budget_ms, "generic")
+
+
+func submit_map_descriptors(descriptors: Array) -> void:
+	_map_build_queue.clear()
+	for descriptor: Variant in descriptors:
+		if descriptor is Dictionary:
+			_map_build_queue.append(descriptor as Dictionary)
+	planned_map_item_count = _map_build_queue.size()
+	built_map_item_count = 0
+	map_slice_count = 0
+	map_max_items_in_slice = 0
+	map_max_slice_ms = 0.0
+
+
+func submit_collision_descriptors(descriptors: Array) -> void:
+	_collision_build_queue.clear()
+	for descriptor: Variant in descriptors:
+		if descriptor is Dictionary:
+			_collision_build_queue.append(descriptor as Dictionary)
+	planned_collision_count = _collision_build_queue.size()
+	built_collision_count = 0
+	failed_collision_count = 0
+	collision_slice_count = 0
+	collision_max_items_in_slice = 0
+	collision_max_slice_ms = 0.0
+
+
+func begin_actor_collection(validator: Callable) -> bool:
+	if stage != Stage.SPAWN_ACTORS or _actor_collection_started or not validator.is_valid():
+		return false
+	_actor_collection_started = true
+	_actor_descriptor_validator = validator
+	_actor_collection_open = true
+	return true
+
+
+func close_actor_collection() -> void:
+	_actor_collection_open = false
+
+
+func actor_collection_is_open() -> bool:
+	return _actor_collection_open and stage == Stage.SPAWN_ACTORS
+
+
+func actor_descriptor_is_admissible(descriptor: Dictionary) -> bool:
+	if not actor_collection_is_open():
+		return false
+	var actor_id: Variant = descriptor.get("actor_id")
+	if not actor_id is String or actor_id.is_empty() or _planned_actor_ids.has(actor_id):
+		return false
+	return descriptor.get("actor_type", "") in ["enemy", "npc", "zone_portal", "map_portal"] \
+		and descriptor.get("payload") is Dictionary
+
+
+func submit_actor_descriptor(descriptor: Dictionary) -> bool:
+	# Admission precedes every queue, identity and diagnostic counter mutation.
+	if not actor_descriptor_is_admissible(descriptor):
+		return false
+	if not _actor_descriptor_validator.is_valid() or not bool(_actor_descriptor_validator.call(descriptor)):
+		return false
+	planned_actors += 1
+	var actor_id := str(descriptor.get("actor_id", ""))
+	_planned_actor_ids[actor_id] = true
+	_actor_spawn_queue.append(descriptor.duplicate(true))
+	return true
+
+
+func process_map_queue(handler: Callable, max_items: int, budget_ms: float) -> void:
+	await _process_staged_queue(_map_build_queue, handler, max_items, budget_ms, "map")
+
+
+func process_collision_queue(
+	handler: Callable,
+	max_items: int,
+	budget_ms: float
+) -> void:
+	await _process_staged_queue(
+		_collision_build_queue,
+		handler,
+		max_items,
+		budget_ms,
+		"collision"
+	)
+
+
+func process_actor_queue(handler: Callable, max_items: int, budget_ms: float) -> void:
+	close_actor_collection()
+	await _process_staged_queue(
+		_actor_spawn_queue,
+		handler,
+		max_items,
+		budget_ms,
+		"actor"
+	)
+
+
+func process_actor_queue_blocking(
+	handler: Callable,
+	max_items: int,
+	budget_ms: float
+) -> void:
+	close_actor_collection()
+	var owner_generation := generation
+	while is_generation_current(owner_generation) and not _actor_spawn_queue.is_empty():
+		_process_staged_queue_slice(
+			_actor_spawn_queue,
+			handler,
+			max_items,
+			budget_ms,
+			"actor"
+		)
+
+
+func _process_staged_queue(
+	queue: Array,
+	handler: Callable,
+	max_items: int,
+	budget_ms: float,
+	kind: String
+) -> void:
+	var owner_generation := generation
+	while is_generation_current(owner_generation) and not queue.is_empty():
+		_process_staged_queue_slice(queue, handler, max_items, budget_ms, kind)
+		if not is_generation_current(owner_generation):
+			return
+		if not queue.is_empty() and defer_between_slices:
+			await _runtime.next_service()
+
+
+func _process_staged_queue_slice(
+	queue: Array,
+	handler: Callable,
+	max_items: int,
+	budget_ms: float,
+	kind: String
+) -> void:
+	var owner_generation := generation
+	var slice_start := Time.get_ticks_usec()
+	var processed := 0
+	while is_generation_current(owner_generation) and not queue.is_empty():
+		var item: Variant = queue.pop_front()
+		if item is Dictionary:
+			var item_started_usec := Time.get_ticks_usec()
+			var result: Variant = handler.call(item as Dictionary)
+			# A real callback may replace this generation synchronously. Neither
+			# its returned item nor its slice belongs to the replacement owner.
+			if not is_generation_current(owner_generation):
+				return
+			var item_ms := (
+				float(Time.get_ticks_usec() - item_started_usec) / 1000.0
+			)
+			if kind == "map":
+				built_map_item_count += 1
+			elif kind == "collision":
+				if result == null:
+					failed_collision_count += 1
+				else:
+					built_collision_count += 1
+			elif kind == "actor":
+				actor_total_ms += item_ms
+				actor_max_item_ms = maxf(actor_max_item_ms, item_ms)
+				if result is Dictionary and bool(result.get("ok", false)):
+					if bool(result.get("materialized", true)):
+						spawned_actors += 1
+					else:
+						deferred_actors += 1
+				else:
+					failed_actors += 1
+		processed += 1
+		var elapsed_ms := (Time.get_ticks_usec() - slice_start) / 1000.0
+		if processed >= max_items or elapsed_ms >= budget_ms:
+			break
+	var slice_ms := (Time.get_ticks_usec() - slice_start) / 1000.0
+	_slice_count += 1
+	_max_slice_ms = maxf(_max_slice_ms, slice_ms)
+	_total_slice_ms += slice_ms
+	if kind == "map":
+		map_slice_count += 1
+		map_max_items_in_slice = maxi(map_max_items_in_slice, processed)
+		map_max_slice_ms = maxf(map_max_slice_ms, slice_ms)
+	elif kind == "collision":
+		collision_slice_count += 1
+		collision_max_items_in_slice = maxi(
+			collision_max_items_in_slice, processed
+		)
+		collision_max_slice_ms = maxf(collision_max_slice_ms, slice_ms)
+	elif kind == "actor":
+		actor_slice_count += 1
+		actor_max_items_in_slice = maxi(actor_max_items_in_slice, processed)
+		actor_max_slice_ms = maxf(actor_max_slice_ms, slice_ms)
+
+
+func record_sync_load() -> void:
+	_synchronous_load_during_spawn += 1
+
+
+# ── Threaded Resource Prefetch ──
+
+func request_threaded_prefetch() -> int:
+	var _requested := 0
+	# Godot 4.7's dummy renderer has unsafe concurrent texture RID allocation.
+	# Automated gameplay tests retain the same manifest and failure gates while
+	# creating imported resources on this thread. Visible/Android loading keeps
+	# its original asynchronous path; this is not an engine-wide repair.
+	var serial_test_load: bool = _resources.display_server_name() == "headless"
+	diagnostic["headless_serial_prefetch"] = serial_test_load
+	for _path: Variant in resource_manifest:
+		var _entry: Dictionary = resource_manifest[_path]
+		var _required := (_entry.get("required", true) as bool)
+		var _optional := (_entry.get("optional_prefetch", false) as bool)
+		if not (_required or _optional):
+			continue
+		if serial_test_load:
+			var resource_path := str(_path)
+			var resource: RefCounted = _resources.load(resource_path) if _resources.exists(resource_path) else null
+			if resource != null:
+				_prefetched_resources[resource_path] = resource
+				_entry["status"] = "ready"
+				_requested += 1
+			else:
+				_entry["status"] = "load_failed"
+				if _required:
+					diagnostic["prefetch_failure_count"] += 1
+			continue
+		var _status: int = _resources.load_threaded_request(str(_path))
+		if _status == OK:
+			# Every successful request adds one user claim, including a same-path
+			# request that the engine attaches to the existing load token.
+			_entry["claim_count"] = int(_entry.get("claim_count", 0)) + 1
+			_entry["status"] = "requested"
+			_requested += 1
+		else:
+			_entry["status"] = "request_failed"
+			# Optional (wall-render derived) resources must not pollute
+			# required failure diagnostics; a missing optional texture is
+			# handled by mode selection falling back to LEGACY.
+			if _required:
+				diagnostic["prefetch_failure_count"] += 1
+	return _requested
+
+
+func poll_threaded_prefetch() -> bool:
+	var _pending := 0
+	for _path: Variant in resource_manifest:
+		var _entry: Dictionary = resource_manifest[_path]
+		if _entry.get("status", "") != "requested":
+			continue
+
+		var _progress: Array = []
+		var _status: int = _resources.load_threaded_get_status(str(_path), _progress)
+		match _status:
+			ResourceLoader.THREAD_LOAD_LOADED:
+				var _res := _consume_threaded_claims(
+					str(_path), int(_entry.get("claim_count", 1))
+				)
+				if _res != null:
+					_prefetched_resources[str(_path)] = _res
+					_entry["status"] = "ready"
+				else:
+					_entry["status"] = "load_failed"
+					if _entry.get("required", true):
+						diagnostic["prefetch_failure_count"] += 1
+			ResourceLoader.THREAD_LOAD_FAILED:
+				# FAILED is terminal and still owns a retrieval token in Godot.
+				_consume_threaded_claims(
+					str(_path), int(_entry.get("claim_count", 1))
+				)
+				_entry["status"] = "load_failed"
+				if _entry.get("required", true):
+					diagnostic["prefetch_failure_count"] += 1
+			ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+				# INVALID_RESOURCE means no user claim remains (or it was already
+				# consumed). Never call get a second time for this status.
+				_entry["claim_count"] = 0
+				_entry["status"] = "load_failed"
+				if _entry.get("required", true):
+					diagnostic["prefetch_failure_count"] += 1
+			_:
+				_pending += 1
+	return _pending == 0
+
+
+func poll_retired_threaded_prefetch() -> void:
+	## Nonblocking lifecycle service for requests whose transition owner ended.
+	## Retired claims are handed to ContentLayers' bounded owner; this method
+	## never calls get() and never blocks a gameplay frame.
+	_transfer_retired_threaded_claims()
+
+
+func retire_threaded_resource_claims() -> bool:
+	## Transfer unresolved accepted claims to the existing ContentLayers
+	## preparation owner before this coordinator is destroyed.  This does not
+	## issue a new request and does not transfer claims already consumed.
+	if not _claim_owner.has_method("retire_threaded_resource_claims"):
+		return false
+	_retire_pending_threaded_requests()
+	return _retired_threaded_requests.is_empty()
+
+
+func _retire_pending_threaded_requests() -> void:
+	var moved_paths: Array[String] = []
+	for _path: Variant in resource_manifest:
+		var _entry: Dictionary = resource_manifest[_path]
+		if str(_entry.get("status", "")) == "requested":
+			var retired_entry: Dictionary = _entry.duplicate(true)
+			var path := str(_path)
+			if _retired_threaded_requests.has(path):
+				var existing: Dictionary = _retired_threaded_requests[path]
+				retired_entry["claim_count"] = (
+					int(existing.get("claim_count", 1))
+					+ int(retired_entry.get("claim_count", 1))
+				)
+			_retired_threaded_requests[path] = retired_entry
+			moved_paths.append(path)
+	for path in moved_paths:
+		resource_manifest.erase(path)
+	_transfer_retired_threaded_claims()
+
+
+func _poll_retired_threaded_requests() -> void:
+	_transfer_retired_threaded_claims()
+
+
+func _transfer_retired_threaded_claims() -> void:
+	if _retired_threaded_requests.is_empty() or not _claim_owner.has_method("retire_threaded_resource_claims"):
+		return
+	for raw_path: Variant in _retired_threaded_requests.keys().duplicate():
+		var path := str(raw_path)
+		var retired: Dictionary = _retired_threaded_requests[path]
+		var count := int(retired.get("claim_count", 0))
+		if count <= 0:
+			_retired_threaded_requests.erase(path)
+			continue
+		if bool(_claim_owner.retire_threaded_resource_claims(path, count)):
+			_retired_threaded_requests.erase(path)
+
+
+func _consume_threaded_claims(path: String, claim_count: int) -> RefCounted:
+	var result: RefCounted = null
+	for _claim in range(maxi(0, claim_count)):
+		var candidate: RefCounted = _resources.load_threaded_get(path)
+		if candidate != null:
+			result = candidate
+	return result
+
+
+func poll_threaded_prefetch_blocking(timeout_ms := 3000) -> bool:
+	assert(_resources.blocking_original_loading_scope_allowed(), "blocking bootstrap has no original cold/Loading scope")
+	var deadline := Time.get_ticks_msec() + timeout_ms
+	while not poll_threaded_prefetch():
+		if Time.get_ticks_msec() >= deadline:
+			return false
+	return true
+
+
+func get_prefetched_resource(path: String) -> RefCounted:
+	var _res: Variant = _prefetched_resources.get(path)
+	if _resources.is_original_resource_reference(_res):
+		return _res
+	return null
+
+
+func has_failed_required_resource() -> bool:
+	for _path: Variant in resource_manifest:
+		var _entry: Dictionary = resource_manifest[_path]
+		if _entry.get("required", true) and _entry.get("status", "") in ["request_failed", "load_failed"]:
+			return true
+	return false
+
+
+func snapshot() -> Dictionary:
+	_sync_diagnostics()
+	var d := diagnostic.duplicate(true)
+	d["generation"] = generation
+	d["stage"] = Stage.keys()[stage]
+	return d

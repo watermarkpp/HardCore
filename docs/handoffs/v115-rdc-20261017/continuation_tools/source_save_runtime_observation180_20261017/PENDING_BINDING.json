@@ -1,0 +1,51 @@
+{
+  "status": "BLOCKED",
+  "scope": "new Native58a tool preparation only; no snapshot or positive stage",
+  "native_manifest": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\SOURCE_MANIFEST.map_reply_observation_20261017.json",
+  "native_manifest_sha256": "0f3b37d1f43279e9b4633870768e64f610581a354afba777c9b404b7ac496178",
+  "native_source_sha256": "58a1b306f62b5d805bd2ff282ab37367cc807e7dd2672c0fb265c2e2289de5f8",
+  "console_sha256": null,
+  "main_sha256": null,
+  "pending_tool_files": [
+    {
+      "path": "prepare_snapshot.py",
+      "historical_source_sha256": "10cc1e1559c987ea94eb68be0a388aa0d07239c4e1c52077e7f5553b620a8611",
+      "pending_sha256": "3230ddd813e4332ac9c8427ceb69b4b492b76f5e108615fd5a5217f57cbba835",
+      "python_ast": "PASS"
+    },
+    {
+      "path": "run_stage.py",
+      "historical_source_sha256": "c1a4cfb13c8f4b076caa45a49e04015403319eaf450b0eeebf377c097bea19a5",
+      "pending_sha256": "63c77c5516a7e4af3a534fb9529f01992dd9d748c8abf2be015f83cf02e6b15c",
+      "python_ast": "PASS"
+    }
+  ],
+  "unchanged_guard_files": [
+    {
+      "path": "runner_bridge.ps1",
+      "sha256": "5f61a869b475ff47aca9ca6015db9634c7e273d5205c1896c405ddf4e46ba62b",
+      "matches_historical": true
+    },
+    {
+      "path": "isolated_git.py",
+      "sha256": "c4f0d8ef265e70dda176e6fb60015e6938ca6ba9660cdc757251a9df7846bbcb",
+      "matches_historical": true
+    },
+    {
+      "path": "SOURCE_SAVE_FIXTURE_BINDING.json",
+      "sha256": "cf7eaa1b107bf895f7ba4c1f685726694b4a64235e8fc8e2a60ef9921728b8b1",
+      "matches_historical": true
+    },
+    {
+      "path": "STAGE_BUDGET_GATE.json",
+      "sha256": "37b9cc447b3c33c16997cddc800cdb4beef57b4c061653a2ddccb3b38fd21d7c",
+      "matches_historical": true
+    }
+  ],
+  "fixture_files_verified": 6,
+  "upstream_reviewed_binding_sha256": "1d07002eec568509cc13e9aed788a5947c609d3a4cb3a38dcab3c58889b44482",
+  "final_CANDIDATE_BINDING_created": false,
+  "snapshots_created": 0,
+  "positive_stages_started": 0,
+  "gate": "actual new Windows PE pair + final four-tool binding + actual matching World normal-exit PASS evidence"
+}

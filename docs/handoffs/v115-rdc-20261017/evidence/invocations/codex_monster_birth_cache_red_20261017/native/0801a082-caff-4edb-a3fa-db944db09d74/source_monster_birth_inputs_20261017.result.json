@@ -1,0 +1,137 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "actual Main captures production monster 18",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "actual Main captures production monster 19",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "Native captures publication as immutable plain values",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "actual separate owner starts",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "actual nonMain owner imports original Main monster records",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "new world clears only the compiled input selection",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "owner lookup keeps original published record 18",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "owner lookup installs same input in birth plan 18",
+      "passed": false
+    },
+    {
+      "id": 9,
+      "label": "owner lookup keeps original published record 19",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "owner lookup installs same input in birth plan 19",
+      "passed": false
+    },
+    {
+      "id": 11,
+      "label": "unknown ID remains rejected without a cache entry",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "real birth plan seals after owner lookups",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "sealed plan reads same published input 18",
+      "passed": false
+    },
+    {
+      "id": 14,
+      "label": "sealed plan reads same published input 19",
+      "passed": false
+    },
+    {
+      "id": 15,
+      "label": "new world clears only the compiled input selection",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "owner lookup keeps original published record 18",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "owner lookup installs same input in birth plan 18",
+      "passed": false
+    },
+    {
+      "id": 18,
+      "label": "owner lookup keeps original published record 19",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "owner lookup installs same input in birth plan 19",
+      "passed": false
+    },
+    {
+      "id": 20,
+      "label": "unknown ID remains rejected without a cache entry",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "real birth plan seals after owner lookups",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "sealed plan reads same published input 18",
+      "passed": false
+    },
+    {
+      "id": 23,
+      "label": "sealed plan reads same published input 19",
+      "passed": false
+    }
+  ],
+  "count": 23,
+  "engine_version": "4.7-stable (custom_build)",
+  "failed": 8,
+  "invocation_id": "be4a4917-b99d-43c9-a7ee-3eaa8846e428",
+  "passed": 15,
+  "reported_checks": 23,
+  "reported_failures": 8,
+  "run_id": "0801a082-caff-4edb-a3fa-db944db09d74",
+  "runtime_environment": {
+    "native_process_id": 9324,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/multicore-v115/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\.godot\\runtime_appdata\\multicore_v115\\runner_be4a4917-b99d-43c9-a7ee-3eaa8846e428",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/multicore-v115/HardCore/.godot/runtime_appdata/multicore_v115/runner_be4a4917-b99d-43c9-a7ee-3eaa8846e428/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "source_monster_birth_inputs_20261017",
+  "schema_version": 1,
+  "source_content_sha256": "83ebc4cea4320afd94d66823f9bbf5aeccf8f34d3ce41121a55a6048b5d989aa",
+  "status": "FAIL"
+}

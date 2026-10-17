@@ -31,16 +31,25 @@ static func profile_for_id(monster_id: int) -> Dictionary:
 	return data().get("profiles", {}).get(key, {})
 
 static func request_profile(profile: Dictionary, direction := 0) -> void:
+	if _source_owner_active:
+		var count := int(profile.get("frame_count",profile.get("frames_per_direction",0)))
+		var records: Array = profile.get("frames",[])
+		for index in range(direction*count,mini((direction+1)*count,records.size())): _queue_source_owner_demand(str(records[index].path))
+		return
 	var count := int(profile.get("frame_count", profile.get("frames_per_direction", 0)))
 	var records: Array = profile.get("frames", [])
 	for index in range(direction * count, mini((direction + 1) * count, records.size())):
 		request(str(records[index].path))
 
 static func request(path: String) -> void:
+	if _source_owner_active:
+		_queue_source_owner_demand(path)
+		return
 	if _textures.has(path) or _requested.has(path) or _queue.has(path): return
 	_queue.append(path)
 
 static func poll() -> void:
+	if _source_owner_active: return
 	var frame := Engine.get_process_frames()
 	if frame == _last_poll_frame: return
 	_last_poll_frame = frame
@@ -84,6 +93,7 @@ static func poll() -> void:
 ## ContentLayers owner, while terminal claims are consumed here.  No request is
 ## submitted again and no get is attempted for INVALID_RESOURCE.
 static func retire_pending_threaded_claims() -> bool:
+	if _source_owner_active: return _requested.is_empty() # Actual S owns accepted claims after adoption.
 	var complete := true
 	for path: String in _requested.keys():
 		var status := ResourceLoader.load_threaded_get_status(path)
@@ -102,6 +112,10 @@ static func retire_pending_threaded_claims() -> bool:
 	return complete
 
 static func texture(path: String) -> Texture2D:
+	if _source_owner_active:
+		_queue_source_owner_demand(path)
+		var vault: RefCounted = _source_owner_vault.get_ref() if _source_owner_vault != null else null
+		return vault.texture_for_renderer(int(_source_owner_tokens[path])) if vault != null and _source_owner_tokens.has(path) else null
 	poll()
 	if _textures.has(path):
 		_last_use[path] = Engine.get_process_frames()
@@ -134,3 +148,50 @@ static func diagnostics() -> Dictionary:
 		"loads": _loads,
 		"evictions": _evictions,
 	}
+
+static var _source_owner_active := false
+static var _source_owner_vault: WeakRef
+static var _source_owner_tokens: Dictionary = {}
+static var _source_owner_demands: Array[Dictionary] = []
+static var _source_owner_demand_paths: Dictionary = {}
+static var _source_owner_demand_sequence := 0
+static func capture_original_owner_handoff() -> Dictionary:
+	assert(OS.get_thread_caller_id()==OS.get_main_thread_id())
+	var source: Script=load("res://scripts/monster_source_frames.gd")
+	var projectile_path := "res://assets/data/monster_projectile_exact_sources_v2.json"
+	var projectile: Variant=JSON.parse_string(FileAccess.get_file_as_string(projectile_path))
+	if not projectile is Dictionary: return {}
+	return {"contract_id":"world.source_frames.original_handoff.v1","session_cache_id":source.get_instance_id(),"data":data().duplicate(true),"projectile_sources":projectile,
+		"data_sha256":FileAccess.get_sha256(MANIFEST),"projectile_sha256":FileAccess.get_sha256(projectile_path),"original_requested_count":_requested.size(),"original_texture_count":_textures.size(),"original_queued_count":_queue.size(),"original_last_poll_frame":_last_poll_frame}
+static func install_original_owner_texture(cache_id: int,path: String,token: int,vault: RefCounted) -> bool:
+	if OS.get_thread_caller_id()!=OS.get_main_thread_id() or cache_id!=load("res://scripts/monster_source_frames.gd").get_instance_id() or token==0 or vault==null or vault.texture_for_renderer(token)==null: return false
+	if not _requested.is_empty() or not _textures.is_empty() or not _queue.is_empty() or _last_poll_frame!=-1: return false
+	if _source_owner_vault != null and _source_owner_vault.get_ref() != null and not is_same(_source_owner_vault.get_ref(),vault): return false
+	_source_owner_vault=weakref(vault);_source_owner_active=true;_source_owner_tokens[path]=token
+	return true
+static func evict_original_owner_texture(cache_id: int,path: String) -> bool:
+	if OS.get_thread_caller_id()!=OS.get_main_thread_id() or cache_id!=load("res://scripts/monster_source_frames.gd").get_instance_id() or not _source_owner_active: return false
+	_source_owner_tokens.erase(path)
+	return true
+static func _queue_source_owner_demand(path: String) -> void:
+	assert(OS.get_thread_caller_id()==OS.get_main_thread_id())
+	if _source_owner_demand_paths.has(path): return
+	_source_owner_demand_sequence+=1
+	_source_owner_demand_paths[path]=true
+	_source_owner_demands.append({"contract_id":"world.source_frames.original_demand.v1","session_cache_id":load("res://scripts/monster_source_frames.gd").get_instance_id(),"sequence":_source_owner_demand_sequence,"path":path})
+static func take_original_owner_demands() -> Array[Dictionary]:
+	assert(OS.get_thread_caller_id()==OS.get_main_thread_id())
+	var result: Array[Dictionary]=_source_owner_demands
+	_source_owner_demands=[];_source_owner_demand_paths.clear()
+	return result
+
+static func adopt_original_source_owner(cache_id: int, vault: RefCounted) -> bool:
+	if OS.get_thread_caller_id()!=OS.get_main_thread_id() or cache_id!=load("res://scripts/monster_source_frames.gd").get_instance_id() or vault==null or not vault.has_method("texture_for_renderer"): return false
+	if not _requested.is_empty() or not _textures.is_empty() or not _queue.is_empty() or _last_poll_frame!=-1: return false
+	if _source_owner_vault!=null and _source_owner_vault.get_ref()!=null and not is_same(_source_owner_vault.get_ref(),vault): return false
+	_source_owner_vault=weakref(vault);_source_owner_active=true
+	return true
+static func close_original_source_owner(cache_id: int) -> bool:
+	if OS.get_thread_caller_id()!=OS.get_main_thread_id() or cache_id!=load("res://scripts/monster_source_frames.gd").get_instance_id() or not _source_owner_tokens.is_empty() or not _source_owner_demands.is_empty(): return false
+	_source_owner_active=false;_source_owner_vault=null;_source_owner_demand_sequence=0;_source_owner_demand_paths.clear()
+	return true

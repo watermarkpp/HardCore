@@ -63,7 +63,17 @@ var _layout_apply_count := 0
 var _action_feedback_serial := 0
 
 
+# Main callback depth only. No new gameplay/IO owner or timer.
+var _original_main_callback_ledger: Dictionary = {}
+
+
 func _ready() -> void:
+	_original_main_callback_ledger["_ready"] = int(_original_main_callback_ledger.get("_ready",0)) + 1
+	_original_source_skill_panel__ready()
+	_original_main_callback_ledger["_ready"] -= 1
+
+
+func _original_source_skill_panel__ready() -> void:
 	set_meta("calibration_retired_paths", [
 		"SkillDetailPanel/SkillDetailV3Frame",
 		"SkillDetailPanel/SkillDetailV3Frame/SkillDetailV3FrameDecoration",
@@ -428,6 +438,12 @@ func _build_long_press_timer() -> void:
 
 
 func open_for(display_name: String) -> void:
+	_original_main_callback_ledger["open_for"] = int(_original_main_callback_ledger.get("open_for",0)) + 1
+	_original_source_skill_panel_open_for(display_name)
+	_original_main_callback_ledger["open_for"] -= 1
+
+
+func _original_source_skill_panel_open_for(display_name: String) -> void:
 	_trainer_name = display_name
 	var all_entries: Array = GameData.get_profession_skills(
 		PlayerState.profession
@@ -494,6 +510,12 @@ func _on_visibility_changed() -> void:
 
 
 func refresh() -> void:
+	_original_main_callback_ledger["refresh"] = int(_original_main_callback_ledger.get("refresh",0)) + 1
+	_original_source_skill_panel_refresh()
+	_original_main_callback_ledger["refresh"] -= 1
+
+
+func _original_source_skill_panel_refresh() -> void:
 	if skill_list == null:
 		return
 	_refresh_pending = false
@@ -526,6 +548,15 @@ func refresh() -> void:
 
 
 func _sync_equipment_granted_entries() -> void:
+	## Ordinary profession entries are the stable base list. Grant rows are
+	## rebuilt from current availability on every refresh so equip/unequip and
+	## durability changes are reflected immediately without duplication.
+	_original_main_callback_ledger["_sync_equipment_granted_entries"] = int(_original_main_callback_ledger.get("_sync_equipment_granted_entries",0)) + 1
+	_original_source_skill_panel__sync_equipment_granted_entries()
+	_original_main_callback_ledger["_sync_equipment_granted_entries"] -= 1
+
+
+func _original_source_skill_panel__sync_equipment_granted_entries() -> void:
 	## Ordinary profession entries are the stable base list. Grant rows are
 	## rebuilt from current availability on every refresh so equip/unequip and
 	## durability changes are reflected immediately without duplication.
@@ -605,6 +636,14 @@ func _ensure_skill_list_bottom_clearance() -> void:
 func _rebuild_skill_cards() -> void:
 	# Slots keep their controls, calibrated geometry and input bindings across
 	# refreshes. Only the current profession's excess tail is retired.
+	_original_main_callback_ledger["_rebuild_skill_cards"] = int(_original_main_callback_ledger.get("_rebuild_skill_cards",0)) + 1
+	_original_source_skill_panel__rebuild_skill_cards()
+	_original_main_callback_ledger["_rebuild_skill_cards"] -= 1
+
+
+func _original_source_skill_panel__rebuild_skill_cards() -> void:
+	# Slots keep their controls, calibrated geometry and input bindings across
+	# refreshes. Only the current profession's excess tail is retired.
 	while skill_buttons.size() > skill_entries.size():
 		var retired: Button = skill_buttons.pop_back()
 		retired.free()
@@ -679,6 +718,12 @@ func _on_skill_selected(index: int) -> void:
 
 
 func _show_skill_detail(index: int) -> void:
+	_original_main_callback_ledger["_show_skill_detail"] = int(_original_main_callback_ledger.get("_show_skill_detail",0)) + 1
+	_original_source_skill_panel__show_skill_detail(index)
+	_original_main_callback_ledger["_show_skill_detail"] -= 1
+
+
+func _original_source_skill_panel__show_skill_detail(index: int) -> void:
 	var entry: Dictionary = skill_entries[index]
 	var skill_name := str(entry.get("skillName", ""))
 	var learned := PlayerState.is_skill_learned(skill_name)
@@ -721,6 +766,13 @@ func _show_skill_detail(index: int) -> void:
 
 
 func _player_mechanics_description(row: Dictionary, combat: Dictionary) -> String:
+	_original_main_callback_ledger["_player_mechanics_description"] = int(_original_main_callback_ledger.get("_player_mechanics_description",0)) + 1
+	var original_result: Variant = _original_source_skill_panel__player_mechanics_description(row,combat)
+	_original_main_callback_ledger["_player_mechanics_description"] -= 1
+	return original_result
+
+
+func _original_source_skill_panel__player_mechanics_description(row: Dictionary, combat: Dictionary) -> String:
 	var stable_id := str(row.get("skill_id", ProfessionRules.skill_id(str(row.get("skillName", "")))))
 	return SkillDescription.describe(stable_id, maxi(0, int(combat.get("skill_level", 0))), PlayerState.computed_stats, PlayerState.level)
 
@@ -754,6 +806,13 @@ func _refresh_assignment_slots() -> void:
 
 
 func _assignment_skill_name(slot_group: String, slot_index: int) -> String:
+	_original_main_callback_ledger["_assignment_skill_name"] = int(_original_main_callback_ledger.get("_assignment_skill_name",0)) + 1
+	var original_result: Variant = _original_source_skill_panel__assignment_skill_name(slot_group,slot_index)
+	_original_main_callback_ledger["_assignment_skill_name"] -= 1
+	return original_result
+
+
+func _original_source_skill_panel__assignment_skill_name(slot_group: String, slot_index: int) -> String:
 	if not skill_button_assignments.is_empty():
 		if not skill_button_assignments.has(slot_group):
 			return ""
@@ -861,6 +920,12 @@ func _open_assignment_popup_for_selected() -> void:
 
 
 func _open_assignment_popup_for(index: int) -> void:
+	_original_main_callback_ledger["_open_assignment_popup_for"] = int(_original_main_callback_ledger.get("_open_assignment_popup_for",0)) + 1
+	_original_source_skill_panel__open_assignment_popup_for(index)
+	_original_main_callback_ledger["_open_assignment_popup_for"] -= 1
+
+
+func _original_source_skill_panel__open_assignment_popup_for(index: int) -> void:
 	if index < 0 or index >= skill_entries.size():
 		return
 	var skill_name := str(skill_entries[index].get("skillName", ""))
@@ -884,6 +949,12 @@ func _assign_selected_to_slot(slot_index: int) -> void:
 
 
 func _assign_selected_to_target(slot_group: String, slot_index: int) -> void:
+	_original_main_callback_ledger["_assign_selected_to_target"] = int(_original_main_callback_ledger.get("_assign_selected_to_target",0)) + 1
+	_original_source_skill_panel__assign_selected_to_target(slot_group,slot_index)
+	_original_main_callback_ledger["_assign_selected_to_target"] -= 1
+
+
+func _original_source_skill_panel__assign_selected_to_target(slot_group: String, slot_index: int) -> void:
 	var skill_name := ""
 	if assignment_popup.visible:
 		skill_name = str(assignment_popup.get_meta("skill_name", ""))
@@ -922,6 +993,12 @@ func _assign_selected_to_target(slot_group: String, slot_index: int) -> void:
 
 
 func _request_clear_target(slot_group: String, slot_index: int) -> void:
+	_original_main_callback_ledger["_request_clear_target"] = int(_original_main_callback_ledger.get("_request_clear_target",0)) + 1
+	_original_source_skill_panel__request_clear_target(slot_group,slot_index)
+	_original_main_callback_ledger["_request_clear_target"] -= 1
+
+
+func _original_source_skill_panel__request_clear_target(slot_group: String, slot_index: int) -> void:
 	var maximum := ATTACK_SLOT_COUNT if slot_group == "attack" else ATTACK_RING_SLOT_COUNT
 	if slot_group not in ["attack", "attack_ring"] or slot_index < 0 or slot_index >= maximum:
 		return

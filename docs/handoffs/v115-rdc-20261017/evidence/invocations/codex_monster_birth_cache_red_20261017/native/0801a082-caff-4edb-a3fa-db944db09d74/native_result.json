@@ -1,0 +1,80 @@
+{
+  "test_name": "source_monster_birth_inputs_20261017",
+  "test_path": "tests/framework/source_monster_birth_inputs_20261017.tscn",
+  "wrapper_process_id": 19564,
+  "wrapper_started_utc": "2026-10-17T09:04:31.5305679Z",
+  "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\.godot\\runtime_appdata\\multicore_v115\\runner_be4a4917-b99d-43c9-a7ee-3eaa8846e428",
+  "fixed_fps": 0,
+  "pass_marker_found": false,
+  "process_exited": true,
+  "wrapper_exit_code": 1,
+  "child_process_exit_state": "exited",
+  "execution_deadline_utc": "2026-10-17T09:05:01.5347018Z",
+  "native_exit_observed_utc": "2026-10-17T09:04:41.4265732Z",
+  "effective_exit_code": 1,
+  "timeout": false,
+  "stdout_failure_count": 0,
+  "stderr_failure_count": 0,
+  "engine_log_failure_count": 0,
+  "cleanup_warning_evidence": {
+    "status": "PASS",
+    "allowlisted_errors": {
+      "string_formatting": {
+        "count": 0,
+        "lines": []
+      },
+      "resources_in_use": {
+        "count": 0,
+        "lines": []
+      },
+      "rid_leak": {
+        "count": 0,
+        "lines": []
+      },
+      "null_parameter": {
+        "count": 0,
+        "lines": []
+      }
+    },
+    "unknown_error_lines": [],
+    "unknown_error_count": 0,
+    "objectdb_leak_warning_lines": [],
+    "objectdb_leak_warning_count": 0,
+    "functional_marker_observed": false,
+    "formal_evidence_status": "MISSING",
+    "formal_evidence_reason": "legacy_run_bound_checks_missing",
+    "receipt_validation_reasons": [
+      "framework_receipt_not_pass"
+    ],
+    "candidate_receipt_correlation": false,
+    "upstream_result": "NOT_RUN",
+    "raw_log_paths": [
+      "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_monster_birth_cache_red_20261017\\logs\\source_monster_birth_inputs_20261017.stdout.log",
+      "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_monster_birth_cache_red_20261017\\logs\\source_monster_birth_inputs_20261017.stderr.log",
+      "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_monster_birth_cache_red_20261017\\logs\\source_monster_birth_inputs_20261017.godot.log"
+    ],
+    "receipt_path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\test_logs\\framework\\source_monster_birth_inputs_20261017.result.json",
+    "expected_scene_id": "source_monster_birth_inputs_20261017",
+    "expected_invocation_id": "be4a4917-b99d-43c9-a7ee-3eaa8846e428"
+  },
+  "framework_run_id": "0801a082-caff-4edb-a3fa-db944db09d74",
+  "framework_receipt_valid": false,
+  "source_content_sha256": "83ebc4cea4320afd94d66823f9bbf5aeccf8f34d3ce41121a55a6048b5d989aa",
+  "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+  "engine_fingerprints": [
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_map_reply_observation_20261017_build\\Godot_v115-stable_win64_console.exe",
+      "sha256": "1b69c0d26f54df88301791e5f3dbd43f7e20aad30a727addfff3287ea9d11c91",
+      "bytes": 298496
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_map_reply_observation_20261017_build\\Godot_v115-stable_win64.exe",
+      "sha256": "7f54a5090cfde94a7d2fcf37c22c14ecd23e00eefcc0bf5e23d1c0326bc7b8de",
+      "bytes": 175887872
+    }
+  ],
+  "formal_evidence_status": "MISSING",
+  "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+  "result": "FAIL",
+  "reason": "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+}

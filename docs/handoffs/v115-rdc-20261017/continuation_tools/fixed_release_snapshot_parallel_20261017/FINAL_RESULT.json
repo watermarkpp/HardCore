@@ -1,0 +1,54 @@
+{
+  "status": "PASS",
+  "scope": "PRIVATE_GIT_COMPONENT_ONLY",
+  "actual_test": {
+    "checks": 41,
+    "failed": 0,
+    "not_run": 0,
+    "native_exit": 0,
+    "receipt_sha256": "765820a259a9ae761a145d472d2db5c3c784533102b2e2624afb0ea4a7b66daa"
+  },
+  "production_snapshot": "NOT_RUN",
+  "production_common_objects_publication": "NOT_RUN",
+  "formal_CLI_runtime": "NOT_RUN",
+  "World_and_normal_exit": "FAIL upstream; not retested",
+  "SourceSave_six_stages": "NOT_RUN",
+  "viewport_followup": "NOT_RUN; not started per stop instruction",
+  "remote_ref_and_push": "NOT_RUN by worker; parent-owned handoff-only",
+  "real_index_preserved": true,
+  "files": [
+    {
+      "path": "fixed_release_objects.py",
+      "sha256": "f1e1bf4f89468b161a3dd505e6d305d7228a4127c1ef00812e2e29050b733f0f",
+      "bytes": 11279
+    },
+    {
+      "path": "fixed_release_snapshot.py",
+      "sha256": "d61f49943d199c3720283a5136ec6ad139c97a62c6a66a346534f5a4980e2759",
+      "bytes": 8773
+    },
+    {
+      "path": "freeze_delivery.py",
+      "sha256": "80942ff0951ba264d0a8e1816729a4b54d80c6703552f753c39a0ae5eb849e43",
+      "bytes": 2315
+    },
+    {
+      "path": "isolated_git.py",
+      "sha256": "c4f0d8ef265e70dda176e6fb60015e6938ca6ba9660cdc757251a9df7846bbcb",
+      "bytes": 4644
+    },
+    {
+      "path": "test_fixed_release_objects.py",
+      "sha256": "45ece3aa862f86764a1d0a74dd91d95766ee3ddb290ce1cfcb6b943a65a5ee91",
+      "bytes": 10200
+    }
+  ],
+  "remaining": [
+    "Parent review of formal CLI full production selection/gates",
+    "True World/normal-exit PASS required for formal release snapshot",
+    "Parent handoff-only documents/evidence policy and ref/push",
+    "Parent delivery archive validation must cover all assets/",
+    "Viewport identity and other known World blockers",
+    "SourceSave six actual180s stages and final APK/device gates"
+  ]
+}

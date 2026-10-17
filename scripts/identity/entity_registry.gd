@@ -1,28 +1,44 @@
 extends RefCounted
 
+const CatalogGate := preload("res://scripts/gameplay/content/catalog_publication_gate.gd")
+
 # Typed identity translation only. Existing catalogs remain the rule authority.
 const PATH := "res://assets/data/runtime/entity_registry_v1.json"
 const CONTRACT := "hardcore.entity_identity.v1"
 const NUMERIC := ["item", "service_item", "monster", "map"]
 const KINDS := ["skill", "item", "service_item", "monster", "map", "profession", "slot", "currency", "item_category"]
 const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
-static var _document: Dictionary = {}
-static var _by_id: Dictionary = {}
-static var _by_legacy: Dictionary = {}
-static var _service_for_item: Dictionary = {}
-static var _attempted := false
-static var last_errors: Array[String] = []
+static var _document: Dictionary = {}:
+	set(value):
+		if CatalogGate.write_allowed(): _document = value
+static var _by_id: Dictionary = {}:
+	set(value):
+		if CatalogGate.write_allowed(): _by_id = value
+static var _by_legacy: Dictionary = {}:
+	set(value):
+		if CatalogGate.write_allowed(): _by_legacy = value
+static var _service_for_item: Dictionary = {}:
+	set(value):
+		if CatalogGate.write_allowed(): _service_for_item = value
+static var _attempted := false:
+	set(value):
+		if CatalogGate.write_allowed(): _attempted = value
+static var last_errors: Array[String] = []:
+	set(value):
+		if CatalogGate.write_allowed(): last_errors = value
 
 static func ensure_loaded() -> bool:
 	if not _document.is_empty():
 		return true
 	if _attempted:
 		return false
+	if not CatalogGate.write_allowed(): return false
 	_attempted = true
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(PATH))
 	return publish(parsed)
 
 static func publish(value: Variant) -> bool:
+	if not CatalogGate.write_allowed(): return false
 	var errors: Array[String] = []
 	if not value is Dictionary or not _keys(value, ["schema_version", "contract_id", "source_hashes", "records", "counts"]) \
 		or value.schema_version != 1 or value.contract_id != CONTRACT or not value.source_hashes is Dictionary \

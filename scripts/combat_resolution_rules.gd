@@ -1,6 +1,8 @@
 class_name CombatResolutionRules
 extends RefCounted
 
+const CatalogGate := preload("res://scripts/gameplay/content/catalog_publication_gate.gd")
+
 const CONTRACT_PATH := "res://assets/data/vanilla_176/combat_resolution_contract.json"
 const CONTRACT_ID := "combat.resolution.openmir2.v1"
 const PHYSICAL_HIT_POLICY_ID := "physical.hit.random_agility.strict_lt.v1"
@@ -25,7 +27,9 @@ const ANTI_MAGIC_ELIGIBLE_SKILLS := {
 	"taoist.soul_fire_talisman": true,
 }
 
-static var _contract_cache: Dictionary = {}
+static var _contract_cache: Dictionary = {}:
+	set(value):
+		if CatalogGate.write_allowed(): _contract_cache = value
 
 
 static func contract() -> Dictionary:

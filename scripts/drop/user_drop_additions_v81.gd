@@ -1,10 +1,13 @@
 extends RefCounted
+const ProfileContent := preload("res://scripts/gameplay/profile/legacy_profile_content.gd")
+var _content_port: ProfileContent.ContentPort
 
 const PATH := "res://assets/data/drop/user_additions_v81.json"
 var policy: Dictionary = {}
 var valid := false
 
-func _init() -> void:
+func _init(content: ProfileContent.ContentPort = null) -> void:
+	_content_port = ProfileContent.resolve(content)
 	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(PATH))
 	if not data is Dictionary: return
 	policy = data
@@ -84,8 +87,8 @@ func reward(slot: Dictionary) -> Dictionary:
 
 func item_identity(item_id: int) -> Dictionary:
 	if not valid or item_id != 110: return {}
-	var item := GameData.get_item_rules_record({"item_id":110})
-	if item.is_empty() or GameData._stable_item_id(item) != 110 or str(item.get("kind", "")) != "equipment": return {}
+	var item := _content_port.get_item_rules_record({"item_id":110})
+	if item.is_empty() or _content_port._stable_item_id(item) != 110 or str(item.get("kind", "")) != "equipment": return {}
 	return {"canonical_item_id":110, "canonical_item_name":str(item.name), "authority":"drop.user_additions.v81"}
 
 func _scaled(numerator: int, denominator: int) -> Vector2i:

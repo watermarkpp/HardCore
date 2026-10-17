@@ -1,0 +1,486 @@
+{
+  "status": "PASS",
+  "scope": "Sealed Native Android JNI/templates only; no game/signing/install acceptance",
+  "manifest": {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\SOURCE_MANIFEST.map_reply_observation_20261017.json",
+    "bytes": 36880,
+    "sha256": "0f3b37d1f43279e9b4633870768e64f610581a354afba777c9b404b7ac496178"
+  },
+  "native_source_sha256": "58a1b306f62b5d805bd2ff282ab37367cc807e7dd2672c0fb265c2e2289de5f8",
+  "game_APK115": "NOT_RUN",
+  "device_test": "NOT_RUN",
+  "commands": [
+    {
+      "argv": [
+        "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\build_prep\\venv\\Scripts\\scons.exe",
+        "-C",
+        "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot",
+        "platform=android",
+        "target=template_debug",
+        "arch=arm64",
+        "precision=single",
+        "debug_symbols=no",
+        "production=yes",
+        "hardcore_native_source_sha256=58a1b306f62b5d805bd2ff282ab37367cc807e7dd2672c0fb265c2e2289de5f8",
+        "generate_android_binaries=no",
+        "-j2"
+      ],
+      "cwd": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\platform\\android\\java",
+      "log": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\android_map_reply_observation_20261017_build\\scons_debug_arm64.log",
+      "started": 1792226564.744162,
+      "started_ns": 1792226564744162100,
+      "inputs_before": {
+        "status": "PASS",
+        "inputs": 169,
+        "gd_seals": 5,
+        "engine_head": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+        "source_sha256": "58a1b306f62b5d805bd2ff282ab37367cc807e7dd2672c0fb265c2e2289de5f8"
+      },
+      "preexisting_artifacts": {
+        "libgodot_android.so": {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\platform\\android\\java\\lib\\libs\\debug\\arm64-v8a\\libgodot_android.so",
+          "bytes": 77274000,
+          "sha256": "91de8f0d225c30372a9a5265e7c699f35bbd76a5dc3c244b2b65bd82e0684fbf"
+        },
+        "libc++_shared.so": {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\platform\\android\\java\\lib\\libs\\debug\\arm64-v8a\\libc++_shared.so",
+          "bytes": 9290184,
+          "sha256": "0c52cfab2df0d957d8b346a2bdc5ae8d71feca2591924d77e1cd724d5bf74352"
+        }
+      },
+      "exit_code": 0,
+      "finished": 1792226608.9620392,
+      "inputs_after": {
+        "status": "PASS",
+        "inputs": 169,
+        "gd_seals": 5,
+        "engine_head": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+        "source_sha256": "58a1b306f62b5d805bd2ff282ab37367cc807e7dd2672c0fb265c2e2289de5f8"
+      }
+    },
+    {
+      "argv": [
+        "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\build_prep\\venv\\Scripts\\scons.exe",
+        "-C",
+        "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot",
+        "platform=android",
+        "target=template_debug",
+        "arch=x86_64",
+        "precision=single",
+        "debug_symbols=no",
+        "production=yes",
+        "hardcore_native_source_sha256=58a1b306f62b5d805bd2ff282ab37367cc807e7dd2672c0fb265c2e2289de5f8",
+        "generate_android_binaries=no",
+        "-j2"
+      ],
+      "cwd": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\platform\\android\\java",
+      "log": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\android_map_reply_observation_20261017_build\\scons_debug_x86_64.log",
+      "started": 1792226610.2006578,
+      "started_ns": 1792226610200657800,
+      "inputs_before": {
+        "status": "PASS",
+        "inputs": 169,
+        "gd_seals": 5,
+        "engine_head": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+        "source_sha256": "58a1b306f62b5d805bd2ff282ab37367cc807e7dd2672c0fb265c2e2289de5f8"
+      },
+      "preexisting_artifacts": {
+        "libgodot_android.so": {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\platform\\android\\java\\lib\\libs\\debug\\x86_64\\libgodot_android.so",
+          "bytes": 82302712,
+          "sha256": "eee51360f196a44210dc6615edb00313e5f76899ec4a6e52d0f9b2e4194c6e76"
+        },
+        "libc++_shared.so": {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\platform\\android\\java\\lib\\libs\\debug\\x86_64\\libc++_shared.so",
+          "bytes": 9015544,
+          "sha256": "e28cb9e0f456caf8498d0e8562b3ac3f73bf78c07555a52b5602396f240abec3"
+        }
+      },
+      "exit_code": 0,
+      "finished": 1792226644.9404023,
+      "inputs_after": {
+        "status": "PASS",
+        "inputs": 169,
+        "gd_seals": 5,
+        "engine_head": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+        "source_sha256": "58a1b306f62b5d805bd2ff282ab37367cc807e7dd2672c0fb265c2e2289de5f8"
+      }
+    },
+    {
+      "argv": [
+        "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\build_prep\\venv\\Scripts\\scons.exe",
+        "-C",
+        "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot",
+        "platform=android",
+        "target=template_release",
+        "arch=arm64",
+        "precision=single",
+        "debug_symbols=no",
+        "production=yes",
+        "hardcore_native_source_sha256=58a1b306f62b5d805bd2ff282ab37367cc807e7dd2672c0fb265c2e2289de5f8",
+        "generate_android_binaries=no",
+        "-j2"
+      ],
+      "cwd": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\platform\\android\\java",
+      "log": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\android_map_reply_observation_20261017_build\\scons_release_arm64.log",
+      "started": 1792226646.147252,
+      "started_ns": 1792226646147251900,
+      "inputs_before": {
+        "status": "PASS",
+        "inputs": 169,
+        "gd_seals": 5,
+        "engine_head": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+        "source_sha256": "58a1b306f62b5d805bd2ff282ab37367cc807e7dd2672c0fb265c2e2289de5f8"
+      },
+      "preexisting_artifacts": {
+        "libgodot_android.so": {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\platform\\android\\java\\lib\\libs\\release\\arm64-v8a\\libgodot_android.so",
+          "bytes": 72172080,
+          "sha256": "2d936e416755a41e96939dee8b4e6c98ed2cec1f40f70f8d563ac44a5da4be4f"
+        },
+        "libc++_shared.so": {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\platform\\android\\java\\lib\\libs\\release\\arm64-v8a\\libc++_shared.so",
+          "bytes": 9290184,
+          "sha256": "0c52cfab2df0d957d8b346a2bdc5ae8d71feca2591924d77e1cd724d5bf74352"
+        }
+      },
+      "exit_code": 0,
+      "finished": 1792226678.5728686,
+      "inputs_after": {
+        "status": "PASS",
+        "inputs": 169,
+        "gd_seals": 5,
+        "engine_head": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+        "source_sha256": "58a1b306f62b5d805bd2ff282ab37367cc807e7dd2672c0fb265c2e2289de5f8"
+      }
+    },
+    {
+      "argv": [
+        "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\build_prep\\venv\\Scripts\\scons.exe",
+        "-C",
+        "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot",
+        "platform=android",
+        "target=template_release",
+        "arch=x86_64",
+        "precision=single",
+        "debug_symbols=no",
+        "production=yes",
+        "hardcore_native_source_sha256=58a1b306f62b5d805bd2ff282ab37367cc807e7dd2672c0fb265c2e2289de5f8",
+        "generate_android_binaries=no",
+        "-j2"
+      ],
+      "cwd": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\platform\\android\\java",
+      "log": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\android_map_reply_observation_20261017_build\\scons_release_x86_64.log",
+      "started": 1792226679.7938874,
+      "started_ns": 1792226679793887500,
+      "inputs_before": {
+        "status": "PASS",
+        "inputs": 169,
+        "gd_seals": 5,
+        "engine_head": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+        "source_sha256": "58a1b306f62b5d805bd2ff282ab37367cc807e7dd2672c0fb265c2e2289de5f8"
+      },
+      "preexisting_artifacts": {
+        "libgodot_android.so": {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\platform\\android\\java\\lib\\libs\\release\\x86_64\\libgodot_android.so",
+          "bytes": 75110168,
+          "sha256": "ca53f7d5508c5f05852a35c805fc91cdd2d117938d7d8eeeb50d8f29920da749"
+        },
+        "libc++_shared.so": {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\platform\\android\\java\\lib\\libs\\release\\x86_64\\libc++_shared.so",
+          "bytes": 9015544,
+          "sha256": "e28cb9e0f456caf8498d0e8562b3ac3f73bf78c07555a52b5602396f240abec3"
+        }
+      },
+      "exit_code": 0,
+      "finished": 1792226713.029418,
+      "inputs_after": {
+        "status": "PASS",
+        "inputs": 169,
+        "gd_seals": 5,
+        "engine_head": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+        "source_sha256": "58a1b306f62b5d805bd2ff282ab37367cc807e7dd2672c0fb265c2e2289de5f8"
+      }
+    },
+    {
+      "argv": [
+        "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\android-build\\jdk\\jdk-17.0.20+8\\bin\\java.exe",
+        "-Xmx64m",
+        "-Xms64m",
+        "-classpath",
+        "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\platform\\android\\java\\gradle\\wrapper\\gradle-wrapper.jar",
+        "org.gradle.wrapper.GradleWrapperMain",
+        "--no-daemon",
+        "--max-workers=2",
+        "-Dorg.gradle.jvmargs=-Xmx1536m -XX:MaxMetaspaceSize=512m",
+        "--init-script",
+        "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\android_map_reply_observation_20261017_build\\exact_native_abis.gradle",
+        "-Pexport_enabled_abis=arm64-v8a|x86_64",
+        "-PdoNotStrip=true",
+        "generateGodotTemplates"
+      ],
+      "cwd": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\platform\\android\\java",
+      "log": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\android_map_reply_observation_20261017_build\\gradle_actual_templates.log",
+      "started": 1792226714.3834882,
+      "started_ns": 1792226714383488200,
+      "inputs_before": {
+        "status": "PASS",
+        "inputs": 169,
+        "gd_seals": 5,
+        "engine_head": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+        "source_sha256": "58a1b306f62b5d805bd2ff282ab37367cc807e7dd2672c0fb265c2e2289de5f8"
+      },
+      "preexisting_artifacts": {
+        "android_debug.apk": {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\bin\\android_debug.apk",
+          "bytes": 99611940,
+          "sha256": "ef373f761d4ca42a3445724f233f0e2586d4430af20968030fad30ab20ac3c5f"
+        },
+        "android_release.apk": {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\bin\\android_release.apk",
+          "bytes": 56908823,
+          "sha256": "ac33c3d47fc521788e4db0f6110f988ca3c9ef929fb88274cff80dc876c12987"
+        },
+        "android_source.zip": {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\bin\\android_source.zip",
+          "bytes": 114410131,
+          "sha256": "940b922d4de9e4122d41768d8dd4e253387ca74c3669a8b9d461cd136c86fe02"
+        }
+      },
+      "exit_code": 0,
+      "finished": 1792226787.6309638,
+      "inputs_after": {
+        "status": "PASS",
+        "inputs": 169,
+        "gd_seals": 5,
+        "engine_head": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+        "source_sha256": "58a1b306f62b5d805bd2ff282ab37367cc807e7dd2672c0fb265c2e2289de5f8"
+      }
+    }
+  ],
+  "jni": {
+    "debug": {
+      "arm64-v8a": {
+        "libgodot_android.so": {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\platform\\android\\java\\lib\\libs\\debug\\arm64-v8a\\libgodot_android.so",
+          "bytes": 77274112,
+          "sha256": "56c6b1fb3bfbb91b65dcc394fbf473a9f4e6a62a02720df099d5d068771719e0",
+          "mtime_ns": 1792226605304715100,
+          "produced_after_ns": 1792226564744162100
+        },
+        "libc++_shared.so": {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\platform\\android\\java\\lib\\libs\\debug\\arm64-v8a\\libc++_shared.so",
+          "bytes": 9290184,
+          "sha256": "0c52cfab2df0d957d8b346a2bdc5ae8d71feca2591924d77e1cd724d5bf74352",
+          "ndk_source": {
+            "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\android-build\\sdk\\ndk\\29.0.14206865\\toolchains\\llvm\\prebuilt\\windows-x86_64\\sysroot\\usr\\lib\\aarch64-linux-android\\libc++_shared.so",
+            "bytes": 9290184,
+            "sha256": "0c52cfab2df0d957d8b346a2bdc5ae8d71feca2591924d77e1cd724d5bf74352"
+          }
+        }
+      },
+      "x86_64": {
+        "libgodot_android.so": {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\platform\\android\\java\\lib\\libs\\debug\\x86_64\\libgodot_android.so",
+          "bytes": 82302712,
+          "sha256": "3472c1459a184f67519b8634e422a7be64cc83f6252c56e23ebc25421cf84006",
+          "mtime_ns": 1792226641940560500,
+          "produced_after_ns": 1792226610200657800
+        },
+        "libc++_shared.so": {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\platform\\android\\java\\lib\\libs\\debug\\x86_64\\libc++_shared.so",
+          "bytes": 9015544,
+          "sha256": "e28cb9e0f456caf8498d0e8562b3ac3f73bf78c07555a52b5602396f240abec3",
+          "ndk_source": {
+            "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\android-build\\sdk\\ndk\\29.0.14206865\\toolchains\\llvm\\prebuilt\\windows-x86_64\\sysroot\\usr\\lib\\x86_64-linux-android\\libc++_shared.so",
+            "bytes": 9015544,
+            "sha256": "e28cb9e0f456caf8498d0e8562b3ac3f73bf78c07555a52b5602396f240abec3"
+          }
+        }
+      }
+    },
+    "release": {
+      "arm64-v8a": {
+        "libgodot_android.so": {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\platform\\android\\java\\lib\\libs\\release\\arm64-v8a\\libgodot_android.so",
+          "bytes": 72172048,
+          "sha256": "e56933f1423c3233eb49396fcd82bbf6f30a513a02d88b69d8f816718f71b861",
+          "mtime_ns": 1792226675862813400,
+          "produced_after_ns": 1792226646147251900
+        },
+        "libc++_shared.so": {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\platform\\android\\java\\lib\\libs\\release\\arm64-v8a\\libc++_shared.so",
+          "bytes": 9290184,
+          "sha256": "0c52cfab2df0d957d8b346a2bdc5ae8d71feca2591924d77e1cd724d5bf74352",
+          "ndk_source": {
+            "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\android-build\\sdk\\ndk\\29.0.14206865\\toolchains\\llvm\\prebuilt\\windows-x86_64\\sysroot\\usr\\lib\\aarch64-linux-android\\libc++_shared.so",
+            "bytes": 9290184,
+            "sha256": "0c52cfab2df0d957d8b346a2bdc5ae8d71feca2591924d77e1cd724d5bf74352"
+          }
+        }
+      },
+      "x86_64": {
+        "libgodot_android.so": {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\platform\\android\\java\\lib\\libs\\release\\x86_64\\libgodot_android.so",
+          "bytes": 75110168,
+          "sha256": "fa718c883584e79248f1882a454e678bcc1eb85ec13e572ac385ab26567d7393",
+          "mtime_ns": 1792226709819109700,
+          "produced_after_ns": 1792226679793887500
+        },
+        "libc++_shared.so": {
+          "path": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\platform\\android\\java\\lib\\libs\\release\\x86_64\\libc++_shared.so",
+          "bytes": 9015544,
+          "sha256": "e28cb9e0f456caf8498d0e8562b3ac3f73bf78c07555a52b5602396f240abec3",
+          "ndk_source": {
+            "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\android-build\\sdk\\ndk\\29.0.14206865\\toolchains\\llvm\\prebuilt\\windows-x86_64\\sysroot\\usr\\lib\\x86_64-linux-android\\libc++_shared.so",
+            "bytes": 9015544,
+            "sha256": "e28cb9e0f456caf8498d0e8562b3ac3f73bf78c07555a52b5602396f240abec3"
+          }
+        }
+      }
+    }
+  },
+  "artifacts": {
+    "debug": {
+      "jni": {
+        "arm64-v8a": {
+          "libgodot_android.so": "56c6b1fb3bfbb91b65dcc394fbf473a9f4e6a62a02720df099d5d068771719e0",
+          "libc++_shared.so": "0c52cfab2df0d957d8b346a2bdc5ae8d71feca2591924d77e1cd724d5bf74352"
+        },
+        "x86_64": {
+          "libgodot_android.so": "3472c1459a184f67519b8634e422a7be64cc83f6252c56e23ebc25421cf84006",
+          "libc++_shared.so": "e28cb9e0f456caf8498d0e8562b3ac3f73bf78c07555a52b5602396f240abec3"
+        }
+      },
+      "file": {
+        "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\android_map_reply_observation_20261017_build\\templates\\android_debug.apk",
+        "bytes": 67916607,
+        "sha256": "6d5f02175605c775ee0a2bd9d7e41ca60d9bd98768389a53ba7eb7d525e0f754"
+      }
+    },
+    "release": {
+      "jni": {
+        "arm64-v8a": {
+          "libgodot_android.so": "e56933f1423c3233eb49396fcd82bbf6f30a513a02d88b69d8f816718f71b861",
+          "libc++_shared.so": "0c52cfab2df0d957d8b346a2bdc5ae8d71feca2591924d77e1cd724d5bf74352"
+        },
+        "x86_64": {
+          "libgodot_android.so": "fa718c883584e79248f1882a454e678bcc1eb85ec13e572ac385ab26567d7393",
+          "libc++_shared.so": "e28cb9e0f456caf8498d0e8562b3ac3f73bf78c07555a52b5602396f240abec3"
+        }
+      },
+      "file": {
+        "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\android_map_reply_observation_20261017_build\\templates\\android_release.apk",
+        "bytes": 56908267,
+        "sha256": "1d6db066707012e53766a27fc3ebc444db9926b4898f7c9faea85babd46626dd"
+      }
+    },
+    "source_debug": {
+      "file": {
+        "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\android_map_reply_observation_20261017_build\\source_debug.aar",
+        "bytes": 59725122,
+        "sha256": "c12f74340bb8624bdae93fd759b88cdfb6d7aa4600cc9a38cc6430ee0174c19d"
+      },
+      "jni": {
+        "arm64-v8a": {
+          "libgodot_android.so": "56c6b1fb3bfbb91b65dcc394fbf473a9f4e6a62a02720df099d5d068771719e0",
+          "libc++_shared.so": "0c52cfab2df0d957d8b346a2bdc5ae8d71feca2591924d77e1cd724d5bf74352"
+        },
+        "x86_64": {
+          "libgodot_android.so": "3472c1459a184f67519b8634e422a7be64cc83f6252c56e23ebc25421cf84006",
+          "libc++_shared.so": "e28cb9e0f456caf8498d0e8562b3ac3f73bf78c07555a52b5602396f240abec3"
+        }
+      }
+    },
+    "source_release": {
+      "file": {
+        "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\android_map_reply_observation_20261017_build\\source_release.aar",
+        "bytes": 55357077,
+        "sha256": "15cb7409938d524636b4d85ec447a0d1f3716db72931494e57b2d4ceb62ebc5e"
+      },
+      "jni": {
+        "arm64-v8a": {
+          "libgodot_android.so": "e56933f1423c3233eb49396fcd82bbf6f30a513a02d88b69d8f816718f71b861",
+          "libc++_shared.so": "0c52cfab2df0d957d8b346a2bdc5ae8d71feca2591924d77e1cd724d5bf74352"
+        },
+        "x86_64": {
+          "libgodot_android.so": "fa718c883584e79248f1882a454e678bcc1eb85ec13e572ac385ab26567d7393",
+          "libc++_shared.so": "e28cb9e0f456caf8498d0e8562b3ac3f73bf78c07555a52b5602396f240abec3"
+        }
+      }
+    },
+    "source_zip": {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\android_map_reply_observation_20261017_build\\templates\\android_source.zip",
+      "bytes": 114406967,
+      "sha256": "0b9945fb10135bb7f98c915a013a06f6bec55ef09402b974433c9b1122c99432"
+    }
+  },
+  "builder": {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\tools\\build_hardcore_android_templates.py",
+    "bytes": 24772,
+    "sha256": "c76d186f2240a11fea3ad4b80b0593695f44b9c94205a7ea99deac357615af04"
+  },
+  "runtime_capability": "NOT_RUN",
+  "compile_identity_argument": "hardcore_native_source_sha256=58a1b306f62b5d805bd2ff282ab37367cc807e7dd2672c0fb265c2e2289de5f8",
+  "tools": [
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\build_prep\\venv\\Scripts\\scons.exe",
+      "bytes": 108473,
+      "sha256": "afd27bd94272a43fdeab91f0243bc4e22e32d6eed204774fd7a0d32198dcf605"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\android-build\\jdk\\jdk-17.0.20+8\\bin\\java.exe",
+      "bytes": 49976,
+      "sha256": "7efce5caf5306bc4b3f6134a6147e3bfd80c5fec9162708d6a3ae02f37c69782"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\platform\\android\\java\\gradle\\wrapper\\gradle-wrapper.jar",
+      "bytes": 59203,
+      "sha256": "e996d452d2645e70c01c11143ca2d3742734a28da2bf61f25c82bdc288c9e637"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore\\tools\\android-build\\sdk\\ndk\\29.0.14206865\\source.properties",
+      "bytes": 107,
+      "sha256": "716f3518a923198cfab037abb32dc3f1b1f7e9a9dcdcda6b66be5906215d2658"
+    }
+  ],
+  "preflight": {
+    "status": "PASS",
+    "inputs": 169,
+    "gd_seals": 5,
+    "engine_head": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+    "source_sha256": "58a1b306f62b5d805bd2ff282ab37367cc807e7dd2672c0fb265c2e2289de5f8"
+  },
+  "compile_identity_source": {
+    "status": "PASS",
+    "source": {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\simulation_host_original_primitives.cpp",
+      "bytes": 93023,
+      "sha256": "5d386451a1feffef03eed18c45836841e46c55e01c966ddd4357c4cb3c562e18"
+    },
+    "config": {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\config.py",
+      "bytes": 493,
+      "sha256": "a8de87cf6212f9f5cf058243ada34193a83095d95475b3974e2a1354b20ba7da"
+    },
+    "SCsub": {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\SCsub",
+      "bytes": 462,
+      "sha256": "109cf7b68a6a9b1296567fa911ec5161aaeb9d0b63e717f93a960676a7982de0"
+    },
+    "runtime_capability": "NOT_RUN"
+  },
+  "build": "PASS",
+  "gradle_init": {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\android_map_reply_observation_20261017_build\\exact_native_abis.gradle",
+    "bytes": 288,
+    "sha256": "af62c0c148c885d1068d3b41658e8888979e1f05fffd1b4887a750564ada1b42"
+  },
+  "postflight": {
+    "status": "PASS",
+    "inputs": 169,
+    "gd_seals": 5,
+    "engine_head": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+    "source_sha256": "58a1b306f62b5d805bd2ff282ab37367cc807e7dd2672c0fb265c2e2289de5f8"
+  }
+}

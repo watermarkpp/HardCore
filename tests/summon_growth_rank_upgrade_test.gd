@@ -1,5 +1,7 @@
 extends Node
 
+const FormalWorldFixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
+
 const ORIGIN_GU := Vector2(38.5, 13.5)
 const HOME_MAP_ID := 910001
 const AWAY_MAP_ID := 910003
@@ -9,6 +11,8 @@ const DIVINE_SKILL := "召唤神兽"
 
 var _game: Node
 var _cast_serial := 0
+var _credit_targets: Array[EnemyActor] = []
+var _credit_target_cursor := 0
 
 
 func _ready() -> void:
@@ -125,10 +129,21 @@ func _run() -> void:
 	_assert_persisted_rank("divine_beast", 3, 7)
 	_game._set_player_world_position(_game._canonical_ground_gu_to_screen_px(ORIGIN_GU))
 
+	var credit_skeleton_state := _preserved_state(skeleton)
+	var credit_divine_state := _preserved_state(divine)
+	await _publish_credit_targets()
+	skeleton = _game._canonical_main_pet("skeleton")
+	divine = _game._canonical_main_pet("divine_beast")
+	assert(skeleton != null and divine != null)
+	_freeze_pet(skeleton)
+	_freeze_pet(divine)
+	_assert_preserved(skeleton, credit_skeleton_state, "formal credit target republication")
+	_assert_preserved(divine, credit_divine_state, "formal credit target republication")
 	_verify_kill_credit(skeleton, divine)
 	_verify_poison_last_participant(skeleton, divine)
 	_verify_poison_without_participant(skeleton, divine)
 	_verify_dead_last_participant_is_not_reassigned(skeleton, divine)
+	assert(_credit_target_cursor == _credit_targets.size(), "all seven formal credit cases must execute")
 	_game.queue_free()
 	await get_tree().process_frame
 	PlayerState.test_mode = previous_test_mode
@@ -200,12 +215,27 @@ func _assert_persisted_rank(summon_id: String, expected_rank: int, expected_cap:
 	assert(int(saved.get("maximum_pet_level", -1)) == expected_cap)
 
 
+func _publish_credit_targets() -> void:
+	# The frozen birth owner admits the complete published plan, not later
+	# ad-hoc factories. Each independent credit case owns a distinct base slot.
+	var descriptors: Array[Dictionary] = []
+	for index in range(7):
+		descriptors.append({"id": TARGET_MONSTER_ID,
+			"ground": ORIGIN_GU + Vector2(1.0, 0.0), "respawn": -1.0,
+			"context": {"respawn_enabled": false,
+				"spawn_group_id": "summon_growth_rank_credit",
+				"spawn_slot_id": "test:summon_growth_rank_credit:%d" % index}})
+	_credit_targets = await FormalWorldFixture.publish_targets(self, _game, descriptors, "summon_growth_rank_credit")
+	assert(_credit_targets.size() == 7, "all original credit cases need actual mapped targets")
+	_freeze_world()
+	_game._set_player_world_position(_game._canonical_ground_gu_to_screen_px(ORIGIN_GU))
+
+
 func _new_credit_target() -> EnemyActor:
 	var position: Vector2 = _game._canonical_ground_gu_to_screen_px(ORIGIN_GU + Vector2(1.0, 0.0))
-	var enemy: EnemyActor = _game._spawn_enemy(
-		GameData.get_monster_by_id(TARGET_MONSTER_ID), position, false, -1.0,
-		{"respawn_enabled": false, "spawn_group_id": "summon_growth_rank_credit"},
-	)
+	assert(_credit_target_cursor < _credit_targets.size(), "credit case exceeded its published target set")
+	var enemy := _credit_targets[_credit_target_cursor]
+	_credit_target_cursor += 1
 	assert(enemy != null and enemy.monster_id == TARGET_MONSTER_ID)
 	enemy.set_physics_process(false)
 	enemy.set_combat_position(position, &"summon_growth_credit_target")

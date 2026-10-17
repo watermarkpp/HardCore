@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/character_source_full_world_20261016.gd" id="1"]
+
+[node name="CharacterSourceFullWorld" type="Node"]
+script = ExtResource("1")

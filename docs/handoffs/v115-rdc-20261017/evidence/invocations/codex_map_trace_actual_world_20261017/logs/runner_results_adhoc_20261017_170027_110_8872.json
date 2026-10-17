@@ -1,0 +1,125 @@
+{
+  "failed": 1,
+  "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\.godot\\runtime_appdata\\multicore_v115\\runner_c33d7c12-3993-4076-b5ca-a0bb68c9da9d",
+    "runner_process_id": 8872
+  },
+  "engine_log_errors": 89,
+  "generated_at": "2026-10-17T17:00:27.1110202+08:00",
+  "git_head": "45170d0eaf4d2c642d4a03de392f64fa2b1e25bf",
+  "passed": 0,
+  "total": 1,
+  "invocation_id": "c33d7c12-3993-4076-b5ca-a0bb68c9da9d",
+  "results": [
+    {
+      "test_name": "character_source_full_world_20261016",
+      "test_path": "tests/framework/character_source_full_world_20261016.tscn",
+      "wrapper_process_id": 10084,
+      "wrapper_started_utc": "2026-10-17T08:59:05.5934651Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\.godot\\runtime_appdata\\multicore_v115\\runner_c33d7c12-3993-4076-b5ca-a0bb68c9da9d",
+      "fixed_fps": 0,
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-10-17T09:01:05.5936080Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 90,
+      "engine_log_failure_count": 89,
+      "cleanup_warning_evidence": {
+        "status": "FAIL",
+        "allowlisted_errors": {
+          "string_formatting": {
+            "count": 0,
+            "lines": []
+          },
+          "resources_in_use": {
+            "count": 0,
+            "lines": []
+          },
+          "rid_leak": {
+            "count": 0,
+            "lines": []
+          },
+          "null_parameter": {
+            "count": 0,
+            "lines": []
+          }
+        },
+        "unknown_error_lines": [
+          "ERROR: World simulation owner fault: actual_viewport_Root_scope_missing",
+          "ERROR: actual_Main_view_service_failed",
+          "ERROR: World simulation owner fault: actual_native_closing_process_frame_required",
+          "ERROR: actual_Main_view_service_failed",
+          "ERROR: actual_Main_view_service_failed",
+          "ERROR: actual_Main_view_service_failed",
+          "ERROR: actual_Main_view_service_failed",
+          "ERROR: World simulation owner fault: actual_viewport_Root_scope_missing",
+          "ERROR: actual_Main_view_service_failed",
+          "ERROR: World simulation owner fault: actual_native_closing_process_frame_required",
+          "ERROR: actual_Main_view_service_failed",
+          "ERROR: actual_Main_view_service_failed",
+          "ERROR: actual_Main_view_service_failed"
+        ],
+        "unknown_error_count": 13,
+        "objectdb_leak_warning_lines": [],
+        "objectdb_leak_warning_count": 0,
+        "functional_marker_observed": false,
+        "formal_evidence_status": "MISSING",
+        "formal_evidence_reason": "legacy_run_bound_checks_missing",
+        "receipt_validation_reasons": [
+          "framework_receipt_not_pass"
+        ],
+        "candidate_receipt_correlation": false,
+        "upstream_result": "NOT_RUN",
+        "raw_log_paths": [
+          "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_map_trace_actual_world_20261017\\logs\\character_source_full_world_20261016.stdout.log",
+          "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_map_trace_actual_world_20261017\\logs\\character_source_full_world_20261016.stderr.log",
+          "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_map_trace_actual_world_20261017\\logs\\character_source_full_world_20261016.godot.log"
+        ],
+        "receipt_path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\test_logs\\framework\\character_source_full_world_20261016.result.json",
+        "expected_scene_id": "character_source_full_world_20261016",
+        "expected_invocation_id": "c33d7c12-3993-4076-b5ca-a0bb68c9da9d"
+      },
+      "framework_run_id": "60eb6141-53c3-40df-bead-06ae187c8a06",
+      "framework_receipt_valid": false,
+      "source_content_sha256": "050135c4c282f5413c97dbc46a4cd6c6ff810f323149d81d2f1c5ed367b0be5d",
+      "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+      "engine_fingerprints": [
+        {
+          "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_map_reply_observation_20261017_build\\Godot_v115-stable_win64_console.exe",
+          "sha256": "1b69c0d26f54df88301791e5f3dbd43f7e20aad30a727addfff3287ea9d11c91",
+          "bytes": 298496
+        },
+        {
+          "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_map_reply_observation_20261017_build\\Godot_v115-stable_win64.exe",
+          "sha256": "7f54a5090cfde94a7d2fcf37c22c14ecd23e00eefcc0bf5e23d1c0326bc7b8de",
+          "bytes": 175887872
+        }
+      ],
+      "formal_evidence_status": "MISSING",
+      "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_1;stderr_failures_90;engine_log_failures_89;framework_checks_failed"
+    }
+  ],
+  "suite": "adhoc",
+  "source_content_sha256": "050135c4c282f5413c97dbc46a4cd6c6ff810f323149d81d2f1c5ed367b0be5d",
+  "engine_fingerprints": [
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_map_reply_observation_20261017_build\\Godot_v115-stable_win64_console.exe",
+      "sha256": "1b69c0d26f54df88301791e5f3dbd43f7e20aad30a727addfff3287ea9d11c91",
+      "bytes": 298496
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_map_reply_observation_20261017_build\\Godot_v115-stable_win64.exe",
+      "sha256": "7f54a5090cfde94a7d2fcf37c22c14ecd23e00eefcc0bf5e23d1c0326bc7b8de",
+      "bytes": 175887872
+    }
+  ]
+}

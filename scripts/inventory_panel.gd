@@ -111,7 +111,20 @@ var _context_menu_policy: Dictionary = {
 var _press_cancelled := false
 
 
+# Main callback depth only. No new gameplay/IO owner or timer.
+var _original_main_callback_ledger: Dictionary = {}
+
+
 func _ready() -> void:
+	# This source-created frame duplicated the user's calibrated BagPanel frame.
+	# Keep both its root and generated decoration retired so an older saved
+	# calibration profile cannot bind them if that profile is loaded again.
+	_original_main_callback_ledger["_ready"] = int(_original_main_callback_ledger.get("_ready",0)) + 1
+	_original_source_inventory_panel__ready()
+	_original_main_callback_ledger["_ready"] -= 1
+
+
+func _original_source_inventory_panel__ready() -> void:
 	# This source-created frame duplicated the user's calibrated BagPanel frame.
 	# Keep both its root and generated decoration retired so an older saved
 	# calibration profile cannot bind them if that profile is loaded again.
@@ -261,6 +274,12 @@ func _build_attribute_panel() -> void:
 
 
 func _build_equipment_panel() -> void:
+	_original_main_callback_ledger["_build_equipment_panel"] = int(_original_main_callback_ledger.get("_build_equipment_panel",0)) + 1
+	_original_source_inventory_panel__build_equipment_panel()
+	_original_main_callback_ledger["_build_equipment_panel"] -= 1
+
+
+func _original_source_inventory_panel__build_equipment_panel() -> void:
 	var panel := _section_panel("EquipmentPanel", Vector2(294, 72), Vector2(390, 566))
 	var title := _section_title("人物装备", 390)
 	title.name = "EquipmentTitle"
@@ -561,6 +580,12 @@ func _bag_grid_minimum_size() -> Vector2:
 
 
 func _refresh_equipment_slots() -> void:
+	_original_main_callback_ledger["_refresh_equipment_slots"] = int(_original_main_callback_ledger.get("_refresh_equipment_slots",0)) + 1
+	_original_source_inventory_panel__refresh_equipment_slots()
+	_original_main_callback_ledger["_refresh_equipment_slots"] -= 1
+
+
+func _original_source_inventory_panel__refresh_equipment_slots() -> void:
 	var compatibility_lines: Array[String] = []
 	for slot: String in PlayerState.EQUIPMENT_SLOTS:
 		var button: Button = equipment_buttons.get(slot)
@@ -600,6 +625,12 @@ func _flush_queued_stats_refresh() -> void:
 
 
 func _refresh_character_stats() -> void:
+	_original_main_callback_ledger["_refresh_character_stats"] = int(_original_main_callback_ledger.get("_refresh_character_stats",0)) + 1
+	_original_source_inventory_panel__refresh_character_stats()
+	_original_main_callback_ledger["_refresh_character_stats"] -= 1
+
+
+func _original_source_inventory_panel__refresh_character_stats() -> void:
 	if equipment_stats_label == null:
 		return
 	_stats_refresh_pending = false
@@ -668,12 +699,25 @@ func _character_stats_text(stats: Dictionary) -> String:
 
 
 func _character_attribute_explanation(term: String) -> String:
+	_original_main_callback_ledger["_character_attribute_explanation"] = int(_original_main_callback_ledger.get("_character_attribute_explanation",0)) + 1
+	var original_result: Variant = _original_source_inventory_panel__character_attribute_explanation(term)
+	_original_main_callback_ledger["_character_attribute_explanation"] -= 1
+	return original_result
+
+
+func _original_source_inventory_panel__character_attribute_explanation(term: String) -> String:
 	if term == "等级":
 		return "%d/%d" % [PlayerState.experience, PlayerState.experience_to_next_level()]
 	return ""
 
 
 func _refresh_bag_grid() -> void:
+	_original_main_callback_ledger["_refresh_bag_grid"] = int(_original_main_callback_ledger.get("_refresh_bag_grid",0)) + 1
+	_original_source_inventory_panel__refresh_bag_grid()
+	_original_main_callback_ledger["_refresh_bag_grid"] -= 1
+
+
+func _original_source_inventory_panel__refresh_bag_grid() -> void:
 	if _bag_cells.is_empty():
 		_initialize_bag_cells(BAG_VISIBLE_CAPACITY)
 	for inventory_index in range(_bag_cells.size()):
@@ -699,6 +743,12 @@ func _initialize_bag_cells(target_count := BAG_CAPACITY) -> void:
 
 
 func _continue_bag_cell_initialization() -> void:
+	_original_main_callback_ledger["_continue_bag_cell_initialization"] = int(_original_main_callback_ledger.get("_continue_bag_cell_initialization",0)) + 1
+	await _original_source_inventory_panel__continue_bag_cell_initialization()
+	_original_main_callback_ledger["_continue_bag_cell_initialization"] -= 1
+
+
+func _original_source_inventory_panel__continue_bag_cell_initialization() -> void:
 	if _bag_cells_ready or _bag_cell_initialization_running:
 		return
 	_bag_cell_initialization_running = true
@@ -714,6 +764,12 @@ func _continue_bag_cell_initialization() -> void:
 
 
 func wait_until_runtime_ready() -> void:
+	_original_main_callback_ledger["wait_until_runtime_ready"] = int(_original_main_callback_ledger.get("wait_until_runtime_ready",0)) + 1
+	await _original_source_inventory_panel_wait_until_runtime_ready()
+	_original_main_callback_ledger["wait_until_runtime_ready"] -= 1
+
+
+func _original_source_inventory_panel_wait_until_runtime_ready() -> void:
 	if not _bag_cells_ready:
 		_continue_bag_cell_initialization()
 	while is_inside_tree() and not _bag_cells_ready:
@@ -793,6 +849,13 @@ func _update_bag_cell(index: int, stack: Dictionary) -> void:
 
 
 func _inventory_record(index: int) -> Dictionary:
+	_original_main_callback_ledger["_inventory_record"] = int(_original_main_callback_ledger.get("_inventory_record",0)) + 1
+	var original_result: Variant = _original_source_inventory_panel__inventory_record(index)
+	_original_main_callback_ledger["_inventory_record"] -= 1
+	return original_result
+
+
+func _original_source_inventory_panel__inventory_record(index: int) -> Dictionary:
 	if index < 0 or index >= PlayerState.inventory.size():
 		return {}
 	var record: Variant = PlayerState.inventory[index]
@@ -830,6 +893,13 @@ func _same_selection_ref(left: Dictionary, right: Dictionary) -> bool:
 
 
 func _find_inventory_index_for_ref(selection_ref: Dictionary) -> int:
+	_original_main_callback_ledger["_find_inventory_index_for_ref"] = int(_original_main_callback_ledger.get("_find_inventory_index_for_ref",0)) + 1
+	var original_result: Variant = _original_source_inventory_panel__find_inventory_index_for_ref(selection_ref)
+	_original_main_callback_ledger["_find_inventory_index_for_ref"] -= 1
+	return original_result
+
+
+func _original_source_inventory_panel__find_inventory_index_for_ref(selection_ref: Dictionary) -> int:
 	if selection_ref.is_empty() or str(selection_ref.get("container", "")) != "inventory":
 		return -1
 	var instance_id := str(selection_ref.get("instance_id", ""))
@@ -847,6 +917,12 @@ func _find_inventory_index_for_ref(selection_ref: Dictionary) -> int:
 
 
 func _reconcile_selection() -> void:
+	_original_main_callback_ledger["_reconcile_selection"] = int(_original_main_callback_ledger.get("_reconcile_selection",0)) + 1
+	_original_source_inventory_panel__reconcile_selection()
+	_original_main_callback_ledger["_reconcile_selection"] -= 1
+
+
+func _original_source_inventory_panel__reconcile_selection() -> void:
 	var rebound: Array[Dictionary] = []
 	var rebound_indices: Dictionary = {}
 	for selection_ref: Dictionary in selected_inventory_refs:
@@ -1006,6 +1082,12 @@ func _show_item_notice(
 
 
 func _select_equipment_slot(slot: String) -> void:
+	_original_main_callback_ledger["_select_equipment_slot"] = int(_original_main_callback_ledger.get("_select_equipment_slot",0)) + 1
+	_original_source_inventory_panel__select_equipment_slot(slot)
+	_original_main_callback_ledger["_select_equipment_slot"] -= 1
+
+
+func _original_source_inventory_panel__select_equipment_slot(slot: String) -> void:
 	if _press_cancelled or TouchScrollSupportScript.is_drag_active(get_tree()):
 		return
 	if selected_inventory_refs.size() > 1:
@@ -1086,6 +1168,12 @@ func _clear_equipment_selection() -> void:
 
 
 func _show_equipment_detail(slot: String) -> void:
+	_original_main_callback_ledger["_show_equipment_detail"] = int(_original_main_callback_ledger.get("_show_equipment_detail",0)) + 1
+	_original_source_inventory_panel__show_equipment_detail(slot)
+	_original_main_callback_ledger["_show_equipment_detail"] -= 1
+
+
+func _original_source_inventory_panel__show_equipment_detail(slot: String) -> void:
 	var equipped: Variant = PlayerState.equipment.get(slot, {})
 	if not equipped is Dictionary or (equipped as Dictionary).is_empty():
 		return
@@ -1101,6 +1189,12 @@ func _show_equipment_detail(slot: String) -> void:
 
 
 func _refresh_selected_equipment_detail() -> void:
+	_original_main_callback_ledger["_refresh_selected_equipment_detail"] = int(_original_main_callback_ledger.get("_refresh_selected_equipment_detail",0)) + 1
+	_original_source_inventory_panel__refresh_selected_equipment_detail()
+	_original_main_callback_ledger["_refresh_selected_equipment_detail"] -= 1
+
+
+func _original_source_inventory_panel__refresh_selected_equipment_detail() -> void:
 	if selected_equipment_slot.is_empty():
 		return
 	var equipped: Variant = PlayerState.equipment.get(selected_equipment_slot, {})
@@ -1139,6 +1233,12 @@ func _can_receive_unequip_to_index(index: int) -> bool:
 
 
 func _unequip_to_inventory_slot(index: int) -> void:
+	_original_main_callback_ledger["_unequip_to_inventory_slot"] = int(_original_main_callback_ledger.get("_unequip_to_inventory_slot",0)) + 1
+	_original_source_inventory_panel__unequip_to_inventory_slot(index)
+	_original_main_callback_ledger["_unequip_to_inventory_slot"] -= 1
+
+
+func _original_source_inventory_panel__unequip_to_inventory_slot(index: int) -> void:
 	if not _can_receive_unequip_to_index(index):
 		return
 	var slot := selected_equipment_slot
@@ -1288,6 +1388,13 @@ func _on_long_press_timer_timeout() -> void:
 
 
 func _context_menu_allowed() -> bool:
+	_original_main_callback_ledger["_context_menu_allowed"] = int(_original_main_callback_ledger.get("_context_menu_allowed",0)) + 1
+	var original_result: Variant = _original_source_inventory_panel__context_menu_allowed()
+	_original_main_callback_ledger["_context_menu_allowed"] -= 1
+	return original_result
+
+
+func _original_source_inventory_panel__context_menu_allowed() -> bool:
 	if not bool(_context_menu_policy.get("enabled", false)):
 		return false
 	var allowed_kinds: Array = _context_menu_policy.get("enabled_kinds", [])
@@ -1307,6 +1414,12 @@ func _context_menu_allowed() -> bool:
 
 
 func _open_long_press_menu() -> void:
+	_original_main_callback_ledger["_open_long_press_menu"] = int(_original_main_callback_ledger.get("_open_long_press_menu",0)) + 1
+	_original_source_inventory_panel__open_long_press_menu()
+	_original_main_callback_ledger["_open_long_press_menu"] -= 1
+
+
+func _original_source_inventory_panel__open_long_press_menu() -> void:
 	if _press_context.is_empty() or not is_instance_valid(_press_button):
 		return
 	_long_press_opened = true
@@ -1353,6 +1466,12 @@ func _add_context_action(label: String, action: Dictionary, disabled := false) -
 
 
 func _on_context_action(id: int) -> void:
+	_original_main_callback_ledger["_on_context_action"] = int(_original_main_callback_ledger.get("_on_context_action",0)) + 1
+	_original_source_inventory_panel__on_context_action(id)
+	_original_main_callback_ledger["_on_context_action"] -= 1
+
+
+func _original_source_inventory_panel__on_context_action(id: int) -> void:
 	var action: Dictionary = _context_actions.get(id, {})
 	var result: Dictionary = {}
 	var use_result: Dictionary = {}
@@ -1463,6 +1582,14 @@ func _activate_selected_item(preferred_slot := "") -> void:
 func _activate_inventory_index(index: int, preferred_slot := "") -> void:
 	# preferred_slot stays empty for direct double-click activation: PlayerState
 	# is the authoritative equipment-slot resolver, so the UI never hardcodes a side.
+	_original_main_callback_ledger["_activate_inventory_index"] = int(_original_main_callback_ledger.get("_activate_inventory_index",0)) + 1
+	_original_source_inventory_panel__activate_inventory_index(index,preferred_slot)
+	_original_main_callback_ledger["_activate_inventory_index"] -= 1
+
+
+func _original_source_inventory_panel__activate_inventory_index(index: int, preferred_slot := "") -> void:
+	# preferred_slot stays empty for direct double-click activation: PlayerState
+	# is the authoritative equipment-slot resolver, so the UI never hardcodes a side.
 	var stack := _inventory_record(index)
 	if stack.is_empty():
 		return
@@ -1541,6 +1668,12 @@ func _first_empty_inventory_slot() -> int:
 
 
 func _on_auto_sort_pressed() -> void:
+	_original_main_callback_ledger["_on_auto_sort_pressed"] = int(_original_main_callback_ledger.get("_on_auto_sort_pressed",0)) + 1
+	_original_source_inventory_panel__on_auto_sort_pressed()
+	_original_main_callback_ledger["_on_auto_sort_pressed"] -= 1
+
+
+func _original_source_inventory_panel__on_auto_sort_pressed() -> void:
 	_clear_inventory_action_feedback()
 	GothicUIThemeScript.set_button_feedback(auto_sort_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "inventory.sort")
 	var result: Dictionary = PlayerState.sort_inventory_deterministic()
@@ -1558,6 +1691,12 @@ func _on_auto_sort_pressed() -> void:
 
 
 func _on_discard_pressed() -> void:
+	_original_main_callback_ledger["_on_discard_pressed"] = int(_original_main_callback_ledger.get("_on_discard_pressed",0)) + 1
+	_original_source_inventory_panel__on_discard_pressed()
+	_original_main_callback_ledger["_on_discard_pressed"] -= 1
+
+
+func _original_source_inventory_panel__on_discard_pressed() -> void:
 	if discard_button == null or discard_button.disabled or selected_inventory_indices.is_empty():
 		return
 	var indices: Array = selected_inventory_indices.keys()
@@ -1603,6 +1742,12 @@ func _clear_inventory_action_feedback() -> void:
 
 
 func _unequip_selected() -> void:
+	_original_main_callback_ledger["_unequip_selected"] = int(_original_main_callback_ledger.get("_unequip_selected",0)) + 1
+	_original_source_inventory_panel__unequip_selected()
+	_original_main_callback_ledger["_unequip_selected"] -= 1
+
+
+func _original_source_inventory_panel__unequip_selected() -> void:
 	if selected_equipment_slot.is_empty():
 		return
 	var target_slot := _first_empty_inventory_slot()
@@ -1704,6 +1849,13 @@ func _slot_name(slot: String) -> String:
 
 
 func _slot_is_empty(slot: String) -> bool:
+	_original_main_callback_ledger["_slot_is_empty"] = int(_original_main_callback_ledger.get("_slot_is_empty",0)) + 1
+	var original_result: Variant = _original_source_inventory_panel__slot_is_empty(slot)
+	_original_main_callback_ledger["_slot_is_empty"] -= 1
+	return original_result
+
+
+func _original_source_inventory_panel__slot_is_empty(slot: String) -> bool:
 	var value: Variant = PlayerState.equipment.get(slot, {})
 	return not value is Dictionary or value.is_empty()
 

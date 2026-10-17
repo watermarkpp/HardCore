@@ -1,0 +1,10 @@
+#!/usr/bin/env python
+Import("env")
+
+identity_source = "simulation_host_original_primitives.cpp"
+env.add_source_files(env.modules_sources, [source for source in Glob("*.cpp") if source.name != identity_source])
+identity_env = env.Clone()
+identity = str(env.get("hardcore_native_source_sha256", ""))
+if identity:
+    identity_env.Append(CPPDEFINES=[("HARDCORE_NATIVE_SOURCE_SHA256", identity)])
+identity_env.add_source_files(env.modules_sources, identity_source)

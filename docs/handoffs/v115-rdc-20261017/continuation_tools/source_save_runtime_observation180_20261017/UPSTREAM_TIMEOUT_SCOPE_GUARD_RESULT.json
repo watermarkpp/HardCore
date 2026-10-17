@@ -1,0 +1,152 @@
+{
+  "scope": "Actual runner guard AST and source parsing only; no Godot/save/World execution",
+  "status": "PASS",
+  "failed": 0,
+  "records": [
+    {
+      "name": "actual_parse_tools/run_multicore_v115_tests.ps1",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "name": "actual_parse_tools/run_godot_tests.ps1",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "name": "actual_parse_outputs/v115_multicore/source_save_runtime_180_20261017/runner_bridge.ps1",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "accepted": true,
+      "name": "wrapper_source_save180_exact",
+      "expected": true,
+      "passed": true,
+      "reason": ""
+    },
+    {
+      "accepted": true,
+      "name": "wrapper_world120_unchanged",
+      "expected": true,
+      "passed": true,
+      "reason": ""
+    },
+    {
+      "accepted": true,
+      "name": "wrapper_normal60_unchanged",
+      "expected": true,
+      "passed": true,
+      "reason": ""
+    },
+    {
+      "accepted": false,
+      "name": "wrapper_source_flag_other_scene_rejected",
+      "expected": false,
+      "passed": true,
+      "reason": "The approved 180s exception is restricted to one Source save/warehouse roundtrip stage."
+    },
+    {
+      "accepted": false,
+      "name": "wrapper_source_flag_two_scenes_rejected",
+      "expected": false,
+      "passed": true,
+      "reason": "The approved 180s exception is restricted to one Source save/warehouse roundtrip stage."
+    },
+    {
+      "accepted": false,
+      "name": "wrapper_source_wrong_base_timeout_rejected",
+      "expected": false,
+      "passed": true,
+      "reason": "The approved 180s exception is restricted to one Source save/warehouse roundtrip stage."
+    },
+    {
+      "accepted": false,
+      "name": "wrapper_both_exceptions_rejected",
+      "expected": false,
+      "passed": true,
+      "reason": "The approved 180s exception is restricted to one Source save/warehouse roundtrip stage."
+    },
+    {
+      "accepted": true,
+      "name": "runner_source_save180_exact",
+      "expected": true,
+      "passed": true,
+      "reason": ""
+    },
+    {
+      "accepted": true,
+      "name": "runner_world120_unchanged",
+      "expected": true,
+      "passed": true,
+      "reason": ""
+    },
+    {
+      "accepted": true,
+      "name": "runner_normal30_unchanged",
+      "expected": true,
+      "passed": true,
+      "reason": ""
+    },
+    {
+      "accepted": false,
+      "name": "runner_unapproved180_rejected",
+      "expected": false,
+      "passed": true,
+      "reason": "Only one explicitly approved Source save/warehouse roundtrip stage may use 180s."
+    },
+    {
+      "accepted": false,
+      "name": "runner_source_flag_wrong_scene_rejected",
+      "expected": false,
+      "passed": true,
+      "reason": "Only one explicitly approved Source save/warehouse roundtrip stage may use 180s."
+    },
+    {
+      "accepted": false,
+      "name": "runner_source_flag_two_scenes_rejected",
+      "expected": false,
+      "passed": true,
+      "reason": "Only one explicitly approved Source save/warehouse roundtrip stage may use 180s."
+    },
+    {
+      "accepted": false,
+      "name": "runner_source_flag_suite_rejected",
+      "expected": false,
+      "passed": true,
+      "reason": "Only one explicitly approved Source save/warehouse roundtrip stage may use 180s."
+    },
+    {
+      "accepted": false,
+      "name": "runner_source_flag_wrong_timeout_rejected",
+      "expected": false,
+      "passed": true,
+      "reason": "Only one explicitly approved Source save/warehouse roundtrip stage may use 180s."
+    },
+    {
+      "accepted": false,
+      "name": "runner_both_flags_rejected",
+      "expected": false,
+      "passed": true,
+      "reason": "Only one explicitly approved Source save/warehouse roundtrip stage may use 180s."
+    },
+    {
+      "accepted": false,
+      "name": "runner_other_extended_timeout_rejected",
+      "expected": false,
+      "passed": true,
+      "reason": "Only the explicit user-approved diagnostic live scenes may use a 90s window, using TestPaths."
+    }
+  ],
+  "checks": 20,
+  "inputs": [
+    {
+      "sha256": "64ef66c46f375549993b581109773c6e157c3d369339918cad75390f96893959",
+      "path": "tools/run_multicore_v115_tests.ps1"
+    },
+    {
+      "sha256": "c2353f58387772e612e8db73fdd689b07c3782f1a1c3492bfe8876bcc59f19f3",
+      "path": "tools/run_godot_tests.ps1"
+    }
+  ]
+}

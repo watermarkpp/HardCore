@@ -89,7 +89,17 @@ var _applied_layout_profiles: Dictionary = {}
 var _layout_apply_count := 0
 
 
+# Main callback depth only. No new gameplay/IO owner or timer.
+var _original_main_callback_ledger: Dictionary = {}
+
+
 func _ready() -> void:
+	_original_main_callback_ledger["_ready"] = int(_original_main_callback_ledger.get("_ready",0)) + 1
+	_original_source_shop_panel__ready()
+	_original_main_callback_ledger["_ready"] -= 1
+
+
+func _original_source_shop_panel__ready() -> void:
 	set_meta("calibration_retired_paths", [
 		"DetailPanel/SellOneButton",
 		"DetailPanel/SellQuantityRow/DecreaseQuantity/QuantityDecoration",
@@ -482,6 +492,13 @@ func _rebuild_goods_cards() -> void:
 
 
 func _collect_occupied_inventory_indices() -> Array[int]:
+	_original_main_callback_ledger["_collect_occupied_inventory_indices"] = int(_original_main_callback_ledger.get("_collect_occupied_inventory_indices",0)) + 1
+	var original_result: Variant = _original_source_shop_panel__collect_occupied_inventory_indices()
+	_original_main_callback_ledger["_collect_occupied_inventory_indices"] -= 1
+	return original_result
+
+
+func _original_source_shop_panel__collect_occupied_inventory_indices() -> Array[int]:
 	var occupied_indices: Array[int] = []
 	for inventory_index in range(PlayerState.inventory.size()):
 		var record: Variant = PlayerState.inventory[inventory_index]
@@ -511,6 +528,12 @@ func _build_sell_quote_key_sequence(occupied_indices: Array[int]) -> Array[Strin
 
 
 func _ensure_goods_card_capacity(required_count: int) -> void:
+	_original_main_callback_ledger["_ensure_goods_card_capacity"] = int(_original_main_callback_ledger.get("_ensure_goods_card_capacity",0)) + 1
+	_original_source_shop_panel__ensure_goods_card_capacity(required_count)
+	_original_main_callback_ledger["_ensure_goods_card_capacity"] -= 1
+
+
+func _original_source_shop_panel__ensure_goods_card_capacity(required_count: int) -> void:
 	while _goods_card_pool.size() < required_count:
 		var card := Button.new()
 		card.custom_minimum_size = CARD_SIZE
@@ -527,6 +550,12 @@ func _ensure_goods_card_capacity(required_count: int) -> void:
 
 
 func _set_active_sell_card_count(required_count: int) -> void:
+	_original_main_callback_ledger["_set_active_sell_card_count"] = int(_original_main_callback_ledger.get("_set_active_sell_card_count",0)) + 1
+	_original_source_shop_panel__set_active_sell_card_count(required_count)
+	_original_main_callback_ledger["_set_active_sell_card_count"] -= 1
+
+
+func _original_source_shop_panel__set_active_sell_card_count(required_count: int) -> void:
 	_ensure_goods_card_capacity(required_count)
 	for index in range(_goods_card_pool.size()):
 		var card := _goods_card_pool[index]
@@ -586,6 +615,14 @@ func _apply_sell_quote_to_card(card: Button, quote: Dictionary) -> void:
 func _rebind_sell_structure(
 	occupied_indices: Array[int], quote_keys: Array[String], structure_tokens: Array[String]
 ) -> void:
+	_original_main_callback_ledger["_rebind_sell_structure"] = int(_original_main_callback_ledger.get("_rebind_sell_structure",0)) + 1
+	_original_source_shop_panel__rebind_sell_structure(occupied_indices,quote_keys,structure_tokens)
+	_original_main_callback_ledger["_rebind_sell_structure"] -= 1
+
+
+func _original_source_shop_panel__rebind_sell_structure(
+	occupied_indices: Array[int], quote_keys: Array[String], structure_tokens: Array[String]
+) -> void:
 	if PlayerState.test_mode:
 		_sell_structure_bind_count += 1
 	_sell_structure_indices = occupied_indices.duplicate()
@@ -610,6 +647,12 @@ func _rebind_sell_structure(
 
 
 func _patch_sell_quotes_only() -> void:
+	_original_main_callback_ledger["_patch_sell_quotes_only"] = int(_original_main_callback_ledger.get("_patch_sell_quotes_only",0)) + 1
+	_original_source_shop_panel__patch_sell_quotes_only()
+	_original_main_callback_ledger["_patch_sell_quotes_only"] -= 1
+
+
+func _original_source_shop_panel__patch_sell_quotes_only() -> void:
 	if PlayerState.test_mode:
 		_sell_quote_patch_count += 1
 	for display_index in range(goods_buttons.size()):
@@ -621,6 +664,12 @@ func _patch_sell_quotes_only() -> void:
 
 
 func _clear_goods_cards() -> void:
+	_original_main_callback_ledger["_clear_goods_cards"] = int(_original_main_callback_ledger.get("_clear_goods_cards",0)) + 1
+	_original_source_shop_panel__clear_goods_cards()
+	_original_main_callback_ledger["_clear_goods_cards"] -= 1
+
+
+func _original_source_shop_panel__clear_goods_cards() -> void:
 	for card: Button in _goods_card_pool:
 		if card.visible:
 			card.hide()
@@ -630,6 +679,13 @@ func _clear_goods_cards() -> void:
 
 
 func _acquire_goods_cards(count: int) -> Array[Button]:
+	_original_main_callback_ledger["_acquire_goods_cards"] = int(_original_main_callback_ledger.get("_acquire_goods_cards",0)) + 1
+	var original_result: Variant = _original_source_shop_panel__acquire_goods_cards(count)
+	_original_main_callback_ledger["_acquire_goods_cards"] -= 1
+	return original_result
+
+
+func _original_source_shop_panel__acquire_goods_cards(count: int) -> Array[Button]:
 	_clear_goods_cards()
 	_ensure_goods_card_capacity(count)
 	var active: Array[Button] = []
@@ -652,6 +708,19 @@ func _on_goods_card_pressed(card: Button) -> void:
 
 
 func _build_card_contents(
+	card: Button,
+	display_name: String,
+	texture: Texture2D,
+	price_text := "",
+	show_price := true,
+	item: Dictionary = {},
+) -> void:
+	_original_main_callback_ledger["_build_card_contents"] = int(_original_main_callback_ledger.get("_build_card_contents",0)) + 1
+	_original_source_shop_panel__build_card_contents(card,display_name,texture,price_text,show_price,item)
+	_original_main_callback_ledger["_build_card_contents"] -= 1
+
+
+func _original_source_shop_panel__build_card_contents(
 	card: Button,
 	display_name: String,
 	texture: Texture2D,
@@ -868,6 +937,12 @@ func apply_sell_result(result: Dictionary) -> void:
 
 
 func _request_sell_quotes() -> void:
+	_original_main_callback_ledger["_request_sell_quotes"] = int(_original_main_callback_ledger.get("_request_sell_quotes",0)) + 1
+	_original_source_shop_panel__request_sell_quotes()
+	_original_main_callback_ledger["_request_sell_quotes"] -= 1
+
+
+func _original_source_shop_panel__request_sell_quotes() -> void:
 	var items: Array = []
 	var merchant_context := _active_merchant_context()
 	var merchant_id := str(merchant_context.get("merchant_id", ""))
@@ -1155,6 +1230,12 @@ func _on_visibility_changed() -> void:
 
 
 func _apply_inventory_change() -> void:
+	_original_main_callback_ledger["_apply_inventory_change"] = int(_original_main_callback_ledger.get("_apply_inventory_change",0)) + 1
+	_original_source_shop_panel__apply_inventory_change()
+	_original_main_callback_ledger["_apply_inventory_change"] -= 1
+
+
+func _original_source_shop_panel__apply_inventory_change() -> void:
 	_inventory_refresh_pending = false
 	_inventory_refresh_scheduled = false
 	if PlayerState.test_mode:
@@ -1215,11 +1296,23 @@ func _apply_layout_profile_once(profile_id: String) -> void:
 
 
 func _refresh_gold() -> void:
+	_original_main_callback_ledger["_refresh_gold"] = int(_original_main_callback_ledger.get("_refresh_gold",0)) + 1
+	_original_source_shop_panel__refresh_gold()
+	_original_main_callback_ledger["_refresh_gold"] -= 1
+
+
+func _original_source_shop_panel__refresh_gold() -> void:
 	if gold_label != null:
 		gold_label.text = "金币 %d" % PlayerState.gold
 
 
 func _refresh_repair_preview() -> void:
+	_original_main_callback_ledger["_refresh_repair_preview"] = int(_original_main_callback_ledger.get("_refresh_repair_preview",0)) + 1
+	_original_source_shop_panel__refresh_repair_preview()
+	_original_main_callback_ledger["_refresh_repair_preview"] -= 1
+
+
+func _original_source_shop_panel__refresh_repair_preview() -> void:
 	if not is_inside_tree() or not is_visible_in_tree() or _trade_mode != "buy":
 		_ui_l1_repair_dirty = true
 		return
@@ -1285,6 +1378,12 @@ func _sell_card_for_inventory_index(inventory_index: int) -> Button:
 
 
 func _repair_all() -> void:
+	_original_main_callback_ledger["_repair_all"] = int(_original_main_callback_ledger.get("_repair_all",0)) + 1
+	_original_source_shop_panel__repair_all()
+	_original_main_callback_ledger["_repair_all"] -= 1
+
+
+func _original_source_shop_panel__repair_all() -> void:
 	_clear_transaction_feedback()
 	GothicUIThemeScript.set_button_feedback(
 		repair_button,
@@ -1385,6 +1484,13 @@ func _active_merchant_context() -> Dictionary:
 
 
 func _inventory_record(index: int) -> Dictionary:
+	_original_main_callback_ledger["_inventory_record"] = int(_original_main_callback_ledger.get("_inventory_record",0)) + 1
+	var original_result: Variant = _original_source_shop_panel__inventory_record(index)
+	_original_main_callback_ledger["_inventory_record"] -= 1
+	return original_result
+
+
+func _original_source_shop_panel__inventory_record(index: int) -> Dictionary:
 	if index < 0 or index >= PlayerState.inventory.size():
 		return {}
 	var record: Variant = PlayerState.inventory[index]

@@ -1078,6 +1078,8 @@ func _monster_attack_frontier_key(
 
 
 func _ensure_live_enemy_audio_owner(context: Dictionary) -> bool:
+	if context.has("original_source_actor_identity"):
+		return _ensure_original_source_audio_owner(context)
 	var owner_key := str(context.get("audio_owner_key", context.get("owner_key", ""))).strip_edges()
 	var source_instance_id: Variant = context.get("source_instance_id", 0)
 	var source_life: Variant = context.get("source_life", -1)
@@ -1345,3 +1347,33 @@ func _on_event_finished(pool_index: int) -> void:
 	slot["contract_id"] = CONTRACT_ID
 	slot["pool_index"] = pool_index
 	event_finished.emit(slot)
+
+var _original_source_audio_projection: Callable
+var _original_source_audio_world: Dictionary
+func configure_original_source_owner_projection(projection: Callable, world: Dictionary) -> bool:
+	if OS.get_thread_caller_id()!=OS.get_main_thread_id() or _original_source_audio_projection.is_valid() or not projection.is_valid() or not world.has_all(["contract_id","world_runtime_id","world_epoch","runtime_map_id","profile_id"]): return false
+	_original_source_audio_projection=projection;_original_source_audio_world=world.duplicate(true)
+	return true
+func can_commit_actual_original_map_arrival(transaction: Dictionary, projection: Callable) -> bool:
+	return OS.get_thread_caller_id() == OS.get_main_thread_id() and _original_source_audio_projection == projection and projection.is_valid() and _original_source_audio_world == transaction.get("before_world") and preload("res://scripts/gameplay/world/world_original_map_arrival_contract.gd").accepts(transaction)
+func commit_actual_original_map_arrival(transaction: Dictionary, projection: Callable) -> bool:
+	if not can_commit_actual_original_map_arrival(transaction,projection): return false
+	_original_source_audio_world = transaction.after_world.duplicate(true)
+	# Accepted old command/reply identities and original owner frontiers are
+	# retained verbatim; ordinary retire_monster_audio_owner settles them.
+	return true
+func _ensure_original_source_audio_owner(context: Dictionary) -> bool:
+	if not _original_source_audio_projection.is_valid() or context.get("original_source_world_context")!=_original_source_audio_world: return false
+	var identity: Dictionary=context.get("original_source_actor_identity",{})
+	var actual: Variant=_original_source_audio_projection.call(identity)
+	if not actual is Dictionary or actual.get("actor_identity")!=identity or actual.get("world_context")!=_original_source_audio_world or actual.get("present")!=true or actual.get("inside_tree")!=true or actual.get("queued_for_deletion")!=false or actual.get("kind")!="enemy": return false
+	var id: Variant=context.get("source_instance_id")
+	var life: Variant=context.get("source_life")
+	var monster: Variant=context.get("monster_id")
+	if not id is int or id<=0 or not life is int or life<0 or actual.get("runtime_id")!=id or actual.get("life")!=life or actual.get("monster_id")!=monster: return false
+	var key: String=str(context.get("audio_owner_key",context.get("owner_key",""))).strip_edges()
+	if key!="monster:%d:%d" % [monster,id]: return false
+	var existing: Variant=_monster_audio_owners.get(key)
+	if existing is Dictionary: return existing.get("source_instance_id")==id and existing.get("source_life")==life
+	_monster_audio_owners[key]={"source_instance_id":id,"source_life":life,"frontier_keys":[],"exact_keys":[]}
+	return true

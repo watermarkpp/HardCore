@@ -1,6 +1,6 @@
 extends RefCounted
 
-## Prepares private files only. The main thread validates the normalized documents,
+## Prepares private files only. The domain owner validates the normalized documents,
 ## checks current state, and alone promotes files / acknowledges the transfer.
 var task_id := -1
 var paths: Dictionary = {}

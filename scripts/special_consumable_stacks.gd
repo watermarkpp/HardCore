@@ -1,8 +1,9 @@
 extends RefCounted
+const ProfileContent := preload("res://scripts/gameplay/profile/legacy_profile_content.gd")
 ## Lossless legacy migration. Existing items never change slots or cross a page.
 const EFFECTS := ["temporary_stat_buff", "blessing_oil", "repair_oil", "war_god_oil"]
 
-static func split_available(records: Array, capacity: int, page_size: int) -> Array:
+static func split_available(records: Array, capacity: int, page_size: int, content: ProfileContent.ContentPort = null) -> Array:
 	var result := records
 	var copied := false
 	for page_start in range(0, capacity, page_size):
@@ -16,7 +17,7 @@ static func split_available(records: Array, capacity: int, page_size: int) -> Ar
 				var record: Dictionary = records[index]
 				if record.has("instance_id"):
 					continue
-				var item := GameData.get_item_record(record)
+				var item := ProfileContent.resolve(content).get_item_record(record)
 				if str(item.get("useEffect", "")) in EFFECTS and not bool(item.get("stackable", true)):
 					candidates.append(index)
 		var cursor := 0

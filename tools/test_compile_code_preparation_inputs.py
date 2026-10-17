@@ -33,6 +33,29 @@ class ProducerCases(unittest.TestCase):
         result = self.inspect(source)
         self.assertTrue(any(error in refusal for refusal in result["refusals"]), result)
 
+    def test_only_proven_zero_argument_native_mutex_static_initializer(self):
+        source = "extends RefCounted\nstatic var _mutex := Mutex.new()\n"
+        denied = MODULE.extract(source, OWNER, {}, NATIVE | {"Mutex"}, {})
+        self.assertTrue(any("unsupported_member_initializer" in item for item in denied["refusals"]))
+        granted = MODULE.extract(source, OWNER, {}, NATIVE | {"Mutex"}, {}, approved_static_constructors={"Mutex.new"})
+        self.assertEqual(granted["refusals"], [])
+        for expression in ["Mutex.new(1)", "Mutex.new().lock()", "Mutex.create()", "Object.new()"]:
+            result = MODULE.extract("extends RefCounted\nstatic var _mutex := " + expression + "\n", OWNER, {}, NATIVE | {"Mutex", "Object"}, {}, approved_static_constructors={"Mutex.new"})
+            self.assertTrue(any("unsupported_member_initializer" in item for item in result["refusals"]), expression)
+
+    def test_static_constructor_evidence_is_exact_and_engine_bound(self):
+        env = {"schema_version":1,"engine":{"binary_sha256":"TEST_ONLY"},"run_id":"TEST_ONLY","invocation_id":"TEST_ONLY","source_content_sha256":"TEST_ONLY","object_classes":["RefCounted","Mutex"],"variant_type_names":[],"singletons":[]}
+        self.assertEqual(MODULE.native_static_constructors(env,"TEST_ONLY"),set())
+        proof = {"contract_id":"hc.code_preparation.native_static_mutex.probe.v1","class_name":"Mutex","operation":"new","argument_count":0,"context":"static_member_initializer","source_sha256":MODULE.MUTEX_STATIC_PROBE_SHA256,"native_class_observed":"Mutex","native_scriptless":True,"reference_counted":True,"lock_roundtrip":True}
+        env["native_static_initializers"] = {"Mutex.new":proof}
+        self.assertEqual(MODULE.native_static_constructors(env,"TEST_ONLY"),{"Mutex.new"})
+        with self.assertRaises(MODULE.Refusal): MODULE.native_static_constructors(env,"OTHER_TEST_ONLY")
+        for key,value in [("argument_count",1),("argument_count",0.0),("argument_count",False),("native_scriptless",1),("native_scriptless",False),("lock_roundtrip",False),("source_sha256","0"*64),("native_class_observed","Object")]:
+            invalid = json.loads(json.dumps(env));invalid["native_static_initializers"]["Mutex.new"][key] = value
+            with self.assertRaises(MODULE.Refusal,msg=key): MODULE.native_static_constructors(invalid,"TEST_ONLY")
+        invalid = json.loads(json.dumps(env));invalid["native_static_initializers"]["Object.new"] = proof
+        with self.assertRaises(MODULE.Refusal): MODULE.native_static_constructors(invalid,"TEST_ONLY")
+
     def test_literal_preload(self):
         self.assertEqual(self.asset_paths(f'extends RefCounted\nconst Asset = preload("{ASSET}")\n'), [ASSET])
 

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/world_main_service_20261014.gd" id="1"]
+
+[node name="WorldMainServiceFixture" type="Node"]
+script = ExtResource("1")

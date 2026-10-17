@@ -1,17 +1,30 @@
 extends RefCounted
 
+const CatalogGate := preload("res://scripts/gameplay/content/catalog_publication_gate.gd")
+
 const PATH := "res://assets/data/equipment_granted_skills.source.json"
 const CONTRACT_ID := "equipment.granted_skills.source.v1"
 
-static var _records_by_skill: Dictionary = {}
-static var _records_by_item: Dictionary = {}
-static var _records_by_display_name: Dictionary = {}
-static var _loaded := false
-static var last_errors: Array[String] = []
+static var _records_by_skill: Dictionary = {}:
+	set(value):
+		if CatalogGate.write_allowed(): _records_by_skill = value
+static var _records_by_item: Dictionary = {}:
+	set(value):
+		if CatalogGate.write_allowed(): _records_by_item = value
+static var _records_by_display_name: Dictionary = {}:
+	set(value):
+		if CatalogGate.write_allowed(): _records_by_display_name = value
+static var _loaded := false:
+	set(value):
+		if CatalogGate.write_allowed(): _loaded = value
+static var last_errors: Array[String] = []:
+	set(value):
+		if CatalogGate.write_allowed(): last_errors = value
 
 static func ensure_loaded() -> bool:
 	if _loaded:
 		return last_errors.is_empty()
+	if not CatalogGate.write_allowed(): return false
 	_loaded = true
 	var file := FileAccess.open(PATH, FileAccess.READ)
 	var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null

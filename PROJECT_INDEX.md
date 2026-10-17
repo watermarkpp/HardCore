@@ -1,3 +1,5 @@
+> Latest v115 checkpoint 2026-10-14T17:35:26.185031+08:00: [CURRENT_IMPL_20261014_1735.md](docs/review/multicore_v114_20261013/CURRENT_IMPL_20261014_1735.md). Final Pro architecture read; actual native deferred/cold transfer fixtures PASS; full-world/batch/save/APK/device gates remain open. Existing history retained.
+
 # HardCore Project Index
 
 2026-10-09 v108手机反馈修复：冷怪目标获取从optional/300ms队列移到必要事件，同movement30/30、火墙正伤害30/30；真实异步死亡成功回执补PERSISTING→SETTLING，零掉落卡死闭合；掉落小quantum在原wall预算内推进，32死亡53工作帧完成/原240帧期限/RNG及上限保持；菜单层内退出失败反馈及Footer互斥、启动无有效配置默认音量修复。必要原生专项PASS和历史FAIL逐项记录在 docs/review/v108_runtime_bug_repair_20261009/CURRENT_RESULT.md。原HEAD及index保持，已有全部升级内容保留；远端咨询分支codex/v108-runtime-bug-review-20261009。本轮没有新APK、没有修复后手机验收（DEVICE TEST: NOT_RUN），不能用原108封装PASS覆盖用户反馈。用户指定项目助手工作线程已派发，本轮首次返回模型限额，未获得外部分析。

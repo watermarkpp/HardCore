@@ -195,13 +195,19 @@ func _write_failure_can_resume() -> void:
 	put(root.path_join("character_profiles.json"), {"version":1, "profiles":[{"id":"A"}]})
 	var original_hash := FileAccess.get_sha256(path)
 	var state := owner(root)
-	# An owned directory occupying the writer's temp file makes actual I/O fail.
-	check(DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(path + ".tmp")) == OK, "real write fault at profile promotion")
+	# Requests use private temporary files. Occupy the actual backup rotation
+	# destination so the formal worker encounters a real filesystem failure.
+	var fault_path := path + ".bak"
+	check(DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(fault_path)) == OK, "real write fault at profile promotion")
 	check(not state.finish_startup_save_upgrade(), "actual storage failure blocks admission")
+	check(state.startup_save_upgrade_result.get("reason") == "world_clock_import_profile_failed"
+		and state.startup_save_upgrade_result.get("write_failure_reason") == "primary_rotation_failed", "actual writer reports failed primary rotation: " + str(state.startup_save_upgrade_result))
+	check(FileAccess.get_sha256(path) == original_hash
+		and not FileAccess.file_exists(root.path_join("save_upgrades/framework_identity_v1/completed.json")), "failed rotation preserves primary bytes and closes completion")
 	var original := root.path_join("save_upgrades/framework_identity_v1/original/characters/A.json")
 	check(FileAccess.get_sha256(original) == original_hash, "storage failure retains immutable old profile")
 	check(not state.select_character("A"), "storage failure keeps gate closed")
-	check(DirAccess.remove_absolute(ProjectSettings.globalize_path(path + ".tmp")) == OK, "remove precise owned fault directory")
+	check(DirAccess.remove_absolute(ProjectSettings.globalize_path(fault_path)) == OK, "remove precise owned fault directory")
 	check(state.finish_startup_save_upgrade(), "retry resumes original upgrade after storage restored: " + str(state.startup_save_upgrade_result))
 	check(FileAccess.get_sha256(original) == original_hash, "retry never replaces original archive")
 	state.queue_free()

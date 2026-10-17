@@ -99,7 +99,17 @@ var _last_bank_transfer_request: Dictionary = {}
 var _last_bank_transfer_result: Dictionary = {}
 
 
+# Main callback depth only. No new gameplay/IO owner or timer.
+var _original_main_callback_ledger: Dictionary = {}
+
+
 func _ready() -> void:
+	_original_main_callback_ledger["_ready"] = int(_original_main_callback_ledger.get("_ready",0)) + 1
+	_original_source_warehouse_panel__ready()
+	_original_main_callback_ledger["_ready"] -= 1
+
+
+func _original_source_warehouse_panel__ready() -> void:
 	set_meta("calibration_retired_paths", [
 		# The docked presenter owns current title geometry/text. These old
 		# floating-presenter paths must not revive a second title or body.
@@ -403,6 +413,12 @@ func _on_visibility_changed() -> void:
 
 
 func refresh() -> void:
+	_original_main_callback_ledger["refresh"] = int(_original_main_callback_ledger.get("refresh",0)) + 1
+	_original_source_warehouse_panel_refresh()
+	_original_main_callback_ledger["refresh"] -= 1
+
+
+func _original_source_warehouse_panel_refresh() -> void:
 	if bag_grid == null or stash_grid == null:
 		return
 	_refresh_pending = false
@@ -512,6 +528,12 @@ func _initialize_grid_cells(target_count := WAREHOUSE_PAGE_CAPACITY) -> void:
 
 
 func _continue_grid_cell_initialization() -> void:
+	_original_main_callback_ledger["_continue_grid_cell_initialization"] = int(_original_main_callback_ledger.get("_continue_grid_cell_initialization",0)) + 1
+	await _original_source_warehouse_panel__continue_grid_cell_initialization()
+	_original_main_callback_ledger["_continue_grid_cell_initialization"] -= 1
+
+
+func _original_source_warehouse_panel__continue_grid_cell_initialization() -> void:
 	if _grid_cells_ready or _grid_cell_initialization_running:
 		return
 	_grid_cell_initialization_running = true
@@ -550,6 +572,12 @@ func _populate_grid_cells_from(first_index: int) -> void:
 
 
 func wait_until_runtime_ready() -> void:
+	_original_main_callback_ledger["wait_until_runtime_ready"] = int(_original_main_callback_ledger.get("wait_until_runtime_ready",0)) + 1
+	await _original_source_warehouse_panel_wait_until_runtime_ready()
+	_original_main_callback_ledger["wait_until_runtime_ready"] -= 1
+
+
+func _original_source_warehouse_panel_wait_until_runtime_ready() -> void:
 	if not _grid_cells_ready:
 		_continue_grid_cell_initialization()
 	while is_inside_tree() and not _grid_cells_ready:
@@ -745,10 +773,24 @@ func _refresh_transfer_action_states() -> void:
 
 
 func _bank_transfer_amount() -> int:
+	_original_main_callback_ledger["_bank_transfer_amount"] = int(_original_main_callback_ledger.get("_bank_transfer_amount",0)) + 1
+	var original_result: Variant = _original_source_warehouse_panel__bank_transfer_amount()
+	_original_main_callback_ledger["_bank_transfer_amount"] -= 1
+	return original_result
+
+
+func _original_source_warehouse_panel__bank_transfer_amount() -> int:
 	return int(PlayerState.BANK_TRANSFER_AMOUNT)
 
 
 func _bank_boundary_message(deposit: bool, player_gold: int, shared_gold: int) -> String:
+	_original_main_callback_ledger["_bank_boundary_message"] = int(_original_main_callback_ledger.get("_bank_boundary_message",0)) + 1
+	var original_result: Variant = _original_source_warehouse_panel__bank_boundary_message(deposit,player_gold,shared_gold)
+	_original_main_callback_ledger["_bank_boundary_message"] -= 1
+	return original_result
+
+
+func _original_source_warehouse_panel__bank_boundary_message(deposit: bool, player_gold: int, shared_gold: int) -> String:
 	var amount := _bank_transfer_amount()
 	if deposit:
 		if player_gold < amount:
@@ -764,6 +806,12 @@ func _bank_boundary_message(deposit: bool, player_gold: int, shared_gold: int) -
 
 
 func _refresh_bank_state() -> void:
+	_original_main_callback_ledger["_refresh_bank_state"] = int(_original_main_callback_ledger.get("_refresh_bank_state",0)) + 1
+	_original_source_warehouse_panel__refresh_bank_state()
+	_original_main_callback_ledger["_refresh_bank_state"] -= 1
+
+
+func _original_source_warehouse_panel__refresh_bank_state() -> void:
 	if not is_inside_tree() or not is_visible_in_tree():
 		_ui_l1_bank_dirty = true
 		_ui_l1_hidden_bank_skips += 1
@@ -825,6 +873,12 @@ func _bank_result_message(deposit: bool, result: Dictionary) -> String:
 
 
 func _on_bank_transfer_pressed(deposit: bool) -> void:
+	_original_main_callback_ledger["_on_bank_transfer_pressed"] = int(_original_main_callback_ledger.get("_on_bank_transfer_pressed",0)) + 1
+	_original_source_warehouse_panel__on_bank_transfer_pressed(deposit)
+	_original_main_callback_ledger["_on_bank_transfer_pressed"] -= 1
+
+
+func _original_source_warehouse_panel__on_bank_transfer_pressed(deposit: bool) -> void:
 	if _bank_transfer_pending or _transfer_pending:
 		return
 	var player_gold := int(PlayerState.gold)
@@ -846,6 +900,12 @@ func _on_bank_transfer_pressed(deposit: bool) -> void:
 
 
 func _submit_bank_transfer(deposit: bool, transaction_id: String, transaction_sequence: int) -> void:
+	_original_main_callback_ledger["_submit_bank_transfer"] = int(_original_main_callback_ledger.get("_submit_bank_transfer",0)) + 1
+	await _original_source_warehouse_panel__submit_bank_transfer(deposit,transaction_id,transaction_sequence)
+	_original_main_callback_ledger["_submit_bank_transfer"] -= 1
+
+
+func _original_source_warehouse_panel__submit_bank_transfer(deposit: bool, transaction_id: String, transaction_sequence: int) -> void:
 	if _bank_transfer_pending:
 		return
 	_bank_transfer_pending = true
@@ -958,6 +1018,12 @@ func _fill_compatibility_list(list: ItemList, records: Array, selected_indices: 
 
 
 func _deposit() -> void:
+	_original_main_callback_ledger["_deposit"] = int(_original_main_callback_ledger.get("_deposit",0)) + 1
+	await _original_source_warehouse_panel__deposit()
+	_original_main_callback_ledger["_deposit"] -= 1
+
+
+func _original_source_warehouse_panel__deposit() -> void:
 	if _transfer_pending: return
 	_sanitize_transfer_selections()
 	if _active_selection_side != "bag" or selected_bag_indices.is_empty():
@@ -1001,6 +1067,12 @@ func _deposit() -> void:
 
 
 func _withdraw() -> void:
+	_original_main_callback_ledger["_withdraw"] = int(_original_main_callback_ledger.get("_withdraw",0)) + 1
+	await _original_source_warehouse_panel__withdraw()
+	_original_main_callback_ledger["_withdraw"] -= 1
+
+
+func _original_source_warehouse_panel__withdraw() -> void:
 	if _transfer_pending: return
 	_sanitize_transfer_selections()
 	if _active_selection_side != "stash" or selected_stash_indices.is_empty():
@@ -1079,6 +1151,12 @@ func _selected_refs_for_indices(side: String, records: Array, indices: Array[int
 
 
 func _selected_transfer_refs_after_deposit(moving_refs: Array[Dictionary], result: Dictionary) -> void:
+	_original_main_callback_ledger["_selected_transfer_refs_after_deposit"] = int(_original_main_callback_ledger.get("_selected_transfer_refs_after_deposit",0)) + 1
+	_original_source_warehouse_panel__selected_transfer_refs_after_deposit(moving_refs,result)
+	_original_main_callback_ledger["_selected_transfer_refs_after_deposit"] -= 1
+
+
+func _original_source_warehouse_panel__selected_transfer_refs_after_deposit(moving_refs: Array[Dictionary], result: Dictionary) -> void:
 	var ids := _selected_instance_ids(moving_refs)
 	if not bool(result.get("success", false)):
 		return
@@ -1108,6 +1186,12 @@ func _selected_transfer_refs_after_deposit(moving_refs: Array[Dictionary], resul
 
 
 func _selected_transfer_refs_after_withdraw(moving_refs: Array[Dictionary], result: Dictionary) -> void:
+	_original_main_callback_ledger["_selected_transfer_refs_after_withdraw"] = int(_original_main_callback_ledger.get("_selected_transfer_refs_after_withdraw",0)) + 1
+	_original_source_warehouse_panel__selected_transfer_refs_after_withdraw(moving_refs,result)
+	_original_main_callback_ledger["_selected_transfer_refs_after_withdraw"] -= 1
+
+
+func _original_source_warehouse_panel__selected_transfer_refs_after_withdraw(moving_refs: Array[Dictionary], result: Dictionary) -> void:
 	var ids := _selected_instance_ids(moving_refs)
 	if not bool(result.get("success", false)):
 		return
@@ -1219,6 +1303,13 @@ func apply_sort_result(result: Dictionary) -> void:
 
 
 func _warehouse_record(slot_index: int) -> Dictionary:
+	_original_main_callback_ledger["_warehouse_record"] = int(_original_main_callback_ledger.get("_warehouse_record",0)) + 1
+	var original_result: Variant = _original_source_warehouse_panel__warehouse_record(slot_index)
+	_original_main_callback_ledger["_warehouse_record"] -= 1
+	return original_result
+
+
+func _original_source_warehouse_panel__warehouse_record(slot_index: int) -> Dictionary:
 	if not _warehouse_slot_has_item(slot_index):
 		return {}
 	var value: Variant = PlayerState.warehouse_inventory[slot_index]
@@ -1226,6 +1317,13 @@ func _warehouse_record(slot_index: int) -> Dictionary:
 
 
 func _bag_record(slot_index: int) -> Dictionary:
+	_original_main_callback_ledger["_bag_record"] = int(_original_main_callback_ledger.get("_bag_record",0)) + 1
+	var original_result: Variant = _original_source_warehouse_panel__bag_record(slot_index)
+	_original_main_callback_ledger["_bag_record"] -= 1
+	return original_result
+
+
+func _original_source_warehouse_panel__bag_record(slot_index: int) -> Dictionary:
 	if slot_index < 0 or slot_index >= PlayerState.inventory.size():
 		return {}
 	var value: Variant = PlayerState.inventory[slot_index]
@@ -1253,6 +1351,13 @@ func _same_selection_ref(left: Dictionary, right: Dictionary) -> bool:
 
 
 func _find_ref_index(selection_ref: Dictionary) -> int:
+	_original_main_callback_ledger["_find_ref_index"] = int(_original_main_callback_ledger.get("_find_ref_index",0)) + 1
+	var original_result: Variant = _original_source_warehouse_panel__find_ref_index(selection_ref)
+	_original_main_callback_ledger["_find_ref_index"] -= 1
+	return original_result
+
+
+func _original_source_warehouse_panel__find_ref_index(selection_ref: Dictionary) -> int:
 	var side := str(selection_ref.get("container", ""))
 	var records: Array = PlayerState.inventory if side == "bag" else PlayerState.warehouse_inventory
 	var instance_id := str(selection_ref.get("instance_id", ""))
@@ -1313,6 +1418,13 @@ func _reconcile_semantic_selections() -> void:
 
 
 func _warehouse_slot_has_item(slot_index: int) -> bool:
+	_original_main_callback_ledger["_warehouse_slot_has_item"] = int(_original_main_callback_ledger.get("_warehouse_slot_has_item",0)) + 1
+	var original_result: Variant = _original_source_warehouse_panel__warehouse_slot_has_item(slot_index)
+	_original_main_callback_ledger["_warehouse_slot_has_item"] -= 1
+	return original_result
+
+
+func _original_source_warehouse_panel__warehouse_slot_has_item(slot_index: int) -> bool:
 	if slot_index < 0 or slot_index >= PlayerState.warehouse_inventory.size():
 		return false
 	var value: Variant = PlayerState.warehouse_inventory[slot_index]
@@ -1322,6 +1434,13 @@ func _warehouse_slot_has_item(slot_index: int) -> bool:
 
 
 func _warehouse_occupied_count() -> int:
+	_original_main_callback_ledger["_warehouse_occupied_count"] = int(_original_main_callback_ledger.get("_warehouse_occupied_count",0)) + 1
+	var original_result: Variant = _original_source_warehouse_panel__warehouse_occupied_count()
+	_original_main_callback_ledger["_warehouse_occupied_count"] -= 1
+	return original_result
+
+
+func _original_source_warehouse_panel__warehouse_occupied_count() -> int:
 	var count := 0
 	for slot_index in range(PlayerState.warehouse_inventory.size()):
 		if _warehouse_slot_has_item(slot_index):
@@ -1347,11 +1466,23 @@ func _free_slots_on_current_page(limit: int = WAREHOUSE_PAGE_CAPACITY) -> Array[
 
 
 func _ensure_warehouse_slot(slot_index: int) -> void:
+	_original_main_callback_ledger["_ensure_warehouse_slot"] = int(_original_main_callback_ledger.get("_ensure_warehouse_slot",0)) + 1
+	_original_source_warehouse_panel__ensure_warehouse_slot(slot_index)
+	_original_main_callback_ledger["_ensure_warehouse_slot"] -= 1
+
+
+func _original_source_warehouse_panel__ensure_warehouse_slot(slot_index: int) -> void:
 	while PlayerState.warehouse_inventory.size() <= slot_index:
 		PlayerState.warehouse_inventory.append({})
 
 
 func _trim_empty_warehouse_tail() -> void:
+	_original_main_callback_ledger["_trim_empty_warehouse_tail"] = int(_original_main_callback_ledger.get("_trim_empty_warehouse_tail",0)) + 1
+	_original_source_warehouse_panel__trim_empty_warehouse_tail()
+	_original_main_callback_ledger["_trim_empty_warehouse_tail"] -= 1
+
+
+func _original_source_warehouse_panel__trim_empty_warehouse_tail() -> void:
 	while (
 		not PlayerState.warehouse_inventory.is_empty()
 		and not _warehouse_slot_has_item(PlayerState.warehouse_inventory.size() - 1)

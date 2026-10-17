@@ -17,7 +17,7 @@ static func load_layout() -> Dictionary:
 	return parsed if parsed is Dictionary else {}
 
 
-static func build(parent: Node2D, home: Vector2) -> Dictionary:
+static func build(parent: Node2D, home: Vector2, physical_collisions: bool = true) -> Dictionary:
 	var layout := load_layout()
 	var nodes: Array[Node] = []
 	var collisions: Array[Dictionary] = []
@@ -40,9 +40,12 @@ static func build(parent: Node2D, home: Vector2) -> Dictionary:
 			)
 		var collision: Variant = record.get("collision", {})
 		if collision is Dictionary and not collision.is_empty():
-			var body := _collision_body(position, collision)
-			parent.add_child(body)
-			nodes.append(body)
+			# The same immutable layout entry remains available to the Source
+			# collision owner even when Main creates only physical display Nodes.
+			if physical_collisions:
+				var body := _collision_body(position, collision)
+				parent.add_child(body)
+				nodes.append(body)
 			collisions.append({"position": position, "definition": collision.duplicate(true)})
 	for record: Variant in layout.get("lights", []):
 		if record is Dictionary:

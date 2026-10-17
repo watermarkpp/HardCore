@@ -1,0 +1,78 @@
+{
+  "test_name": "code_preparation_native_symbol_probe_test",
+  "test_path": "tests/framework/code_preparation_native_symbol_probe_test.tscn",
+  "wrapper_process_id": 21204,
+  "wrapper_started_utc": "2026-10-17T08:43:41.9627927Z",
+  "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\.godot\\runtime_appdata\\multicore_v115\\runner_daf70158-e120-463d-a65e-b824fef3a3f5",
+  "fixed_fps": 0,
+  "pass_marker_found": true,
+  "process_exited": true,
+  "wrapper_exit_code": 0,
+  "child_process_exit_state": "exited",
+  "execution_deadline_utc": "2026-10-17T08:44:11.9629177Z",
+  "native_exit_observed_utc": "2026-10-17T08:43:51.1286512Z",
+  "effective_exit_code": 0,
+  "timeout": false,
+  "stdout_failure_count": 0,
+  "stderr_failure_count": 0,
+  "engine_log_failure_count": 0,
+  "cleanup_warning_evidence": {
+    "status": "PASS",
+    "allowlisted_errors": {
+      "string_formatting": {
+        "count": 0,
+        "lines": []
+      },
+      "resources_in_use": {
+        "count": 0,
+        "lines": []
+      },
+      "rid_leak": {
+        "count": 0,
+        "lines": []
+      },
+      "null_parameter": {
+        "count": 0,
+        "lines": []
+      }
+    },
+    "unknown_error_lines": [],
+    "unknown_error_count": 0,
+    "objectdb_leak_warning_lines": [],
+    "objectdb_leak_warning_count": 0,
+    "functional_marker_observed": true,
+    "formal_evidence_status": "MISSING",
+    "formal_evidence_reason": "upstream_native_and_full_receipt_validation_required",
+    "receipt_validation_reasons": [],
+    "candidate_receipt_correlation": true,
+    "upstream_result": "NOT_RUN",
+    "raw_log_paths": [
+      "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_map_reply_observation_cold_capture_20261017\\logs\\code_preparation_native_symbol_probe_test.stdout.log",
+      "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_map_reply_observation_cold_capture_20261017\\logs\\code_preparation_native_symbol_probe_test.stderr.log",
+      "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_map_reply_observation_cold_capture_20261017\\logs\\code_preparation_native_symbol_probe_test.godot.log"
+    ],
+    "receipt_path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\test_logs\\framework\\code_preparation_native_symbol_probe_test.result.json",
+    "expected_scene_id": "code_preparation_native_symbol_probe_test",
+    "expected_invocation_id": "daf70158-e120-463d-a65e-b824fef3a3f5"
+  },
+  "framework_run_id": "118f0ad9-1eed-4818-8068-b0b157f9b6b1",
+  "framework_receipt_valid": true,
+  "source_content_sha256": "e2f403e5c062b0494e950a3c8347b288b1d77655721a526594c3b3c2c84ee8a5",
+  "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+  "engine_fingerprints": [
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_map_reply_observation_20261017_build\\Godot_v115-stable_win64_console.exe",
+      "sha256": "1b69c0d26f54df88301791e5f3dbd43f7e20aad30a727addfff3287ea9d11c91",
+      "bytes": 298496
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_map_reply_observation_20261017_build\\Godot_v115-stable_win64.exe",
+      "sha256": "7f54a5090cfde94a7d2fcf37c22c14ecd23e00eefcc0bf5e23d1c0326bc7b8de",
+      "bytes": 175887872
+    }
+  ],
+  "formal_evidence_status": "PASS",
+  "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+  "result": "PASS",
+  "reason": ""
+}

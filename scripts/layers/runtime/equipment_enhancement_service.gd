@@ -1,5 +1,9 @@
 class_name EquipmentEnhancementService
 extends RefCounted
+const ProfileRuleSet := preload("res://scripts/gameplay/profile/profile_rule_set.gd")
+var _rules: ProfileRuleSet
+const ProfileContent := preload("res://scripts/gameplay/profile/legacy_profile_content.gd")
+var _content_port: ProfileContent.ContentPort
 
 const ItemCategories := preload("res://scripts/identity/item_category_identity.gd")
 
@@ -7,7 +11,9 @@ const Rules := preload("res://scripts/layers/rules/equipment_enhancement_rules.g
 const Grade := preload("res://scripts/layers/rules/equipment_enhancement_grade.gd")
 const BlackIron := preload("res://scripts/layers/rules/equipment_enhancement_black_iron.gd")
 
-var _player
+var _player_ref: WeakRef
+var _player: Object:
+	get: return _player_ref.get_ref()
 var _rng := RandomNumberGenerator.new()
 var _session_id := ""
 var _serial := 0
@@ -16,8 +22,19 @@ var _consumed: Dictionary = {}
 var _enhancement_transaction_in_progress := false
 
 
-func _init(player: Node) -> void:
-	_player = player
+func _init(player: Object, content: ProfileContent.ContentPort = null, owner_state: Dictionary = {}) -> void:
+	_player_ref = weakref(player)
+	_content_port = ProfileContent.resolve(content)
+	_rules = _content_port.rules
+	if not owner_state.is_empty():
+		assert(OS.get_thread_caller_id()!=OS.get_main_thread_id(),"loaded helper handoff is S-owned")
+		_rng = owner_state.rng
+		_session_id = owner_state._session_id
+		_serial = owner_state._serial
+		_issued = owner_state._issued
+		_consumed = owner_state._consumed
+		_enhancement_transaction_in_progress = false # Handoff admission already proved the original helper idle.
+		return
 	_rng.randomize()
 	_session_id = "%d:%d" % [Time.get_ticks_usec(), _rng.randi()]
 
@@ -45,16 +62,16 @@ func quote_forge_tray() -> Dictionary:
 		var stack: Dictionary = _player.forge_tray[index]
 		if stack.is_empty():
 			continue
-		var item := GameData.get_item_record(stack)
+		var item := _content_port.get_item_record(stack)
 		if str(item.get("kind", "")) == "equipment" and ItemCategories.category_for_record(item) in ["hc.item_category.weapon", "hc.item_category.armor", "hc.item_category.helmet"]:
 			if target >= 0:
 				return _failure("只能放入一件待锻造装备。")
 			target = index
-		elif BlackIron.purity_for(stack) >= 0:
+		elif _rules.black_iron.purity_for(stack) >= 0:
 			if iron >= 0:
 				return _failure("只需放入一块黑铁矿。")
 			iron = index
-		elif Grade.can_use_as_accessory_material(int(item.get("itemId", -1))):
+		elif _rules.enhancement_grade.can_use_as_accessory_material(int(item.get("itemId", -1))):
 			accessories.append(index)
 		else:
 			return _failure("%s不可以作为锻造材料" % str(item.get("name", stack.get("name", "该物品"))))
@@ -100,7 +117,7 @@ func commit_forge(quote: Dictionary, save_in_background := false) -> Dictionary:
 	var next_inventory := collection_before.duplicate(true)
 	var target_index := int(quote.target_index)
 	var target: Dictionary = (next_inventory[target_index] as Dictionary).duplicate(true)
-	var catalog := GameData.get_item_record(target)
+	var catalog := _content_port.get_item_record(target)
 	var roll := _rng.randi_range(0, 9999)
 	var forge_succeeded := roll < int(quote.final_success_bps)
 	var history: Array = []
@@ -124,7 +141,7 @@ func commit_forge(quote: Dictionary, save_in_background := false) -> Dictionary:
 		"contract_id": Rules.CONTRACT_ID,
 		"forge": {"stage": history.size(), "modifiers": modifiers, "history": history},
 	}
-	if not Rules.validate_enhancement(target.enhancement, ItemCategories.category_for_record(catalog)) or (target.has("drop_instance_contract_id") and not GameData.validate_item_drop_instance(target)):
+	if not _rules.enhancement.validate_enhancement(target.enhancement, ItemCategories.category_for_record(catalog)) or (target.has("drop_instance_contract_id") and not _content_port.validate_item_drop_instance(target)):
 		_enhancement_transaction_in_progress = false
 		return _failure("装备锻造数据校验失败，物品未改变。")
 	next_inventory[target_index] = target
@@ -182,18 +199,18 @@ func _build_quote(target_index: int, iron_index: int, accessory_a_index: int, ac
 		if int(value.get("count", 1)) != 1:
 			return _failure("每个工作格只需放入一件物品。")
 		records.append(value)
-	var target_item := GameData.get_item_record(records[0])
+	var target_item := _content_port.get_item_record(records[0])
 	var target_id := int(target_item.get("itemId", -1))
 	var category := ItemCategories.category_for_record(target_item)
-	var stage_before := Rules.forge_stage(records[0])
-	var target_grade := Grade.grade_for_id(target_id)
+	var stage_before := _rules.enhancement.forge_stage(records[0])
+	var target_grade := _rules.enhancement_grade.grade_for_id(target_id)
 	if str(target_item.get("kind", "")) != "equipment" or category not in ["hc.item_category.weapon", "hc.item_category.armor", "hc.item_category.helmet"] or target_grade < 0 or stage_before < 0:
 		return _failure("只能锻造武器、衣服或头盔。")
-	if records[0].has("enhancement") and not Rules.validate_enhancement(records[0].enhancement, category):
+	if records[0].has("enhancement") and not _rules.enhancement.validate_enhancement(records[0].enhancement, category):
 		return _failure("装备锻造数据无效。")
-	if stage_before >= Rules.max_stage(category):
+	if stage_before >= _rules.enhancement.max_stage(category):
 		return _failure("这件装备已达到锻造等级上限。")
-	var purity := BlackIron.purity_for(records[1])
+	var purity := _rules.black_iron.purity_for(records[1])
 	if purity < 0:
 		return _failure("请放入黑铁矿。")
 	var accessories: Array[Dictionary] = []
@@ -201,14 +218,14 @@ func _build_quote(target_index: int, iron_index: int, accessory_a_index: int, ac
 	for record: Dictionary in [records[2], records[3]]:
 		if not preload("res://scripts/items/item_extension_codec.gd").can_release_ownership(record):
 			return _failure("请先取出材料装备中的镶嵌物品。")
-		var accessory := GameData.get_item_record(record)
+		var accessory := _content_port.get_item_record(record)
 		var accessory_id := int(accessory.get("itemId", -1))
-		if not Grade.can_use_as_accessory_material(accessory_id):
+		if not _rules.enhancement_grade.can_use_as_accessory_material(accessory_id):
 			return _failure("%s不可以作为锻造材料" % str(accessory.get("name", record.get("name", "该物品"))))
 		accessories.append(accessory)
-		grades.append(Grade.grade_for_id(accessory_id))
-	var probability := Rules.quote_probability(category, stage_before + 1, purity, target_grade, grades[0], grades[1])
-	var cost := Rules.forge_gold_cost(category, stage_before + 1)
+		grades.append(_rules.enhancement_grade.grade_for_id(accessory_id))
+	var probability := _rules.enhancement.quote_probability(category, stage_before + 1, purity, target_grade, grades[0], grades[1])
+	var cost := _rules.enhancement.forge_gold_cost(category, stage_before + 1)
 	if probability.is_empty() or cost < 0:
 		return _failure("锻造规则不可用。")
 	var result := {
@@ -240,14 +257,14 @@ func _build_quote(target_index: int, iron_index: int, accessory_a_index: int, ac
 
 
 func _success_stat(quote: Dictionary, inventory: Array) -> String:
-	var target := GameData.get_item_record(inventory[int(quote.target_index)])
+	var target := _content_port.get_item_record(inventory[int(quote.target_index)])
 	if ItemCategories.category_for_record(target) != "hc.item_category.weapon":
 		return "defense_max"
-	var accessory_a := GameData.get_item_record(inventory[int(quote.accessory_a_index)])
-	var accessory_b := GameData.get_item_record(inventory[int(quote.accessory_b_index)])
+	var accessory_a := _content_port.get_item_record(inventory[int(quote.accessory_a_index)])
+	var accessory_b := _content_port.get_item_record(inventory[int(quote.accessory_b_index)])
 	accessory_a["modifiers"] = (inventory[int(quote.accessory_a_index)] as Dictionary).get("modifiers", [])
 	accessory_b["modifiers"] = (inventory[int(quote.accessory_b_index)] as Dictionary).get("modifiers", [])
-	var weights := Rules.forge_attribute_weights(accessory_a, accessory_b)
+	var weights := _rules.enhancement.forge_attribute_weights(accessory_a, accessory_b)
 	var total := int(weights.attack_max) + int(weights.magic_max) + int(weights.tao_max)
 	var roll := _rng.randi_range(1, total)
 	for stat: String in ["attack_max", "magic_max", "tao_max"]:

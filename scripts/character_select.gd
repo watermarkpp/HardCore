@@ -61,6 +61,7 @@ var enter_button: Button
 var delete_button: Button
 var delete_confirmation: GothicConfirmationPanel
 var launch_loading_overlay: Control
+var _launch_loading_screen: CanvasLayer
 var preview_visual_root: Control
 var preview_name_label: Label
 var preview_detail_label: Label
@@ -83,6 +84,8 @@ var _roster_drag_start_scroll := 0
 var _roster_drag_touch_index := -1
 var _roster_suppress_press_until_msec := 0
 var _launch_in_progress := false
+var _source_startup_producer: RefCounted
+var _source_startup_receipt: Dictionary = {}
 var launch_scene_path := "res://scenes/main.tscn"
 var _launch_scene_preload_path := ""
 var _launch_scene_preload_state: StringName = LAUNCH_PRELOAD_IDLE
@@ -101,7 +104,17 @@ var suppress_quit_for_test := false
 var quit_requested_for_test := false
 
 
+# Main callback depth only. No new gameplay/IO owner or timer.
+var _original_main_callback_ledger: Dictionary = {}
+
+
 func _ready() -> void:
+	_original_main_callback_ledger["_ready"] = int(_original_main_callback_ledger.get("_ready",0)) + 1
+	_original_source_character_select__ready()
+	_original_main_callback_ledger["_ready"] -= 1
+
+
+func _original_source_character_select__ready() -> void:
 	_accept_startup_launch_retention()
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	theme = GothicUIThemeScript.build_character_hall()
@@ -131,6 +144,12 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
+	_original_main_callback_ledger["_exit_tree"] = int(_original_main_callback_ledger.get("_exit_tree",0)) + 1
+	_original_source_character_select__exit_tree()
+	_original_main_callback_ledger["_exit_tree"] -= 1
+
+
+func _original_source_character_select__exit_tree() -> void:
 	ContentLayers.cancel_internal_code_owner(self, _launch_code_generation)
 	_launch_code_generation += 1
 	_launch_scene_preload_generation += 1
@@ -141,11 +160,29 @@ func _exit_tree() -> void:
 
 
 func _notification(what: int) -> void:
+	# After the genuine first-map handoff, this original receiver stays retained
+	# only for the producer/terminal resource lifetime. The actual current Root
+	# owns close notifications; the old hall must not call SceneTree.quit first.
+	if what == NOTIFICATION_WM_CLOSE_REQUEST and _source_startup_producer != null:
+		var application: RefCounted = _source_startup_producer.actual_application()
+		if application != null and application.is_actual_retained_launch_receiver(self): return
+	_original_main_callback_ledger["_notification"] = int(_original_main_callback_ledger.get("_notification",0)) + 1
+	_original_source_character_select__notification(what)
+	_original_main_callback_ledger["_notification"] -= 1
+
+
+func _original_source_character_select__notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		_request_application_quit()
 
 
 func _request_application_quit() -> void:
+	_original_main_callback_ledger["_request_application_quit"] = int(_original_main_callback_ledger.get("_request_application_quit",0)) + 1
+	_original_source_character_select__request_application_quit()
+	_original_main_callback_ledger["_request_application_quit"] -= 1
+
+
+func _original_source_character_select__request_application_quit() -> void:
 	if _quit_requested:
 		return
 	_quit_requested = true
@@ -209,6 +246,12 @@ func _request_launch_scene_preload() -> void:
 
 
 func _monitor_launch_scene_preload(generation: int, requested_path: String) -> void:
+	_original_main_callback_ledger["_monitor_launch_scene_preload"] = int(_original_main_callback_ledger.get("_monitor_launch_scene_preload",0)) + 1
+	await _original_source_character_select__monitor_launch_scene_preload(generation,requested_path)
+	_original_main_callback_ledger["_monitor_launch_scene_preload"] -= 1
+
+
+func _original_source_character_select__monitor_launch_scene_preload(generation: int, requested_path: String) -> void:
 	while (
 		is_inside_tree()
 		and generation == _launch_scene_preload_generation
@@ -243,6 +286,13 @@ func _mark_launch_scene_preload_failed(_error: int, generation: int, requested_p
 
 
 func _wait_for_launch_scene_preload() -> PackedScene:
+	_original_main_callback_ledger["_wait_for_launch_scene_preload"] = int(_original_main_callback_ledger.get("_wait_for_launch_scene_preload",0)) + 1
+	var original_result: Variant = await _original_source_character_select__wait_for_launch_scene_preload()
+	_original_main_callback_ledger["_wait_for_launch_scene_preload"] -= 1
+	return original_result
+
+
+func _original_source_character_select__wait_for_launch_scene_preload() -> PackedScene:
 	_request_launch_scene_preload()
 	var requested_path := launch_scene_path
 	var generation := _launch_scene_preload_generation
@@ -265,6 +315,12 @@ func _wait_for_launch_scene_preload() -> PackedScene:
 	return null
 
 func _input(event: InputEvent) -> void:
+	_original_main_callback_ledger["_input"] = int(_original_main_callback_ledger.get("_input",0)) + 1
+	_original_source_character_select__input(event)
+	_original_main_callback_ledger["_input"] -= 1
+
+
+func _original_source_character_select__input(event: InputEvent) -> void:
 	if profile_scroll == null or not is_instance_valid(profile_scroll):
 		return
 	if str(profile_scroll.get_meta("touch_scroll_policy", "")) == TouchScrollSupportScript.STABLE_ID:
@@ -574,10 +630,17 @@ func _build_preview_panel() -> void:
 
 
 func _build_launch_loading_overlay() -> void:
+	# The original cover spans construction of the new World camera. Keep its
+	# same opaque surface in screen coordinates while world canvas transforms
+	# change; its actual presentation receipt remains authoritative.
+	_launch_loading_screen = CanvasLayer.new()
+	_launch_loading_screen.name = "CharacterLaunchScreen"
+	_launch_loading_screen.layer = 1000
+	add_child(_launch_loading_screen)
 	launch_loading_overlay = LoadingTransitionOverlayScript.new()
 	launch_loading_overlay.name = "CharacterLaunchLoading"
 	launch_loading_overlay.set_meta("stable_id", "character.launch.loading")
-	add_child(launch_loading_overlay)
+	_launch_loading_screen.add_child(launch_loading_overlay)
 
 
 func _build_delete_confirmation() -> void:
@@ -671,6 +734,12 @@ func _build_creation_panel() -> void:
 
 
 func _refresh_profiles() -> void:
+	_original_main_callback_ledger["_refresh_profiles"] = int(_original_main_callback_ledger.get("_refresh_profiles",0)) + 1
+	_original_source_character_select__refresh_profiles()
+	_original_main_callback_ledger["_refresh_profiles"] -= 1
+
+
+func _original_source_character_select__refresh_profiles() -> void:
 	ai_teammate_enabled = false
 	selected_ai_profile_id = ""
 	for child in list_box.get_children():
@@ -808,6 +877,13 @@ func _refresh_character_preview() -> void:
 
 
 func _profile_equipment_snapshot(profile_id: String) -> Dictionary:
+	_original_main_callback_ledger["_profile_equipment_snapshot"] = int(_original_main_callback_ledger.get("_profile_equipment_snapshot",0)) + 1
+	var original_result: Variant = _original_source_character_select__profile_equipment_snapshot(profile_id)
+	_original_main_callback_ledger["_profile_equipment_snapshot"] -= 1
+	return original_result
+
+
+func _original_source_character_select__profile_equipment_snapshot(profile_id: String) -> Dictionary:
 	if profile_id.is_empty():
 		return {}
 	var profile_path := "%s/%s.json" % [PlayerState.profile_directory, profile_id]
@@ -837,6 +913,12 @@ func _on_profile_ai_pressed(profile_id: String) -> void:
 
 
 func _select_main_profile(profile_id: String) -> void:
+	_original_main_callback_ledger["_select_main_profile"] = int(_original_main_callback_ledger.get("_select_main_profile",0)) + 1
+	_original_source_character_select__select_main_profile(profile_id)
+	_original_main_callback_ledger["_select_main_profile"] -= 1
+
+
+func _original_source_character_select__select_main_profile(profile_id: String) -> void:
 	if not _profile_exists(profile_id):
 		return
 	if profile_id == selected_ai_profile_id:
@@ -901,6 +983,12 @@ func _restore_character_action_visual_contract() -> void:
 
 
 func _create_character() -> void:
+	_original_main_callback_ledger["_create_character"] = int(_original_main_callback_ledger.get("_create_character",0)) + 1
+	_original_source_character_select__create_character()
+	_original_main_callback_ledger["_create_character"] -= 1
+
+
+func _original_source_character_select__create_character() -> void:
 	if create_button == null:
 		return
 	last_creation_request = build_creation_request()
@@ -943,6 +1031,12 @@ func _request_delete_selected_character() -> void:
 
 
 func _on_delete_confirmation_confirmed(request: Dictionary) -> void:
+	_original_main_callback_ledger["_on_delete_confirmation_confirmed"] = int(_original_main_callback_ledger.get("_on_delete_confirmation_confirmed",0)) + 1
+	_original_source_character_select__on_delete_confirmation_confirmed(request)
+	_original_main_callback_ledger["_on_delete_confirmation_confirmed"] -= 1
+
+
+func _original_source_character_select__on_delete_confirmation_confirmed(request: Dictionary) -> void:
 	if str(request.get("action_id", "")) != DELETE_ACTION_ID:
 		return
 	var context: Dictionary = request.get("context", {})
@@ -974,6 +1068,12 @@ func build_creation_request() -> Dictionary:
 
 
 func _enter_selected_character() -> void:
+	_original_main_callback_ledger["_enter_selected_character"] = int(_original_main_callback_ledger.get("_enter_selected_character",0)) + 1
+	await _original_source_character_select__enter_selected_character()
+	_original_main_callback_ledger["_enter_selected_character"] -= 1
+
+
+func _original_source_character_select__enter_selected_character() -> void:
 	if _launch_in_progress:
 		return
 	if selected_main_profile_id.is_empty():
@@ -1043,11 +1143,45 @@ func _enter_selected_character() -> void:
 	launch_loading_overlay.set_loading_progress("character:%s" % selected_main_profile_id, 1.0, "进入游戏")
 	if suppress_scene_change_for_test:
 		return
+	# The original selected-profile/code/cover continuation is the sole entry.
+	# Retain the producer across awaits; an admitted Source graph must never
+	# fall through into a second legacy GameRoot or discard accepted work.
+	if ClassDB.class_exists("HardCoreSimulationHost"):
+		await _launch_original_source_application()
+		return
 	var scene_error: int = ContentLayers.change_scene_with_internal_code_retention(_launch_code_result, self, launch_scene)
 	if scene_error == OK:
 		_launch_code_result.clear() # original service now bridges this same lease.
 	if scene_error != OK:
 		_restore_after_launch_failure("暂时无法进入游戏，请重试")
+
+
+func _launch_original_source_application() -> void:
+	if _source_startup_producer != null:
+		message_label.text = "游戏启动仍在处理中"
+		return
+	# Resolve on the existing Main loading stack rather than introducing a
+	# CharacterSelect -> application -> CharacterSelect preload cycle.
+	var code: Script = load("res://scripts/gameplay/source/main_startup_application_producer.gd")
+	_source_startup_producer = code.new()
+	_source_startup_receipt = await _source_startup_producer.prepare_main(PlayerState,code.original_phone_host_policy())
+	if _source_startup_receipt.get("success") != true:
+		# Partial compositions stay retained for their exact abort owner. There
+		# is no generic cancel or Main fallback after an unknown admission stage.
+		message_label.text = "游戏启动未完成，请保留当前界面"
+		return
+	var application: RefCounted = _source_startup_producer.actual_application()
+	var launch: Dictionary = await application.prepare_original_character_launch(self)
+	_source_startup_receipt = launch.duplicate(true)
+	if launch.get("success") == true: return
+	if launch.get("handled") == false:
+		var retired: Dictionary = _source_startup_producer.retire_actual_unstarted_preparation()
+		_source_startup_receipt["unstarted_retirement"] = retired
+		if retired.get("success") == true:
+			_source_startup_producer = null
+			_restore_after_launch_failure("暂时无法进入游戏，请保留存档并重试")
+			return
+	message_label.text = "游戏启动未完成，请保留当前界面"
 
 
 func _restore_after_launch_failure(reason: String) -> void:
@@ -1131,6 +1265,13 @@ func is_code_preparation_loading_phase_current(generation: int) -> bool:
 	return is_code_preparation_generation_current(generation) and _launch_in_progress
 
 func _prepare_launch_code_if_cold(generation: int) -> bool:
+	_original_main_callback_ledger["_prepare_launch_code_if_cold"] = int(_original_main_callback_ledger.get("_prepare_launch_code_if_cold",0)) + 1
+	var original_result: Variant = await _original_source_character_select__prepare_launch_code_if_cold(generation)
+	_original_main_callback_ledger["_prepare_launch_code_if_cold"] -= 1
+	return original_result
+
+
+func _original_source_character_select__prepare_launch_code_if_cold(generation: int) -> bool:
 	if ContentLayers.is_internal_code_retention_current(_launch_code_result, self):
 		return true
 	ContentLayers.retire_internal_code_result(_launch_code_result)

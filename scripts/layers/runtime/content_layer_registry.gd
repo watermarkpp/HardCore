@@ -42,7 +42,17 @@ var _expansion_commit_in_progress := false
 var configuration_revision := 0
 
 
+# Main callback depth only. No new gameplay/IO owner or timer.
+var _original_main_callback_ledger: Dictionary = {}
+
+
 func _ready() -> void:
+	_original_main_callback_ledger["_ready"] = int(_original_main_callback_ledger.get("_ready",0)) + 1
+	_original_source_content_layer_registry__ready()
+	_original_main_callback_ledger["_ready"] -= 1
+
+
+func _original_source_content_layer_registry__ready() -> void:
 	if not initial_load_deferred:
 		ensure_loaded()
 
@@ -104,6 +114,13 @@ func reload_feature_catalog(registry_path: String = FEATURE_REGISTRY) -> bool:
 
 
 func _feature_reload_boundary() -> bool:
+	_original_main_callback_ledger["_feature_reload_boundary"] = int(_original_main_callback_ledger.get("_feature_reload_boundary",0)) + 1
+	var original_result: Variant = _original_source_content_layer_registry__feature_reload_boundary()
+	_original_main_callback_ledger["_feature_reload_boundary"] -= 1
+	return original_result
+
+
+func _original_source_content_layer_registry__feature_reload_boundary() -> bool:
 	if _feature_publication_in_progress:
 		feature_load_errors = ["feature_publication_in_progress"]
 		return false
@@ -116,6 +133,13 @@ func _feature_reload_boundary() -> bool:
 
 
 func reload_feature_catalog_async(registry_path: String = FEATURE_REGISTRY) -> bool:
+	_original_main_callback_ledger["reload_feature_catalog_async"] = int(_original_main_callback_ledger.get("reload_feature_catalog_async",0)) + 1
+	var original_result: Variant = await _original_source_content_layer_registry_reload_feature_catalog_async(registry_path)
+	_original_main_callback_ledger["reload_feature_catalog_async"] -= 1
+	return original_result
+
+
+func _original_source_content_layer_registry_reload_feature_catalog_async(registry_path: String = FEATURE_REGISTRY) -> bool:
 	if not _feature_reload_boundary(): return false
 	var result := _read_feature_candidate(registry_path)
 	if result.is_empty(): return false
@@ -134,6 +158,13 @@ func reload_feature_catalog_async(registry_path: String = FEATURE_REGISTRY) -> b
 
 
 func _await_feature_application(service: Node, callback: Callable, sequence: int) -> bool:
+	_original_main_callback_ledger["_await_feature_application"] = int(_original_main_callback_ledger.get("_await_feature_application",0)) + 1
+	var original_result: Variant = await _original_source_content_layer_registry__await_feature_application(service,callback,sequence)
+	_original_main_callback_ledger["_await_feature_application"] -= 1
+	return original_result
+
+
+func _original_source_content_layer_registry__await_feature_application(service: Node, callback: Callable, sequence: int) -> bool:
 	var success: bool = await service.apply_ready(callback)
 	# Direct service cancellation may terminate a queued application before
 	# its callback clears this request's lock. Never unlock a newer producer.
@@ -165,6 +196,13 @@ func threaded_resource_claim_diagnostics() -> Dictionary:
 
 
 func _apply_prepared_feature_candidate(result: Dictionary, resource_lease: RefCounted, sequence: int, profile: String) -> bool:
+	_original_main_callback_ledger["_apply_prepared_feature_candidate"] = int(_original_main_callback_ledger.get("_apply_prepared_feature_candidate",0)) + 1
+	var original_result: Variant = _original_source_content_layer_registry__apply_prepared_feature_candidate(result,resource_lease,sequence,profile)
+	_original_main_callback_ledger["_apply_prepared_feature_candidate"] -= 1
+	return original_result
+
+
+func _original_source_content_layer_registry__apply_prepared_feature_candidate(result: Dictionary, resource_lease: RefCounted, sequence: int, profile: String) -> bool:
 	if sequence != _feature_preparation_sequence: return false
 	_feature_publication_in_progress = false
 	if PlayerState.active_profile_id != profile or not _feature_reload_boundary():
@@ -262,6 +300,13 @@ func _read_feature_candidate(registry_path: String) -> Dictionary:
 
 
 func _publish_feature_configuration(candidate: RefCounted, authority: Dictionary, bindings: Array, enabled: Array, resource_lease: RefCounted = null) -> bool:
+	_original_main_callback_ledger["_publish_feature_configuration"] = int(_original_main_callback_ledger.get("_publish_feature_configuration",0)) + 1
+	var original_result: Variant = _original_source_content_layer_registry__publish_feature_configuration(candidate,authority,bindings,enabled,resource_lease)
+	_original_main_callback_ledger["_publish_feature_configuration"] -= 1
+	return original_result
+
+
+func _original_source_content_layer_registry__publish_feature_configuration(candidate: RefCounted, authority: Dictionary, bindings: Array, enabled: Array, resource_lease: RefCounted = null) -> bool:
 	if _feature_publication_in_progress:
 		feature_load_errors = ["feature_publication_in_progress"]
 		return false
@@ -323,6 +368,13 @@ func set_feature_module_enabled(id: String, enabled: bool) -> bool:
 
 
 func _feature_enabled_candidate(id: String, enabled: bool) -> Dictionary:
+	_original_main_callback_ledger["_feature_enabled_candidate"] = int(_original_main_callback_ledger.get("_feature_enabled_candidate",0)) + 1
+	var original_result: Variant = _original_source_content_layer_registry__feature_enabled_candidate(id,enabled)
+	_original_main_callback_ledger["_feature_enabled_candidate"] -= 1
+	return original_result
+
+
+func _original_source_content_layer_registry__feature_enabled_candidate(id: String, enabled: bool) -> Dictionary:
 	if _feature_publication_in_progress:
 		feature_load_errors = ["feature_publication_in_progress"]
 		return {}
@@ -345,6 +397,13 @@ func _feature_enabled_candidate(id: String, enabled: bool) -> Dictionary:
 
 
 func set_feature_module_enabled_async(id: String, enabled: bool) -> bool:
+	_original_main_callback_ledger["set_feature_module_enabled_async"] = int(_original_main_callback_ledger.get("set_feature_module_enabled_async",0)) + 1
+	var original_result: Variant = await _original_source_content_layer_registry_set_feature_module_enabled_async(id,enabled)
+	_original_main_callback_ledger["set_feature_module_enabled_async"] -= 1
+	return original_result
+
+
+func _original_source_content_layer_registry_set_feature_module_enabled_async(id: String, enabled: bool) -> bool:
 	if not enabled: return set_feature_module_enabled(id, false)
 	var result := _feature_enabled_candidate(id, enabled)
 	if result.is_empty(): return false
@@ -367,6 +426,13 @@ func set_feature_module_enabled_async(id: String, enabled: bool) -> bool:
 
 
 func _apply_prepared_feature_module(id: String, enabled: bool, result: Dictionary, resource_lease: RefCounted, sequence: int, scope: Dictionary) -> bool:
+	_original_main_callback_ledger["_apply_prepared_feature_module"] = int(_original_main_callback_ledger.get("_apply_prepared_feature_module",0)) + 1
+	var original_result: Variant = _original_source_content_layer_registry__apply_prepared_feature_module(id,enabled,result,resource_lease,sequence,scope)
+	_original_main_callback_ledger["_apply_prepared_feature_module"] -= 1
+	return original_result
+
+
+func _original_source_content_layer_registry__apply_prepared_feature_module(id: String, enabled: bool, result: Dictionary, resource_lease: RefCounted, sequence: int, scope: Dictionary) -> bool:
 	if sequence != _feature_preparation_sequence: return false
 	_feature_publication_in_progress = false
 	var current := _feature_enabled_candidate(id, enabled)
@@ -669,6 +735,13 @@ var internal_code_errors: Array = []
 var internal_code_publication_diagnostic: Dictionary = {}
 
 func is_internal_code_publication_boundary_current(sequence: int) -> bool:
+	_original_main_callback_ledger["is_internal_code_publication_boundary_current"] = int(_original_main_callback_ledger.get("is_internal_code_publication_boundary_current",0)) + 1
+	var original_result: Variant = _original_source_content_layer_registry_is_internal_code_publication_boundary_current(sequence)
+	_original_main_callback_ledger["is_internal_code_publication_boundary_current"] -= 1
+	return original_result
+
+
+func _original_source_content_layer_registry_is_internal_code_publication_boundary_current(sequence: int) -> bool:
 	return sequence == _feature_preparation_sequence and not _feature_publication_in_progress and not bool(PlayerState.feature_publication_context().world_active)
 
 func code_preparation_export_contract() -> Dictionary:
@@ -752,6 +825,13 @@ func _publish_internal_code_catalogue(scope: RefCounted, consumer_ref: WeakRef, 
 	return true
 
 func ensure_internal_code_catalogue_async(scope: RefCounted, consumer: Node, generation: int) -> bool:
+	_original_main_callback_ledger["ensure_internal_code_catalogue_async"] = int(_original_main_callback_ledger.get("ensure_internal_code_catalogue_async",0)) + 1
+	var original_result: Variant = await _original_source_content_layer_registry_ensure_internal_code_catalogue_async(scope,consumer,generation)
+	_original_main_callback_ledger["ensure_internal_code_catalogue_async"] -= 1
+	return original_result
+
+
+func _original_source_content_layer_registry_ensure_internal_code_catalogue_async(scope: RefCounted, consumer: Node, generation: int) -> bool:
 	if scope == null or not is_same(scope.get_script(), InternalCodeScope) or not is_instance_valid(consumer) or not bool(scope.valid_for(consumer, generation)):
 		internal_code_errors = ["internal_code_publication_loading_scope_unavailable"]
 		return false
@@ -790,6 +870,13 @@ func is_code_preparation_publication_current(entry_id: String, generation: int, 
 	return _internal_code_metadata[entry_id].plan_sha256 == plan_sha256
 
 func prepare_internal_code_entry(entry_id: String, overlay: Control, consumer: Node, generation: int) -> Dictionary:
+	_original_main_callback_ledger["prepare_internal_code_entry"] = int(_original_main_callback_ledger.get("prepare_internal_code_entry",0)) + 1
+	var original_result: Variant = await _original_source_content_layer_registry_prepare_internal_code_entry(entry_id,overlay,consumer,generation)
+	_original_main_callback_ledger["prepare_internal_code_entry"] -= 1
+	return original_result
+
+
+func _original_source_content_layer_registry_prepare_internal_code_entry(entry_id: String, overlay: Control, consumer: Node, generation: int) -> Dictionary:
 	if not InternalCodeData.REGISTERED_TARGETS.has(entry_id):
 		return {"success": false, "errors": ["internal_code_entry_unregistered"], "lease": null}
 	var scope: RefCounted = InternalCodeScope.issue(overlay, consumer, generation)
@@ -800,6 +887,13 @@ func prepare_internal_code_entry(entry_id: String, overlay: Control, consumer: N
 	return await _feature_resources().prepare_code_inputs(_internal_code_entries[entry_id], entry_id, self, scope, consumer, generation)
 
 func request_internal_prepared_script(prepared: Dictionary, consumer: Node, generation: int) -> Dictionary:
+	_original_main_callback_ledger["request_internal_prepared_script"] = int(_original_main_callback_ledger.get("request_internal_prepared_script",0)) + 1
+	var original_result: Variant = await _original_source_content_layer_registry_request_internal_prepared_script(prepared,consumer,generation)
+	_original_main_callback_ledger["request_internal_prepared_script"] -= 1
+	return original_result
+
+
+func _original_source_content_layer_registry_request_internal_prepared_script(prepared: Dictionary, consumer: Node, generation: int) -> Dictionary:
 	return await _feature_resources().request_code_script(prepared, consumer, generation)
 
 func cancel_internal_code_owner(consumer: Node, generation: int) -> void:
@@ -823,3 +917,27 @@ func change_scene_with_internal_code_retention(result: Dictionary, consumer: Nod
 func claim_internal_code_world_retention(consumer: Node) -> Dictionary:
 	return _feature_resource_service.claim_code_world_handoff(consumer) if is_instance_valid(_feature_resource_service) else {}
 
+
+
+func install_original_feature_resource_facade(facade: Node) -> bool:
+	if OS.get_thread_caller_id()!=OS.get_main_thread_id() or not is_instance_valid(facade) or not facade.is_inside_tree() or facade.is_queued_for_deletion() or facade.get_tree()!=get_tree(): return false
+	if facade.get_script()!=load("res://scripts/features/runtime/feature_resource_main_facade.gd"): return false
+	var primitives: Variant=facade.get("_primitives")
+	if not primitives is RefCounted or primitives.get_script()!=load("res://scripts/features/runtime/feature_resource_main_primitives.gd"): return false
+	if not primitives.verify_original_physical_facade_switch(self,_feature_resource_service,facade): return false
+	_feature_resource_service=facade
+	return true
+
+# Physical resources stay the same objects. Their real still-live leases move
+# back to the original coordinator only after Source and Native have ended.
+func return_actual_terminal_feature_owner(application: RefCounted, gate: RefCounted, publication: Dictionary, legacy: Node, physical: Node) -> Dictionary:
+	if OS.get_thread_caller_id()!=OS.get_main_thread_id() or application==null or application.get_script()!=load("res://scripts/gameplay/source/main_boot_application.gd") or not application.verify_actual_profile_return_terminal(gate,publication,false) or not is_instance_valid(legacy) or legacy.get_script()!=preload("res://scripts/features/runtime/feature_resource_preparation.gd") or not legacy.is_inside_tree() or not is_instance_valid(physical) or physical!=_feature_resource_service: return {"success":false,"status":"BLOCKED","error":"actual_ended_Source_and_original_physical_owners_required"}
+	for field: String in ["_requests","_jobs","_work","_retirements","_applications","_deferred_completions"]:
+		if not legacy.get(field).is_empty(): return {"success":false,"status":"BLOCKED","error":"actual_legacy_resource_debt:"+field}
+	if legacy.get("_quantum_active") or legacy.get("_applying_request")!=0 or legacy.get("_code_world_handoff_id")!=0: return {"success":false,"status":"BLOCKED","error":"actual_legacy_resource_callback_not_terminal"}
+	var leases: Array=preload("res://scripts/features/contracts/feature_resource_lease.gd").capture_original_physical_owner_leases(physical)
+	var ids: Array[int]=[]
+	for lease: RefCounted in leases: ids.append(lease.get_instance_id())
+	if not preload("res://scripts/features/contracts/feature_resource_lease.gd").rebind_original_physical_owner(physical,legacy,leases): return {"success":false,"status":"BLOCKED","error":"actual_lease_owner_return_rejected"}
+	_feature_resource_service=legacy
+	return {"success":true,"status":"READY","actual_lease_ids":ids,"actual_previous_owner_id":physical.get_instance_id(),"actual_original_legacy_owner_id":legacy.get_instance_id()}

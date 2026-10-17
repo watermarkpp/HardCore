@@ -1,0 +1,15 @@
+> Final Pro formal clarification and practical architecture have now been read. The pending-reply paragraphs below are historical. The active ruling and actual evidence are in CURRENT_IMPL_20261014_1735.md. Ordinary pursuit latency is authorized; instantaneous attack eligibility/HP/save facts must never be guessed.
+
+# Ordinary pursuit pipeline: clarified product decision
+
+The user explicitly accepts delayed ordinary monster pursuit targets. A player sampled at A may already be at B when the movement plan toward A is adopted. The next plan may pursue B while the player is at C. The 300 ms interval is adjustable and is a computation/delivery window, not a measured job duration or a mandatory sleep.
+
+Attack/spell eligibility must use current authoritative player and monster positions, current life/control/cooldown state and the existing line-of-sight rule. Entering range must be observed by the next normal logic tick; it must not wait for the ordinary pursuit batch. Damage, death, knockback and control cannot remain queued behind a long planning or resource wait. This clarification authorizes ordinary pursuit-intent latency; it does not authorize stale attack positions, wall penetration, discarded damage, changed HP authority, lost saves or warehouse contents.
+
+For a strict sample-at-start / adopt-next-period / hold-for-one-period scheme with interval T, the target sample is T old at adoption and approaches 2T immediately before replacement. With T=300 ms this is 300 to almost 600 ms of target information age. This is distinct from continuous movement speed and attack reaction time. Actual computation can finish sooner; a late fresh-input finalization or earlier adoption may reduce age but must not be claimed without a concrete design.
+
+Pro has received the clarified movement-plan/instant-combat question in the official existing conversation, followed by this explicit acceptance of ordinary pursuit lag. The first revised request was visibly sent and was thinking; the later user decision was visibly submitted while it was thinking and is now the latest request. No completed revised formal reply has yet been read. Preserve both sent DOM/screenshot receipts. Do not treat the earlier source-preserving 300 ms decision as the final product interpretation.
+
+Recommended design direction pending the revised Pro reply: immutable bounded planning jobs, a latest-player-state publication, continuous lightweight advancement of an accepted time-tagged movement plan, immediate combat/control processing, and explicit invalidation/local contact correction. Rendering does not join planning jobs. Expensive planning must not block the immediate state owner. A dynamic contact must still be resolved correctly; a predicted route is not permission to walk through another actor or the player.
+
+Scope: design clarification only. No gameplay frequency, package identity, signing, save data, main gameplay source or frozen v113 source was changed by this decision record. Existing candidate implementation and evidence remain preserved; full 115 Android/device performance is NOT_RUN.

@@ -1,0 +1,17 @@
+{
+  "baseline": "45170d0eaf4d2c642d4a03de392f64fa2b1e25bf",
+  "source_content_sha256": "b4042638a8cc81e7045b5dd935b6acc633024a0f2964d0ed3a2b82f3747916c7",
+  "source_manifest": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_map_trace_semantic_20261017\\SOURCE_MANIFEST.json",
+  "real_index_before": "3180f91855b8bc8d7a22848592ff9f95f2d19574a73f7a3eea90e962f7151b22",
+  "approved_full_world_120": false,
+  "approved_source_save_180": false,
+  "command": [
+    "tools/run_godot_tests.ps1",
+    "-GodotExecutable",
+    "C:/Users/Administrator/.codex/worktrees/multicore-v115/HardCore/outputs/v115_multicore/codex_resume_20261015_182255/windows_map_reply_observation_20261017_build/Godot_v115-stable_win64_console.exe",
+    "-TestPaths",
+    "tests/framework/multicore_v115_script_semantic_20261015.tscn",
+    "-TimeoutSeconds",
+    "60"
+  ]
+}

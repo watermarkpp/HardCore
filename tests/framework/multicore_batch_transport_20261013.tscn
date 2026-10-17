@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tests/framework/multicore_batch_transport_20261013.gd" type="Script" id="1"]
+
+[node name="MulticoreBatchTransport20261013" type="Node"]
+script = ExtResource("1")

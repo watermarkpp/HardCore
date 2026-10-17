@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/persistent_profile_process_20261015.gd" id="1"]
+
+[node name="PersistentProfileProcess" type="Node"]
+script = ExtResource("1")

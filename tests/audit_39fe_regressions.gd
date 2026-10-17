@@ -8,12 +8,18 @@ const Manager := preload("res://scripts/persistent_ground_effect_manager.gd")
 const Splice := preload("res://scripts/map_editor/map_registry_entry_splice.gd")
 const Enemy := preload("res://scripts/enemy.gd")
 
-class FailingInventory:
-	extends "res://scripts/player_state.gd"
+class FailingProfile:
+	extends "res://scripts/gameplay/profile/profile_model.gd"
 	var commit_calls := 0
 	func _commit_save(_update_profile_index := true, _checkpoint_world := true) -> bool:
 		commit_calls += 1
 		return false
+
+class FailingInventory extends "res://scripts/player_state.gd":
+	var commit_calls: int:
+		get: return _model.get("commit_calls")
+	func _init() -> void:
+		super(FailingProfile.new())
 
 var _failed := 0
 var _checked := 0

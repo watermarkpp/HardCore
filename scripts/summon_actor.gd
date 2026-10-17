@@ -4,6 +4,11 @@ extends CharacterBody2D
 signal summon_state_changed(previous_state: int, current_state: int)
 signal passive_wakeup_changed()
 
+const SummonDomainStateScript := preload("res://scripts/gameplay/actors/summon_domain_state.gd")
+const SummonActorModelScript := preload("res://scripts/gameplay/actors/summon_actor_model.gd")
+const SummonLegacyPortsScript := preload("res://scripts/gameplay/actors/summon_legacy_actor_ports.gd")
+var _legacy_ports: RefCounted
+
 const DamageLedgerObserverScript := preload("res://scripts/damage_ledger_observer.gd")
 
 const SummonVisualRegistryScript := preload("res://scripts/summon_visual_registry.gd")
@@ -34,8 +39,8 @@ const PERSISTENCE_CONTRACT_ID := "skills.summon.persistence.runtime_state.v1"
 const DIRECT_SPELL_DAMAGE_RUNTIME_ID := (
 	"summon.direct_spell_damage.openmir2.v1"
 )
-const STEALTH_STATE_CONTRACT_ID := "skills.summon_actor.stealth_state.v1"
-const BUFF_STATE_CONTRACT_ID := "skills.summon_actor.buff_state.v1"
+const STEALTH_STATE_CONTRACT_ID := SummonDomainStateScript.STEALTH_STATE_CONTRACT_ID
+const BUFF_STATE_CONTRACT_ID := SummonDomainStateScript.BUFF_STATE_CONTRACT_ID
 const SUSTAINED_FRAME_COST_CONTRACT_ID := (
 	"skills.summon.sustained_frame_cost.bounded.v1"
 )
@@ -102,115 +107,274 @@ const VISUAL_PATHS := {
 	"taoist.summon_divine_beast": "res://assets/art/characters/taoist/effects/summon_divine_beast.png",
 }
 
-var owner_player: PlayerCharacter
-var _monster_source_poison := MonsterSourcePoisonStateScript.new()
-var _monster_control_remaining := 0.0
-## Owner character level frozen at summon creation. Fully independent of the
-## pet's own growth level (summon_exp_level).
-var owner_level := 1
-var runtime_map_id: int = -1
-var runtime_ground_gu_to_screen_position_px := Callable()
-var runtime_screen_to_ground_position_px := Callable()
-var _combat_spatial_index: RuntimeCombatSpatialIndexScript
-var _outgoing_magic_stats: Dictionary = {}
-var _rest_formation_moving := false
-## FREEZE-P0.1: fail-closed projection diagnostics.
-var missing_projection_rejection_count := 0
-var projection_rejection_reason := &""
-var summon_name := "骷髅"
-var summon_id := "skeleton"
-var skill_id := "taoist.summon_skeleton"
-var skill_level := 0
-var effective_skill_rank := 0
-var pet_slot_index := 0
-var _divine_damage_more := 1.0
-var summon_level := 0
-var summon_exp_level := 0
-var maximum_pet_level := 1
-var pet_growth_exp := 0
-var summon_count := 1
-var attack_type := "physical"
-var monster_level := 1
-var max_hp := 80
-var current_hp := 80
-var attack_min := 3
-var attack_max := 6
-var ac_min := 0
-var ac_max := 0
-var mac_min := 0
-var mac_max := 0
-var accuracy := 1
-var agility := 1
-var name_color_index := 255
-var attack_interval := 1.25
-var lifetime_seconds := 864000.0
-var remaining_lifetime := 864000.0
-var move_speed_gu_per_sec := (
+# One numeric owner shared by the legacy adapter and the future S actor.
+# Rules are explicit ports; the legacy path supplies the original scripts.
+var domain_state := SummonActorModelScript.new(
+	TaoistCombatMath, SkillRankResolver,
 	CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(135.0)
 )
-var attack_range_gu := (
-	CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(48.0)
-)
-var aggro_radius_gu := (
-	CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(330.0)
-)
-var combat_radius_gu := (
-	CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(15.0)
-)
-var collision_radius_px := 15.0
-var leash_range_gu := (
-	CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(560.0)
-)
-var teleport_range_gu := (
-	CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(900.0)
-)
-var follow_distance_gu := (
-	CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(75.0)
-)
-var actual_ground_motion_gu := Vector2.ZERO
-var owner_death_rule := "expire"
-var reject_when_owner_has_slave := true
-var recall_existing_on_create_failure := false
-var state := SummonState.FOLLOW_OWNER
-var owner_teleport_pending := false
-var _owner_teleport_saved_collision_layer := 0
-var _owner_teleport_saved_collision_mask := 0
-var last_attack_type := ""
-var summon_release_id := ""
-var summon_spawn_footprint_snapshot: Dictionary = {}
-var last_attack_footprint_snapshot: Dictionary = {}
-var last_attack_relation := ""
-var _attack_timer := 0.0
-var _attack_release_sequence := 0
-var _rng := RandomNumberGenerator.new()
+
+var owner_player: PlayerCharacter:
+	get: return _legacy_ports.resolve_actor(domain_state.owner_link) as PlayerCharacter if _legacy_ports != null else null
+	set(value): domain_state.owner_link = _legacy_ports.capture_actor(value)
+var _monster_source_poison: RefCounted:
+	get: return domain_state._monster_source_poison
+	set(value): domain_state._monster_source_poison = value
+var _monster_control_remaining: float:
+	get: return domain_state._monster_control_remaining
+	set(value): domain_state._monster_control_remaining = value
+## Owner character level frozen at summon creation. Fully independent of the
+## pet's own growth level (summon_exp_level).
+var owner_level: int:
+	get: return domain_state.owner_level
+	set(value): domain_state.owner_level = value
+var runtime_map_id: int:
+	get: return domain_state.runtime_map_id
+	set(value): domain_state.runtime_map_id = value
+var runtime_ground_gu_to_screen_position_px: Callable:
+	get: return domain_state.runtime_ground_gu_to_screen_position_px
+	set(value): domain_state.runtime_ground_gu_to_screen_position_px = value
+var runtime_screen_to_ground_position_px: Callable:
+	get: return domain_state.runtime_screen_to_ground_position_px
+	set(value): domain_state.runtime_screen_to_ground_position_px = value
+var _combat_spatial_index: RuntimeCombatSpatialIndexScript
+var _outgoing_magic_stats: Dictionary:
+	get: return domain_state._outgoing_magic_stats
+	set(value): domain_state._outgoing_magic_stats = value
+var _rest_formation_moving: bool:
+	get: return domain_state._rest_formation_moving
+	set(value): domain_state._rest_formation_moving = value
+## FREEZE-P0.1: fail-closed projection diagnostics.
+var missing_projection_rejection_count: int:
+	get: return domain_state.missing_projection_rejection_count
+	set(value): domain_state.missing_projection_rejection_count = value
+var projection_rejection_reason: StringName:
+	get: return domain_state.projection_rejection_reason
+	set(value): domain_state.projection_rejection_reason = value
+var summon_name: String:
+	get: return domain_state.summon_name
+	set(value): domain_state.summon_name = value
+var summon_id: String:
+	get: return domain_state.summon_id
+	set(value): domain_state.summon_id = value
+var skill_id: String:
+	get: return domain_state.skill_id
+	set(value): domain_state.skill_id = value
+var skill_level: int:
+	get: return domain_state.skill_level
+	set(value): domain_state.skill_level = value
+var effective_skill_rank: int:
+	get: return domain_state.effective_skill_rank
+	set(value): domain_state.effective_skill_rank = value
+var pet_slot_index: int:
+	get: return domain_state.pet_slot_index
+	set(value): domain_state.pet_slot_index = value
+var _divine_damage_more: float:
+	get: return domain_state.divine_damage_more
+	set(value): domain_state.divine_damage_more = value
+var summon_level: int:
+	get: return domain_state.summon_level
+	set(value): domain_state.summon_level = value
+var summon_exp_level: int:
+	get: return domain_state.summon_exp_level
+	set(value): domain_state.summon_exp_level = value
+var maximum_pet_level: int:
+	get: return domain_state.maximum_pet_level
+	set(value): domain_state.maximum_pet_level = value
+var pet_growth_exp: int:
+	get: return domain_state.pet_growth_exp
+	set(value): domain_state.pet_growth_exp = value
+var summon_count: int:
+	get: return domain_state.summon_count
+	set(value): domain_state.summon_count = value
+var attack_type: String:
+	get: return domain_state.attack_type
+	set(value): domain_state.attack_type = value
+var monster_level: int:
+	get: return domain_state.monster_level
+	set(value): domain_state.monster_level = value
+var max_hp: int:
+	get: return domain_state.max_hp
+	set(value): domain_state.max_hp = value
+var current_hp: int:
+	get: return domain_state.current_hp
+	set(value): domain_state.current_hp = value
+var attack_min: int:
+	get: return domain_state.attack_min
+	set(value): domain_state.attack_min = value
+var attack_max: int:
+	get: return domain_state.attack_max
+	set(value): domain_state.attack_max = value
+var ac_min: int:
+	get: return domain_state.ac_min
+	set(value): domain_state.ac_min = value
+var ac_max: int:
+	get: return domain_state.ac_max
+	set(value): domain_state.ac_max = value
+var mac_min: int:
+	get: return domain_state.mac_min
+	set(value): domain_state.mac_min = value
+var mac_max: int:
+	get: return domain_state.mac_max
+	set(value): domain_state.mac_max = value
+var accuracy: int:
+	get: return domain_state.accuracy
+	set(value): domain_state.accuracy = value
+var agility: int:
+	get: return domain_state.agility
+	set(value): domain_state.agility = value
+var name_color_index: int:
+	get: return domain_state.name_color_index
+	set(value): domain_state.name_color_index = value
+var attack_interval: float:
+	get: return domain_state.attack_interval
+	set(value): domain_state.attack_interval = value
+var lifetime_seconds: float:
+	get: return domain_state.lifetime_seconds
+	set(value): domain_state.lifetime_seconds = value
+var remaining_lifetime: float:
+	get: return domain_state.remaining_lifetime
+	set(value): domain_state.remaining_lifetime = value
+var move_speed_gu_per_sec: float:
+	get: return domain_state.move_speed_gu_per_sec
+	set(value): domain_state.move_speed_gu_per_sec = value
+var attack_range_gu: float:
+	get: return domain_state.attack_range_gu
+	set(value): domain_state.attack_range_gu = value
+var aggro_radius_gu: float:
+	get: return domain_state.aggro_radius_gu
+	set(value): domain_state.aggro_radius_gu = value
+var combat_radius_gu: float:
+	get: return domain_state.combat_radius_gu
+	set(value): domain_state.combat_radius_gu = value
+var collision_radius_px: float:
+	get: return domain_state.collision_radius_px
+	set(value): domain_state.collision_radius_px = value
+var leash_range_gu: float:
+	get: return domain_state.leash_range_gu
+	set(value): domain_state.leash_range_gu = value
+var teleport_range_gu: float:
+	get: return domain_state.teleport_range_gu
+	set(value): domain_state.teleport_range_gu = value
+var follow_distance_gu: float:
+	get: return domain_state.follow_distance_gu
+	set(value): domain_state.follow_distance_gu = value
+var actual_ground_motion_gu: Vector2:
+	get: return domain_state.actual_ground_motion_gu
+	set(value): domain_state.actual_ground_motion_gu = value
+var owner_death_rule: String:
+	get: return domain_state.owner_death_rule
+	set(value): domain_state.owner_death_rule = value
+var reject_when_owner_has_slave: bool:
+	get: return domain_state.reject_when_owner_has_slave
+	set(value): domain_state.reject_when_owner_has_slave = value
+var recall_existing_on_create_failure: bool:
+	get: return domain_state.recall_existing_on_create_failure
+	set(value): domain_state.recall_existing_on_create_failure = value
+var state: int:
+	get: return domain_state.state
+	set(value): domain_state.state = value
+var owner_teleport_pending: bool:
+	get: return domain_state.owner_teleport_pending
+	set(value): domain_state.owner_teleport_pending = value
+var _owner_teleport_saved_collision_layer: int:
+	get: return domain_state._owner_teleport_saved_collision_layer
+	set(value): domain_state._owner_teleport_saved_collision_layer = value
+var _owner_teleport_saved_collision_mask: int:
+	get: return domain_state._owner_teleport_saved_collision_mask
+	set(value): domain_state._owner_teleport_saved_collision_mask = value
+var last_attack_type: String:
+	get: return domain_state.last_attack_type
+	set(value): domain_state.last_attack_type = value
+var summon_release_id: String:
+	get: return domain_state.summon_release_id
+	set(value): domain_state.summon_release_id = value
+var summon_spawn_footprint_snapshot: Dictionary:
+	get: return domain_state.summon_spawn_footprint_snapshot
+	set(value): domain_state.summon_spawn_footprint_snapshot = value
+var last_attack_footprint_snapshot: Dictionary:
+	get: return domain_state.last_attack_footprint_snapshot
+	set(value): domain_state.last_attack_footprint_snapshot = value
+var last_attack_relation: String:
+	get: return domain_state.last_attack_relation
+	set(value): domain_state.last_attack_relation = value
+var _attack_timer: float:
+	get: return domain_state._attack_timer
+	set(value): domain_state._attack_timer = value
+var _attack_release_sequence: int:
+	get: return domain_state._attack_release_sequence
+	set(value): domain_state._attack_release_sequence = value
+var _rng: RandomNumberGenerator:
+	get: return domain_state._rng
+	set(value): domain_state._rng = value
 var _sprite: Sprite2D
 var _fire_sprite: Sprite2D
-var _current_target: EnemyActor
+var _current_target: EnemyActor:
+	get: return _legacy_ports.resolve_actor(domain_state.current_target_link) as EnemyActor if _legacy_ports != null else null
+	set(value): domain_state.current_target_link = _legacy_ports.capture_actor(value)
 var _animation_resources: Dictionary = {}
-var _visual_profile_complete := false
-var _visual_preview_active := false
-var _visual_state := "idle"
-var _visual_direction := 0
-var _visual_frame := 0
-var _visual_elapsed := 0.0
-var _visual_facing := Vector2.DOWN
-var _attack_visual_remaining := 0.0
-var _hit_visual_remaining := 0.0
-var _death_visual_remaining := 0.0
-var _pending_attack_target: EnemyActor
-var _pending_attack_snapshot: Dictionary = {}
-var _pending_attack_release_remaining := 0.0
-var _pending_attack_direction := Vector2.DOWN
+var _visual_profile_complete: bool:
+	get: return domain_state._visual_profile_complete
+	set(value): domain_state._visual_profile_complete = value
+var _visual_preview_active: bool:
+	get: return domain_state._visual_preview_active
+	set(value): domain_state._visual_preview_active = value
+var _visual_state: String:
+	get: return domain_state._visual_state
+	set(value): domain_state._visual_state = value
+var _visual_direction: int:
+	get: return domain_state._visual_direction
+	set(value): domain_state._visual_direction = value
+var _visual_frame: int:
+	get: return domain_state._visual_frame
+	set(value): domain_state._visual_frame = value
+var _visual_elapsed: float:
+	get: return domain_state._visual_elapsed
+	set(value): domain_state._visual_elapsed = value
+var _visual_facing: Vector2:
+	get: return domain_state._visual_facing
+	set(value): domain_state._visual_facing = value
+var _attack_visual_remaining: float:
+	get: return domain_state._attack_visual_remaining
+	set(value): domain_state._attack_visual_remaining = value
+var _hit_visual_remaining: float:
+	get: return domain_state._hit_visual_remaining
+	set(value): domain_state._hit_visual_remaining = value
+var _death_visual_remaining: float:
+	get: return domain_state._death_visual_remaining
+	set(value): domain_state._death_visual_remaining = value
+var _pending_attack_target: EnemyActor:
+	get: return _legacy_ports.resolve_actor(domain_state.pending_attack_target_link) as EnemyActor if _legacy_ports != null else null
+	set(value): domain_state.pending_attack_target_link = _legacy_ports.capture_actor(value)
+var _pending_attack_snapshot: Dictionary:
+	get: return domain_state._pending_attack_snapshot
+	set(value): domain_state._pending_attack_snapshot = value
+var _pending_attack_release_remaining: float:
+	get: return domain_state._pending_attack_release_remaining
+	set(value): domain_state._pending_attack_release_remaining = value
+var _pending_attack_direction: Vector2:
+	get: return domain_state._pending_attack_direction
+	set(value): domain_state._pending_attack_direction = value
 var _fire_visual_elapsed := 0.0
 var _fire_visual_remaining := 0.0
 var _health_bar_y := -35.0
 var _visual_request_id := SummonVisualRegistryScript.REQUEST_UNKNOWN
 var _visual_request_attempts := 0
-var _target_acquire_remaining := 0.0
-var _target_scan_count := 0
-var _target_candidate_count := 0
-var _target_acquire_fail_closed_count := 0
-var _target_acquire_last_rejection_reason := ""
+var _target_acquire_remaining: float:
+	get: return domain_state._target_acquire_remaining
+	set(value): domain_state._target_acquire_remaining = value
+var _target_scan_count: int:
+	get: return domain_state._target_scan_count
+	set(value): domain_state._target_scan_count = value
+var _target_candidate_count: int:
+	get: return domain_state._target_candidate_count
+	set(value): domain_state._target_candidate_count = value
+var _target_acquire_fail_closed_count: int:
+	get: return domain_state._target_acquire_fail_closed_count
+	set(value): domain_state._target_acquire_fail_closed_count = value
+var _target_acquire_last_rejection_reason: String:
+	get: return domain_state._target_acquire_last_rejection_reason
+	set(value): domain_state._target_acquire_last_rejection_reason = value
 var _custom_draw_request_count := 0
 var _sprite_frame_apply_count := 0
 var _last_buff_draw_signature := Vector2i(-1, -1)
@@ -229,14 +393,49 @@ var _audio_attack_frame_sequence := -1
 
 ## Independent support-buff state: stealth, physical defence (AC) and magic
 ## defence (MAC) each keep their own timer and refresh independently.
-var stealth_remaining_seconds := 0.0
-var stealth_buff_id := ""
-var ac_buff_bonus := 0
-var ac_buff_remaining_seconds := 0.0
-var ac_buff_id := ""
-var mac_buff_bonus := 0
-var mac_buff_remaining_seconds := 0.0
-var mac_buff_id := ""
+var stealth_remaining_seconds: float:
+	get: return domain_state.stealth_remaining_seconds
+	set(value): domain_state.stealth_remaining_seconds = value
+var stealth_buff_id: String:
+	get: return domain_state.stealth_buff_id
+	set(value): domain_state.stealth_buff_id = value
+var ac_buff_bonus: int:
+	get: return domain_state.ac_buff_bonus
+	set(value): domain_state.ac_buff_bonus = value
+var ac_buff_remaining_seconds: float:
+	get: return domain_state.ac_buff_remaining_seconds
+	set(value): domain_state.ac_buff_remaining_seconds = value
+var ac_buff_id: String:
+	get: return domain_state.ac_buff_id
+	set(value): domain_state.ac_buff_id = value
+var mac_buff_bonus: int:
+	get: return domain_state.mac_buff_bonus
+	set(value): domain_state.mac_buff_bonus = value
+var mac_buff_remaining_seconds: float:
+	get: return domain_state.mac_buff_remaining_seconds
+	set(value): domain_state.mac_buff_remaining_seconds = value
+var mac_buff_id: String:
+	get: return domain_state.mac_buff_id
+	set(value): domain_state.mac_buff_id = value
+
+
+func _init() -> void:
+	_legacy_ports = SummonLegacyPortsScript.new(self)
+	domain_state.configure_ports({
+		"profile": PlayerState, "profession_rules": ProfessionRules,
+		"warrior_rules": WarriorCombatMathScript, "combat_rules": CombatResolutionRules,
+		"art_rules": preload("res://scripts/art_spec.gd"), "actor_links": _legacy_ports,
+		"motion": _legacy_ports, "lifetime": _legacy_ports, "presentation": _legacy_ports,
+		"damage_observer": _legacy_ports, "landing": _legacy_ports, "spatial": _legacy_ports,
+	})
+	assert(domain_state.bind_runtime_actor_id(get_instance_id()))
+	domain_state.summon_state_changed.connect(summon_state_changed.emit)
+	domain_state.passive_wakeup_changed.connect(_on_domain_passive_wakeup_changed)
+
+
+func _on_domain_passive_wakeup_changed() -> void:
+	# Preserve synchronous listener reentry inside the domain timer sweep.
+	passive_wakeup_changed.emit()
 
 
 func setup(
@@ -248,132 +447,11 @@ func setup(
 	owner_level_value := -1,
 	maximum_pet_level_value := -1
 ) -> void:
-	owner_player = player
-	var inferred_skill_id := source_skill_id
-	if inferred_skill_id.is_empty():
-		inferred_skill_id = "taoist.summon_divine_beast" if display_name == "神兽" else "taoist.summon_skeleton"
-	var inferred_level := learned_level
-	if inferred_level < 0 and PlayerState != null:
-		inferred_level = PlayerState.effective_skill_level(ProfessionRules.skill_display_name(inferred_skill_id))
-	var inferred_owner_level := owner_level_value
-	if inferred_owner_level < 1 and PlayerState != null:
-		inferred_owner_level = PlayerState.level
-	owner_level = maxi(1, inferred_owner_level)
-	var profile := TaoistCombatMath.summon_profile(
-		inferred_skill_id,
-		maxi(0, inferred_level),
-		owner_level,
-		maxi(1, power)
-	)
-	skill_id = inferred_skill_id
-	effective_skill_rank = maxi(0, inferred_level)
-	_divine_damage_more = SkillRankResolver.more_multiplier(effective_skill_rank) if inferred_skill_id == "taoist.summon_divine_beast" else 1.0
-	skill_level = int(profile.get("skill_level", 0))
-	summon_level = int(profile.get("summon_level", skill_level))
-	summon_exp_level = int(profile.get("summon_exp_level", skill_level))
-	maximum_pet_level = (
-		maximum_pet_level_value
-		if maximum_pet_level_value >= 0
-		else int(profile.get("max_pet_level", 1))
-	)
-	maximum_pet_level = clampi(maximum_pet_level, summon_exp_level, 7)
-	pet_growth_exp = int(profile.get("pet_growth_exp", 0))
-	summon_count = int(profile.get("summon_count", 1))
-	summon_id = str(profile.get("summon_id", "skeleton"))
-	summon_name = str(profile.get("display_name", display_name))
-	attack_type = str(profile.get("attack_type", "physical"))
-	monster_level = int(profile.get("monster_level", 1))
-	max_hp = int(profile.get("max_hp", 60 + power * 12))
-	current_hp = max_hp
-	attack_min = int(profile.get("attack_min", maxi(1, int(power / 2))))
-	attack_max = int(profile.get("attack_max", maxi(attack_min, power)))
-	ac_min = int(profile.get("ac_min", 0))
-	ac_max = int(profile.get("ac_max", ac_min))
-	mac_min = int(profile.get("mac_min", 0))
-	mac_max = int(profile.get("mac_max", mac_min))
-	accuracy = int(profile.get("accuracy", 1))
-	agility = int(profile.get("agility", 1))
-	name_color_index = TaoistCombatMath.summon_name_color_index(summon_exp_level)
-	attack_interval = float(profile.get("attack_interval", 1.25))
-	lifetime_seconds = float(profile.get("lifetime_seconds", 864000.0))
-	remaining_lifetime = lifetime_seconds
-	move_speed_gu_per_sec = float(profile.get(
-		"move_speed_gu_per_sec",
-		CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(
-			155.0 if summon_id == "divine_beast" else 135.0
-		)
-	))
-	## User-authored combat geometry supersedes the legacy screen-pixel range:
-	## skeleton uses the warrior-normal 1.5 GU reach and divine beast uses a
-	## 3 GU by 1 GU directed footprint.
-	attack_range_gu = _attack_effect_length_gu()
-	aggro_radius_gu = float(profile.get(
-		"aggro_radius_gu",
-		CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(
-			380.0 if summon_id == "divine_beast" else 330.0
-		)
-	))
-	leash_range_gu = float(profile.get(
-		"leash_range_gu",
-		CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(
-			560.0
-		)
-	))
-	teleport_range_gu = float(profile.get(
-		"teleport_range_gu",
-		CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(
-			900.0
-		)
-	))
-	follow_distance_gu = float(profile.get(
-		"follow_distance_gu",
-		CombatUnitLegacyAdapterScript.legacy_isometric_screen_scalar_px_to_gu(
-			75.0
-		)
-	))
-	owner_death_rule = str(profile.get("owner_death_rule", "expire"))
-	reject_when_owner_has_slave = bool(profile.get("reject_when_owner_has_slave", true))
-	recall_existing_on_create_failure = bool(profile.get("recall_existing_on_create_failure", false))
-	state = SummonState.FOLLOW_OWNER
-	_audio_appear_emitted = false
-	_audio_death_emitted = false
-	_audio_attack_sequence = 0
-	_audio_attack_frame_sequence = -1
+	domain_state.setup(_legacy_ports.capture_actor(player), display_name, power, learned_level, source_skill_id, owner_level_value, maximum_pet_level_value)
 
 
 func configure_spawn_release_footprint(source_release_id: String) -> void:
-	if runtime_map_id >= 0 and not runtime_screen_to_ground_position_px.is_valid():
-		# FREEZE-P0.1: mapped summon without a projection must not create a
-		# formal spawn snapshot at fake/delta coordinates.
-		missing_projection_rejection_count += 1
-		projection_rejection_reason = (
-			GroundUnitSpaceScript.REASON_MISSING_SCREEN_TO_GROUND_PROJECTION
-		)
-		summon_spawn_footprint_snapshot = {}
-		return
-	summon_release_id = (
-		source_release_id
-		if not source_release_id.is_empty()
-		else "%s:summon:%d" % [skill_id, get_instance_id()]
-	)
-	var spawn_combat_radius_gu := (
-		WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
-			collision_radius_px
-		)
-	)
-	var spawn_center_ground_gu := (
-		_runtime_screen_to_ground_position(global_position)
-	)
-	summon_spawn_footprint_snapshot = (
-		SkillFootprintSnapshotScript.create_target_footprint(
-			skill_id,
-			summon_release_id,
-			spawn_center_ground_gu,
-			spawn_combat_radius_gu,
-			get_instance_id(),
-			_snapshot_coordinate_context(spawn_center_ground_gu)
-		)
-	)
+	domain_state.configure_spawn_release_footprint(source_release_id)
 
 
 func configure_runtime_map_projection(
@@ -381,21 +459,12 @@ func configure_runtime_map_projection(
 	ground_gu_to_screen_position_px: Callable,
 	screen_position_px_to_ground_gu: Callable = Callable()
 ) -> void:
-	runtime_map_id = int(map_id)
-	runtime_ground_gu_to_screen_position_px = (
-		ground_gu_to_screen_position_px
-		if ground_gu_to_screen_position_px is Callable
-		else Callable()
-	)
-	runtime_screen_to_ground_position_px = (
-		screen_position_px_to_ground_gu
-		if screen_position_px_to_ground_gu is Callable
-		else Callable()
-	)
+	domain_state.configure_runtime_map_projection(map_id, ground_gu_to_screen_position_px, screen_position_px_to_ground_gu)
 
 
 func configure_spatial_index(index: RuntimeCombatSpatialIndexScript) -> void:
 	_combat_spatial_index = index
+	_legacy_ports.configure_spatial_index(index)
 
 
 func _audio_monster_id() -> int:
@@ -530,92 +599,23 @@ func _audio_death_once() -> void:
 
 
 func relocate_after_owner_teleport(final_position_px: Vector2) -> Dictionary:
-	## The integration owner supplies a position already selected by the
-	## canonical map/obstacle-aware summon spawn plan. This method is deliberately
-	## not a placement search: it only cancels stale combat/motion state and
-	## commits the final legal position after same-map or cross-map travel.
-	## The caller must configure the current map projection before calling this
-	## method; runtime_map_id is part of target validation and spatial queries.
-	if not final_position_px.is_finite():
-		return {
-			"contract_id": OWNER_TELEPORT_RELOCATION_CONTRACT_ID,
-			"relocated": false,
-			"reason": "non_finite_final_position",
-		}
-	if state in [SummonState.DEAD, SummonState.EXPIRED]:
-		return {
-			"contract_id": OWNER_TELEPORT_RELOCATION_CONTRACT_ID,
-			"relocated": false,
-			"reason": "summon_not_active",
-		}
-	var had_target := is_instance_valid(_current_target)
-	var had_pending_attack := _pending_attack_target != null
-	_reset_combat_after_owner_teleport()
-	global_position = final_position_px
-	if owner_teleport_pending:
-		collision_layer = _owner_teleport_saved_collision_layer
-		collision_mask = _owner_teleport_saved_collision_mask
-		owner_teleport_pending = false
-		visible = true
-	passive_wakeup_changed.emit()
-	return {
-		"contract_id": OWNER_TELEPORT_RELOCATION_CONTRACT_ID,
-		"relocated": true,
-		"final_position_px": final_position_px,
-		"target_cleared": had_target,
-		"pending_attack_cleared": had_pending_attack,
-		"motion_cleared": true,
-		"state": state_name(),
-	}
+	return domain_state.relocate_after_owner_teleport(final_position_px)
 
 
 func defer_owner_teleport_relocation() -> void:
-	# A full landing has no legal body slot nearby. Keep HP and lifetime, but
-	# remove the old-map body and stale attack until the owner reaches new ground.
-	if state in [SummonState.DEAD, SummonState.EXPIRED]:
-		return
-	if not owner_teleport_pending:
-		_owner_teleport_saved_collision_layer = collision_layer
-		_owner_teleport_saved_collision_mask = collision_mask
-	owner_teleport_pending = true
-	_reset_combat_after_owner_teleport()
-	collision_layer = 0
-	collision_mask = 0
-	visible = false
-	passive_wakeup_changed.emit()
+	domain_state.defer_owner_teleport_relocation()
 
 
 func _reset_combat_after_owner_teleport() -> void:
-	_current_target = null
-	_clear_pending_attack()
-	_target_acquire_remaining = TARGET_ACQUIRE_INTERVAL_SECONDS
-	_rest_formation_moving = false
-	_attack_timer = 0.0
-	_attack_visual_remaining = 0.0
-	_fire_visual_remaining = 0.0
-	if _fire_sprite != null:
-		_fire_sprite.visible = false
-	velocity = Vector2.ZERO
-	actual_ground_motion_gu = Vector2.ZERO
-	_set_state(SummonState.FOLLOW_OWNER)
-	_visual_state = "idle"
-	_visual_elapsed = 0.0
-	_request_visual_redraw()
+	domain_state._reset_combat_after_owner_teleport()
 
 
 func projection_ready() -> bool:
-	if runtime_map_id < 0:
-		return true
-	return runtime_screen_to_ground_position_px.is_valid()
+	return domain_state.projection_ready()
 
 
 func _snapshot_coordinate_context(origin_ground_gu: Vector2) -> Dictionary:
-	return SkillFootprintSnapshotScript.make_absolute_runtime_context(
-		runtime_map_id,
-		origin_ground_gu,
-		origin_ground_gu,
-		runtime_ground_gu_to_screen_position_px
-	)
+	return domain_state._snapshot_coordinate_context(origin_ground_gu)
 
 
 func _ready() -> void:
@@ -630,7 +630,7 @@ func _ready() -> void:
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 	safe_margin = 0.35
 	max_slides = 6
-	_rng.randomize()
+	domain_state.initialize_gameplay()
 	var collision := CollisionShape2D.new()
 	collision.name = "CollisionShape2D"
 	# HC-BODY-2TIER-1P5-V1: summons resolve their body from the same two-tier
@@ -668,176 +668,11 @@ func _notification(what: int) -> void:
 
 
 func _process(delta: float) -> void:
-	_update_support_buff_timers(delta)
-	_update_stealth_visual()
-	_refresh_buff_redraw_if_needed()
-	_attack_visual_remaining = maxf(0.0, _attack_visual_remaining - delta)
-	_hit_visual_remaining = maxf(0.0, _hit_visual_remaining - delta)
-	_update_fire_visual(delta)
-	if state == SummonState.DEAD:
-		_death_visual_remaining = maxf(0.0, _death_visual_remaining - delta)
-		if _death_visual_remaining <= 0.0:
-			queue_free()
-			return
-	if not _visual_profile_complete:
-		## The registry can finalize at most one imported texture per poll. Polling
-		## each frame makes the idle-first preview visible as soon as its formal
-		## Texture2D import completes without adding a blocking load.
-		_poll_visual_activation()
-	if _animation_resources.is_empty():
-		return
-	var next_visual_state := "idle"
-	if state == SummonState.DEAD:
-		next_visual_state = "death"
-	elif _hit_visual_remaining > 0.0:
-		next_visual_state = "hit"
-	elif _attack_visual_remaining > 0.0:
-		next_visual_state = "attack"
-	elif velocity.length_squared() > 25.0:
-		next_visual_state = "walk"
-	if next_visual_state != _visual_state:
-		_visual_state = next_visual_state
-		_visual_elapsed = 0.0
-	else:
-		_visual_elapsed += delta
-	if _pending_attack_target != null:
-		_visual_facing = _pending_attack_direction
-	elif velocity.length_squared() > 25.0:
-		_visual_facing = velocity.normalized()
-	elif is_instance_valid(_current_target):
-		var target_offset := _current_target.global_position - global_position
-		if target_offset.length_squared() > 0.001:
-			_visual_facing = target_offset.normalized()
-	elif is_instance_valid(owner_player) and owner_player.facing.length_squared() > 0.001:
-		_visual_facing = owner_player.facing.normalized()
-	_visual_direction = ArtSpec.mir2_client_direction_row(_visual_facing)
-	var frame_count := int(_animation_resources.get("frame_counts", {}).get(_visual_state, 1))
-	var frame_ms := int(_animation_resources.get("frame_ms", {}).get(_visual_state, 100))
-	if _visual_state in ["attack", "hit", "death"]:
-		_visual_frame = mini(frame_count - 1, int(floor(_visual_elapsed * 1000.0 / float(maxi(1, frame_ms)))))
-	else:
-		_visual_frame = int(floor(_visual_elapsed * 1000.0 / float(maxi(1, frame_ms)))) % frame_count
-	_apply_visual_frame()
+	domain_state.step_process(delta)
 
 
 func _physics_process(delta: float) -> void:
-	_update_monster_source_poison(delta)
-	if state == SummonState.DEAD:
-		velocity = Vector2.ZERO
-		actual_ground_motion_gu = Vector2.ZERO
-		return
-	_attack_timer = maxf(0.0, _attack_timer - delta)
-	_target_acquire_remaining = maxf(
-		0.0,
-		_target_acquire_remaining - delta
-	)
-	_update_pending_attack(delta)
-	remaining_lifetime = maxf(0.0, remaining_lifetime - delta)
-	if remaining_lifetime <= 0.0:
-		_expire()
-		return
-	if not is_instance_valid(owner_player) or owner_player.current_hp <= 0:
-		_expire()
-		return
-	if owner_teleport_pending:
-		velocity = Vector2.ZERO
-		actual_ground_motion_gu = Vector2.ZERO
-		return
-	if _monster_control_remaining > 0.0:
-		_monster_control_remaining = maxf(0.0, _monster_control_remaining - delta)
-		velocity = Vector2.ZERO
-		actual_ground_motion_gu = Vector2.ZERO
-		return
-	var owner_distance_gu := distance_gu_to_screen_position_px(
-		owner_player.global_position
-	)
-	if owner_distance_gu >= teleport_range_gu:
-		_set_state(SummonState.RETURN_TO_OWNER)
-		var landing_plan := _canonical_owner_teleport_landing_plan()
-		if not bool(landing_plan.get("valid", false)):
-			# A remote owner never authorizes a raw position write.  Keep the
-			# existing body hidden/pending until the canonical map-aware planner
-			# finds a legal footprint, exactly as map-arrival relocation does.
-			if bool(landing_plan.get("defer_allowed", false)):
-				_defer_owner_follow_landing()
-			velocity = Vector2.ZERO
-			actual_ground_motion_gu = Vector2.ZERO
-			return
-		var landing_position: Variant = landing_plan.get("position_screen_px")
-		if not landing_position is Vector2 or not (landing_position as Vector2).is_finite():
-			_defer_owner_follow_landing()
-			return
-		# Preserve the established follow action/timing; only its placement now
-		# requires a legal footprint. Accepted attacks are not reset by following.
-		global_position = landing_position as Vector2
-		passive_wakeup_changed.emit()
-		_rest_formation_moving = false
-		velocity = Vector2.ZERO
-		actual_ground_motion_gu = Vector2.ZERO
-		return
-	if (
-		not is_instance_valid(_current_target)
-		or _current_target.is_queued_for_deletion()
-		or _current_target.current_hp <= 0
-		or not _enemy_accepts_external_attack(_current_target)
-	):
-		_current_target = null
-		if _target_acquire_remaining <= 0.0:
-			if state not in [SummonState.FOLLOW_OWNER, SummonState.RETURN_TO_OWNER]:
-				_set_state(SummonState.ACQUIRE_TARGET)
-			_current_target = _nearest_enemy()
-			_target_acquire_remaining = TARGET_ACQUIRE_INTERVAL_SECONDS
-	var enemy := _current_target
-	if (
-		enemy != null
-		and _distance_gu_between_screen_positions_px(
-			enemy.global_position, owner_player.global_position
-		) > leash_range_gu
-	):
-		_current_target = null
-		_target_acquire_remaining = 0.0
-		enemy = null
-	if enemy != null:
-		var offset_screen_px := enemy.global_position - global_position
-		if _target_within_attack_geometry(enemy):
-			_set_state(SummonState.ATTACK_TARGET)
-			velocity = Vector2.ZERO
-			if _attack_timer <= 0.0 and _pending_attack_target == null:
-				_begin_attack(enemy)
-		else:
-			_set_state(SummonState.CHASE_TARGET)
-			velocity = _screen_velocity_toward_delta_px(offset_screen_px)
-	else:
-		var rest_target_screen_px := _owner_formation_anchor_screen_px()
-		var rest_offset_screen_px := rest_target_screen_px - global_position
-		var rest_distance_gu := distance_gu_to_screen_position_px(
-			rest_target_screen_px
-		)
-		if _rest_formation_moving:
-			if rest_distance_gu <= FORMATION_SETTLE_DISTANCE_GU:
-				_rest_formation_moving = false
-		elif rest_distance_gu >= FORMATION_WAKE_DISTANCE_GU:
-			_rest_formation_moving = true
-		if _rest_formation_moving:
-			_set_state(SummonState.RETURN_TO_OWNER)
-			velocity = _screen_velocity_toward_arrival_delta_px(
-				rest_offset_screen_px,
-				delta
-			)
-		else:
-			_set_state(SummonState.FOLLOW_OWNER)
-			velocity = Vector2.ZERO
-	var position_before_move_px := global_position
-	move_and_slide()
-	actual_ground_motion_gu = (
-		GroundUnitSpaceScript.actual_ground_motion_gu_from_screen_positions(
-			position_before_move_px,
-			global_position
-		)
-	)
-
-	if not actual_ground_motion_gu.is_zero_approx():
-		passive_wakeup_changed.emit()
+	domain_state.step_physics(delta)
 
 
 func _owner_follow_landing_authority() -> Node:
@@ -853,593 +688,156 @@ func _owner_follow_landing_authority() -> Node:
 
 
 func _canonical_owner_teleport_landing_plan() -> Dictionary:
-	var authority := _owner_follow_landing_authority()
-	if authority != null:
-		var raw_plan: Variant = authority.call("_canonical_summon_follow_landing_plan", self)
-		if raw_plan is Dictionary:
-			return raw_plan
-	return {"valid": false, "reason": "canonical_landing_authority_unavailable", "defer_allowed": false}
+	return domain_state._canonical_owner_teleport_landing_plan()
 
 
 func _defer_owner_follow_landing() -> void:
-	var authority := _owner_follow_landing_authority()
-	if authority == null:
-		return
-	defer_owner_teleport_relocation()
-	authority.call("_register_pending_main_pet_arrival", self)
+	domain_state._defer_owner_follow_landing()
 
 
 func _begin_attack(enemy: EnemyActor) -> void:
-	## Entering an attack breaks group invisibility immediately, rather than
-	## waiting for the delayed damage-release frame.
-	if is_stealthed():
-		stealth_remaining_seconds = 0.0
-		stealth_buff_id = ""
-		_update_stealth_visual()
-		passive_wakeup_changed.emit()
-	_attack_timer = attack_interval
-	last_attack_type = attack_type
-	_pending_attack_target = enemy
-	_pending_attack_snapshot = create_attack_release_footprint_snapshot(enemy)
-	last_attack_footprint_snapshot = _pending_attack_snapshot.duplicate(true)
-	_pending_attack_release_remaining = _attack_release_delay_seconds()
-	var target_offset := enemy.global_position - global_position
-	if target_offset.length_squared() > 0.001:
-		_pending_attack_direction = target_offset.normalized()
-	_visual_facing = _pending_attack_direction
-	_attack_visual_remaining = _visual_action_duration("attack")
-	_visual_state = "attack"
-	_visual_elapsed = 0.0
-	_audio_attack_started()
+	domain_state._begin_attack(_legacy_ports.capture_actor(enemy))
 
 
 func _update_pending_attack(delta: float) -> void:
-	if _pending_attack_target == null:
-		return
-	_pending_attack_release_remaining = maxf(
-		0.0, _pending_attack_release_remaining - delta
-	)
-	if _pending_attack_release_remaining <= 0.0:
-		_release_pending_attack()
+	domain_state._update_pending_attack(delta)
 
 
 func _release_pending_attack() -> void:
-	var target := _pending_attack_target
-	var snapshot := _pending_attack_snapshot
-	_audio_attack_frame()
-	if summon_id == "divine_beast":
-		_start_fire_visual()
-	if (
-		is_instance_valid(target)
-		and not target.is_queued_for_deletion()
-		and target.current_hp > 0
-		and _enemy_accepts_external_attack(target)
-		and attack_release_snapshot_intersects_target(snapshot, target)
-		and _attack_world_path_clear(target)
-		and _attack_hit_succeeds(target)
-	):
-		var hp_before := target.current_hp
-		var damage := _outgoing_damage_after_defense(target)
-		if damage > 0:
-			target.take_damage(damage, self)
-		if hp_before > 0 and target.current_hp <= 0:
-			gain_growth_from_kill(int(target.monster_data.get("level", 0)))
-	_clear_pending_attack()
+	domain_state._release_pending_attack()
 
 
 func _outgoing_damage_after_defense(target: EnemyActor) -> int:
-	var raw_damage := _rng.randi_range(attack_min, attack_max)
-	if attack_type == "physical":
-		return int(WarriorCombatMathScript.resolve_enemy_physical_damage(
-			raw_damage, target.effective_physical_defense()
-		).get("final_damage", 0))
-	if attack_type == "fire":
-		# Primary TElfWarriorMonster/TSpitSpider uses its own accuracy roll and
-		# GetMagStruckDamage (MAC). It is not a player direct spell: do not add
-		# its anti-magic gate or RM_MAGSTRUCK movement delay to the pet's breath.
-		if not target.direct_spell_runtime_stats_into(_outgoing_magic_stats):
-			return 0
-		var minimum := int(_outgoing_magic_stats.get("magic_defense_min", 0))
-		var maximum := int(_outgoing_magic_stats.get("magic_defense_max", minimum))
-		var boosted_raw := raw_damage if effective_skill_rank <= 3 else roundi(float(raw_damage) * _divine_damage_more)
-		return maxi(0, boosted_raw - _rng.randi_range(minimum, maximum))
-	return 0
+	return domain_state._outgoing_damage_after_defense(target)
 
 
 func _attack_hit_succeeds(target: EnemyActor) -> bool:
-	if PlayerState.test_mode:
-		return true
-	return WarriorCombatMathScript.roll_hit(accuracy, target.agility, _rng)
+	return domain_state._attack_hit_succeeds(_legacy_ports.capture_actor(target))
 
 
 func _attack_release_delay_seconds() -> float:
-	if not _animation_resources.is_empty():
-		var explicit_ms := int(_animation_resources.get("attack_release_ms", -1))
-		if explicit_ms >= 0:
-			return float(explicit_ms) / 1000.0
-		var release_frame_index := 5
-		var frame_ms := int(
-			_animation_resources.get("frame_ms", {}).get("attack", 100)
-		)
-		return float(release_frame_index * frame_ms) / 1000.0
-	return 0.5
+	return domain_state._attack_release_delay_seconds()
 
 
 func _clear_pending_attack() -> void:
-	_pending_attack_target = null
-	_pending_attack_snapshot = {}
-	_pending_attack_release_remaining = 0.0
+	domain_state._clear_pending_attack()
 
 
 func retire_for_rank_cap() -> void:
-	_expire()
+	domain_state.retire_for_rank_cap()
 
 
 func _expire() -> void:
-	if state == SummonState.EXPIRED or state == SummonState.DEAD:
-		return
-	_set_state(SummonState.EXPIRED)
-	_clear_pending_attack()
-	velocity = Vector2.ZERO
-	queue_free()
+	domain_state._expire()
 
 
 func _set_state(next_state: int) -> void:
-	if state == next_state:
-		return
-	var previous_state := state
-	state = next_state
-	summon_state_changed.emit(previous_state, state)
+	domain_state._set_state(next_state)
 
 
 func _nearest_enemy() -> EnemyActor:
-	_target_scan_count += 1
-	if runtime_map_id < 0:
-		_reject_target_acquisition("runtime_map_unavailable")
-		return null
-	if not runtime_screen_to_ground_position_px.is_valid():
-		_reject_target_acquisition("screen_to_ground_projection_unavailable")
-		return null
-	if (
-		_combat_spatial_index == null
-		or not is_instance_valid(_combat_spatial_index)
-	):
-		_reject_target_acquisition("spatial_index_unavailable")
-		return null
-	var origin_ground_gu := _runtime_screen_to_ground_position(global_position)
-	if not origin_ground_gu.is_finite():
-		_reject_target_acquisition("origin_ground_position_invalid")
-		return null
-	_target_acquire_last_rejection_reason = ""
-	var nearest: EnemyActor
-	var nearest_distance_gu := INF
-	var nearest_stable_combat_order := 0
-	var nearest_actor_runtime_id := 0
-	var candidates := _combat_spatial_index.query_aabb_candidates(
-		runtime_map_id,
-		Rect2(origin_ground_gu, Vector2.ZERO),
-		aggro_radius_gu + combat_radius_gu + GroundUnitSpaceScript.EPSILON_GU
-	)
-	_target_candidate_count += candidates.size()
-	for candidate: Dictionary in candidates:
-		var node: Node = candidate.get("node", null)
-		if not node is EnemyActor:
-			continue
-		var enemy := node as EnemyActor
-		if (
-			not is_instance_valid(enemy)
-			or enemy.is_queued_for_deletion()
-			or enemy.current_hp <= 0
-			or enemy.runtime_map_id != runtime_map_id
-			or not _enemy_accepts_external_attack(enemy)
-		):
-			continue
-		var target_ground_gu := enemy.spatial_index_position()
-		if not target_ground_gu.is_finite():
-			continue
-		var target_bounds_gu := maxf(
-			0.0, float(candidate.get("bounds_gu", 0.0))
-		)
-		var distance_gu := maxf(
-			0.0,
-			origin_ground_gu.distance_to(target_ground_gu)
-				- combat_radius_gu
-				- target_bounds_gu
-		)
-		if distance_gu > aggro_radius_gu + GroundUnitSpaceScript.EPSILON_GU:
-			continue
-		var stable_combat_order := int(
-			candidate.get("stable_combat_order", 0)
-		)
-		var actor_runtime_id := int(candidate.get("actor_runtime_id", 0))
-		if (
-			distance_gu < nearest_distance_gu - GroundUnitSpaceScript.EPSILON_GU
-			or (
-				absf(distance_gu - nearest_distance_gu)
-					<= GroundUnitSpaceScript.EPSILON_GU
-				and (
-					nearest == null
-					or stable_combat_order < nearest_stable_combat_order
-					or (
-						stable_combat_order == nearest_stable_combat_order
-						and actor_runtime_id < nearest_actor_runtime_id
-					)
-				)
-			)
-		):
-			nearest = enemy
-			nearest_distance_gu = distance_gu
-			nearest_stable_combat_order = stable_combat_order
-			nearest_actor_runtime_id = actor_runtime_id
-	return nearest
+	return _legacy_ports.resolve_actor(domain_state._nearest_enemy()) as EnemyActor
 
 
 func _enemy_accepts_external_attack(enemy: EnemyActor) -> bool:
-	if not is_instance_valid(enemy) or enemy.is_queued_for_deletion():
-		return false
-	return enemy.accepts_external_attack_from(self)
+	return domain_state._enemy_accepts_external_attack(_legacy_ports.capture_actor(enemy))
 
 
 func _reject_target_acquisition(reason: String) -> void:
-	_target_acquire_fail_closed_count += 1
-	_target_acquire_last_rejection_reason = reason
+	domain_state._reject_target_acquisition(reason)
 
 
 func _owner_formation_anchor_screen_px() -> Vector2:
-	var owner_forward_ground_gu := (
-		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-			owner_player.movement_facing
-		)
-	)
-	if (
-		owner_forward_ground_gu.length_squared()
-		<= GroundUnitSpaceScript.EPSILON_GU * GroundUnitSpaceScript.EPSILON_GU
-	):
-		owner_forward_ground_gu = Vector2(1.0, 1.0)
-	owner_forward_ground_gu = owner_forward_ground_gu.normalized()
-	var lateral_ground_gu := Vector2(
-		-owner_forward_ground_gu.y,
-		owner_forward_ground_gu.x
-	)
-	var typed_side := -1.0 if summon_id == "skeleton" else 1.0
-	var slot_offset_ground_gu := (
-		lateral_ground_gu
-		* typed_side
-		* RECALL_OFFSET_GU
-		* float(1 + floori(float(pet_slot_index) / 2.0))
-	)
-	if summon_id == "skeleton" and pet_slot_index % 2 == 1:
-		slot_offset_ground_gu -= owner_forward_ground_gu * RECALL_OFFSET_GU
-	return (
-		owner_player.global_position
-		+ GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
-			slot_offset_ground_gu
-		)
-	)
+	return domain_state._owner_formation_anchor_screen_px()
 
 
 func rest_formation_contract_snapshot() -> Dictionary:
-	return {
-		"contract_id": REST_FORMATION_CONTRACT_ID,
-		"collision_contract_id": COLLISION_INTERACTION_CONTRACT_ID,
-		"typed_slot_id": "%s:%d" % [summon_id, pet_slot_index],
-		"direction_source": "owner_movement_facing",
-		"slot_offset_gu": RECALL_OFFSET_GU,
-		"expected_dual_separation_gu": RECALL_OFFSET_GU * 2.0,
-		"wake_distance_gu": FORMATION_WAKE_DISTANCE_GU,
-		"settle_distance_gu": FORMATION_SETTLE_DISTANCE_GU,
-		"desired_screen_position_px": _owner_formation_anchor_screen_px(),
-		"player_pass_through": (
-			collision_layer == WorldSpatialRulesScript.PLAYER_LAYER
-			and (
-				collision_mask & WorldSpatialRulesScript.PLAYER_LAYER
-			) == 0
-		),
-		"pet_hard_collision_enabled": (
-			collision_mask & WorldSpatialRulesScript.PLAYER_LAYER
-		) != 0,
-		"world_collision_preserved": (
-			collision_mask & WorldSpatialRulesScript.WORLD_LAYER
-		) != 0,
-		"enemy_collision_preserved": (
-			collision_mask & WorldSpatialRulesScript.ENEMY_LAYER
-		) != 0,
-	}
+	return domain_state.rest_formation_contract_snapshot()
 
 
 func spatial_contract_snapshot() -> Dictionary:
-	return {
-		"contract_id": SPATIAL_CONTRACT_ID,
-		"unit_contract_id": GroundUnitSpaceScript.CONTRACT_ID,
-		"move_speed_gu_per_sec": move_speed_gu_per_sec,
-		"attack_range_gu": attack_range_gu,
-		"attack_footprint_contract_id": ATTACK_FOOTPRINT_CONTRACT_ID,
-		"attack_effect_length_gu": _attack_effect_length_gu(),
-		"attack_effect_width_gu": SUMMON_ATTACK_WIDTH_GU,
-		"attack_interval_seconds": attack_interval,
-		"aggro_radius_gu": aggro_radius_gu,
-		"combat_radius_gu": combat_radius_gu,
-		"leash_range_gu": leash_range_gu,
-		"teleport_range_gu": teleport_range_gu,
-		"follow_distance_gu": follow_distance_gu,
-		"owner_teleport_relocation_contract_id": (
-			OWNER_TELEPORT_RELOCATION_CONTRACT_ID
-		),
-	}
+	return domain_state.spatial_contract_snapshot()
 
 
 func synchronize_skill_rank(rank: int) -> bool:
-	var new_rank := maxi(skill_level, SkillRankResolver.formula_rank(rank))
-	var resolved_effective := maxi(new_rank, TaoistCombatMath.clamp_skill_level(rank))
-	var changed_more := resolved_effective != effective_skill_rank
-	effective_skill_rank = resolved_effective
-	_divine_damage_more = SkillRankResolver.more_multiplier(effective_skill_rank) if summon_id == "divine_beast" else 1.0
-	var new_cap := maxi(maximum_pet_level, TaoistCombatMath.maximum_summon_pet_level(new_rank))
-	if new_rank == skill_level and new_cap == maximum_pet_level and not changed_more:
-		return false
-	skill_level = new_rank
-	maximum_pet_level = new_cap
-	attack_interval = float(TaoistCombatMath.effective_summon_attack_interval_ms(
-		summon_id, new_rank
-	)) / 1000.0
-	move_speed_gu_per_sec = 1000.0 / float(maxi(1,
-		TaoistCombatMath.effective_summon_move_interval_ms(summon_id, new_rank)
-	))
-	return true
+	return domain_state.synchronize_skill_rank(rank)
 
 
 func gain_growth_from_kill(killed_monster_level: int) -> bool:
-	if summon_exp_level >= maximum_pet_level:
-		return false
-	pet_growth_exp += TaoistCombatMath.summon_kill_growth_credit(killed_monster_level)
-	var threshold := TaoistCombatMath.summon_growth_threshold(
-		summon_id, summon_exp_level
-	)
-	if pet_growth_exp <= threshold:
-		return false
-	pet_growth_exp -= threshold
-	summon_exp_level = mini(maximum_pet_level, summon_exp_level + 1)
-	_apply_growth_stats_preserving_current_hp()
-	_request_visual_redraw()
-	return true
+	return domain_state.gain_growth_from_kill(killed_monster_level)
 
 
 func growth_contract_snapshot() -> Dictionary:
-	return {
-		"contract_id": TaoistCombatMath.summon_baseline_contract_id(),
-		"summon_id": summon_id,
-		"skill_rank": skill_level,
-		"pet_level": summon_exp_level,
-		"maximum_pet_level": maximum_pet_level,
-		"growth_exp": pet_growth_exp,
-		"growth_policy_id": TaoistCombatMath.SUMMON_GROWTH_POLICY_ID,
-		"kill_growth_multiplier": TaoistCombatMath.SUMMON_KILL_GROWTH_MULTIPLIER,
-		"next_threshold": TaoistCombatMath.summon_growth_threshold(
-			summon_id, summon_exp_level
-		),
-		"name_color_index": name_color_index,
-		"persistence": "transient_non_permanent_pet",
-	}
+	return domain_state.growth_contract_snapshot()
 
 
 func _apply_growth_stats_preserving_current_hp() -> void:
-	var absolute_hp_before := current_hp
-	var stats := TaoistCombatMath.summon_stats(summon_id, summon_exp_level)
-	max_hp = int(stats.get("max_hp", max_hp))
-	attack_min = int(stats.get("dc_min", attack_min))
-	attack_max = int(stats.get("dc_max", attack_max))
-	ac_min = int(stats.get("ac_min", ac_min))
-	ac_max = int(stats.get("ac_max", ac_max))
-	mac_min = int(stats.get("mac_min", mac_min))
-	mac_max = int(stats.get("mac_max", mac_max))
-	accuracy = int(stats.get("accuracy", accuracy))
-	agility = int(stats.get("agility", agility))
-	current_hp = mini(absolute_hp_before, max_hp)
-	name_color_index = TaoistCombatMath.summon_name_color_index(summon_exp_level)
+	domain_state.apply_growth_stats_preserving_current_hp()
 
 
 func create_attack_release_footprint_snapshot(target: Node2D) -> Dictionary:
-	if not is_instance_valid(target):
-		return {}
-	if runtime_map_id >= 0 and not runtime_screen_to_ground_position_px.is_valid():
-		missing_projection_rejection_count += 1
-		projection_rejection_reason = (
-			GroundUnitSpaceScript.REASON_MISSING_SCREEN_TO_GROUND_PROJECTION
-		)
-		last_attack_footprint_snapshot = {}
-		return {}
-	var origin_ground_gu := (
-		_runtime_screen_to_ground_position(global_position)
-	)
-	var target_ground_gu := (
-		_runtime_screen_to_ground_position(target.global_position)
-	)
-	var release_id := "%s:attack:%d:%d" % [
-		skill_id,
-		get_instance_id(),
-		_attack_release_sequence,
-	]
-	_attack_release_sequence += 1
-	last_attack_relation = "directed_ground_gu"
-	return SkillFootprintSnapshotScript.create_directed_rectangle(
-		skill_id,
-		release_id,
-		origin_ground_gu,
-		GroundUnitSpaceScript.normalized_ground_direction(
-			origin_ground_gu, target_ground_gu
-		),
-		_attack_effect_length_gu(),
-		SUMMON_ATTACK_WIDTH_GU,
-		0.0,
-		0.0,
-		0.0,
-		"",
-		_snapshot_coordinate_context(origin_ground_gu)
-	)
+	return domain_state.create_attack_release_footprint_snapshot(_legacy_ports.capture_actor(target))
 
 
 func _attack_effect_length_gu() -> float:
-	return (
-		DIVINE_BEAST_ATTACK_LENGTH_GU
-		if summon_id == "divine_beast"
-		else SKELETON_ATTACK_LENGTH_GU
-	)
+	return domain_state._attack_effect_length_gu()
 
 
 func _target_within_attack_geometry(target: Node2D) -> bool:
-	if not is_instance_valid(target):
-		return false
-	var origin_ground_gu := _runtime_screen_to_ground_position(global_position)
-	var target_ground_gu := _runtime_screen_to_ground_position(
-		target.global_position
-	)
-	if not origin_ground_gu.is_finite() or not target_ground_gu.is_finite():
-		return false
-	## The target is the aiming axis, so the exact directed-rectangle contact
-	## condition reduces to length plus the target's canonical GU footprint.
-	## Release still uses the frozen polygon snapshot, preserving width when a
-	## target moves sideways during the attack animation.
-	return (
-		origin_ground_gu.distance_to(target_ground_gu)
-		<= _attack_effect_length_gu()
-			+ _target_combat_radius_gu(target)
-			+ GroundUnitSpaceScript.EPSILON_GU
-		and _attack_world_path_clear(target)
-	)
+	return domain_state._target_within_attack_geometry(_legacy_ports.capture_actor(target))
 
 
 func _attack_world_path_clear(target: Node2D) -> bool:
-	if not is_inside_tree() or not is_instance_valid(target):
-		return false
-	var world := get_world_2d()
-	if world == null or world.direct_space_state == null:
-		return false
-	var query := PhysicsRayQueryParameters2D.create(
-		global_position,
-		target.global_position,
-		WorldSpatialRulesScript.WORLD_MASK,
-	)
-	query.collide_with_bodies = true
-	query.collide_with_areas = true
-	return world.direct_space_state.intersect_ray(query).is_empty()
+	return domain_state._attack_world_path_clear(_legacy_ports.capture_actor(target))
 
 
 func attack_release_snapshot_intersects_target(
 	attack_snapshot: Dictionary,
 	target: Node2D
 ) -> bool:
-	if attack_snapshot.is_empty():
-		return false
-	if not bool(SkillFootprintSnapshotScript.validate_for_consumer(
-		attack_snapshot,
-		_snapshot_coordinate_context(
-			_runtime_screen_to_ground_position(global_position)
-		),
-		SkillFootprintSnapshotScript.VALIDATION_STRICT_V2
-	).get("valid", false)):
-		return false
-	return SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
-		attack_snapshot,
-		_runtime_screen_to_ground_position(target.global_position),
-		_target_combat_radius_gu(target)
-	)
+	return domain_state.attack_release_snapshot_intersects_target(attack_snapshot, _legacy_ports.capture_actor(target))
 
 
 func _runtime_screen_to_ground_position(screen_position_px: Vector2) -> Vector2:
-	if runtime_screen_to_ground_position_px.is_valid():
-		var ground_position_gu: Variant = (
-			runtime_screen_to_ground_position_px.call(screen_position_px)
-		)
-		if ground_position_gu is Vector2:
-			return ground_position_gu
-	if runtime_map_id < 0:
-		return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-			screen_position_px
-		)
-	missing_projection_rejection_count += 1
-	projection_rejection_reason = (
-		GroundUnitSpaceScript.REASON_MISSING_SCREEN_TO_GROUND_PROJECTION
-	)
-	return Vector2.INF
+	return domain_state._runtime_screen_to_ground_position(screen_position_px)
 
 
 func distance_gu_to_screen_position_px(target_screen_position_px: Vector2) -> float:
-	return _distance_gu_between_screen_positions_px(
-		global_position,
-		target_screen_position_px
-	)
+	return domain_state.distance_gu_to_screen_position_px(target_screen_position_px)
 
 
 func target_footprint_surface_distance_gu(
 	target_screen_position_px: Vector2,
 	target_combat_radius_gu: float
 ) -> float:
-	return maxf(
-		0.0,
-		distance_gu_to_screen_position_px(target_screen_position_px)
-		- combat_radius_gu
-		- maxf(0.0, target_combat_radius_gu)
-	)
+	return domain_state.target_footprint_surface_distance_gu(target_screen_position_px, target_combat_radius_gu)
 
 
 static func _target_combat_radius_gu(target: Node) -> float:
-	if is_instance_valid(target) and target is EnemyActor:
-		return maxf(0.0, (target as EnemyActor).combat_radius_gu)
-	return 0.0
+	return SummonLegacyPortsScript.target_combat_radius_gu_for_actor(target)
 
 
 func _screen_velocity_toward_delta_px(delta_screen_px: Vector2) -> Vector2:
-	var direction_ground_gu := (
-		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-			delta_screen_px
-		)
-	)
-	return GroundUnitSpaceScript.desired_screen_velocity_px_per_sec(
-		direction_ground_gu,
-		move_speed_gu_per_sec
-	)
+	return domain_state._screen_velocity_toward_delta_px(delta_screen_px)
 
 
 static func _distance_gu_between_screen_positions_px(
 	first_screen_position_px: Vector2,
 	second_screen_position_px: Vector2
 ) -> float:
-	return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-		second_screen_position_px - first_screen_position_px
-	).length()
+	return SummonActorModelScript._distance_gu_between_screen_positions_px(first_screen_position_px, second_screen_position_px)
 
 
 func apply_control(seconds: float) -> void:
-	if not is_finite(seconds) or seconds <= 0.0 or state in [SummonState.DEAD, SummonState.EXPIRED]:
-		return
-	_monster_control_remaining = maxf(_monster_control_remaining, seconds)
-	_pending_attack_target = null
-	_pending_attack_snapshot = {}
-	_pending_attack_release_remaining = 0.0
-	velocity = Vector2.ZERO
-	actual_ground_motion_gu = Vector2.ZERO
+	domain_state.apply_control(seconds)
 
 
 func apply_monster_poison(tick_damage: int, seconds: float, interval_seconds: float) -> bool:
-	if current_hp <= 0 or state in [SummonState.DEAD, SummonState.EXPIRED]:
-		return false
-	if is_instance_valid(owner_player) and owner_player.combat_transition_is_active():
-		return false
-	return _monster_source_poison.apply(tick_damage, seconds, interval_seconds)
+	return domain_state.apply_monster_poison(tick_damage, seconds, interval_seconds)
 
 
 func _update_monster_source_poison(delta: float) -> void:
-	if current_hp <= 0 or state in [SummonState.DEAD, SummonState.EXPIRED]:
-		_monster_source_poison.clear()
-		return
-	if is_instance_valid(owner_player) and owner_player.combat_transition_is_active():
-		return
-	var ticks: int = _monster_source_poison.advance(delta)
-	for _tick in range(ticks):
-		if current_hp <= 0 or state in [SummonState.DEAD, SummonState.EXPIRED]:
-			_monster_source_poison.clear()
-			break
-		_apply_resolved_damage(_monster_source_poison.tick_damage, false)
+	domain_state._update_monster_source_poison(delta)
 
 
 func take_damage(
@@ -1448,19 +846,7 @@ func take_damage(
 	defense_roll := -1,
 	delivery_identity: Variant = null,
 ) -> void:
-	## The runtime service supplies the source actor as the second argument. A
-	## numeric second argument is also accepted as a deterministic test hook;
-	## neither form changes the canonical summon defence range.
-	var resolved_roll := defense_roll
-	if resolved_roll < 0 and (source_or_defense_roll is int or source_or_defense_roll is float):
-		resolved_roll = int(source_or_defense_roll)
-	var absorbed := _roll_defense(
-		ac_min,
-		ac_max,
-		physical_defence_bonus(),
-		resolved_roll,
-	)
-	_apply_resolved_damage(maxi(1, amount - absorbed), true, delivery_identity)
+	domain_state.take_damage(amount, source_or_defense_roll, defense_roll, delivery_identity)
 
 
 func take_monster_mixed_damage(
@@ -1469,42 +855,11 @@ func take_monster_mixed_damage(
 	context: Dictionary,
 	delivery_identity: Variant = null,
 ) -> Dictionary:
-	if current_hp <= 0 or state in [SummonState.DEAD, SummonState.EXPIRED]:
-		DamageLedgerObserverScript.record_terminal(delivery_identity, "rejected", "summon_dead")
-		return {"success": false, "applied_damage": 0, "failure_reason": "summon_dead"}
-	if is_instance_valid(owner_player) and owner_player.combat_transition_is_active():
-		DamageLedgerObserverScript.record_terminal(delivery_identity, "rejected", "owner_combat_isolated")
-		return {"success": false, "applied_damage": 0, "failure_reason": "owner_combat_isolated"}
-	if physical_raw < 0 or magic_raw < 0:
-		DamageLedgerObserverScript.record_terminal(delivery_identity, "rejected", "invalid_mixed_damage")
-		return {"success": false, "applied_damage": 0, "failure_reason": "invalid_mixed_damage"}
-	var ac_roll := _roll_defense(ac_min, ac_max, physical_defence_bonus(), -1)
-	var mac_roll := _roll_defense(mac_min, mac_max, magic_defence_bonus(), -1)
-	var physical_damage := maxi(0, physical_raw - ac_roll)
-	var magic_damage := maxi(0, magic_raw - mac_roll)
-	var total := physical_damage + magic_damage
-	var hp_before := current_hp
-	if total > 0:
-		_apply_resolved_damage(total, true, delivery_identity)
-	elif DamageLedgerObserverScript.recording_enabled:
-		DamageLedgerObserverScript.record_terminal(delivery_identity, "mitigated", "summon_mixed_zero")
-	return {
-		"success": true, "runtime_contract": "monster_mixed_damage.v1",
-		"physical_defense_roll": ac_roll, "magic_defense_roll": mac_roll,
-		"physical_damage": physical_damage, "magic_damage": magic_damage,
-		"pipeline_input": total, "applied_damage": maxi(0, hp_before - current_hp),
-		"release_id": str(context.get("release_id", "")),
-	}
+	return domain_state.take_monster_mixed_damage(physical_raw, magic_raw, context, delivery_identity)
 
 
 func take_magic_damage(amount: int, magic_defense_roll := -1) -> void:
-	var absorbed := _roll_defense(
-		mac_min,
-		mac_max,
-		magic_defence_bonus(),
-		magic_defense_roll,
-	)
-	_apply_resolved_damage(maxi(1, amount - absorbed))
+	domain_state.take_magic_damage(amount, magic_defense_roll)
 
 
 func take_direct_spell_damage(
@@ -1515,51 +870,7 @@ func take_direct_spell_damage(
 	causes_struck := true,
 	delivery_identity: Variant = null,
 ) -> Dictionary:
-	## Boss target-magic, special-magic melee and area-magic all settle through
-	## this same direct-spell contract. Summons currently have no anti-magic
-	## points; their canonical MAC range (plus an active MAC buff) is consumed by
-	## the shared anti-magic -> MAC -> damage pipeline. AC is intentionally not
-	## part of direct spell settlement.
-	var stable_skill_id := ProfessionRules.skill_id(skill_id_value)
-	var adapted_stats := {
-		"magic_defense_min": maxi(0, mac_min + magic_defence_bonus()),
-		"magic_defense_max": maxi(
-			maxi(0, mac_min + magic_defence_bonus()),
-			mac_max + magic_defence_bonus(),
-		),
-	}
-	var checked_anti_magic_roll := anti_magic_roll
-	if checked_anti_magic_roll < 0:
-		checked_anti_magic_roll = _rng.randi_range(
-			0,
-			CombatResolutionRules.ANTI_MAGIC_ROLL_SIDES - 1,
-		)
-	var magic_defense_state := {}
-	var magic_defense_adapter := Callable(
-		self,
-		"_resolve_direct_spell_magic_defense",
-	).bind(magic_defense_roll, magic_defense_state)
-	var resolution := CombatResolutionRules.resolve_direct_spell_damage(
-		stable_skill_id,
-		raw_damage,
-		adapted_stats,
-		checked_anti_magic_roll,
-		magic_defense_adapter,
-	)
-	resolution["runtime_contract"] = DIRECT_SPELL_DAMAGE_RUNTIME_ID
-	resolution["mac_buff_applied"] = magic_defence_bonus()
-	resolution["magic_defense_min"] = int(adapted_stats.magic_defense_min)
-	resolution["magic_defense_max"] = int(adapted_stats.magic_defense_max)
-	resolution["magic_defense_roll"] = int(magic_defense_state.get("roll", -1))
-	resolution["physical_defense_bypassed"] = true
-	var hp_before := current_hp
-	if int(resolution.get("final_damage", 0)) > 0:
-		_apply_resolved_damage(int(resolution.final_damage), true, delivery_identity)
-	elif DamageLedgerObserverScript.recording_enabled:
-		DamageLedgerObserverScript.record_terminal(delivery_identity, "mitigated", "summon_spell_zero")
-	resolution["summon_pipeline_input"] = int(resolution.final_damage)
-	resolution["applied_damage"] = maxi(0, hp_before - current_hp)
-	return resolution
+	return domain_state.take_direct_spell_damage(skill_id_value, raw_damage, anti_magic_roll, magic_defense_roll, causes_struck, delivery_identity)
 
 
 func _resolve_direct_spell_magic_defense(
@@ -1569,18 +880,7 @@ func _resolve_direct_spell_magic_defense(
 	roll_override: int,
 	resolution_state: Dictionary,
 ) -> int:
-	var minimum := maxi(0, int(target_stats.get("magic_defense_min", 0)))
-	var maximum := maxi(
-		minimum,
-		int(target_stats.get("magic_defense_max", minimum)),
-	)
-	var roll := (
-		clampi(roll_override, minimum, maximum)
-		if roll_override >= 0
-		else _rng.randi_range(minimum, maximum)
-	)
-	resolution_state["roll"] = roll
-	return maxi(0, incoming_damage - roll)
+	return domain_state._resolve_direct_spell_magic_defense(_skill_id_value, incoming_damage, target_stats, roll_override, resolution_state)
 
 
 func _roll_defense(
@@ -1589,160 +889,59 @@ func _roll_defense(
 	active_bonus: int,
 	roll_override: int,
 ) -> int:
-	var minimum := maxi(0, base_minimum) + maxi(0, active_bonus)
-	var maximum := maxi(minimum, maxi(0, base_maximum) + maxi(0, active_bonus))
-	return (
-		clampi(roll_override, minimum, maximum)
-		if roll_override >= 0
-		else _rng.randi_range(minimum, maximum)
-	)
+	return domain_state._roll_defense(base_minimum, base_maximum, active_bonus, roll_override)
 
 
 func restore_health(amount: int) -> int:
-	if amount <= 0 or state in [SummonState.DEAD, SummonState.EXPIRED]:
-		return 0
-	var hp_before := current_hp
-	current_hp = mini(max_hp, current_hp + amount)
-	var actual_restored := current_hp - hp_before
-	if actual_restored > 0:
-		_request_visual_redraw()
-	return actual_restored
+	return domain_state.restore_health(amount)
 
 
 func _apply_resolved_damage(amount: int, causes_struck := true, delivery_identity: Variant = null) -> void:
-	if state in [SummonState.DEAD, SummonState.EXPIRED]:
-		DamageLedgerObserverScript.record_terminal(delivery_identity, "rejected", "summon_dead_or_expired")
-		return
-	var hp_before := current_hp
-	current_hp = maxi(0, current_hp - maxi(1, amount))
-	if DamageLedgerObserverScript.recording_enabled:
-		DamageLedgerObserverScript.record_hp_mutation(self, maxi(1, amount), hp_before, current_hp, "summon_damage", delivery_identity)
-	if current_hp == 0:
-		_set_state(SummonState.DEAD)
-		_audio_death_once()
-		remove_from_group("combat_targets")
-		collision_layer = 0
-		collision_mask = 0
-		velocity = Vector2.ZERO
-		_current_target = null
-		_clear_pending_attack()
-		_hit_visual_remaining = 0.0
-		_attack_visual_remaining = 0.0
-		_death_visual_remaining = _visual_action_duration("death")
-		_visual_state = "death"
-		_visual_elapsed = 0.0
-	elif causes_struck:
-		_hit_visual_remaining = _visual_action_duration("hit")
-		_visual_state = "hit"
-		_visual_elapsed = 0.0
-		if current_hp < hp_before:
-			_audio_hurt()
-	_request_visual_redraw()
+	domain_state._apply_resolved_damage(amount, causes_struck, delivery_identity)
 
 
 func apply_stealth(seconds: float, buff_id := "buff.taoist.mass_invisibility") -> void:
-	## Refresh semantics: keep the longer remaining duration, mirroring the
-	## player stealth contract (player.apply_stealth uses max).
-	if seconds <= 0.0:
-		return
-	var was_hidden := is_stealthed()
-	stealth_remaining_seconds = maxf(stealth_remaining_seconds, seconds)
-	if not buff_id.is_empty():
-		stealth_buff_id = buff_id
-	if not was_hidden:
-		passive_wakeup_changed.emit()
+	domain_state.apply_stealth(seconds, buff_id)
 
 
 func is_stealthed() -> bool:
-	return stealth_remaining_seconds > 0.0
+	return domain_state.is_stealthed()
 
 
 func stealth_remaining() -> float:
-	return stealth_remaining_seconds
+	return domain_state.stealth_remaining()
 
 
 func apply_ac_buff(bonus: int, seconds: float, buff_id := "") -> void:
-	if seconds <= 0.0:
-		return
-	## Reliable refresh: a weaker or shorter refresh never downgrades an
-	## active buff. A fresh cast after expiry starts from the new value.
-	var safe_bonus := maxi(0, bonus)
-	if ac_buff_remaining_seconds <= 0.0:
-		ac_buff_bonus = safe_bonus
-	else:
-		ac_buff_bonus = maxi(ac_buff_bonus, safe_bonus)
-	ac_buff_remaining_seconds = maxf(ac_buff_remaining_seconds, seconds)
-	if not buff_id.is_empty():
-		ac_buff_id = buff_id
+	domain_state.apply_ac_buff(bonus, seconds, buff_id)
 
 
 func apply_mac_buff(bonus: int, seconds: float, buff_id := "") -> void:
-	if seconds <= 0.0:
-		return
-	var safe_bonus := maxi(0, bonus)
-	if mac_buff_remaining_seconds <= 0.0:
-		mac_buff_bonus = safe_bonus
-	else:
-		mac_buff_bonus = maxi(mac_buff_bonus, safe_bonus)
-	mac_buff_remaining_seconds = maxf(mac_buff_remaining_seconds, seconds)
-	if not buff_id.is_empty():
-		mac_buff_id = buff_id
+	domain_state.apply_mac_buff(bonus, seconds, buff_id)
 
 
 func physical_defence_bonus() -> int:
-	return ac_buff_bonus if ac_buff_remaining_seconds > 0.0 else 0
+	return domain_state.physical_defence_bonus()
 
 
 func magic_defence_bonus() -> int:
-	return mac_buff_bonus if mac_buff_remaining_seconds > 0.0 else 0
+	return domain_state.magic_defence_bonus()
 
 
 func clear_ac_buff() -> void:
-	ac_buff_bonus = 0
-	ac_buff_remaining_seconds = 0.0
-	ac_buff_id = ""
+	domain_state.clear_ac_buff()
 
 
 func clear_mac_buff() -> void:
-	mac_buff_bonus = 0
-	mac_buff_remaining_seconds = 0.0
-	mac_buff_id = ""
+	domain_state.clear_mac_buff()
 
 
 func buff_state_snapshot() -> Dictionary:
-	return {
-		"contract_id": BUFF_STATE_CONTRACT_ID,
-		"stealth_contract_id": STEALTH_STATE_CONTRACT_ID,
-		"stealth_remaining_seconds": stealth_remaining_seconds,
-		"stealth_buff_id": stealth_buff_id,
-		"is_stealthed": is_stealthed(),
-		"physical_defence": {
-			"bonus": physical_defence_bonus(),
-			"remaining_seconds": ac_buff_remaining_seconds,
-			"buff_id": ac_buff_id,
-		},
-		"magic_defence": {
-			"bonus": magic_defence_bonus(),
-			"remaining_seconds": mac_buff_remaining_seconds,
-			"buff_id": mac_buff_id,
-		},
-	}
+	return domain_state.buff_state_snapshot()
 
 
 func _update_support_buff_timers(delta: float) -> void:
-	if stealth_remaining_seconds > 0.0:
-		stealth_remaining_seconds = maxf(0.0, stealth_remaining_seconds - delta)
-		if stealth_remaining_seconds <= 0.0:
-			stealth_buff_id = ""
-			passive_wakeup_changed.emit()
-	if ac_buff_remaining_seconds > 0.0:
-		ac_buff_remaining_seconds = maxf(0.0, ac_buff_remaining_seconds - delta)
-		if ac_buff_remaining_seconds <= 0.0:
-			clear_ac_buff()
-	if mac_buff_remaining_seconds > 0.0:
-		mac_buff_remaining_seconds = maxf(0.0, mac_buff_remaining_seconds - delta)
-		if mac_buff_remaining_seconds <= 0.0:
-			clear_mac_buff()
+	domain_state.update_support_buff_timers(delta)
 
 
 func _buff_draw_signature() -> Vector2i:
@@ -1760,13 +959,7 @@ func _screen_velocity_toward_arrival_delta_px(
 	delta_screen_px: Vector2,
 	delta: float
 ) -> Vector2:
-	var desired_velocity := _screen_velocity_toward_delta_px(delta_screen_px)
-	if delta <= 0.0:
-		return desired_velocity
-	var maximum_step_px := desired_velocity.length() * delta
-	if maximum_step_px > delta_screen_px.length():
-		return delta_screen_px / delta
-	return desired_velocity
+	return domain_state._screen_velocity_toward_arrival_delta_px(delta_screen_px, delta)
 
 
 func _refresh_buff_redraw_if_needed() -> void:
@@ -1816,7 +1009,7 @@ func _buff_hint_lines() -> Array[String]:
 
 
 func state_name() -> String:
-	return SummonState.keys()[state]
+	return domain_state.state_name()
 
 
 func _install_visual() -> void:
@@ -1893,6 +1086,7 @@ func _activate_profile(profile: Dictionary, is_streaming_preview := false) -> bo
 	if profile.is_empty():
 		return false
 	_animation_resources = profile
+	domain_state.activate_numeric_visual_profile(profile)
 	_visual_preview_active = is_streaming_preview
 	_visual_profile_complete = not is_streaming_preview
 	var frame_size: Vector2i = profile.get("frame_size", Vector2i.ZERO)
@@ -1989,99 +1183,11 @@ func performance_diagnostics() -> Dictionary:
 
 
 func persistence_snapshot() -> Dictionary:
-	return {
-		"contract_id": PERSISTENCE_CONTRACT_ID,
-		"alive": (
-			current_hp > 0
-			and state not in [SummonState.EXPIRED, SummonState.DEAD]
-		),
-		"runtime_state": state_name(),
-		"summon_id": summon_id,
-		"skill_id": skill_id,
-		"skill_rank": skill_level,
-		"pet_slot_index": pet_slot_index,
-		"effective_skill_rank": effective_skill_rank,
-		"owner_level": owner_level,
-		"current_hp": current_hp,
-		"max_hp": max_hp,
-		"summon_exp_level": summon_exp_level,
-		"maximum_pet_level": maximum_pet_level,
-		"pet_growth_exp": pet_growth_exp,
-		"remaining_lifetime": remaining_lifetime,
-		"stealth": {
-			"remaining_seconds": stealth_remaining_seconds,
-			"buff_id": stealth_buff_id,
-		},
-		"physical_defence": {
-			"bonus": ac_buff_bonus,
-			"remaining_seconds": ac_buff_remaining_seconds,
-			"buff_id": ac_buff_id,
-		},
-		"magic_defence": {
-			"bonus": mac_buff_bonus,
-			"remaining_seconds": mac_buff_remaining_seconds,
-			"buff_id": mac_buff_id,
-		},
-	}
+	return domain_state.persistence_snapshot()
 
 
 func restore_persistence_snapshot(snapshot: Dictionary) -> bool:
-	if str(snapshot.get("contract_id", "")) != PERSISTENCE_CONTRACT_ID:
-		return false
-	if not bool(snapshot.get("alive", true)):
-		return false
-	var restored_summon_id := str(snapshot.get("summon_id", ""))
-	if restored_summon_id not in ["skeleton", "divine_beast"]:
-		return false
-	summon_id = restored_summon_id
-	skill_id = str(snapshot.get("skill_id", skill_id))
-	skill_level = maxi(0, int(snapshot.get("skill_rank", skill_level)))
-	pet_slot_index = maxi(0, int(snapshot.get("pet_slot_index", 0)))
-	effective_skill_rank = maxi(0, int(snapshot.get("effective_skill_rank", skill_level)))
-	_divine_damage_more = SkillRankResolver.more_multiplier(effective_skill_rank) if summon_id == "divine_beast" else 1.0
-	owner_level = maxi(1, int(snapshot.get("owner_level", owner_level)))
-	var restored_current_hp := maxi(0, int(snapshot.get("current_hp", current_hp)))
-	summon_exp_level = clampi(
-		int(snapshot.get("summon_exp_level", summon_exp_level)), 0, 7
-	)
-	maximum_pet_level = clampi(
-		int(snapshot.get("maximum_pet_level", maximum_pet_level)),
-		summon_exp_level,
-		7
-	)
-	pet_growth_exp = maxi(0, int(snapshot.get("pet_growth_exp", pet_growth_exp)))
-	remaining_lifetime = maxf(
-		0.0, float(snapshot.get("remaining_lifetime", remaining_lifetime))
-	)
-	var stealth: Dictionary = snapshot.get("stealth", {})
-	stealth_remaining_seconds = maxf(
-		0.0, float(stealth.get("remaining_seconds", 0.0))
-	)
-	stealth_buff_id = str(stealth.get("buff_id", ""))
-	var physical: Dictionary = snapshot.get("physical_defence", {})
-	ac_buff_bonus = maxi(0, int(physical.get("bonus", 0)))
-	ac_buff_remaining_seconds = maxf(
-		0.0, float(physical.get("remaining_seconds", 0.0))
-	)
-	ac_buff_id = str(physical.get("buff_id", ""))
-	var magic: Dictionary = snapshot.get("magic_defence", {})
-	mac_buff_bonus = maxi(0, int(magic.get("bonus", 0)))
-	mac_buff_remaining_seconds = maxf(
-		0.0, float(magic.get("remaining_seconds", 0.0))
-	)
-	mac_buff_id = str(magic.get("buff_id", ""))
-	## max_hp and every combat stat are derived from the canonical pet level.
-	## The persisted max_hp is retained only for backward-readable snapshots;
-	## trusting it would allow a stale/edited snapshot to restore level-3 HP with
-	## level-0 AC/MAC/DC (the historical restore bug).
-	_apply_growth_stats_preserving_current_hp()
-	current_hp = clampi(restored_current_hp, 0, max_hp)
-	name_color_index = TaoistCombatMath.summon_name_color_index(summon_exp_level)
-	attack_range_gu = _attack_effect_length_gu()
-	_last_buff_draw_signature = _buff_draw_signature()
-	_update_stealth_visual()
-	_request_visual_redraw()
-	return true
+	return domain_state.restore_persistence_snapshot(snapshot)
 
 
 func level_label_layout_snapshot() -> Dictionary:
@@ -2121,11 +1227,7 @@ func reset_performance_diagnostics_for_tests() -> void:
 
 
 func _visual_action_duration(action_name: String) -> float:
-	if _animation_resources.is_empty():
-		return 1.2 if action_name == "death" else 0.2
-	var frame_count := int(_animation_resources.get("frame_counts", {}).get(action_name, 1))
-	var frame_ms := int(_animation_resources.get("frame_ms", {}).get(action_name, 100))
-	return float(frame_count * frame_ms) / 1000.0
+	return domain_state._visual_action_duration(action_name)
 
 
 func _start_fire_visual() -> void:

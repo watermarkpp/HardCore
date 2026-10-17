@@ -18,7 +18,7 @@ func extract_function(source: String, function_name: String) -> String:
 	return source.substr(begin, end - begin) if end >= 0 else source.substr(begin)
 
 func _ready() -> void:
-	var production := FileAccess.get_file_as_string("res://scripts/player_state.gd")
+	var production := FileAccess.get_file_as_string("res://scripts/gameplay/profile/profile_model.gd")
 	var methods := ""
 	for function_name: String in ["destroy_inventory_indices", "_inventory_slot_is_occupied", "_trim_inventory_empty_tail"]:
 		var method := extract_function(production, function_name)

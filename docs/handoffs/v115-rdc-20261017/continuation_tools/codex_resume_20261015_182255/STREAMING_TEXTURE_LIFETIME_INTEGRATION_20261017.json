@@ -1,0 +1,24 @@
+{
+  "status": "NOT_RUN",
+  "scope": "Parent complete2file diff review+gitapplycheck+exactcandidate copy; integrated World validation pending",
+  "baseline": "actual component44checks5FAIL/native1",
+  "candidate": "actual component56checks0FAIL/native0/engine0; actualTexture retained through source take and rootACK then all physical+metadata roots/escrow0",
+  "binding_sha256": "9be10eb7e20ea973397d1d2ba6c56c54ac608a7b37d0f2113197cbf09acec78f",
+  "patch_sha256": "c6c91453b1ced2fc5e6bdc95e6bb0364862ac86767532646c27b4c9422c12efc",
+  "files": [
+    {
+      "path": "scripts/gameplay/enemy/enemy_owner_resource_primitives.gd",
+      "preimage_sha256": "3852a4474793f70692c4bdd53a01b8417305b068e4cec2168a87980e3dba15e7",
+      "bytes": 30636,
+      "candidate_sha256": "f9708ce902aa6ef783e82efaab082cc40c0b298461b101336948fc6b3424a553"
+    },
+    {
+      "path": "scripts/gameplay/enemy/enemy_owner_streaming_coordinator.gd",
+      "preimage_sha256": "fd3fb13ddff24e1d8ec43798955300c510c7491feba1e4d3bab4a4af8deba68e",
+      "bytes": 107707,
+      "candidate_sha256": "9606e86241a7770715204816bf54e3e7dec9f3fdd73c4edff162ca30fd25d346"
+    }
+  ],
+  "index_sha256": "3180f91855b8bc8d7a22848592ff9f95f2d19574a73f7a3eea90e962f7151b22",
+  "native_unchanged": "4035170f8e8396d3cc25075a8a2c1860d024006ae314567cb38f0b61d3168558"
+}

@@ -1,6 +1,8 @@
 class_name SkillDataLoader
 extends RefCounted
 
+const CatalogGate := preload("res://scripts/gameplay/content/catalog_publication_gate.gd")
+
 const EntityRegistry := preload("res://scripts/identity/entity_registry.gd")
 
 const CombatUnitLegacyAdapter := preload(
@@ -48,14 +50,23 @@ const RUNTIME_FORBIDDEN_STATUS_FRAGMENTS := [
 	"rejected_version_mismatch",
 ]
 
-static var _document: Dictionary = {}
-static var _skills_by_id: Dictionary = {}
-static var _ids_by_alias: Dictionary = {}
-static var _configuration_revision := ""
+static var _document: Dictionary = {}:
+	set(value):
+		if CatalogGate.write_allowed(): _document = value
+static var _skills_by_id: Dictionary = {}:
+	set(value):
+		if CatalogGate.write_allowed(): _skills_by_id = value
+static var _ids_by_alias: Dictionary = {}:
+	set(value):
+		if CatalogGate.write_allowed(): _ids_by_alias = value
+static var _configuration_revision := "":
+	set(value):
+		if CatalogGate.write_allowed(): _configuration_revision = value
 
 
 static func document() -> Dictionary:
 	if _document.is_empty():
+		if not CatalogGate.write_allowed(): return {}
 		var parsed := _read_json(SOURCE_OF_TRUTH_PATH)
 		var validation := validate_document(parsed)
 		if not bool(validation.get("valid", false)):
@@ -68,6 +79,7 @@ static func document() -> Dictionary:
 
 
 static func reload_data() -> Dictionary:
+	if not CatalogGate.write_allowed(): return {"valid": false, "errors": ["catalog_publication_active"]}
 	_document.clear()
 	_skills_by_id.clear()
 	_ids_by_alias.clear()
@@ -468,6 +480,7 @@ static func validate_document(value: Variant) -> Dictionary:
 
 
 static func _build_indexes() -> void:
+	if not CatalogGate.write_allowed(): return
 	_skills_by_id.clear()
 	_ids_by_alias.clear()
 	for raw_skill: Variant in _document.get("skills", []):

@@ -1,0 +1,180 @@
+extends RefCounted
+
+const CONTRACT_PATH = "res://assets/data/vanilla_176/combat_resolution_contract.json"
+const CONTRACT_ID = "combat.resolution.openmir2.v1"
+const PHYSICAL_HIT_POLICY_ID = "physical.hit.random_agility.strict_lt.v1"
+const MAGIC_EVASION_POLICY_ID = "magic.evasion.anti_magic.direct_spell.v1"
+const PHYSICAL_ATTACK_SPEED_POLICY_ID = "physical.attack_speed.interval_tier.v1"
+const BASE_CHARACTER_ANTI_MAGIC_POINTS = 1
+const ANTI_MAGIC_POINT_DISPLAY_PERCENT = 10
+const ANTI_MAGIC_ROLL_SIDES = 10
+const BASE_PHYSICAL_ATTACK_INTERVAL_MS = 900
+const PHYSICAL_ATTACK_TIER_REDUCTION_MS = 60
+const PHYSICAL_ATTACK_MODES = {
+	"normal": true,
+	"slaying": true,
+	"thrust": true,
+	"half_moon": true,
+	"fire": true,
+}
+const ANTI_MAGIC_ELIGIBLE_SKILLS = {
+	"wizard.fireball": true,
+	"wizard.great_fireball": true,
+	"wizard.lightning": true,
+	"taoist.soul_fire_talisman": true,
+}
+
+var _contract_cache: Dictionary = {}
+
+
+func contract() -> Dictionary:
+	return _contract_cache.duplicate(true)
+
+
+func physical_attack_uses_accuracy(mode: String) -> bool:
+	return PHYSICAL_ATTACK_MODES.has(mode)
+
+
+func physical_hit_succeeds(accuracy: int, target_agility: int, random_roll: int) -> bool:
+	var safe_agility = maxi(1, target_agility)
+	var checked_roll = clampi(random_roll, 0, safe_agility - 1)
+	return checked_roll < maxi(0, accuracy)
+
+
+func physical_hit_probability(accuracy: int, target_agility: int) -> float:
+	var safe_agility = maxi(1, target_agility)
+	return clampf(float(maxi(0, accuracy)) / float(safe_agility), 0.0, 1.0)
+
+
+func roll_physical_hit(accuracy: int, target_agility: int, rng: RandomNumberGenerator) -> bool:
+	var safe_agility = maxi(1, target_agility)
+	return physical_hit_succeeds(accuracy, safe_agility, rng.randi_range(0, safe_agility - 1))
+
+
+func anti_magic_points_from_display_percent(display_percent: int) -> int:
+	return clampi(maxi(0, display_percent) / ANTI_MAGIC_POINT_DISPLAY_PERCENT, 0, ANTI_MAGIC_ROLL_SIDES)
+
+
+func anti_magic_display_percent(internal_points: int) -> int:
+	return clampi(internal_points, 0, ANTI_MAGIC_ROLL_SIDES) * ANTI_MAGIC_POINT_DISPLAY_PERCENT
+
+
+func anti_magic_points_from_context(context: Dictionary) -> int:
+	if context.has("target_anti_magic_points"):
+		return clampi(int(context.target_anti_magic_points), 0, ANTI_MAGIC_ROLL_SIDES)
+	if context.has("target_magic_evasion_percent"):
+		return anti_magic_points_from_display_percent(int(context.target_magic_evasion_percent))
+	return 0
+
+
+func anti_magic_points_from_target_stats(target_stats: Dictionary) -> int:
+	if target_stats.has("anti_magic_points"):
+		return clampi(int(target_stats.anti_magic_points), 0, ANTI_MAGIC_ROLL_SIDES)
+	if target_stats.has("antiMagicPoints"):
+		return clampi(int(target_stats.antiMagicPoints), 0, ANTI_MAGIC_ROLL_SIDES)
+	if target_stats.has("magicEvasionPoints"):
+		return clampi(int(target_stats.magicEvasionPoints), 0, ANTI_MAGIC_ROLL_SIDES)
+	if target_stats.has("antiMagic"):
+		return clampi(int(target_stats.antiMagic), 0, ANTI_MAGIC_ROLL_SIDES)
+	if target_stats.has("magic_evasion_percent"):
+		return anti_magic_points_from_display_percent(int(target_stats.magic_evasion_percent))
+	if target_stats.has("magicEvasionPercent"):
+		return anti_magic_points_from_display_percent(int(target_stats.magicEvasionPercent))
+	return 0
+
+
+func anti_magic_eligible(skill_id: String) -> bool:
+	return ANTI_MAGIC_ELIGIBLE_SKILLS.has(skill_id)
+
+
+func resolve_magic_damage(
+	skill_id: String,
+	raw_damage: int,
+	target_anti_magic_points: int,
+	random_0_to_9: int,
+	all_incoming_magic = false
+) -> Dictionary:
+	var eligible = all_incoming_magic or anti_magic_eligible(skill_id)
+	var points = clampi(target_anti_magic_points, 0, ANTI_MAGIC_ROLL_SIDES)
+	var checked_roll = clampi(random_0_to_9, 0, ANTI_MAGIC_ROLL_SIDES - 1)
+	var evaded = eligible and checked_roll < points
+	var safe_damage = maxi(0, raw_damage)
+	return {
+		"contract_id": "player.ranged_and_magic_evasion.v1" if all_incoming_magic else MAGIC_EVASION_POLICY_ID,
+		"evasion_channel": "anti_magic" if eligible else "none",
+		"anti_magic_eligible": eligible,
+		"anti_magic_checked": eligible,
+		"anti_magic_points": points,
+		"magic_evasion_percent": anti_magic_display_percent(points),
+		"anti_magic_roll": checked_roll,
+		"magic_evaded": evaded,
+		"damage_after_evasion": 0 if evaded else safe_damage,
+		"enters_magic_defense_stage": not evaded and safe_damage > 0,
+	}
+
+
+func resolve_magic_damage_for_target_stats(
+	skill_id: String,
+	raw_damage: int,
+	target_stats: Dictionary,
+	random_0_to_9: int,
+	all_incoming_magic = false
+) -> Dictionary:
+	return resolve_magic_damage(
+		skill_id,
+		raw_damage,
+		anti_magic_points_from_target_stats(target_stats),
+		random_0_to_9,
+		all_incoming_magic
+	)
+
+
+func resolve_direct_spell_damage(
+	skill_id: String,
+	raw_damage: int,
+	target_stats: Dictionary,
+	random_0_to_9: int,
+	magic_defense_resolver = Callable(),
+	all_incoming_magic = false
+) -> Dictionary:
+	var result = resolve_magic_damage_for_target_stats(
+		skill_id,
+		raw_damage,
+		target_stats,
+		random_0_to_9,
+		all_incoming_magic
+	)
+	result["stage_order"] = ["anti_magic", "magic_defense", "take_damage"]
+	result["magic_defense_checked"] = false
+	result["final_damage"] = int(result.damage_after_evasion)
+	if not bool(result.enters_magic_defense_stage):
+		return result
+	if magic_defense_resolver is Callable and magic_defense_resolver.is_valid():
+		result.magic_defense_checked = true
+		result.final_damage = maxi(
+			0,
+			int(magic_defense_resolver.call(skill_id, int(result.damage_after_evasion), target_stats))
+		)
+	return result
+
+
+func physical_attack_interval_ms(attack_speed_tier: int) -> int:
+	return maxi(0, BASE_PHYSICAL_ATTACK_INTERVAL_MS - attack_speed_tier * PHYSICAL_ATTACK_TIER_REDUCTION_MS)
+
+
+func physical_attack_interval_seconds(attack_speed_tier: int) -> float:
+	return float(physical_attack_interval_ms(attack_speed_tier)) / 1000.0
+
+
+func equipment_spell_time_scale(attack_speed_tier: int) -> float:
+	# User single-player override 2026-09-13: equipment speed also affects spells
+	# by the same interval ratio as melee (+1: 900ms -> 840ms). Keep authored
+	# skill timing ratios; reuse existing cast-speed limits for extreme tiers.
+	return clampf(float(physical_attack_interval_ms(attack_speed_tier)) / BASE_PHYSICAL_ATTACK_INTERVAL_MS, 1.0 / 6.0, 5.0)
+
+func configure_contract(document: Dictionary) -> bool:
+	if not _contract_cache.is_empty() or document.is_empty(): return false
+	var captured: Dictionary = preload("res://scripts/features/contracts/plain_graph.gd").capture(document)
+	if not captured.success: return false
+	_contract_cache = captured.value
+	return true

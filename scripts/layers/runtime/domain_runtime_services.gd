@@ -1,6 +1,10 @@
 extends Node
 
 
+# Main callback depth only. No new gameplay/IO owner or timer.
+var _original_main_callback_ledger: Dictionary = {}
+
+
 func map_content(map_id: int) -> Dictionary:
 	return WorldContent.map_content(map_id)
 
@@ -26,4 +30,11 @@ func skill(skill_name: String, level: int) -> Dictionary:
 
 
 func save() -> bool:
+	_original_main_callback_ledger["save"] = int(_original_main_callback_ledger.get("save",0)) + 1
+	var original_result: Variant = _original_source_domain_runtime_services_save()
+	_original_main_callback_ledger["save"] -= 1
+	return original_result
+
+
+func _original_source_domain_runtime_services_save() -> bool:
 	return PlayerState.save_game()

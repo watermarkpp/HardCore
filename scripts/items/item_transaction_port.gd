@@ -1,4 +1,8 @@
 extends RefCounted
+const ProfileContent := preload("res://scripts/gameplay/profile/legacy_profile_content.gd")
+const FeaturePort := preload("res://scripts/gameplay/profile/profile_feature_port.gd")
+var _content_port: ProfileContent.ContentPort
+var _feature_port: FeaturePort
 
 const Codec := preload("res://scripts/items/item_extension_codec.gd")
 const Gem := preload("res://scripts/items/socket_gem_rules.gd")
@@ -17,11 +21,17 @@ const OPERATIONS := {
 	"hc.runes.remove":{"module_id":Rune.MODULE,"namespace_id":Codec.RUNE_NAMESPACE,"entries_field":"runes","slot_field":"rune_slot_id","slot_id":Codec.RUNE_ID}
 }
 
-func _init(owner: Node) -> void:
+func _init(owner: Object, content: ProfileContent.ContentPort = null, features: FeaturePort = null) -> void:
 	_owner = weakref(owner)
+	_content_port = ProfileContent.resolve(content)
+	if features == null:
+		if OS.get_thread_caller_id() != OS.get_main_thread_id():
+			return
+		features = FeaturePort.new(ContentLayers)
+	_feature_port = features
 
 func quote_new(request: Dictionary) -> Dictionary:
-	var player: Node = _owner.get_ref()
+	var player: Object = _owner.get_ref()
 	if player == null or request.size() != 3 or request.has("operation_id"):
 		return _failure("invalid_item_command")
 	var issued := request.duplicate(true)
@@ -33,7 +43,7 @@ func quote_new(request: Dictionary) -> Dictionary:
 	issued["operation_id"] = Journal.sequence_id(_epoch_for(player),last+1)
 	return quote(issued)
 
-func _epoch_for(player: Node) -> String:
+func _epoch_for(player: Object) -> String:
 	if Journal.is_sequenced(player._item_transaction_journal):
 		_issued_epoch = ""; _issued_context = ""
 		return player._item_transaction_journal.epoch
@@ -43,7 +53,7 @@ func _epoch_for(player: Node) -> String:
 	return _issued_epoch
 
 func quote(request: Dictionary) -> Dictionary:
-	var player: Node = _owner.get_ref()
+	var player: Object = _owner.get_ref()
 	if player == null or not _request_valid(request): return _failure("invalid_item_command")
 	var spec: Dictionary=OPERATIONS[request.action]
 	var input_id: String=request[Journal.input_field(request.action)]
@@ -55,7 +65,7 @@ func quote(request: Dictionary) -> Dictionary:
 	var epoch := _epoch_for(player) if request.operation_id.begins_with(Journal.SEQUENCE_PREFIX) else ""
 	var admission := Journal.admission(player._item_transaction_journal,request.operation_id,epoch)
 	if not bool(admission.success): return _failure(admission.reason)
-	var config := ContentLayers.feature_configuration()
+	var config := _feature_port.feature_configuration()
 	if spec.module_id not in config.get("enabled_modules", []): return _failure("rune_fixture_disabled" if spec.module_id==Rune.MODULE else "socket_fixture_disabled")
 	if "items.transact" not in config.catalog.modules[spec.module_id].capabilities: return _failure("missing_item_transaction_permission")
 	if not player._valid_profile_storage_id(player.active_profile_id) or player.active_profile_id == player._save_blocked_profile_id \
@@ -66,10 +76,10 @@ func quote(request: Dictionary) -> Dictionary:
 		return _failure("invalid_item_ownership")
 	var target := _find(request.target_instance_id)
 	if target.is_empty(): return _failure("target_instance_missing_or_ambiguous")
-	var base := Codec.base_record(target.record)
-	if base.is_empty() or not base.get("count") in [1, 1.0] or GameData.get_item_record(base).get("kind") != "equipment" \
-		or not base.has("item_id") or GameData.item_entity_id(base).is_empty(): return _failure("invalid_socket_target")
-	var existing := Codec.extensions(target.record)
+	var base := Codec.base_record(target.record, _content_port)
+	if base.is_empty() or not base.get("count") in [1, 1.0] or _content_port.get_item_record(base).get("kind") != "equipment" \
+		or not base.has("item_id") or _content_port.item_entity_id(base).is_empty(): return _failure("invalid_socket_target")
+	var existing := Codec.extensions(target.record, _content_port)
 	var sockets: Array = existing.get(spec.namespace_id, {}).get(spec.entries_field, [])
 	var gem: Dictionary = {}
 	if _is_insert(request):
@@ -89,12 +99,12 @@ func quote(request: Dictionary) -> Dictionary:
 		"profile_id": player.active_profile_id, "world_clock_generation": player._world_clock_generation,
 		"rules_revision": config.catalog.revision, "request_digest": digest,
 		"target_digest": _target_digest(target.record), "input_digest": _item_digest(gem),
-		"target_entity_id": GameData.item_entity_id(base), "input_instance_id": gem.instance_id}
+		"target_entity_id": _content_port.item_entity_id(base), "input_instance_id": gem.instance_id}
 	var captured := Graph.capture(result)
 	return captured.value if bool(captured.success) else _failure("non_plain_item_quote")
 
 func commit(quoted: Dictionary) -> Dictionary:
-	var player: Node = _owner.get_ref()
+	var player: Object = _owner.get_ref()
 	if player == null or not quoted.get("success", false) or not quoted.get("request") is Dictionary:
 		return _failure("invalid_item_quote")
 	var request: Dictionary = quoted.request
@@ -124,7 +134,7 @@ func commit(quoted: Dictionary) -> Dictionary:
 
 func record_reserved(record: Dictionary) -> bool:
 	if _active.is_empty(): return false
-	var ids := Codec.ownership_ids(record)
+	var ids := Codec.ownership_ids(record, _content_port)
 	return ids.has(_active.quote.request.target_instance_id) or ids.has(_active.quote.input_instance_id)
 
 func slot_reserved(index: int) -> bool:
@@ -135,7 +145,7 @@ func _guard(_identity: Dictionary, plan: Dictionary) -> bool:
 	return quote(plan.quote.request) == plan.quote
 
 func _receipt_context_matches(plan: Dictionary) -> bool:
-	var player: Node = _owner.get_ref()
+	var player: Object = _owner.get_ref()
 	if player == null or player.active_profile_id != plan.quote.profile_id or player._world_clock_generation != plan.quote.world_clock_generation:
 		return false
 	var target := _find(plan.quote.request.target_instance_id)
@@ -145,7 +155,7 @@ func _receipt_context_matches(plan: Dictionary) -> bool:
 		gem = _find(plan.quote.input_instance_id).get("record", {})
 	else:
 		var spec: Dictionary=OPERATIONS[plan.quote.request.action]
-		var sockets: Array = Codec.extensions(target.record).get(spec.namespace_id, {}).get(spec.entries_field, [])
+		var sockets: Array = Codec.extensions(target.record, _content_port).get(spec.namespace_id, {}).get(spec.entries_field, [])
 		if sockets.size() != 1: return false
 		gem = sockets[0].item
 	if _item_digest(gem) != plan.quote.input_digest: return false
@@ -153,7 +163,7 @@ func _receipt_context_matches(plan: Dictionary) -> bool:
 	return true
 
 func _build_document(previous: Dictionary, identity: Dictionary, plan: Dictionary) -> Variant:
-	var player: Node = _owner.get_ref()
+	var player: Object = _owner.get_ref()
 	if not _guard(identity, plan) or previous.is_empty(): return null
 	# Disk and live journal must refer to the same accepted outcomes. An external
 	# edit or late incompatible receipt requires recovery, never a second apply.
@@ -163,7 +173,7 @@ func _build_document(previous: Dictionary, identity: Dictionary, plan: Dictionar
 	var target := _find(plan.quote.request.target_instance_id)
 	var spec: Dictionary=OPERATIONS[plan.quote.request.action]
 	var gem: Dictionary = (_find(plan.quote.input_instance_id).get("record", {}) if _is_insert(plan.quote.request)
-		else Codec.extensions(target.record)[spec.namespace_id][spec.entries_field][0].item)
+		else Codec.extensions(target.record, _content_port)[spec.namespace_id][spec.entries_field][0].item)
 	var output := _compose_target(target.record,gem,spec,_is_insert(plan.quote.request))
 	if output.status != Codec.KNOWN_VALID: return null
 	plan.output = output.item
@@ -176,19 +186,19 @@ func _build_document(previous: Dictionary, identity: Dictionary, plan: Dictionar
 	if plan.journal.is_empty(): return null
 	var document: Dictionary = player._prepare_character_save_payload(false).duplicate(true)
 	if document.is_empty(): return null
-	var decoded := Codec.decode_document(document)
+	var decoded := Codec.decode_document(document, _content_port)
 	if decoded.status != Codec.KNOWN_VALID: return null
 	document = decoded.document
 	_apply_item_delta(document.inventory, document.equipment, target, plan)
 	document[Journal.FIELD] = plan.journal
-	var encoded := Codec.encode_document(document)
+	var encoded := Codec.encode_document(document, _content_port)
 	return encoded.document if encoded.status == Codec.KNOWN_VALID else null
 
 func _complete(receipt: Dictionary, plan: Dictionary) -> void:
 	# A retained asynchronous callback loses publication rights with its job.
 	# It must not restore an old journal/frontier after a later operation finishes.
 	if _active.is_empty() or _active.get("job") != plan.get("job"): return
-	var player: Node = _owner.get_ref()
+	var player: Object = _owner.get_ref()
 	if bool(receipt.get("success", false)):
 		# Receipt consumption precedes pumping any next character save. Publish
 		# related ownership first; never assign the captured full profile/inventory.
@@ -240,7 +250,7 @@ func _apply_item_delta(inventory: Array, equipment: Dictionary, target: Dictiona
 		inventory[plan.destination] = plan.gem.duplicate(true)
 
 func _find(instance_id: String) -> Dictionary:
-	var player: Node = _owner.get_ref()
+	var player: Object = _owner.get_ref()
 	var found := {}
 	for index in player.inventory.size():
 		var record: Variant = player.inventory[index]
@@ -255,17 +265,17 @@ func _find(instance_id: String) -> Dictionary:
 	return found
 
 func _free_inventory_slot() -> int:
-	var player: Node = _owner.get_ref()
+	var player: Object = _owner.get_ref()
 	for index in player.inventory.size():
 		if player.inventory[index] is Dictionary and player.inventory[index].is_empty(): return index
 	return player.inventory.size() if player.inventory.size() < player.INVENTORY_CAPACITY else -1
 
-static func _item_digest(record: Dictionary) -> String:
-	var encoded := Codec.encode_runtime(record)
+func _item_digest(record: Dictionary) -> String:
+	var encoded := Codec.encode_runtime(record, _content_port)
 	return JSON.stringify(encoded.item).sha256_text() if encoded.status == Codec.KNOWN_VALID else ""
 
-static func _target_digest(record: Dictionary) -> String:
-	var normalized := Codec.normalize_runtime(record)
+func _target_digest(record: Dictionary) -> String:
+	var normalized := Codec.normalize_runtime(record, _content_port)
 	if normalized.status != Codec.KNOWN_VALID: return ""
 	var economic_view: Dictionary = normalized.item.duplicate(true)
 	# Only current combat wear is independent of socket eligibility. Maximum
@@ -290,13 +300,13 @@ static func _request_valid(request: Dictionary) -> bool:
 static func _is_insert(request: Dictionary) -> bool:
 	return request.action in ["hc.socketing.insert","hc.runes.insert"]
 
-static func _compose_target(record: Dictionary,input: Dictionary,spec: Dictionary,insert: bool) -> Dictionary:
+func _compose_target(record: Dictionary,input: Dictionary,spec: Dictionary,insert: bool) -> Dictionary:
 	# Modify only this business namespace; the other module keeps its assets.
-	var extensions:=Codec.extensions(record)
+	var extensions:=Codec.extensions(record, _content_port)
 	var entry: Dictionary={"item":input}; entry[spec.slot_field]=spec.slot_id
 	var value: Dictionary={"schema_version":1}; value[spec.entries_field]=[entry] if insert else []
 	extensions[spec.namespace_id]=value
-	return Codec.with_extensions(Codec.base_record(record),extensions)
+	return Codec.with_extensions(Codec.base_record(record, _content_port),extensions, _content_port)
 
 static func _outcome(entry: Dictionary) -> Dictionary:
 	return {"success": true, "pending": false, "durable": true, "applied_in_memory": true, "outcome": entry.duplicate(true)}

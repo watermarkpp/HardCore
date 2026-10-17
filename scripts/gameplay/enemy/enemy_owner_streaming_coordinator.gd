@@ -1,0 +1,2565 @@
+extends RefCounted
+
+## Numeric owner of the original coordinator, with no Node or Resource access.
+## GameRoot._process -> P_GROUP; bootstrap explicit process_frame poll is separate.
+var _owner: int = OS.get_thread_caller_id()
+var _configured := false
+var _failed := false
+var _finished := false
+var _fatal: Callable
+var deps: Dictionary
+var _primitives: RefCounted
+var _allow_synchronous_for_tests := false
+const CLIENT_ACTOR_GROUND_OFFSET := Vector2i(32, 28)
+const REQUIRED_ACTIONS := [&"idle", &"walk", &"attack", &"hit", &"death"]
+const DIRECTION_MODES := [&"mir2_north_first", &"logical_south_first"]
+const DEFAULT_FRAME_COUNTS := {&"idle": 4, &"walk": 6, &"attack": 6, &"hit": 2, &"death": 4}
+
+func owner_thread_id() -> int:
+	return _owner
+
+func configure_owner(bindings: Dictionary, process_scope: Object, fail_owner: Callable, direct_test_on_main := false) -> bool:
+	if _configured or OS.get_thread_caller_id() != _owner or not fail_owner.is_valid(): return false
+	if _owner == OS.get_main_thread_id() and not direct_test_on_main: return false
+	_fatal = fail_owner
+	deps = {}
+	var methods := {
+		"FrameBudget": ["begin", "end", "mark_pending", "remaining_usec"],
+		"Time": ["get_ticks_usec", "get_ticks_msec"],
+		"RuntimeDiagnostics": ["timing_start", "timing_elapsed_usec", "record_performance_max"],
+		"services": ["resolve_service", "service_qualification"],
+		"primitives": ["is_configured", "texture_size", "exists", "load_threaded_request", "load_threaded_get_status", "load_threaded_get", "replace_profile_roots", "bind_visual_profile", "retire_visual_binding", "close_collection_escrow", "retire_threaded_resource_claims", "forget_invalid_claim", "monster_data", "mapping_for_monster"]}
+	for key in methods:
+		var provider: Variant = bindings.get(key)
+		if not provider is RefCounted or not provider.has_method("owner_thread_id") or provider.owner_thread_id() != _owner:
+			return _require(false, "missing/wrong owner provider: " + key)
+		for method in methods[key]:
+			if not provider.has_method(method): return _require(false, "provider method missing: " + key + "." + method)
+		deps[key] = provider
+	_primitives = deps.primitives
+	_allow_synchronous_for_tests = bindings.get("test_mode", false) == true and bindings.get("synchronous_visual_loading_for_tests", false) == true
+	for method in ["increment_test_sync_load_count", "load_client_texture_for_tests"]:
+		if not _primitives.has_method(method): return _require(false, "missing exact original test branch " + method)
+	if not _primitives.is_configured(): return _require(false, "resource primitive protocol not installed")
+	if process_scope == null or process_scope is Node or process_scope is Resource or not process_scope.has_method("owner_thread_id") or process_scope.owner_thread_id() != _owner:
+		return _require(false, "process scope is not the registered original GameRoot owner scope")
+	# This category was keyed by the coordinator's own RefCounted ObjectID,
+	# never an actor ID. Keep that exact formula and one lifetime-local instance.
+	_budget_category = "resource_completion:%d" % get_instance_id()
+	_configured = true
+	configure_process_owner(process_scope)
+	return true
+
+func _require(ok: bool, reason: String) -> bool:
+	if ok and not _failed: return true
+	_failed = true
+	push_error("Streaming owner rejected: " + reason)
+	if _fatal.is_valid(): _fatal.call(reason)
+	return false
+
+func _guard() -> bool:
+	return _require(_configured and not _finished and OS.get_thread_caller_id() == _owner and _primitives.is_configured(), "owner/phase already failed, finished or unconfigured")
+
+func is_healthy() -> bool:
+	return _configured and not _failed and _primitives.is_configured()
+
+func _visual_is_queued(id: int) -> bool:
+	var value: Variant = deps.services.service_qualification(id)
+	if not _require(value is Dictionary and value.has("present") and value.has("queued_for_retirement"), "missing canonical visual qualification"): return true
+	return not bool(value.present) or bool(value.queued_for_retirement)
+
+func _publish_resource_roots() -> void:
+	if _primitives.live_resource_phase():
+		_live_publish_roots()
+		return
+	var profiles: Array = _client_resource_profiles.values()
+	for job: Dictionary in _threaded_profile_requests.values():
+		if job.has("partial_resources"): profiles.append(job.partial_resources)
+		if job.has("resources"): profiles.append(job.resources)
+	_primitives.replace_profile_roots(_budget_category, profiles)
+
+func bind_visual_profile(service_id: int, profile: Dictionary) -> void:
+	if _primitives.live_resource_phase():
+		_require(false, "LIVE profile caller must use actual activation/release transaction")
+		return
+	if not _guard(): return
+	if not _require(service_id > 0 and deps.services.resolve_service(service_id) != null, "profile root has no canonical visual handle"): return
+	var subscription: Dictionary = _visual_subscriptions.get(service_id, {})
+	if not _require(profile.is_empty() or not subscription.is_empty(), "active profile without original subscription"): return
+	var profile_identity := {"service_id": service_id, "resource_key": str(subscription.get("resource_key", "")) if not profile.is_empty() else "", "world_generation": int(subscription.get("world_generation", -1))}
+	_primitives.bind_visual_profile(service_id, profile, profile_identity)
+
+var _original_visual_free: Dictionary = {}
+func finish_visual_resources_at_original_free(service_id: int) -> bool:
+	if not _guard() or service_id <= 0: return false
+	if _original_visual_free.has(service_id): return _original_visual_free[service_id].get("status") == "COMMITTED" and _original_visual_free[service_id].get("result") == true
+	if _primitives.live_resource_phase():
+		_original_visual_free[service_id] = {"status":"PENDING","op":&"retire_visual_binding","args":[service_id]}
+		_enqueue_live_binding(service_id, &"retire_visual_binding", [service_id], "", {}, true)
+		return false
+	if not _primitives.retire_visual_binding(service_id): return false
+	_original_visual_free[service_id] = {"status":"COMMITTED","result":true,"op":&"retire_visual_binding","args":[service_id],"actual_synchronous_original_return":true}
+	return true
+func original_visual_free_started(service_id: int) -> bool:
+	return OS.get_thread_caller_id() == _owner and _original_visual_free.has(service_id)
+func original_visual_free_committed(service_id: int) -> bool:
+	return OS.get_thread_caller_id() == _owner and _original_visual_free.has(service_id) and _original_visual_free[service_id].get("status") == "COMMITTED" and _original_visual_free[service_id].get("result") == true
+func consume_original_visual_free(service_id: int) -> bool:
+	if OS.get_thread_caller_id() != _owner or not _original_visual_free.has(service_id) or _original_visual_free[service_id].get("status") != "COMMITTED" or _original_visual_free[service_id].get("result") != true: return false
+	_original_visual_free.erase(service_id)
+	return true
+
+func complete_synchronous_profile(service_id: int, mapping: Dictionary) -> Dictionary:
+	if not _guard() or not _require(_allow_synchronous_for_tests and deps.services.resolve_service(service_id) != null, "synchronous fallback only allowed by published original test flags"): return {}
+	var result := _complete_synchronous_profile(mapping)
+	_publish_resource_roots()
+	_primitives.close_collection_escrow()
+	return result
+
+func _load_client_texture_for_tests(path: String, expected_size: Vector2i) -> Variant:
+	if not _primitives.increment_test_sync_load_count(): return null
+	record_sync_load(path)
+	return _primitives.load_client_texture_for_tests(path, expected_size)
+
+func finish_owner() -> bool:
+	if _primitives.live_resource_phase(): return _live_finish_owner()
+	if not _guard(): return false
+	if not retire_threaded_resource_claims(): return _require(false, "accepted resource claims could not retire")
+	deps.FrameBudget.mark_pending(_budget_category, false)
+	_primitives.replace_profile_roots(_budget_category, [])
+	_finished = true
+	return true
+
+
+## Q2-D / HC-P1-011: single owner of the global MonsterVisual streaming poll.
+## GameRoot owns exactly one instance; MonsterVisual instances register their
+## needs, receive cached results and keep their own animation. The coordinator
+## never decides actions, directions, frames, timing or combat.
+
+var _budget_category: String
+var _process_owner = WeakRef.new()
+
+func configure_process_owner(owner: Object) -> void:
+	if not _guard(): return
+	if not _require(owner != null and not owner is Node and not owner is Resource and owner.has_method("owner_thread_id") and owner.owner_thread_id() == _owner, "process owner must be the registered numeric GameRoot scope"): return
+	_process_owner = weakref(owner)
+
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE and _configured and not _finished:
+		# No callbacks on a dying RefCounted. WorldCore must run finish_owner at
+		# the original PREDELETE boundary while this owner is still alive.
+		push_error("Streaming owner destroyed without finish_owner; resource claims unresolved")
+
+
+
+const CONTRACT_ID = "hardcore.monster.visual_streaming_coordinator.v1"
+const CLIENT_RESOURCE_CACHE_CAPACITY = 12
+## All cache accounting is decoded, lossless RGBA8 residency: four bytes per
+## atlas pixel, summed across the five action atlases. The old name is kept as
+## a compatibility constant, but its value is not compressed/ETC2 residency.
+const CLIENT_RESOURCE_CACHE_BUDGET_DECODED_RGBA8_BYTES = 64 * 1024 * 1024
+const CLIENT_RESOURCE_CACHE_BUDGET_BYTES = CLIENT_RESOURCE_CACHE_BUDGET_DECODED_RGBA8_BYTES
+const MAX_CONCURRENT_PROFILE_LOADS = 2
+## perf-smoothness-r1 Phase B (audit PERF-04): transient load failures are
+## retried with backoff while somebody still needs the profile; exhausted
+## attempts become permanent and stop retrying. Pre-validation failures
+## (missing/invalid source at request time) are permanent immediately.
+const MAX_FAILURE_RETRIES = 3
+const FAILURE_RETRY_BACKOFF_MSEC = 2000
+## Subscriber expiry is housekeeping, not resource-completion work. Keep the
+## loader/status path per-frame, but visit a fixed number of weak subscriptions
+## so a dense map cannot add one full visual walk to every rendered frame.
+const MAX_SUBSCRIBER_CLEANUP_VISITS_PER_POLL = 8
+## Camera-residency checks are spread over process frames instead of one Timer
+## per monster. Twelve visits keep an 82-actor map near the existing 120 ms
+## visual boundary at 60 FPS while making per-frame work strictly bounded.
+const MAX_VISUAL_RESIDENCY_VISITS_PER_POLL = 12
+const ACTIONS = ["idle", "walk", "attack", "hit", "death"]
+const JOB_LANE_MAP_PREFETCH = "map_prefetch"
+const JOB_LANE_RUNTIME_DEMAND = "runtime_demand"
+
+
+var _threaded_profile_requests: Dictionary = {}
+var _threaded_profile_queue: Array[String] = []
+## Accepted action requests that outlived a failed profile job.  A profile may
+## submit several independent threaded requests before one action fails; the
+## failed job must not abandon the other native retrieval rights.  These paths
+## are drained only when they reach a terminal status, never by blocking the
+## current frame.
+var _orphaned_threaded_paths: Dictionary = {}
+## Accepted requests that are still IN_PROGRESS when this owner is deleted.
+## Godot exposes no owner-cancel operation; retain the path/status as an
+## explicit unresolved receipt instead of blocking predelete on get().
+var _unresolved_threaded_paths: Dictionary = {}
+var _transferred_threaded_path_count = 0
+var _threaded_claims_retired = false
+var _client_resource_profiles: Dictionary = {}
+var _client_resource_profile_lru: Array[String] = []
+var _client_resource_profile_decoded_rgba8_bytes: Dictionary = {}
+var _client_resource_cache_decoded_rgba8_bytes = 0
+var _threaded_texture_request_count = 0
+var _threaded_texture_get_count = 0
+var _map_prefetch_keys: Array[String] = []
+var _map_pinned_profile_keys: Dictionary = {}
+var _map_prefetch_completed_keys: Dictionary = {}
+var _map_pinned_decoded_rgba8_bytes = 0
+var _map_prefetch_generation = 0
+## Bootstrap handoff protection is separate from map pins. A profile may be
+## larger than the steady-state cache budget, or map pin admission may be
+## rejected, while the initial world is still waiting for its first real
+## MonsterVisual lease.
+var _bootstrap_handoff_hold_keys: Dictionary = {}
+var _bootstrap_handoff_hold_generation = -1
+var _last_streaming_poll_frame = -1
+var _request_sequence = 0
+var maximum_completion_latency_usec = 0
+var maximum_action_get_usec = 0
+
+var _visual_subscriptions: Dictionary = {}
+var _visual_cleanup_order: Array[int] = []
+var _visual_cleanup_cursor = 0
+var _visual_residency_cursor = 0
+var _sync_load_count = 0
+var _sync_load_paths: Array[String] = []
+var _request_order: Array[String] = []
+var _apply_order: Array[String] = []
+
+## perf-smoothness-r1 Phase B lifecycle state:
+## - loaded-not-admitted accounting (audit PERF-05): textures held by jobs
+##   that finished loading but have not entered the bounded cache yet.
+## - failure details survive entry release so map_prefetch_status keeps
+##   reporting real failures after a dead entry frees its dedup slot.
+var _loaded_pending_keys: Dictionary = {}
+var _failure_details: Dictionary = {}
+var _retry_requeue_count = 0
+var permanent_failed_request_count = 0
+
+## Per-visual/per-resource residency state. A visual is only a waiter while it
+## has explicitly requested activation; registration alone is deliberately not
+## a waiter. Dictionary values are sets represented as {visual_id: true}.
+var _resource_waiters: Dictionary = {}
+var _resource_leases: Dictionary = {}
+var _visual_waiting_resources: Dictionary = {}
+var _visual_leased_resources: Dictionary = {}
+var _resource_delivery_keys: Dictionary = {}
+var _resource_had_demand: Dictionary = {}
+var _resource_first_apply_seen: Dictionary = {}
+var _resource_ever_loaded: Dictionary = {}
+
+## Diagnostics (monster_streaming_diagnostics).
+var per_instance_poll_call_count = 0
+var coordinator_poll_count = 0
+var heavy_poll_execution_count = 0
+var request_enqueue_count = 0
+var unique_request_count = 0
+var duplicate_request_count = 0
+var active_request_count = 0
+var ready_resource_count = 0
+var failed_resource_count = 0
+var status_poll_count = 0
+var resource_apply_count = 0
+var stale_completion_count = 0
+var invalid_subscriber_cleanup_count = 0
+var subscriber_cleanup_visit_count = 0
+var subscriber_cleanup_max_visits_per_poll = 0
+var visual_residency_visit_count = 0
+var visual_residency_max_visits_per_poll = 0
+var max_waiting_visuals_per_resource = 0
+var pin_rejection_count = 0
+var immediate_eviction_count = 0
+var same_key_reload_count = 0
+var evicted_before_first_apply_count = 0
+var late_completion_resident_skip_count = 0
+
+
+## Explicit scene-owner handoff is the normal lifecycle boundary. PREDELETE
+## uses the same static seam only as protection for standalone coordinators.
+func retire_threaded_resource_claims() -> bool:
+	if not _guard(): return false
+	if _threaded_claims_retired:
+		return _unresolved_threaded_paths.is_empty()
+	var result = _transfer_owned_threaded_claims(
+		_threaded_profile_requests, _orphaned_threaded_paths, _unresolved_threaded_paths
+	)
+	_transferred_threaded_path_count += int(result.transferred)
+	_threaded_claims_retired = bool(result.complete)
+	return _threaded_claims_retired
+
+
+func _transfer_owned_threaded_claims(
+	jobs: Dictionary, orphans: Dictionary, unresolved: Dictionary
+) -> Dictionary:
+	if _primitives.live_resource_phase(): return _live_transfer_claims(jobs, orphans, unresolved)
+	if not _guard(): return {}
+	var transferred = 0
+	var complete = true
+	for job: Dictionary in jobs.values():
+		if str(job.get("state", "")) not in ["loading", "collecting"]:
+			continue
+		var native_get_paths: Dictionary = job.get("native_get_paths", {})
+		var native_requested_paths: Dictionary = job.get("native_requested_paths", {})
+		for raw_path: Variant in native_requested_paths.keys():
+			var path = str(raw_path)
+			var accepted = int(native_requested_paths.get(path, 0))
+			var consumed = int(native_get_paths.get(path, 0))
+			var remaining = maxi(0, accepted - consumed)
+			if path.is_empty() or remaining <= 0:
+				continue
+			var status = _primitives.load_threaded_get_status(path)
+			if status == _primitives.THREAD_LOAD_INVALID_RESOURCE:
+				_primitives.forget_invalid_claim(path, remaining)
+				unresolved.erase(path)
+				continue
+			if status in [_primitives.THREAD_LOAD_IN_PROGRESS, _primitives.THREAD_LOAD_LOADED, _primitives.THREAD_LOAD_FAILED] and _handoff_threaded_claim(path, remaining):
+				transferred += remaining
+				unresolved.erase(path)
+				native_get_paths[path] = accepted
+				job["native_get_paths"] = native_get_paths
+			else:
+				complete = false
+				unresolved[path] = {"status": status, "owner_exit": true, "claim_count": remaining}
+	for raw_path: Variant in orphans.keys():
+		var path = str(raw_path)
+		var remaining = int(orphans.get(path, 0))
+		if remaining <= 0:
+			orphans.erase(path)
+			continue
+		var status = _primitives.load_threaded_get_status(path)
+		if status == _primitives.THREAD_LOAD_INVALID_RESOURCE:
+			_primitives.forget_invalid_claim(path, remaining)
+			unresolved.erase(path)
+			orphans.erase(path)
+		elif status in [_primitives.THREAD_LOAD_IN_PROGRESS, _primitives.THREAD_LOAD_LOADED, _primitives.THREAD_LOAD_FAILED] and _handoff_threaded_claim(path, remaining):
+			transferred += remaining
+			orphans.erase(path)
+			unresolved.erase(path)
+		else:
+			complete = false
+			unresolved[path] = {"status": status, "owner_exit": true, "claim_count": remaining}
+	return {"complete": complete, "transferred": transferred}
+
+
+func _handoff_threaded_claim(path: String, claim_count: int) -> bool:
+	if _primitives.live_resource_phase(): return _live_handoff_claim(path, claim_count)
+	if not _guard(): return false
+	# ContentLayers is the long-lived owner for accepted requests after a
+	# coordinator/scene exits. It never submits a second request; it polls and
+	# consumes one existing claim per bounded quantum.
+	if path.is_empty() or claim_count <= 0 or not _primitives.has_method("retire_threaded_resource_claims"):
+		return false
+	return bool(_primitives.retire_threaded_resource_claims(path, claim_count))
+
+
+func client_resources(cache_key: String) -> Dictionary:
+	if not _guard(): return {}
+	var cached: Variant = _client_resource_profiles.get(cache_key, {})
+	if cached is Dictionary and not cached.is_empty():
+		_touch_client_resource_profile(cache_key)
+		return cached
+	return {}
+
+
+## Public cache admission used by the deterministic test/sync path (keeps one
+## cache truth inside the coordinator).
+func retain_client_resource_profile(
+	cache_key: String,
+	resources: Dictionary
+) -> void:
+	if not _guard(): return
+	_retain_client_resource_profile(cache_key, resources)
+
+
+func request_client_profile(
+	client_mapping: Dictionary,
+	monster_id = -1,
+	map_generation = -1,
+	job_lane = JOB_LANE_RUNTIME_DEMAND
+) -> void:
+	if not _guard(): return
+	var cache_key = _client_resource_cache_key(client_mapping)
+	request_enqueue_count += 1
+	if _client_resource_profiles.has(cache_key):
+		duplicate_request_count += 1
+		return
+	if _threaded_profile_requests.has(cache_key):
+		var existing: Dictionary = _threaded_profile_requests[cache_key]
+		var existing_state = str(existing.get("state", ""))
+		var existing_generation = int(existing.get("map_generation", -1))
+		var generation_changed = (
+			map_generation >= 0
+			and existing_generation >= 0
+			and map_generation != existing_generation
+		)
+		if generation_changed and existing_state in ["failed", "permanent_failed"]:
+			# perf-smoothness-r1 C-R1 (PERF-R2 R2): a terminal job from an
+			# older generation must never block the current generation. The
+			# old world's failure provenance cannot be inherited: erase it so
+			# the current generation creates its own fresh request.
+			_erase_terminal_request(cache_key)
+		else:
+			# The first request owns the job's generation provenance. A later
+			# visual from another generation may reuse the completion, but
+			# must never retag the job and erase the stale-completion
+			# diagnostic.
+			duplicate_request_count += 1
+			return
+	var paths = {}
+	var expected_sizes = {}
+	var frame_size_values: Array = client_mapping.get("frameSize", [160, 160])
+	var frame_size = Vector2i(int(frame_size_values[0]), int(frame_size_values[1]))
+	var actions: Dictionary = client_mapping.get("actions", {})
+	for action_name: String in ACTIONS:
+		var action: Dictionary = actions.get(action_name, {})
+		var path = str(action.get("path", ""))
+		if path.is_empty() or not _primitives.exists(path):
+			# The source is missing at request time: permanent bad data, no
+			# retry can fix it this session (audit PERF-04 classification).
+			_threaded_profile_requests[cache_key] = {
+				"state": "permanent_failed",
+				"mapping": client_mapping,
+				"monster_id": monster_id,
+				"map_generation": map_generation,
+				"request_sequence": _request_sequence,
+				"lane": job_lane,
+				"failed_path": path,
+				"failure_count": MAX_FAILURE_RETRIES,
+			}
+			permanent_failed_request_count += 1
+			_failure_details[cache_key] = {
+				"monsterId": monster_id,
+				"path": path,
+				"state": "permanent_failed",
+				"failure_count": MAX_FAILURE_RETRIES,
+			}
+			failed_resource_count += 1
+			_request_sequence += 1
+			return
+		paths[action_name] = path
+		expected_sizes[action_name] = (
+			frame_size
+			* Vector2i(int(action.get("framesPerDirection", 1)), 8)
+		)
+	_request_sequence += 1
+	if _resource_ever_loaded.has(cache_key):
+		same_key_reload_count += 1
+	_request_order.append(cache_key)
+	_threaded_profile_requests[cache_key] = {
+		"state": "queued",
+		"queued_at_usec": deps.Time.get_ticks_usec(),
+		"mapping": client_mapping.duplicate(true),
+		"paths": paths,
+		"expected_sizes": expected_sizes,
+		"monster_id": monster_id,
+		"map_generation": map_generation,
+		"request_sequence": _request_sequence,
+		"lane": job_lane,
+	}
+	unique_request_count += 1
+	_threaded_profile_queue.append(cache_key)
+	_pump_threaded_profile_queue()
+
+
+func _pump_threaded_profile_queue() -> void:
+	if not _guard(): return
+	deps.FrameBudget.mark_pending(_budget_category, not _threaded_profile_requests.is_empty()
+		or not _visual_subscriptions.is_empty(), true, false, _process_owner.get_ref())
+	var token = deps.FrameBudget.begin(_budget_category)
+	if token == 0:
+		return
+	_start_threaded_profile_jobs()
+	deps.FrameBudget.end(token)
+
+
+func _start_threaded_profile_jobs() -> void:
+	if _primitives.live_resource_phase():
+		_live_start_jobs()
+		return
+	if not _guard(): return
+	var active_count = 0
+	for job: Dictionary in _threaded_profile_requests.values():
+		if str(job.get("state", "")) in ["loading", "collecting"]:
+			active_count += 1
+	while (
+		active_count < MAX_CONCURRENT_PROFILE_LOADS
+		and not _threaded_profile_queue.is_empty()
+	):
+		if deps.FrameBudget.remaining_usec() <= 0:
+			break
+		var cache_key: String = _threaded_profile_queue.pop_front()
+		if not _threaded_profile_requests.has(cache_key):
+			continue
+		var job: Dictionary = _threaded_profile_requests[cache_key]
+		if str(job.get("state", "")) != "queued":
+			continue
+		var paths: Dictionary = job.get("paths", {})
+		var failed_path = ""
+		# perf-smoothness-r1 C-R1 (PERF-R2 R5): use_sub_threads=true can steal
+		# main-thread time. Acceptable while the loading overlay covers the
+		# map prefetch, never during live combat (runtime demand lane).
+		var use_sub_threads = _job_use_sub_threads(job)
+		for action_name: String in ACTIONS:
+			var path = str(paths.get(action_name, ""))
+			var request_error = _primitives.load_threaded_request(
+				path,
+				"Texture2D",
+				use_sub_threads
+			)
+			if request_error != OK:
+				failed_path = path
+				break
+			_threaded_texture_request_count += 1
+			var native_requested_paths: Dictionary = job.get("native_requested_paths", {})
+			native_requested_paths[path] = int(native_requested_paths.get(path, 0)) + 1
+			job["native_requested_paths"] = native_requested_paths
+			_threaded_profile_requests[cache_key] = job
+		if not failed_path.is_empty():
+			_mark_job_failed(cache_key, job, failed_path)
+		else:
+			job["state"] = "loading"
+			active_count += 1
+		_threaded_profile_requests[cache_key] = job
+	active_request_count = _threaded_profile_requests.size()
+
+
+## perf-smoothness-r1 Phase B (audit PERF-04): classify a load failure and
+## record its real action/path. Transient failures get a bounded backoff
+## retry while demand remains; exhausted attempts become permanent.
+func _mark_job_failed(cache_key: String, job: Dictionary, failed_path: String) -> void:
+	if not _guard(): return
+	var native_get_paths: Dictionary = job.get("native_get_paths", {})
+	var native_requested_paths: Dictionary = job.get("native_requested_paths", {})
+	for raw_path: Variant in native_requested_paths.keys():
+		var path = str(raw_path)
+		var accepted = int(native_requested_paths.get(path, 0))
+		var consumed = int(native_get_paths.get(path, 0))
+		var remaining = maxi(0, accepted - consumed)
+		if path.is_empty() or remaining <= 0:
+			continue
+		# FAILED is terminal but still owns one load_threaded_get claim.  Retain
+		# every accepted path, including failed_path, for non-blocking polling.
+		_orphaned_threaded_paths[path] = int(_orphaned_threaded_paths.get(path, 0)) + remaining
+	job.erase("partial_resources")
+	job.erase("action_cursor")
+	job.erase("native_get_paths")
+	job.erase("native_requested_paths")
+	_loaded_pending_keys.erase(cache_key)
+	var failure_count = int(job.get("failure_count", 0)) + 1
+	job["failure_count"] = failure_count
+	job["failed_path"] = failed_path
+	if failure_count >= MAX_FAILURE_RETRIES:
+		job["state"] = "permanent_failed"
+		permanent_failed_request_count += 1
+	else:
+		job["state"] = "failed"
+		job["retry_at_msec"] = deps.Time.get_ticks_msec() + FAILURE_RETRY_BACKOFF_MSEC
+	_threaded_profile_requests[cache_key] = job
+	_failure_details[cache_key] = {
+		"monsterId": int(job.get("monster_id", -1)),
+		"path": failed_path,
+		"state": str(job.get("state", "")),
+		"failure_count": failure_count,
+	}
+	failed_resource_count += 1
+	_publish_resource_roots()
+
+
+
+
+func _poll_orphaned_threaded_paths() -> void:
+	if _primitives.live_resource_phase():
+		_live_poll_orphans()
+		return
+	if not _guard(): return
+	if _orphaned_threaded_paths.is_empty():
+		return
+	for raw_path: Variant in _orphaned_threaded_paths.keys():
+		var path = str(raw_path)
+		# An accepted orphan claim already has a resident owner handoff path. Keep
+		# this poll bounded and avoid live-job traversal plus a second get: the
+		# ContentLayers service consumes at most one transferred claim per budget
+		# quantum. A failed handoff remains owned and is retried next poll.
+		if _handoff_threaded_claim(path, 1):
+			var remaining = int(_orphaned_threaded_paths.get(path, 0)) - 1
+			if remaining <= 0:
+				_orphaned_threaded_paths.erase(path)
+			else:
+				_orphaned_threaded_paths[path] = remaining
+
+
+## perf-smoothness-r1 C-R1 (PERF-R2 R5/B5): only loading-window map prefetch
+## may use sub threads; live-combat runtime demand must not compete with the
+## main thread.
+func _job_use_sub_threads(job: Dictionary) -> bool:
+	if not _guard(): return false
+	return str(job.get("lane", "")) == JOB_LANE_MAP_PREFETCH
+
+
+## perf-smoothness-r1 C-R1 (PERF-R2 R2): uniformly retire a terminal
+## (failed/permanent_failed) job request. Clears every bookkeeping index the
+## job may occupy so the dedup key is fully released for a fresh request.
+func _erase_terminal_request(cache_key: String) -> void:
+	if not _guard(): return
+	if not _threaded_profile_requests.has(cache_key):
+		return
+	var job: Dictionary = _threaded_profile_requests[cache_key]
+	var state = str(job.get("state", ""))
+	if state == "permanent_failed":
+		permanent_failed_request_count = maxi(
+			0,
+			permanent_failed_request_count - 1
+		)
+	_threaded_profile_queue.erase(cache_key)
+	_loaded_pending_keys.erase(cache_key)
+	_threaded_profile_requests.erase(cache_key)
+
+
+## Releases dead failure entries that nobody needs (freeing the dedup key)
+## and requeues backoff-elapsed transient failures with live demand.
+func _retry_eligible_failed_jobs() -> void:
+	if not _guard(): return
+	var now_msec = deps.Time.get_ticks_msec()
+	var requeued = false
+	for cache_key: String in _threaded_profile_requests.keys():
+		var job: Dictionary = _threaded_profile_requests[cache_key]
+		var state = str(job.get("state", ""))
+		if state != "failed" and state != "permanent_failed":
+			continue
+		if not _failure_retry_is_warranted(cache_key, job):
+			# No current map membership and no waiter: the entry only blocks
+			# future same-key requests, so release it. A later demand starts
+			# a fresh request; the failure detail stays reported.
+			if state == "permanent_failed":
+				permanent_failed_request_count -= 1
+			_threaded_profile_requests.erase(cache_key)
+			continue
+		if state == "permanent_failed":
+			continue
+		if int(job.get("failure_count", 0)) >= MAX_FAILURE_RETRIES:
+			# Attempts exhausted: stop retrying, keep the known-bad state.
+			job["state"] = "permanent_failed"
+			permanent_failed_request_count += 1
+			_failure_details[cache_key] = {
+				"monsterId": int(job.get("monster_id", -1)),
+				"path": str(job.get("failed_path", "")),
+				"state": "permanent_failed",
+				"failure_count": int(job.get("failure_count", 0)),
+			}
+			_threaded_profile_requests[cache_key] = job
+			continue
+		if now_msec < int(job.get("retry_at_msec", 0)):
+			continue
+		job["state"] = "queued"
+		job["retry_at_msec"] = 0
+		_threaded_profile_requests[cache_key] = job
+		_threaded_profile_queue.append(cache_key)
+		_retry_requeue_count += 1
+		requeued = true
+	if requeued:
+		_pump_threaded_profile_queue()
+
+
+func _failure_retry_is_warranted(cache_key: String, job: Dictionary) -> bool:
+	if not _guard(): return false
+	var job_generation = int(job.get("map_generation", -1))
+	if job_generation >= 0 and job_generation != _map_prefetch_generation:
+		# perf-smoothness-r1 C-R1 (PERF-R2 R2): a failed job from an older
+		# generation belongs to a dead world; retrying it can never serve the
+		# current generation and its completion would be stale-retired anyway.
+		return false
+	if str(job.get("lane", "")) == JOB_LANE_MAP_PREFETCH:
+		return _map_prefetch_keys.has(cache_key)
+	return _has_resource_waiters(cache_key)
+
+
+## perf-smoothness-r1 Phase B (audit PERF-03) + C-R1 (PERF-R2 R3): an
+## in-flight map-prefetch job from an older generation loses its delivery
+## entry when release_map_pins clears _map_prefetch_keys. Retirement policy:
+## - current generation needs the same key  -> reuse into the map flow;
+## - a current visual explicitly waits      -> deliver to the waiter;
+## - nobody in the current world needs it   -> retire WITHOUT polluting the
+##   new LRU (a dead world's atlas must not evict the live map's entries).
+func _retire_stale_loaded_jobs() -> void:
+	if not _guard(): return
+	for cache_key: String in _threaded_profile_requests.keys():
+		var job: Dictionary = _threaded_profile_requests[cache_key]
+		if str(job.get("state", "")) != "loaded":
+			continue
+		if str(job.get("lane", "")) != JOB_LANE_MAP_PREFETCH:
+			continue
+		var generation = int(job.get("map_generation", -1))
+		if generation < 0 or generation == _map_prefetch_generation:
+			continue
+		# Current generation now needs exactly this profile: reuse the
+		# completed resource through the formal map dispatch path.
+		if _map_prefetch_keys.has(cache_key):
+			_dispatch_loaded_job(cache_key, job, true)
+			continue
+		# A current visual explicitly waits for it.
+		if _has_resource_waiters(cache_key):
+			_dispatch_loaded_job(cache_key, job, false)
+			continue
+		# Nobody in the current world needs it: retire without cache admission.
+		stale_completion_count += 1
+		_loaded_pending_keys.erase(cache_key)
+		_threaded_profile_requests.erase(cache_key)
+	_publish_resource_roots()
+
+
+func poll_once(frame_id: int) -> Dictionary:
+	if _primitives.live_resource_phase(): return _live_poll_once(frame_id)
+	if not _guard(): return {}
+	if frame_id == _last_streaming_poll_frame:
+		return map_prefetch_status()
+	deps.FrameBudget.mark_pending(_budget_category, not _threaded_profile_requests.is_empty()
+		or not _visual_subscriptions.is_empty(), true, false, _process_owner.get_ref())
+	var token = deps.FrameBudget.begin(_budget_category)
+	if token == 0:
+		return map_prefetch_status()
+	var result = _poll_admitted(frame_id)
+	deps.FrameBudget.end(token)
+	deps.FrameBudget.mark_pending(_budget_category, not _threaded_profile_requests.is_empty()
+		or not _visual_subscriptions.is_empty(), true, false, _process_owner.get_ref())
+	return result
+
+
+func _poll_admitted(frame_id: int) -> Dictionary:
+	if _primitives.live_resource_phase(): return _live_poll_admitted(frame_id)
+	if not _guard(): return {}
+	var profile_started_usec = deps.RuntimeDiagnostics.timing_start()
+	_last_streaming_poll_frame = frame_id
+	coordinator_poll_count += 1
+	heavy_poll_execution_count += 1
+	_poll_orphaned_threaded_paths()
+	for cache_key: String in _threaded_profile_requests.keys():
+		if deps.FrameBudget.remaining_usec() <= 0:
+			break
+		var job: Dictionary = _threaded_profile_requests[cache_key]
+		if str(job.get("state", "")) not in ["loading", "collecting"]:
+			_publish_resource_roots()
+			_primitives.close_collection_escrow()
+			continue
+		var ready = true
+		var failed = false
+		var failed_path = ""
+		var paths: Dictionary = job.get("paths", {})
+		for action_name: String in ACTIONS:
+			if ACTIONS.find(action_name) < int(job.get("action_cursor", 0)):
+				continue # A consumed threaded request is no longer polled.
+			var action_path = str(paths.get(action_name, ""))
+			status_poll_count += 1
+			var status = _primitives.load_threaded_get_status(action_path)
+			if (
+				status == _primitives.THREAD_LOAD_FAILED
+				or status == _primitives.THREAD_LOAD_INVALID_RESOURCE
+			):
+				# perf-smoothness-r1 C-R1 (PERF-R2 R4): record the REAL failed
+				# action path, not a hardcoded idle path.
+				failed = true
+				failed_path = action_path
+				break
+			if status != _primitives.THREAD_LOAD_LOADED:
+				ready = false
+		if failed:
+			_mark_job_failed(cache_key, job, failed_path)
+			_publish_resource_roots()
+			_primitives.close_collection_escrow()
+			continue
+		if not ready:
+			_publish_resource_roots()
+			_primitives.close_collection_escrow()
+			continue
+		var mapping: Dictionary = job.get("mapping", {})
+		var result = _client_profile_shell(mapping)
+		var expected_sizes: Dictionary = job.get("expected_sizes", {})
+		if job.has("partial_resources"):
+			result = job.partial_resources
+		var action_cursor = int(job.get("action_cursor", 0))
+		while action_cursor < ACTIONS.size():
+			if deps.FrameBudget.remaining_usec() <= 0:
+				break
+			var action_name: String = ACTIONS[action_cursor]
+			var action_path = str(paths[action_name])
+			var native_get_paths: Dictionary = job.get("native_get_paths", {})
+			native_get_paths[action_path] = int(native_get_paths.get(action_path, 0)) + 1
+			job["native_get_paths"] = native_get_paths
+			_threaded_profile_requests[cache_key] = job
+			var get_started_usec = deps.Time.get_ticks_usec()
+			var texture = _primitives.load_threaded_get(
+				action_path
+			)
+			maximum_action_get_usec = maxi(maximum_action_get_usec, deps.Time.get_ticks_usec() - get_started_usec)
+			_threaded_texture_get_count += 1
+			if (
+				texture == null
+				or Vector2i(_primitives.texture_size(texture))
+					!= Vector2i(expected_sizes[action_name])
+			):
+				failed = true
+				failed_path = action_path
+				break
+			result[action_name] = texture
+			result["frame_counts"][action_name] = int(
+				mapping.get("actions", {}).get(action_name, {}).get(
+					"framesPerDirection", 1
+				)
+			)
+			action_cursor += 1
+		if not failed and action_cursor < ACTIONS.size():
+			job["state"] = "collecting"
+			job["partial_resources"] = result
+			job["action_cursor"] = action_cursor
+			_threaded_profile_requests[cache_key] = job
+			_loaded_pending_keys[cache_key] = _decoded_rgba8_profile_bytes(result)
+			_publish_resource_roots()
+			_primitives.close_collection_escrow()
+			continue
+		var validation_errors: Array = []
+		if not failed:
+			validation_errors = _validate_profile(result)
+		if failed or not validation_errors.is_empty():
+			_mark_job_failed(cache_key, job, failed_path)
+			_publish_resource_roots()
+			_primitives.close_collection_escrow()
+			continue
+		job["state"] = "loaded"
+		job.erase("partial_resources")
+		job.erase("action_cursor")
+		job["resources"] = result
+		_threaded_profile_requests[cache_key] = job
+		# Loaded-not-admitted accounting (audit PERF-05): the finished job's
+		# textures are residency until the dispatch enters the bounded cache.
+		var pending_bytes = _decoded_rgba8_profile_bytes(result)
+		_loaded_pending_keys[cache_key] = pending_bytes
+		_publish_resource_roots()
+		_primitives.close_collection_escrow()
+	if deps.FrameBudget.remaining_usec() > 0:
+		_retry_eligible_failed_jobs()
+	if deps.FrameBudget.remaining_usec() > 0:
+		_commit_loaded_profiles()
+	if deps.FrameBudget.remaining_usec() > 0:
+		_retire_stale_loaded_jobs()
+	if deps.FrameBudget.remaining_usec() > 0:
+		_pump_threaded_profile_queue()
+	if deps.FrameBudget.remaining_usec() > 0:
+		_poll_visual_residency()
+	if deps.FrameBudget.remaining_usec() > 0:
+		_cleanup_invalid_subscribers()
+	var elapsed_usec = deps.RuntimeDiagnostics.timing_elapsed_usec(profile_started_usec)
+	if elapsed_usec > 0:
+		deps.RuntimeDiagnostics.record_performance_max(&"monster_streaming_poll_max_ms", float(elapsed_usec) / 1000.0)
+	_publish_resource_roots()
+	_primitives.close_collection_escrow()
+	return map_prefetch_status()
+
+
+
+
+func _commit_loaded_profiles() -> void:
+	if not _guard(): return
+	# Prefetch jobs commit strictly in caller order (stable pin priority).
+	for cache_key: String in _map_prefetch_keys:
+		if deps.FrameBudget.remaining_usec() <= 0:
+			break
+		if _map_prefetch_completed_keys.has(cache_key):
+			continue
+		var job: Dictionary = _threaded_profile_requests.get(cache_key, {})
+		var state = str(job.get("state", ""))
+		if state in ["failed", "permanent_failed"]:
+			continue
+		if state != "loaded":
+			break
+		_dispatch_loaded_job(cache_key, job, true)
+	# Runtime demand (including a reload of a completed/evicted map-prefetch
+	# key) is a separate delivery lane. It must never re-open or wait behind the
+	# map-prefetch completion order: that order only owns initial pin priority.
+	# Stable request sequence keeps simultaneous visual demand deterministic.
+	var runtime_keys: Array[String] = []
+	for cache_key: String in _threaded_profile_requests.keys():
+		var job: Dictionary = _threaded_profile_requests[cache_key]
+		if str(job.get("lane", JOB_LANE_RUNTIME_DEMAND)) != JOB_LANE_RUNTIME_DEMAND:
+			continue
+		# A new map can require an already accepted runtime request. Keep its
+		# original lane/generation provenance, but satisfy the current map's
+		# initial pin/completion in the ordered loop above. Completed keys still
+		# reload through runtime delivery without reopening the prefetch lane.
+		if _map_prefetch_keys.has(cache_key) and not _map_prefetch_completed_keys.has(cache_key):
+			continue
+		runtime_keys.append(cache_key)
+	runtime_keys.sort_custom(
+		func(a: String, b: String) -> bool:
+			return (
+				int(_threaded_profile_requests.get(a, {}).get(
+					"request_sequence", 0
+				))
+				< int(_threaded_profile_requests.get(b, {}).get(
+					"request_sequence", 0
+				))
+			)
+	)
+	# Deliver ready jobs in stable request-sequence order. perf-smoothness-r1
+	# Phase B (audit PERF-05): a queued/loading job no longer BLOCKS already
+	# loaded later requests - one slow early atlas must not stall profiles a
+	# waiter can use now. Sequence order still keeps delivery deterministic.
+	for cache_key: String in runtime_keys:
+		if deps.FrameBudget.remaining_usec() <= 0:
+			break
+		var job: Dictionary = _threaded_profile_requests[cache_key]
+		var state = str(job.get("state", ""))
+		if state == "failed" or state == "permanent_failed":
+			continue
+		if state != "loaded":
+			continue
+		_dispatch_loaded_job(cache_key, job, false)
+
+
+func _dispatch_loaded_job(
+	cache_key: String,
+	job: Dictionary,
+	is_prefetch: bool
+) -> void:
+	if not _guard(): return
+	var request_generation = int(job.get("map_generation", -1))
+	if (
+		request_generation >= 0
+		and request_generation != _map_prefetch_generation
+	):
+		# Old-generation completion: never applied to the new world; the shared
+		# resource may still enter the bounded cache.
+		stale_completion_count += 1
+	if _loaded_pending_keys.has(cache_key):
+		_loaded_pending_keys.erase(cache_key)
+	var resources: Dictionary = job.get("resources", {})
+	var decoded_rgba8_bytes = _decoded_rgba8_profile_bytes(resources)
+	# A loaded completion is a delivery operation. Keep a true current waiter
+	# protected across admission/publish even if the byte budget is exceeded;
+	# the delivery marker also makes that ordering explicit for diagnostics.
+	if _has_resource_waiters(cache_key):
+		_resource_delivery_keys[cache_key] = true
+	if is_prefetch:
+		_try_pin_map_profile(cache_key, decoded_rgba8_bytes)
+		_map_prefetch_completed_keys[cache_key] = true
+	_retain_client_resource_profile(cache_key, resources)
+	_resource_delivery_keys.erase(cache_key)
+	_threaded_profile_requests.erase(cache_key)
+	_apply_order.append(cache_key)
+	if job.has("queued_at_usec"):
+		maximum_completion_latency_usec = maxi(maximum_completion_latency_usec,
+			deps.Time.get_ticks_usec() - int(job.queued_at_usec))
+	ready_resource_count = _client_resource_profiles.size()
+	active_request_count = _threaded_profile_requests.size()
+	_publish_resource_roots()
+
+
+
+
+func _retain_client_resource_profile(
+	cache_key: String,
+	resources: Dictionary
+) -> void:
+	if not _guard(): return
+	if (
+		_client_resource_profiles.has(cache_key)
+		and _resource_is_protected(cache_key)
+	):
+		# A late completion can arrive after another generation/visual has already
+		# leased this resident entry. Never replace the Texture2D objects under an
+		# active lease (or W/pin); the completion is satisfied by the existing
+		# profile and its resource identity remains stable.
+		late_completion_resident_skip_count += 1
+		_touch_client_resource_profile(cache_key)
+		ready_resource_count = _client_resource_profiles.size()
+		_publish_resource_roots()
+		return
+	if _client_resource_profiles.has(cache_key):
+		_client_resource_cache_decoded_rgba8_bytes -= int(
+			_client_resource_profile_decoded_rgba8_bytes.get(cache_key, 0)
+		)
+	_client_resource_profiles[cache_key] = resources
+	var decoded_rgba8_bytes = _decoded_rgba8_profile_bytes(resources)
+	_client_resource_profile_decoded_rgba8_bytes[cache_key] = decoded_rgba8_bytes
+	_client_resource_cache_decoded_rgba8_bytes += decoded_rgba8_bytes
+	_resource_ever_loaded[cache_key] = true
+	# Demand/apply diagnostics describe this resident profile, not an old
+	# incarnation of the same cache key. A new W or delivery marker starts a
+	# fresh first-apply window; a prefetch-only admission starts with neither.
+	if _has_resource_waiters(cache_key) or _resource_delivery_keys.has(cache_key):
+		_resource_had_demand[cache_key] = true
+	else:
+		_resource_had_demand.erase(cache_key)
+	_resource_first_apply_seen.erase(cache_key)
+	_touch_client_resource_profile(cache_key)
+	_evict_client_resource_profiles()
+	if (
+		not _client_resource_profiles.has(cache_key)
+		and _resource_delivery_keys.has(cache_key)
+	):
+		# This counter is reserved for the forbidden ordering where an active
+		# delivery loses its protection during admission and is evicted before
+		# its first apply. A cancelled W has no delivery marker and is diagnosed
+		# separately by evicted_before_first_apply_count.
+		immediate_eviction_count += 1
+	ready_resource_count = _client_resource_profiles.size()
+	_publish_resource_roots()
+
+
+
+
+func _evict_client_resource_profiles() -> void:
+	if not _guard(): return
+	while (
+		_client_resource_profile_lru.size() > CLIENT_RESOURCE_CACHE_CAPACITY
+		or _client_resource_cache_decoded_rgba8_bytes
+			> CLIENT_RESOURCE_CACHE_BUDGET_DECODED_RGBA8_BYTES
+	):
+		var expired_index = -1
+		for index: int in range(_client_resource_profile_lru.size()):
+			var candidate_key: String = _client_resource_profile_lru[index]
+			if not _client_resource_profiles.has(candidate_key):
+				expired_index = index
+				break
+			if not _resource_is_protected(candidate_key):
+				expired_index = index
+				break
+		if expired_index < 0:
+			_publish_resource_roots()
+			return
+		var expired_key: String = _client_resource_profile_lru.pop_at(
+			expired_index
+		)
+		_client_resource_cache_decoded_rgba8_bytes -= int(
+			_client_resource_profile_decoded_rgba8_bytes.get(expired_key, 0)
+		)
+		_client_resource_profile_decoded_rgba8_bytes.erase(expired_key)
+		_client_resource_profiles.erase(expired_key)
+		if (
+			_resource_had_demand.has(expired_key)
+			and not _resource_first_apply_seen.has(expired_key)
+		):
+			evicted_before_first_apply_count += 1
+		_resource_had_demand.erase(expired_key)
+		_resource_first_apply_seen.erase(expired_key)
+	ready_resource_count = _client_resource_profiles.size()
+	_publish_resource_roots()
+
+
+
+
+func _try_pin_map_profile(cache_key: String, decoded_rgba8_bytes: int) -> bool:
+	if not _guard(): return false
+	if _map_pinned_profile_keys.has(cache_key):
+		return true
+	if _map_pinned_profile_keys.size() >= CLIENT_RESOURCE_CACHE_CAPACITY:
+		pin_rejection_count += 1
+		return false
+	if (
+		decoded_rgba8_bytes <= 0
+		or _map_pinned_decoded_rgba8_bytes + decoded_rgba8_bytes
+			> CLIENT_RESOURCE_CACHE_BUDGET_DECODED_RGBA8_BYTES
+	):
+		pin_rejection_count += 1
+		return false
+	_map_pinned_profile_keys[cache_key] = true
+	_map_pinned_decoded_rgba8_bytes += decoded_rgba8_bytes
+	return true
+
+
+## Exact cache accounting for the formal lossless mode0/vram=false imports:
+## decoded RGBA8 is four bytes for every pixel in every action atlas.
+func _decoded_rgba8_profile_bytes(profile: Dictionary) -> int:
+	if not _guard(): return 0
+	var total = 0
+	for action_name: String in ACTIONS:
+		var texture: Variant = profile.get(action_name)
+		if texture != null:
+			var size: Vector2 = _primitives.texture_size(texture)
+			total += int(size.x) * int(size.y) * 4
+	return total
+
+
+func _estimated_client_profile_bytes(resources: Dictionary) -> int:
+	if not _guard(): return 0
+	return _decoded_rgba8_profile_bytes(resources)
+
+
+func _touch_client_resource_profile(cache_key: String) -> void:
+	if not _guard(): return
+	_client_resource_profile_lru.erase(cache_key)
+	_client_resource_profile_lru.append(cache_key)
+
+
+func _set_world_generation(generation: int) -> void:
+	if not _guard(): return
+	if generation == _map_prefetch_generation:
+		return
+	# A generation fence is also a bootstrap-handoff cancellation boundary.
+	# Clear the old hold before stale visual state is released.
+	_bootstrap_handoff_hold_keys.clear()
+	_bootstrap_handoff_hold_generation = -1
+	_map_prefetch_generation = generation
+	# Fence old W/L state before any new-generation admission can be published.
+	# unregister_visual is idempotent and also removes stale reverse indexes.
+	_release_stale_generation_visuals()
+	_evict_client_resource_profiles()
+
+
+func begin_map_prefetch(
+	monster_ids: Array,
+	hold_for_bootstrap = false
+) -> Dictionary:
+	if not _guard(): return {}
+	release_map_pins()
+	_set_world_generation(_map_prefetch_generation + 1)
+	var seen_ids = {}
+	for value: Variant in monster_ids:
+		var monster_id = int(value)
+		if seen_ids.has(monster_id):
+			continue
+		seen_ids[monster_id] = true
+		var data = _primitives.monster_data(monster_id)
+		if data.is_empty():
+			continue
+		var mapping = _primitives.mapping_for_monster(monster_id)
+		if mapping.is_empty():
+			continue
+		var cache_key = _client_resource_cache_key(mapping)
+		_map_prefetch_keys.append(cache_key)
+		if _client_resource_profiles.has(cache_key):
+			_map_prefetch_completed_keys[cache_key] = true
+			_try_pin_map_profile(
+				cache_key,
+				int(_client_resource_profile_decoded_rgba8_bytes.get(cache_key, 0))
+			)
+		else:
+			request_client_profile(
+				mapping,
+				monster_id,
+				_map_prefetch_generation,
+				JOB_LANE_MAP_PREFETCH
+			)
+	if hold_for_bootstrap:
+		begin_bootstrap_handoff_hold()
+	return map_prefetch_status()
+
+
+## Protect every profile requested by the current map prefetch until its first
+## real visual lease arrives. This is temporary handoff protection, not a
+## permanent cache pin; leased visuals take over protection per key.
+func begin_bootstrap_handoff_hold() -> void:
+	if not _guard(): return
+	_bootstrap_handoff_hold_keys.clear()
+	_bootstrap_handoff_hold_generation = _map_prefetch_generation
+	for cache_key: String in _map_prefetch_keys:
+		_bootstrap_handoff_hold_keys[cache_key] = true
+	_evict_client_resource_profiles()
+
+
+func release_bootstrap_handoff_hold() -> void:
+	if not _guard(): return
+	_bootstrap_handoff_hold_keys.clear()
+	_bootstrap_handoff_hold_generation = -1
+	_evict_client_resource_profiles()
+
+
+func bootstrap_handoff_status() -> Dictionary:
+	if not _guard(): return {}
+	var resident_count = 0
+	var held_bytes = 0
+	for raw_key: Variant in _bootstrap_handoff_hold_keys.keys():
+		var cache_key = str(raw_key)
+		if not _client_resource_profiles.has(cache_key):
+			continue
+		resident_count += 1
+		held_bytes += int(
+			_client_resource_profile_decoded_rgba8_bytes.get(cache_key, 0)
+		)
+	return {
+		"active": not _bootstrap_handoff_hold_keys.is_empty(),
+		"generation": _bootstrap_handoff_hold_generation,
+		"hold_count": _bootstrap_handoff_hold_keys.size(),
+		"resident_count": resident_count,
+		"held_decoded_rgba8_bytes": held_bytes,
+	}
+
+
+func map_prefetch_status() -> Dictionary:
+	if not _guard(): return {}
+	var ready = 0
+	var failed = 0
+	var streamed = 0
+	var pending_details = []
+	var failed_details = []
+	for cache_key: String in _map_prefetch_keys:
+		if _map_prefetch_completed_keys.has(cache_key):
+			if _client_resource_profiles.has(cache_key):
+				ready += 1
+			else:
+				streamed += 1
+			continue
+		var job: Dictionary = _threaded_profile_requests.get(cache_key, {})
+		var job_state = str(job.get("state", ""))
+		if job_state == "failed" or job_state == "permanent_failed":
+			failed += 1
+			failed_details.append({
+				"monsterId": int(job.get("monster_id", -1)),
+				"path": str(job.get("failed_path", "")),
+				"state": job_state,
+				"failure_count": int(job.get("failure_count", 0)),
+			})
+			continue
+		if _failure_details.has(cache_key) and job_state.is_empty():
+			# The entry itself was released (no demand left), but the current
+			# map still asked for this key: report the real failure so the
+			# completion contract stays honest. A live retrying/loading job
+			# must stay pending instead of being counted failed twice.
+			var failure: Dictionary = _failure_details[cache_key]
+			failed += 1
+			failed_details.append(failure.duplicate())
+			continue
+		var path_states = []
+		for path: Variant in job.get("paths", {}).values():
+			var threaded_status = (
+				_live_observed_status(job, str(path))
+				if _primitives.live_resource_phase()
+				else _primitives.load_threaded_get_status(str(path))
+				if str(job.get("state", "")) == "loading"
+				else -1
+			)
+			if threaded_status != _primitives.THREAD_LOAD_LOADED:
+				path_states.append({"path": str(path), "status": threaded_status})
+		pending_details.append({
+			"monsterId": int(job.get("monster_id", -1)),
+			"state": str(job.get("state", "missing")),
+			"paths": path_states,
+		})
+	var completed = ready + streamed
+	return {
+		"requested": _map_prefetch_keys.size(),
+		"ready": ready,
+		"streamed": streamed,
+		"pinned": _map_pinned_profile_keys.size(),
+		"pinned_bytes": _map_pinned_decoded_rgba8_bytes,
+		"pinned_decoded_rgba8_bytes": _map_pinned_decoded_rgba8_bytes,
+		"decoded_rgba8_bytes": _client_resource_cache_decoded_rgba8_bytes,
+		"protected_overbudget_bytes": protected_overbudget_bytes(),
+		"failed": failed,
+		"pending": _map_prefetch_keys.size() - completed - failed,
+		"pending_details": pending_details,
+		"failed_details": failed_details,
+		"complete": completed + failed == _map_prefetch_keys.size(),
+	}
+
+
+func release_map_pins() -> void:
+	if not _guard(): return
+	_map_prefetch_keys.clear()
+	_map_pinned_profile_keys.clear()
+	_map_prefetch_completed_keys.clear()
+	_map_pinned_decoded_rgba8_bytes = 0
+	_bootstrap_handoff_hold_keys.clear()
+	_bootstrap_handoff_hold_generation = -1
+	# Failure details belong to the old map's request set.
+	_failure_details.clear()
+	for cache_key: String in _threaded_profile_queue.duplicate():
+		var job: Dictionary = _threaded_profile_requests.get(cache_key, {})
+		if (
+			int(job.get("map_generation", -1)) >= 0
+			and str(job.get("state", "")) == "queued"
+		):
+			_threaded_profile_queue.erase(cache_key)
+			_threaded_profile_requests.erase(cache_key)
+	_evict_client_resource_profiles()
+	_publish_resource_roots()
+
+
+
+
+func register_visual(
+	visual: RefCounted,
+	monster_runtime_id: int,
+	runtime_map_id: int,
+	world_generation: int,
+	resource_key: String,
+	resource_paths: Dictionary,
+	stable_visual_order: int
+) -> void:
+	if not _guard(): return
+	if visual == null or not is_instance_valid(visual):
+		return
+	if world_generation >= 0 and world_generation != _map_prefetch_generation:
+		# A stale actor cannot re-enter R after a map fence. The caller must
+		# register again with the current generation from its new map lifecycle.
+		return
+	var visual_id = _visual_id(visual)
+	if _visual_subscriptions.has(visual_id):
+		return
+	var subscription_generation = (
+		world_generation if world_generation >= 0 else _map_prefetch_generation
+	)
+	_visual_subscriptions[visual_id] = {
+		"visual_ref": weakref(visual),
+		"monster_runtime_id": monster_runtime_id,
+		"runtime_map_id": runtime_map_id,
+		"world_generation": subscription_generation,
+		"resource_key": resource_key,
+		"resource_paths": resource_paths,
+		"stable_visual_order": stable_visual_order,
+		"resource_state": "registered",
+	}
+	_visual_cleanup_order.append(visual_id)
+
+
+func unregister_visual(visual_id: int) -> void:
+	if not _guard(): return
+	# Unregister is the final U transition and is safe after _exit_tree has
+	# already released the same visual. Clear every reverse-indexed key so a
+	# stale actor can never keep a new generation's profile protected.
+	_forget_visual_cleanup_id(visual_id)
+	_release_all_visual_resources(visual_id)
+	if not _visual_subscriptions.has(visual_id):
+		_evict_client_resource_profiles()
+		return
+	_visual_subscriptions.erase(visual_id)
+	_evict_client_resource_profiles()
+
+
+func registered_visual_count() -> int:
+	if not _guard(): return 0
+	return _visual_subscriptions.size()
+
+
+## Declare an activation demand for one registered visual. Registration is only
+## R (registered/no demand); this call is the R -> W transition. The returned
+## dictionary is a cache hit, otherwise the caller keeps its fallback while the
+## coordinator's one threaded request completes.
+func request_visual_resources(
+	visual: RefCounted,
+	client_mapping: Dictionary,
+	monster_id = -1,
+	request_async = true
+) -> Dictionary:
+	if not _guard(): return {}
+	if visual == null or not is_instance_valid(visual):
+		return {}
+	var visual_id = _visual_id(visual)
+	var cache_key = _cache_key_for_mapping(client_mapping)
+	var sub: Dictionary = _visual_subscriptions.get(visual_id, {})
+	if sub.is_empty() or not _visual_subscription_is_current(visual_id, cache_key):
+		return {}
+	if not declare_visual_need(
+		visual_id,
+		cache_key,
+		int(sub.get("world_generation", -1))
+	):
+		return {}
+	var cached = client_resources(cache_key)
+	if not cached.is_empty():
+		return cached
+	if request_async:
+		# request_client_profile preserves this first job generation as immutable
+		# provenance. A later-generation visual reuses, but never retags, it.
+		request_client_profile(
+			client_mapping,
+			monster_id,
+			int(sub.get("world_generation", -1)),
+			JOB_LANE_RUNTIME_DEMAND
+		)
+	return {}
+
+
+## R -> W. The operation is idempotent for repeated activation polls.
+func declare_visual_need(
+	visual_id: int,
+	resource_key: String,
+	world_generation = -1
+) -> bool:
+	if not _guard(): return false
+	if resource_key.is_empty():
+		return false
+	if not _visual_subscription_is_current(visual_id, resource_key, world_generation):
+		return false
+	var waiting: Dictionary = _visual_waiting_resources.get(visual_id, {})
+	var released_old_lease = false
+	for raw_key: Variant in waiting.keys():
+		var old_key = str(raw_key)
+		if old_key != resource_key:
+			_remove_resource_waiter(visual_id, old_key)
+	var leases: Dictionary = _visual_leased_resources.get(visual_id, {})
+	for raw_key: Variant in leases.keys():
+		var old_key = str(raw_key)
+		if old_key != resource_key:
+			_remove_resource_lease(visual_id, old_key)
+			released_old_lease = true
+	if _visual_has_resource_lease(visual_id, resource_key):
+		if released_old_lease:
+			_evict_client_resource_profiles()
+		return true
+	_add_resource_waiter(visual_id, resource_key)
+	_resource_had_demand[resource_key] = true
+	var sub: Dictionary = _visual_subscriptions.get(visual_id, {})
+	sub["resource_state"] = "waiting"
+	_visual_subscriptions[visual_id] = sub
+	if released_old_lease:
+		_evict_client_resource_profiles()
+	return true
+
+
+## W -> L after MonsterVisual has successfully applied every profile field and
+## its first idle frame. Repeated notifications for the same lease are no-ops.
+func notify_visual_applied(
+	visual_or_id,
+	resource_key = "",
+	world_generation = -1
+) -> bool:
+	if not _guard(): return false
+	var visual_id = _visual_id(visual_or_id)
+	if visual_id < 0 or resource_key.is_empty():
+		# Historical callers only supplied a key; they cannot establish a
+		# per-visual lease and are intentionally ignored for safety.
+		return false
+	if not _visual_subscription_is_current(visual_id, resource_key, world_generation):
+		return false
+	if not _client_resource_profiles.has(resource_key):
+		# L is only valid after the coordinator has admitted the exact profile
+		# that the visual says it applied. A stale/optimistic callback cannot
+		# create a lease for a resource that is no longer resident.
+		return false
+	if _visual_has_resource_lease(visual_id, resource_key):
+		return true
+	_remove_resource_waiter(visual_id, resource_key)
+	_add_resource_lease(visual_id, resource_key)
+	# The first real visual lease is the handoff boundary for this profile.
+	# From here normal per-visual lease protection owns its residency.
+	_bootstrap_handoff_hold_keys.erase(resource_key)
+	_resource_first_apply_seen[resource_key] = true
+	_resource_had_demand[resource_key] = true
+	resource_apply_count += 1
+	var sub: Dictionary = _visual_subscriptions.get(visual_id, {})
+	sub["resource_state"] = "leased"
+	_visual_subscriptions[visual_id] = sub
+	return true
+
+
+## L/W -> R. Releasing a visual resource immediately re-runs the original
+## cross-zone LRU boundary once the last protection for each key disappears.
+func release_visual_resource(
+	visual_or_id,
+	resource_key = ""
+) -> void:
+	if not _guard(): return
+	var visual_id = _visual_id(visual_or_id)
+	if visual_id < 0:
+		return
+	var keys: Dictionary = {}
+	if not resource_key.is_empty():
+		keys[resource_key] = true
+	for raw_key: Variant in (
+		_visual_waiting_resources.get(visual_id, {}) as Dictionary
+	).keys():
+		keys[str(raw_key)] = true
+	for raw_key: Variant in (
+		_visual_leased_resources.get(visual_id, {}) as Dictionary
+	).keys():
+		keys[str(raw_key)] = true
+	for raw_key: Variant in keys.keys():
+		var key = str(raw_key)
+		_remove_resource_waiter(visual_id, key)
+		_remove_resource_lease(visual_id, key)
+	var sub: Dictionary = _visual_subscriptions.get(visual_id, {})
+	if not sub.is_empty():
+		sub["resource_state"] = "registered"
+		_visual_subscriptions[visual_id] = sub
+	_evict_client_resource_profiles()
+
+
+func visual_subscription_is_current(
+	visual_or_id,
+	resource_key = ""
+) -> bool:
+	if not _guard(): return false
+	return _visual_subscription_is_current(
+		_visual_id(visual_or_id),
+		resource_key
+	)
+
+
+func visual_resource_state(visual_or_id) -> String:
+	if not _guard(): return ""
+	var visual_id = _visual_id(visual_or_id)
+	var sub: Dictionary = _visual_subscriptions.get(visual_id, {})
+	return str(sub.get("resource_state", "unregistered"))
+
+
+func _cache_key_for_mapping(client_mapping: Dictionary) -> String:
+	if not _guard(): return ""
+	var cache_key = _client_resource_cache_key(client_mapping)
+	return cache_key
+
+
+func _visual_id(visual_or_id) -> int:
+	if not _guard(): return 0
+	if typeof(visual_or_id) == TYPE_INT:
+		return int(visual_or_id) if int(visual_or_id) > 0 else -1
+	if visual_or_id is RefCounted and visual_or_id.has_method("source_object_id"):
+		if not _require(visual_or_id.has_method("owner_thread_id") and visual_or_id.owner_thread_id() == _owner, "visual belongs to another owner"): return -1
+		var id: int = visual_or_id.source_object_id()
+		if not _require(id > 0 and deps.services.resolve_service(id) != null, "visual lacks canonical service identity"): return -1
+		return id
+	return -1
+
+
+
+
+func _visual_subscription_is_current(
+	visual_id: int,
+	resource_key = "",
+	world_generation = -1
+) -> bool:
+	if not _guard(): return false
+	if visual_id < 0:
+		return false
+	var sub: Dictionary = _visual_subscriptions.get(visual_id, {})
+	if sub.is_empty():
+		return false
+	var subscribed_key = str(sub.get("resource_key", ""))
+	if not resource_key.is_empty() and subscribed_key != str(resource_key):
+		return false
+	var subscribed_generation = int(sub.get("world_generation", -1))
+	if (
+		world_generation >= 0
+		and subscribed_generation >= 0
+		and world_generation != subscribed_generation
+	):
+		return false
+	if (
+		subscribed_generation >= 0
+		and subscribed_generation != _map_prefetch_generation
+	):
+		return false
+	return true
+
+
+func _add_resource_waiter(visual_id: int, resource_key: String) -> void:
+	if not _guard(): return
+	var waiters: Dictionary = _resource_waiters.get(resource_key, {})
+	waiters[visual_id] = true
+	_resource_waiters[resource_key] = waiters
+	var waiting: Dictionary = _visual_waiting_resources.get(visual_id, {})
+	waiting[resource_key] = true
+	_visual_waiting_resources[visual_id] = waiting
+	max_waiting_visuals_per_resource = maxi(
+		max_waiting_visuals_per_resource,
+		waiters.size()
+	)
+
+
+func _remove_resource_waiter(visual_id: int, resource_key: String) -> void:
+	if not _guard(): return
+	if _resource_waiters.has(resource_key):
+		var waiters: Dictionary = _resource_waiters[resource_key]
+		waiters.erase(visual_id)
+		if waiters.is_empty():
+			_resource_waiters.erase(resource_key)
+		else:
+			_resource_waiters[resource_key] = waiters
+	if _visual_waiting_resources.has(visual_id):
+		var waiting: Dictionary = _visual_waiting_resources[visual_id]
+		waiting.erase(resource_key)
+		if waiting.is_empty():
+			_visual_waiting_resources.erase(visual_id)
+		else:
+			_visual_waiting_resources[visual_id] = waiting
+
+
+func _add_resource_lease(visual_id: int, resource_key: String) -> void:
+	if not _guard(): return
+	var leases: Dictionary = _resource_leases.get(resource_key, {})
+	leases[visual_id] = true
+	_resource_leases[resource_key] = leases
+	var visual_leases: Dictionary = _visual_leased_resources.get(visual_id, {})
+	visual_leases[resource_key] = true
+	_visual_leased_resources[visual_id] = visual_leases
+
+
+func _remove_resource_lease(visual_id: int, resource_key: String) -> void:
+	if not _guard(): return
+	if _resource_leases.has(resource_key):
+		var leases: Dictionary = _resource_leases[resource_key]
+		leases.erase(visual_id)
+		if leases.is_empty():
+			_resource_leases.erase(resource_key)
+		else:
+			_resource_leases[resource_key] = leases
+	if _visual_leased_resources.has(visual_id):
+		var visual_leases: Dictionary = _visual_leased_resources[visual_id]
+		visual_leases.erase(resource_key)
+		if visual_leases.is_empty():
+			_visual_leased_resources.erase(visual_id)
+		else:
+			_visual_leased_resources[visual_id] = visual_leases
+
+
+func _visual_has_resource_lease(visual_id: int, resource_key: String) -> bool:
+	if not _guard(): return false
+	return (
+		_visual_leased_resources.has(visual_id)
+		and (_visual_leased_resources[visual_id] as Dictionary).has(resource_key)
+	)
+
+
+func _has_resource_waiters(resource_key: String) -> bool:
+	if not _guard(): return false
+	return (
+		_resource_waiters.has(resource_key)
+		and not (_resource_waiters[resource_key] as Dictionary).is_empty()
+	)
+
+
+func _resource_is_protected(resource_key: String) -> bool:
+	if not _guard(): return false
+	return (
+		_map_pinned_profile_keys.has(resource_key)
+		or (
+			_bootstrap_handoff_hold_generation == _map_prefetch_generation
+			and _bootstrap_handoff_hold_keys.has(resource_key)
+		)
+		or _has_resource_waiters(resource_key)
+		or (
+			_resource_leases.has(resource_key)
+			and not (_resource_leases[resource_key] as Dictionary).is_empty()
+		)
+		or _resource_delivery_keys.has(resource_key)
+	)
+
+
+func _release_all_visual_resources(visual_id: int) -> void:
+	if not _guard(): return
+	var keys: Dictionary = {}
+	for raw_key: Variant in (
+		_visual_waiting_resources.get(visual_id, {}) as Dictionary
+	).keys():
+		keys[str(raw_key)] = true
+	for raw_key: Variant in (
+		_visual_leased_resources.get(visual_id, {}) as Dictionary
+	).keys():
+		keys[str(raw_key)] = true
+	for raw_key: Variant in keys.keys():
+		var key = str(raw_key)
+		_remove_resource_waiter(visual_id, key)
+		_remove_resource_lease(visual_id, key)
+
+
+func _release_stale_generation_visuals() -> void:
+	if not _guard(): return
+	for raw_id: Variant in _visual_subscriptions.keys():
+		var visual_id = int(raw_id)
+		var sub: Dictionary = _visual_subscriptions.get(visual_id, {})
+		var subscribed_generation = int(sub.get("world_generation", -1))
+		if subscribed_generation >= 0 and subscribed_generation != _map_prefetch_generation:
+			unregister_visual(visual_id)
+
+
+func request_order() -> Array:
+	if not _guard(): return []
+	return _request_order.duplicate()
+
+
+func apply_order() -> Array:
+	if not _guard(): return []
+	return _apply_order.duplicate()
+
+
+func set_generation_for_tests(generation: int) -> void:
+	if not _guard(): return
+	_set_world_generation(generation)
+
+
+func waiting_visual_count_for_resource(resource_key: String) -> int:
+	if not _guard(): return 0
+	return (_resource_waiters.get(resource_key, {}) as Dictionary).size()
+
+
+func active_lease_count_for_resource(resource_key: String) -> int:
+	if not _guard(): return 0
+	return (_resource_leases.get(resource_key, {}) as Dictionary).size()
+
+
+func leased_visual_count() -> int:
+	if not _guard(): return 0
+	return _visual_leased_resources.size()
+
+
+func leased_profile_count() -> int:
+	if not _guard(): return 0
+	var count = 0
+	for raw_key: Variant in _resource_leases.keys():
+		if not (_resource_leases[raw_key] as Dictionary).is_empty():
+			count += 1
+	return count
+
+
+func waiting_visual_count() -> int:
+	if not _guard(): return 0
+	return _visual_waiting_resources.size()
+
+
+func protected_overbudget_bytes() -> int:
+	if not _guard(): return 0
+	return maxi(
+		0,
+		_client_resource_cache_decoded_rgba8_bytes
+			- CLIENT_RESOURCE_CACHE_BUDGET_DECODED_RGBA8_BYTES
+	)
+
+
+func unprotected_cached_client_profile_decoded_rgba8_bytes() -> int:
+	if not _guard(): return 0
+	var total = 0
+	for raw_key: Variant in _client_resource_profiles.keys():
+		var key = str(raw_key)
+		if _resource_is_protected(key):
+			continue
+		total += int(_client_resource_profile_decoded_rgba8_bytes.get(key, 0))
+	return total
+
+
+func pending_request_count() -> int:
+	if not _guard(): return 0
+	return _threaded_profile_requests.size()
+
+
+func _cleanup_invalid_subscribers() -> void:
+	if not _guard(): return
+	var visits_this_poll = 0
+	var visit_budget = mini(
+		MAX_SUBSCRIBER_CLEANUP_VISITS_PER_POLL,
+		_visual_cleanup_order.size(),
+	)
+	while visits_this_poll < visit_budget and not _visual_cleanup_order.is_empty():
+		if _visual_cleanup_cursor >= _visual_cleanup_order.size():
+			_visual_cleanup_cursor = 0
+		var visual_id = _visual_cleanup_order[_visual_cleanup_cursor]
+		visits_this_poll += 1
+		subscriber_cleanup_visit_count += 1
+		if not _visual_subscriptions.has(visual_id):
+			_visual_cleanup_order.remove_at(_visual_cleanup_cursor)
+			continue
+		var sub: Dictionary = _visual_subscriptions.get(visual_id, {})
+		var visual_ref: WeakRef = sub.get("visual_ref")
+		var visual: Object = (
+			visual_ref.get_ref()
+			if visual_ref != null
+			else null
+		)
+		if (
+			visual == null
+			or not is_instance_valid(visual)
+			or _visual_is_queued(visual_id)
+		):
+			unregister_visual(visual_id)
+			invalid_subscriber_cleanup_count += 1
+		else:
+			_visual_cleanup_cursor += 1
+	subscriber_cleanup_max_visits_per_poll = maxi(
+		subscriber_cleanup_max_visits_per_poll,
+		visits_this_poll,
+	)
+
+
+func _poll_visual_residency() -> void:
+	if not _guard(): return
+	var visits_this_poll = 0
+	var visit_budget = mini(
+		MAX_VISUAL_RESIDENCY_VISITS_PER_POLL,
+		_visual_cleanup_order.size(),
+	)
+	while visits_this_poll < visit_budget and not _visual_cleanup_order.is_empty():
+		if _visual_residency_cursor >= _visual_cleanup_order.size():
+			_visual_residency_cursor = 0
+		var visual_id = _visual_cleanup_order[_visual_residency_cursor]
+		_visual_residency_cursor += 1
+		visits_this_poll += 1
+		visual_residency_visit_count += 1
+		var sub: Dictionary = _visual_subscriptions.get(visual_id, {})
+		if sub.is_empty():
+			continue
+		var visual_ref: WeakRef = sub.get("visual_ref")
+		var visual: Object = visual_ref.get_ref() if visual_ref != null else null
+		if (
+			visual == null
+			or not is_instance_valid(visual)
+			or not visual.has_method("streaming_residency_poll")
+		):
+			continue
+		visual.call("streaming_residency_poll", deps.Time.get_ticks_msec())
+	visual_residency_max_visits_per_poll = maxi(
+		visual_residency_max_visits_per_poll,
+		visits_this_poll,
+	)
+
+
+func _forget_visual_cleanup_id(visual_id: int) -> void:
+	if not _guard(): return
+	var order_index = _visual_cleanup_order.find(visual_id)
+	if order_index < 0:
+		return
+	_visual_cleanup_order.remove_at(order_index)
+	if order_index < _visual_cleanup_cursor:
+		_visual_cleanup_cursor -= 1
+	if order_index < _visual_residency_cursor:
+		_visual_residency_cursor -= 1
+	if _visual_cleanup_order.is_empty() or _visual_cleanup_cursor >= _visual_cleanup_order.size():
+		_visual_cleanup_cursor = 0
+	if _visual_cleanup_order.is_empty() or _visual_residency_cursor >= _visual_cleanup_order.size():
+		_visual_residency_cursor = 0
+
+
+func record_sync_load(path: String) -> void:
+	if not _guard(): return
+	_sync_load_count += 1
+	_sync_load_paths.append(path)
+
+
+func sync_load_count() -> int:
+	if not _guard(): return 0
+	return _sync_load_count
+
+
+func sync_load_paths() -> Array:
+	if not _guard(): return []
+	return _sync_load_paths.duplicate()
+
+
+func cached_client_profile_count() -> int:
+	if not _guard(): return 0
+	return _client_resource_profiles.size()
+
+
+func cached_client_profile_estimated_bytes() -> int:
+	if not _guard(): return 0
+	# Compatibility getter; the returned value is decoded RGBA8 bytes.
+	return _client_resource_cache_decoded_rgba8_bytes
+
+
+func cached_client_profile_decoded_rgba8_bytes() -> int:
+	if not _guard(): return 0
+	return _client_resource_cache_decoded_rgba8_bytes
+
+
+func threaded_texture_request_count() -> int:
+	if not _guard(): return 0
+	return _threaded_texture_request_count
+
+
+func threaded_texture_get_count() -> int:
+	if not _guard(): return 0
+	return _threaded_texture_get_count
+
+
+func current_world_generation() -> int:
+	if not _guard(): return 0
+	return _map_prefetch_generation
+
+
+func reset_for_tests() -> void:
+	if not _guard(): return
+	maximum_completion_latency_usec = 0
+	maximum_action_get_usec = 0
+	_threaded_profile_requests.clear()
+	_threaded_profile_queue.clear()
+	_orphaned_threaded_paths.clear()
+	_unresolved_threaded_paths.clear()
+	_transferred_threaded_path_count = 0
+	_threaded_claims_retired = false
+	_client_resource_profiles.clear()
+	_client_resource_profile_lru.clear()
+	_client_resource_profile_decoded_rgba8_bytes.clear()
+	_client_resource_cache_decoded_rgba8_bytes = 0
+	_threaded_texture_request_count = 0
+	_threaded_texture_get_count = 0
+	_map_prefetch_keys.clear()
+	_map_pinned_profile_keys.clear()
+	_map_prefetch_completed_keys.clear()
+	_map_pinned_decoded_rgba8_bytes = 0
+	_bootstrap_handoff_hold_keys.clear()
+	_bootstrap_handoff_hold_generation = -1
+	_map_prefetch_generation = 0
+	_last_streaming_poll_frame = -1
+	_request_sequence = 0
+	_request_order.clear()
+	_apply_order.clear()
+	_visual_subscriptions.clear()
+	_visual_cleanup_order.clear()
+	_visual_cleanup_cursor = 0
+	_visual_residency_cursor = 0
+	_resource_waiters.clear()
+	_resource_leases.clear()
+	_visual_waiting_resources.clear()
+	_visual_leased_resources.clear()
+	_resource_delivery_keys.clear()
+	_resource_had_demand.clear()
+	_resource_first_apply_seen.clear()
+	_resource_ever_loaded.clear()
+	_sync_load_count = 0
+	_sync_load_paths.clear()
+	per_instance_poll_call_count = 0
+	coordinator_poll_count = 0
+	heavy_poll_execution_count = 0
+	request_enqueue_count = 0
+	unique_request_count = 0
+	duplicate_request_count = 0
+	active_request_count = 0
+	ready_resource_count = 0
+	failed_resource_count = 0
+	status_poll_count = 0
+	resource_apply_count = 0
+	stale_completion_count = 0
+	invalid_subscriber_cleanup_count = 0
+	subscriber_cleanup_visit_count = 0
+	subscriber_cleanup_max_visits_per_poll = 0
+	visual_residency_visit_count = 0
+	visual_residency_max_visits_per_poll = 0
+	max_waiting_visuals_per_resource = 0
+	pin_rejection_count = 0
+	immediate_eviction_count = 0
+	same_key_reload_count = 0
+	evicted_before_first_apply_count = 0
+	late_completion_resident_skip_count = 0
+	_publish_resource_roots()
+
+
+
+
+func monster_streaming_diagnostics() -> Dictionary:
+	if not _guard(): return {}
+	var oldest_age_usec = 0
+	for job: Dictionary in _threaded_profile_requests.values():
+		if job.has("queued_at_usec"):
+			oldest_age_usec = maxi(oldest_age_usec, deps.Time.get_ticks_usec() - int(job.queued_at_usec))
+	var request_state_counts = {
+		"queued": 0,
+		"loading": 0,
+		"loaded": 0,
+		"failed": 0,
+	}
+	for raw_job: Variant in _threaded_profile_requests.values():
+		if not raw_job is Dictionary:
+			continue
+		var state = str((raw_job as Dictionary).get("state", ""))
+		if state == "collecting":
+			state = "loading"
+		if request_state_counts.has(state):
+			request_state_counts[state] = int(request_state_counts[state]) + 1
+	var orphaned_claim_count = 0
+	for raw_count: Variant in _orphaned_threaded_paths.values():
+		orphaned_claim_count += int(raw_count)
+	return {
+		"contract_id": CONTRACT_ID,
+		"oldest_age_usec": oldest_age_usec,
+		"maximum_completion_latency_usec": maximum_completion_latency_usec,
+		"maximum_action_get_usec": maximum_action_get_usec,
+		"registered_visual_count": _visual_subscriptions.size(),
+		"per_instance_poll_call_count": per_instance_poll_call_count,
+		"coordinator_poll_count": coordinator_poll_count,
+		"heavy_poll_execution_count": heavy_poll_execution_count,
+		"request_enqueue_count": request_enqueue_count,
+		"unique_request_count": unique_request_count,
+		"duplicate_request_count": duplicate_request_count,
+		"active_request_count": _threaded_profile_requests.size(),
+		"orphaned_threaded_path_count": _orphaned_threaded_paths.size(),
+		"orphaned_threaded_claim_count": orphaned_claim_count,
+		"unresolved_threaded_path_count": _unresolved_threaded_paths.size(),
+		"transferred_threaded_path_count": _transferred_threaded_path_count,
+		"queued_request_count": int(request_state_counts.queued),
+		"loading_request_count": int(request_state_counts.loading),
+		"loaded_request_count": int(request_state_counts.loaded),
+		"failed_request_count": int(request_state_counts.failed),
+		"ready_resource_count": _client_resource_profiles.size(),
+		"decoded_rgba8_bytes": _client_resource_cache_decoded_rgba8_bytes,
+		"cached_client_profile_decoded_rgba8_bytes": _client_resource_cache_decoded_rgba8_bytes,
+		"unprotected_decoded_rgba8_bytes": unprotected_cached_client_profile_decoded_rgba8_bytes(),
+		"map_pinned_profile_count": _map_pinned_profile_keys.size(),
+		"pinned_decoded_rgba8_bytes": _map_pinned_decoded_rgba8_bytes,
+		"bootstrap_handoff_hold_count": _bootstrap_handoff_hold_keys.size(),
+		"bootstrap_handoff_resident_count": int(
+			bootstrap_handoff_status().get("resident_count", 0)
+		),
+		"bootstrap_handoff_generation": _bootstrap_handoff_hold_generation,
+		"protected_overbudget_bytes": protected_overbudget_bytes(),
+		"failed_resource_count": failed_resource_count,
+		"status_poll_count": status_poll_count,
+		"resource_apply_count": resource_apply_count,
+		"stale_completion_count": stale_completion_count,
+		"invalid_subscriber_cleanup_count": invalid_subscriber_cleanup_count,
+		"subscriber_cleanup_visit_count": subscriber_cleanup_visit_count,
+		"subscriber_cleanup_max_visits_per_poll": subscriber_cleanup_max_visits_per_poll,
+		"visual_residency_visit_count": visual_residency_visit_count,
+		"visual_residency_max_visits_per_poll": visual_residency_max_visits_per_poll,
+		"sync_load_count": _sync_load_count,
+		"sync_load_paths": _sync_load_paths.duplicate(),
+		"max_waiting_visuals_per_resource": max_waiting_visuals_per_resource,
+		"waiting_visual_count": _visual_waiting_resources.size(),
+		"leased_visual_count": leased_visual_count(),
+		"leased_profile_count": leased_profile_count(),
+		"pin_rejection_count": pin_rejection_count,
+		"immediate_eviction_count": immediate_eviction_count,
+		"same_key_reload_count": same_key_reload_count,
+		"evicted_before_first_apply_count": evicted_before_first_apply_count,
+		"late_completion_resident_skip_count": late_completion_resident_skip_count,
+		# perf-smoothness-r1 Phase B lifecycle accounting (audit PERF-03/04/05).
+		"loaded_pending_request_count": _loaded_pending_keys.size(),
+		"loaded_pending_decoded_rgba8_bytes": _loaded_pending_bytes_total(),
+		"retry_requeue_count": _retry_requeue_count,
+		"permanent_failed_request_count": permanent_failed_request_count,
+	}
+
+
+func _loaded_pending_bytes_total() -> int:
+	if not _guard(): return 0
+	var total = 0
+	for value: Variant in _loaded_pending_keys.values():
+		total += int(value)
+	return total
+
+
+func _client_profile_shell(client_mapping: Dictionary) -> Dictionary:
+	var actions: Variant = client_mapping.get("actions", {})
+	return {
+		"frame_size": Vector2i(int(client_mapping.get("frameSize", [160, 160])[0]), int(client_mapping.get("frameSize", [160, 160])[1])),
+		"foot_anchor": Vector2i(int(client_mapping.get("footAnchor", [80, 138])[0]), int(client_mapping.get("footAnchor", [80, 138])[1])),
+		"actor_ground_offset": CLIENT_ACTOR_GROUND_OFFSET,
+		"health_bar_top_by_direction": client_mapping.get("healthBarTopByDirection", []),
+		"frame_counts": {},
+		"direction_mode": "mir2_north_first",
+		"direction_policy": str(client_mapping.get("directionPolicy", "mir2_directional")),
+		"animation_source": "classic_client_wil",
+	}
+
+
+func _client_resource_cache_key(client_mapping: Dictionary) -> String:
+	var frame_values: Array = client_mapping.get("frameSize", [160, 160])
+	var foot_values: Array = client_mapping.get("footAnchor", [80, 138])
+	var parts = PackedStringArray([
+		"%sx%s" % [int(frame_values[0]), int(frame_values[1])],
+		"%s,%s" % [int(foot_values[0]), int(foot_values[1])],
+		str(client_mapping.get("directionPolicy", "mir2_directional")),
+		str(client_mapping.get("healthBarTopByDirection", [])),
+	])
+	var actions: Dictionary = client_mapping.get("actions", {})
+	for action_name: String in ["idle", "walk", "attack", "hit", "death"]:
+		var action: Dictionary = actions.get(action_name, {})
+		parts.append(
+			"%s:%d"
+			% [str(action.get("path", "")), int(action.get("framesPerDirection", 0))]
+		)
+	return "|".join(parts)
+
+
+func _complete_synchronous_profile(client_mapping: Dictionary) -> Dictionary:
+	var cache_key = _client_resource_cache_key(client_mapping)
+	var actions: Variant = client_mapping.get("actions", {})
+	var result = _client_profile_shell(client_mapping)
+	for action_name: String in ["idle", "walk", "attack", "hit", "death"]:
+		var action: Variant = actions.get(action_name, {}) if actions is Dictionary else {}
+		var path = str(action.get("path", "")) if action is Dictionary else ""
+		if path.is_empty():
+			return {}
+		var frame_count = int(action.get("framesPerDirection", 1))
+		var texture = _load_client_texture_for_tests(path, Vector2i(result.frame_size.x * frame_count, result.frame_size.y * 8))
+		if texture == null:
+			return {}
+		result[action_name] = texture
+		result["frame_counts"][action_name] = frame_count
+	if not _validate_profile(result).is_empty():
+		return {}
+	# Keep a bounded strong-reference window across nearby streamed areas. Godot's
+	# resource cache may release an atlas after the last actor leaves; this LRU
+	# prevents an immediate return from decoding/uploading all five actions again
+	# without eventually retaining the entire 214-monster catalog on mobile.
+	var coordinator = self
+	if coordinator != null and is_instance_valid(coordinator):
+		coordinator.retain_client_resource_profile(cache_key, result)
+	return result
+
+
+func _validate_profile(profile: Dictionary) -> Array[String]:
+	var errors: Array[String] = []
+	var mode = StringName(str(profile.get("direction_mode", "")))
+	if mode not in DIRECTION_MODES:
+		errors.append("direction_mode_invalid")
+	var frame_size: Vector2i = profile.get("frame_size", Vector2i.ZERO)
+	if frame_size.x <= 0 or frame_size.y <= 0:
+		errors.append("frame_size_invalid")
+	var foot_anchor: Vector2i = profile.get("foot_anchor", Vector2i.ZERO)
+	if foot_anchor.x < 0 or foot_anchor.y < 0 or foot_anchor.x > frame_size.x or foot_anchor.y > frame_size.y:
+		errors.append("foot_anchor_invalid")
+	var counts: Dictionary = profile.get("frame_counts", {})
+	for action: StringName in REQUIRED_ACTIONS:
+		var texture: Variant = profile.get(action, null)
+		var count = int(counts.get(action, DEFAULT_FRAME_COUNTS[action]))
+		if texture == null:
+			errors.append("%s_texture_missing" % action)
+			continue
+		if count <= 0:
+			errors.append("%s_frame_count_invalid" % action)
+			continue
+		var expected = Vector2(frame_size.x * count, frame_size.y * 8)
+		if not _primitives.texture_size(texture).is_equal_approx(expected):
+			errors.append("%s_atlas_size_invalid" % action)
+	return errors
+
+## LIVE reuses every original job/cache/W/L/residency/failure field above.
+## Only the primitive-dependent cursor is split across factual P completions.
+var _live_ops: Dictionary = {}
+var _live_bindings: Array[Dictionary] = []
+var _live_root_queue: Array[Dictionary] = []
+var _live_root_active: Dictionary = {}
+var _live_closing := false
+var _live_draining_close := false
+var _live_exit_observations: Dictionary = {}
+var _live_last_close_process_frame := -1
+var _live_last_actual_main_process_frame := -1
+
+func live_resource_phase() -> bool: return _primitives.live_resource_phase()
+
+func configure_live_session(session: RefCounted, reservation_policy: Dictionary) -> bool:
+	if not _guard(): return false
+	for method: String in ["capture_continuation_scope", "continuation_scope_decision"]:
+		if not _require(deps.FrameBudget.has_method(method), "same ledger lacks continuation method: " + method): return false
+	if not _require(_primitives.has_method("capture_live_poll_context") and _primitives.has_method("live_closeable_collection_receipts") and deps.services.has_method("capture_world"), "current primitive/world continuation identity unavailable"): return false
+	var process_owner: Object = _process_owner.get_ref()
+	if not _require(process_owner != null and process_owner.has_method("snapshot"), "original process scope has no factual qualification snapshot"): return false
+	return _primitives.configure_live_session(session, _budget_category, reservation_policy)
+
+func _live_operation(key: String, op: StringName, args: Array, order_key: String, cleanup := false, dependencies: Array = []) -> Dictionary:
+	if not _live_ops.has(key):
+		var id: int = _primitives.enqueue_live_operation(op, args, order_key, dependencies, cleanup)
+		if id == 0: return {"status":"INVALID"}
+		_live_ops[key] = {"id":id,"op":op,"args":args.duplicate(true)}
+	var held: Dictionary = _live_ops[key]
+	if not _require(held.op == op and held.args == args, "pending original cursor arguments changed"): return {"status":"INVALID"}
+	var result: Dictionary = _primitives.take_live_operation(int(held.id))
+	if result.get("status") in ["COMMITTED", "ABANDONED_UNACCEPTED"]: _live_ops.erase(key)
+	return result
+
+func _live_poll_once(frame_id: int) -> Dictionary:
+	if not _guard(): return {}
+	if frame_id == _last_streaming_poll_frame: return map_prefetch_status()
+	var session: RefCounted = _primitives.live_source_session()
+	if not _require(session.begin_resource_commit_phase(frame_id), "LIVE commit must be original P with empty budget stack"): return {}
+	var committed: bool = _primitives.commit_live_results()
+	if not session.finish_resource_commit_phase() or not committed: return {}
+	deps.FrameBudget.mark_pending(_budget_category, true, true, false, _process_owner.get_ref())
+	var token = deps.FrameBudget.begin(_budget_category, _live_closing)
+	var result: Dictionary = map_prefetch_status()
+	if token != 0:
+		result = _live_poll_admitted(frame_id)
+		deps.FrameBudget.end(token)
+	# No scope remains active across the asynchronous primitive boundary.
+	if not _primitives.flush_live_submissions(): return {}
+	return result
+
+func _live_start_jobs() -> void:
+	var active_count := 0
+	for job: Dictionary in _threaded_profile_requests.values():
+		if str(job.get("state", "")) in ["requesting", "loading", "collecting", "rooting"]: active_count += 1
+	while not _live_closing and active_count < MAX_CONCURRENT_PROFILE_LOADS and not _threaded_profile_queue.is_empty():
+		if deps.FrameBudget.remaining_usec() <= 0: break
+		var cache_key: String = _threaded_profile_queue.pop_front()
+		var job: Dictionary = _threaded_profile_requests.get(cache_key, {})
+		if job.get("state") != "queued": continue
+		job.state = "requesting"
+		job.live_request_cursor = 0
+		active_count += 1
+	for cache_key: String in _threaded_profile_requests.keys():
+		var job: Dictionary = _threaded_profile_requests[cache_key]
+		if job.get("state") != "requesting": continue
+		if _live_closing and not _live_ops.has("request:" + cache_key):
+			job.state = "exit_abandoned"
+			continue
+		var cursor := int(job.live_request_cursor)
+		var action: String = ACTIONS[cursor]
+		var path := str(job.paths[action])
+		var result := _live_operation("request:" + cache_key, &"load_threaded_request", [path,"Texture2D",_job_use_sub_threads(job)], "loader:" + path)
+		if result.get("status") == "ABANDONED_UNACCEPTED":
+			job.state = "exit_abandoned"
+			continue
+		if result.get("status") != "COMMITTED": continue
+		if int(result.result) != OK:
+			_mark_job_failed(cache_key, job, path)
+			continue
+		_threaded_texture_request_count += 1
+		var accepted: Dictionary = job.get("native_requested_paths", {})
+		accepted[path] = int(accepted.get(path, 0)) + 1
+		job.native_requested_paths = accepted
+		if _live_closing:
+			job.state = "exit_abandoned"
+			continue
+		job.live_request_cursor = cursor + 1
+		if cursor + 1 == ACTIONS.size():
+			job.state = "loading"
+			job.erase("live_request_cursor")
+	active_request_count = _threaded_profile_requests.size()
+
+func _live_poll_admitted(frame_id: int) -> Dictionary:
+	_last_streaming_poll_frame = frame_id
+	coordinator_poll_count += 1
+	heavy_poll_execution_count += 1
+	_live_poll_bindings()
+	_live_poll_lifetimes()
+	_live_poll_orphans()
+	_live_start_jobs()
+	for cache_key: String in _threaded_profile_requests.keys():
+		if deps.FrameBudget.remaining_usec() <= 0: break
+		var job: Dictionary = _threaded_profile_requests[cache_key]
+		if str(job.get("state", "")) in ["loading", "collecting", "rooting"]: _live_advance_job(cache_key, job)
+	if not _live_closing:
+		if deps.FrameBudget.remaining_usec() > 0: _retry_eligible_failed_jobs()
+		if deps.FrameBudget.remaining_usec() > 0: _commit_loaded_profiles()
+		if deps.FrameBudget.remaining_usec() > 0: _retire_stale_loaded_jobs()
+		if deps.FrameBudget.remaining_usec() > 0: _poll_visual_residency()
+		if deps.FrameBudget.remaining_usec() > 0: _cleanup_invalid_subscribers()
+	_publish_resource_roots()
+	if _live_closing:
+		var retired: Dictionary = _live_transfer_claims(_threaded_profile_requests, _orphaned_threaded_paths, _unresolved_threaded_paths)
+		_transferred_threaded_path_count += int(retired.transferred)
+		_threaded_claims_retired = bool(retired.complete)
+		if _threaded_claims_retired:
+			_live_draining_close = true
+			_live_publish_roots()
+	return map_prefetch_status()
+
+func _live_advance_job(cache_key: String, job: Dictionary) -> void:
+	if _live_closing:
+		for step: String in ["status", "get"]:
+			var key := step + ":" + cache_key
+			if not _live_ops.has(key): continue
+			var held: Dictionary = _live_ops[key]
+			var pending: Dictionary = _primitives.take_live_operation(int(held.id))
+			if pending.get("status") == "PENDING": return
+			_live_ops.erase(key)
+			if step == "get" and pending.get("status") == "COMMITTED":
+				var path := str(held.args[0])
+				var consumed: Dictionary = job.get("native_get_paths", {})
+				consumed[path] = int(consumed.get(path, 0)) + 1
+				job.native_get_paths = consumed
+				_threaded_texture_get_count += 1
+		job.state = "exit_abandoned"
+		return
+	if job.state == "rooting":
+		var held: Array = _primitives.live_root_tokens(_budget_category)
+		for token: int in _primitives.live_profile_tokens([job.partial_resources]):
+			if not held.has(token): return
+		job.state = "loaded"
+		job.resources = job.partial_resources
+		job.erase("partial_resources")
+		job.erase("action_cursor")
+		_loaded_pending_keys[cache_key] = _decoded_rgba8_profile_bytes(job.resources)
+		return
+	var cursor := int(job.get("action_cursor", 0))
+	var action: String = ACTIONS[cursor]
+	var path := str(job.paths[action])
+	if str(job.get("live_step", "status")) == "status":
+		# Preserve the original all-remaining-actions LOADED barrier before get.
+		# Every observation is actual Main work; unfinished statuses are not read
+		# from a guessed snapshot or reported as IN_PROGRESS by S.
+		var status_cursor := int(job.get("live_status_cursor", cursor))
+		var status_path := str(job.paths[ACTIONS[status_cursor]])
+		var observed := _live_operation("status:" + cache_key, &"status", [status_path], "loader:" + status_path)
+		if observed.get("status") != "COMMITTED": return
+		status_poll_count += 1
+		var statuses: Dictionary = job.get("live_statuses", {})
+		statuses[status_path] = {"status":int(observed.result),"native_observation":observed.reply.native_observation.duplicate(true),"identity":observed.identity}
+		job.live_statuses = statuses
+		if int(observed.result) in [_primitives.THREAD_LOAD_FAILED, _primitives.THREAD_LOAD_INVALID_RESOURCE]:
+			_mark_job_failed(cache_key, job, status_path)
+			return
+		job.live_status_ready = bool(job.get("live_status_ready", true)) and int(observed.result) == _primitives.THREAD_LOAD_LOADED
+		if status_cursor + 1 < ACTIONS.size():
+			job.live_status_cursor = status_cursor + 1
+			return
+		job.live_status_cursor = cursor
+		var all_loaded := bool(job.live_status_ready)
+		job.live_status_ready = true
+		if not all_loaded: return
+		job.live_step = "get"
+		job.live_get_dependency = [{"identity":statuses[path].identity,"after":"s_committed"}]
+	var fetched := _live_operation("get:" + cache_key, &"load_threaded_get", [path], "loader:" + path, false, job.live_get_dependency)
+	if fetched.get("status") != "COMMITTED": return
+	var consumed: Dictionary = job.get("native_get_paths", {})
+	consumed[path] = int(consumed.get(path, 0)) + 1
+	job.native_get_paths = consumed
+	_threaded_texture_get_count += 1
+	maximum_action_get_usec = maxi(maximum_action_get_usec, int(fetched.reply.finished_usec) - int(fetched.reply.started_usec))
+	if fetched.texture == null or Vector2i(_primitives.texture_size(fetched.texture)) != Vector2i(job.expected_sizes[action]):
+		_mark_job_failed(cache_key, job, path)
+		return
+	var profile: Dictionary = job.get("partial_resources", _client_profile_shell(job.mapping))
+	profile[action] = fetched.texture
+	profile.frame_counts[action] = int(job.mapping.get("actions", {}).get(action, {}).get("framesPerDirection", 1))
+	job.partial_resources = profile
+	job.action_cursor = cursor + 1
+	job.live_step = "status"
+	job.live_status_cursor = cursor + 1
+	job.erase("live_get_dependency")
+	_loaded_pending_keys[cache_key] = _decoded_rgba8_profile_bytes(profile)
+	if cursor + 1 < ACTIONS.size(): job.state = "collecting"
+	elif not _validate_profile(profile).is_empty(): _mark_job_failed(cache_key, job, path)
+	else: job.state = "rooting"
+	_publish_resource_roots()
+
+func _live_observed_status(job: Dictionary, path: String) -> int:
+	# -1 denotes no completed observation; it is never a ResourceLoader status.
+	return int(job.get("live_statuses", {}).get(path, {}).get("status", -1))
+
+func _live_publish_roots() -> void:
+	var profiles: Array = [] if _live_draining_close else _client_resource_profiles.values()
+	if not _live_draining_close:
+		for job: Dictionary in _threaded_profile_requests.values():
+			if job.has("partial_resources"): profiles.append(job.partial_resources)
+			if job.has("resources"): profiles.append(job.resources)
+	var tokens: Array = _primitives.live_profile_tokens(profiles)
+	var last: Array = _live_root_queue.back().tokens if not _live_root_queue.is_empty() else _live_root_active.get("tokens", _primitives.live_root_tokens(_budget_category))
+	# Capture escrow closure only after this original poll advanced its jobs.
+	# A committed Main GET can still await its Source take under the same budget.
+	var receipts: Array = _primitives.live_closeable_collection_receipts()
+	if last != tokens or (_live_root_queue.is_empty() and _live_root_active.is_empty() and not receipts.is_empty()):
+		_live_root_queue.append({"tokens":tokens.duplicate(),"receipts":receipts})
+
+func _live_poll_lifetimes() -> void:
+	if _live_root_active.is_empty() and not _live_root_queue.is_empty():
+		_live_root_active = _live_root_queue.pop_front()
+		_live_root_active.step = "roots"
+	if _live_root_active.is_empty(): return
+	if _live_root_active.step == "roots":
+		var result := _live_operation("roots", &"replace_roots", [_budget_category,_live_root_active.tokens], "roots:" + _budget_category, _live_root_active.tokens.is_empty())
+		if result.get("status") == "ABANDONED_UNACCEPTED":
+			_live_root_active = {}
+			return
+		if result.get("status") != "COMMITTED": return
+		_live_root_active.receipts = _primitives.live_collection_receipts_still_open(_live_root_active.receipts)
+		_live_root_active.dependencies = [{"identity":result.identity,"after":"s_committed"}]
+		_live_root_active.step = "escrow"
+	if not _live_root_active.receipts.is_empty():
+		var closed := _live_operation("escrow", &"close_get_escrow", [_live_root_active.receipts], "escrow:" + _budget_category, true, _live_root_active.dependencies)
+		if closed.get("status") == "ABANDONED_UNACCEPTED": return
+		if closed.get("status") != "COMMITTED": return
+	_live_root_active = {}
+	# _live_publish_roots runs after the original jobs in this same poll. It
+	# pairs every consumed/discarded GET escrow with that current desired root
+	# snapshot, including failed jobs. Never schedule old roots here before a
+	# just-committed GET has reached its original Source job consumer.
+
+func _live_handoff_claim(path: String, count: int) -> bool:
+	var result := _live_operation("handoff:" + path, &"retire_threaded_resource_claims", [path,count], "loader:" + path, true)
+	return result.get("status") == "COMMITTED" and result.result == true
+
+func _live_poll_orphans() -> void:
+	for path: String in _orphaned_threaded_paths.keys():
+		if deps.FrameBudget.remaining_usec() <= 0: return
+		# Original ContentLayers quantum transfers exactly one existing claim.
+		if _live_handoff_claim(path, 1):
+			var remaining := int(_orphaned_threaded_paths[path]) - 1
+			if remaining == 0: _orphaned_threaded_paths.erase(path)
+			else: _orphaned_threaded_paths[path] = remaining
+
+func _live_transfer_claims(jobs: Dictionary, orphans: Dictionary, unresolved: Dictionary) -> Dictionary:
+	var transferred := 0
+	var complete := true
+	# In-flight get/request/handoff still changes the actual claim count. Wait
+	# for its S cursor to consume the real result before taking an exit total.
+	for key: String in _live_ops:
+		if key.begins_with("request:") or key.begins_with("get:") or key.begins_with("handoff:"):
+			return {"complete":false,"transferred":0}
+	var totals: Dictionary = orphans.duplicate()
+	for job: Dictionary in jobs.values():
+		for path: String in job.get("native_requested_paths", {}):
+			var remaining := int(job.native_requested_paths[path]) - int(job.get("native_get_paths", {}).get(path, 0))
+			if remaining > 0: totals[path] = int(totals.get(path, 0)) + remaining
+	for path: String in totals:
+		var remaining := int(totals[path])
+		if not _live_exit_observations.has(path):
+			var observed := _live_operation("exit_status:" + path, &"status", [path], "loader:" + path, true)
+			if observed.get("status") != "COMMITTED":
+				complete = false
+				continue
+			_live_exit_observations[path] = int(observed.result)
+		var retired: Dictionary
+		if int(_live_exit_observations[path]) == _primitives.THREAD_LOAD_INVALID_RESOURCE:
+			retired = _live_operation("exit_forget:" + path, &"forget_invalid_claim", [path,remaining], "loader:" + path, true)
+		else:
+			retired = _live_operation("exit_transfer:" + path, &"retire_threaded_resource_claims", [path,remaining], "loader:" + path, true)
+		if retired.get("status") != "COMMITTED" or retired.result != true:
+			complete = false
+			unresolved[path] = {"owner_exit":true,"claim_count":remaining}
+			continue
+		transferred += remaining
+		for job: Dictionary in jobs.values():
+			if not job.get("native_requested_paths", {}).has(path): continue
+			var consumed: Dictionary = job.get("native_get_paths", {})
+			consumed[path] = int(job.native_requested_paths[path])
+			job.native_get_paths = consumed
+		orphans.erase(path)
+		unresolved.erase(path)
+	return {"complete":complete,"transferred":transferred}
+
+func _live_finish_owner() -> bool:
+	if live_close_status().get("status") != "READY": return false
+	if not _primitives.release_live_consumer(): return false
+	deps.FrameBudget.mark_pending(_budget_category, false)
+	_finished = true
+	return true
+
+func _enqueue_live_binding(id: int, op: StringName, args: Array, completion: String, profile: Dictionary, cleanup: bool) -> void:
+	_live_bindings.append({"service_id":id,"op":op,"args":args.duplicate(true),"completion":completion,"profile":profile.duplicate(true),"cleanup":cleanup})
+
+func enqueue_live_binding_event(id: int, operation: StringName, args: Array) -> void:
+	# All relevant renderer mutations share a single per-renderer causality key.
+	_enqueue_live_binding(id, &"bind_or_clear", [id,operation,args], "", {}, operation == &"sprite_texture" and args == [null] or operation == &"visual_visible" and args == [false])
+
+func request_live_visual_activation(id: int, profile: Dictionary, actual_visible: bool) -> bool:
+	if not _guard() or _live_closing: return false
+	var sub: Dictionary = _visual_subscriptions.get(id, {})
+	if not _require(not sub.is_empty(), "LIVE activation lacks original visual subscription"): return false
+	var identity := {"service_id":id,"resource_key":str(sub.resource_key),"world_generation":int(sub.world_generation)}
+	if not _primitives.has_binding_fact(id):
+		# Retain the original check position in the SAME binding FIFO. True
+		# means a pending continuation was retained, never a ready binding.
+		# Earlier birth/Sprite mutations can finish before this front resumes.
+		_live_bindings.append({"service_id":id,"op":&"bind_profile","args":[],"completion":"","profile":profile.duplicate(true),"cleanup":false,
+			"await_initial_binding":true,"activation_identity":identity,"actual_visible":actual_visible})
+		return true
+	_enqueue_live_activation_suffix(id, profile, actual_visible, identity)
+	return true
+
+func _enqueue_live_activation_suffix(id: int, profile: Dictionary, actual_visible: bool, identity: Dictionary) -> void:
+	_enqueue_live_binding(id, &"bind_profile", [id,profile,identity], "", {}, false)
+	_enqueue_live_binding(id, &"bind_or_clear", [id,&"visual_visible",[actual_visible]], "", {}, not actual_visible)
+	_enqueue_live_binding(id, &"bind_or_clear", [id,&"sprite_texture",[profile.idle]], "activation", profile, false)
+
+func request_live_visual_release(id: int) -> bool:
+	if not _guard(): return false
+	_enqueue_live_binding(id, &"bind_or_clear", [id,&"visual_visible",[false]], "", {}, true)
+	_enqueue_live_binding(id, &"bind_or_clear", [id,&"sprite_texture",[null]], "", {}, true)
+	_enqueue_live_binding(id, &"bind_profile", [id,{}, {"service_id":id,"resource_key":"","world_generation":-1}], "release", {}, true)
+	return true
+
+func _capture_binding_poll_context() -> Dictionary:
+	# Only ordinary LIVE polling gains a second attempt. Closing keeps its
+	# original single-step cleanup service and accepted-responsibility rules.
+	if OS.get_thread_caller_id() != _owner or not _configured or _failed or _finished or _live_closing: return {}
+	if not _primitives.is_configured(): return {}
+	var process_owner: Object = _process_owner.get_ref()
+	if process_owner == null: return {}
+	var scope: Dictionary = deps.FrameBudget.capture_continuation_scope()
+	var source: Dictionary = _primitives.capture_live_poll_context()
+	if scope.is_empty() or source.is_empty() or str(scope.category) != _budget_category: return {}
+	var world: Dictionary = deps.services.capture_world()
+	if world.is_empty() or world != source.site.world_context: return {}
+	return {"scope":scope,"source":source,"world":world.duplicate(true),
+		"process_owner_id":process_owner.get_instance_id(),"qualification":process_owner.snapshot(),
+		"draining_close":_live_draining_close}
+
+func _live_poll_bindings() -> void:
+	# One existing global binding operation: consume its real COMMITTED result,
+	# then at most attempt one successor. New submission still flushes only
+	# after the ORIGINAL outer budget scope closes. Never wait or spin here.
+	if _live_bindings.is_empty(): return
+	var continuation: Dictionary = _capture_binding_poll_context()
+	for attempt: int in range(2):
+		if attempt > 0:
+			if continuation.is_empty() or _capture_binding_poll_context() != continuation: return
+			var decision: Dictionary = deps.FrameBudget.continuation_scope_decision(continuation.scope)
+			if decision.get("allowed") != true: return
+		if _live_bindings.is_empty(): return
+		var row: Dictionary = _live_bindings.front()
+		if attempt > 0 and not bool(row.cleanup):
+			if deps.services.resolve_service(int(row.service_id)) == null or _visual_is_queued(int(row.service_id)): return
+		if row.get("await_initial_binding") == true:
+			# No reservation, Native submission, profile commit or fabricated fact
+			# occurs while this original prerequisite is still unresolved.
+			if not _primitives.has_binding_fact(int(row.service_id)): return
+			var sub: Dictionary = _visual_subscriptions.get(int(row.service_id), {})
+			if not _require(not sub.is_empty() and str(sub.resource_key) == row.activation_identity.resource_key and int(sub.world_generation) == row.activation_identity.world_generation,
+				"pending original activation subscription changed before initial binding"): return
+			_live_bindings.pop_front()
+			var original_tail: Array[Dictionary] = _live_bindings
+			_live_bindings = []
+			_enqueue_live_activation_suffix(int(row.service_id), row.profile, bool(row.actual_visible), row.activation_identity)
+			_live_bindings.append_array(original_tail)
+			row = _live_bindings.front()
+		var result := _live_operation("binding", row.op, row.args, "binding:%d" % int(row.service_id), row.cleanup)
+		if result.get("status") not in ["COMMITTED", "ABANDONED_UNACCEPTED"]: return
+		# Native identity/op/args checking remains in the unchanged original
+		# primitive. Never pop a different row after a synchronous fault callback.
+		if not _require(not _live_bindings.is_empty() and is_same(_live_bindings.front(), row), "completed binding no longer owns the original FIFO head"): return
+		if row.op == &"retire_visual_binding":
+			var id: int = row.service_id
+			if not _require(_original_visual_free.has(id) and _original_visual_free[id].op == row.op and _original_visual_free[id].args == row.args and result.get("status") == "COMMITTED" and result.get("result") == true, "original visual free requires its actual COMMITTED true receipt"): return
+			_original_visual_free[id] = {"status":"COMMITTED","result":true,"op":row.op,"args":row.args.duplicate(true),"actual_native_result":result.duplicate(true)}
+		_live_bindings.pop_front()
+		if result.get("status") == "ABANDONED_UNACCEPTED": return
+		if row.completion.is_empty(): continue
+		var handle: Object = deps.services.resolve_service(int(row.service_id))
+		if handle == null or _visual_is_queued(int(row.service_id)): return
+		var before_identity: Dictionary = handle.identity() if handle.has_method("identity") else {}
+		var model: Object = handle.model()
+		# Finish the ORIGINAL completion even if it consumes the last allowance.
+		if row.completion == "activation": model.commit_live_resource_activation(row.profile)
+		elif row.completion == "release": model.commit_live_resource_release()
+		if _failed or _finished or before_identity.is_empty() or not is_instance_valid(handle): return
+		if not is_same(deps.services.resolve_service(int(row.service_id)), handle) or _visual_is_queued(int(row.service_id)): return
+		if handle.identity() != before_identity: return
+		# Re-read the next head and actual scope/session/world after completion.
+
+func begin_live_close() -> bool:
+	if not _guard() or not live_resource_phase(): return false
+	if _live_closing: return true
+	_live_closing = true
+	_primitives.abandon_unaccepted_at_original_exit()
+	# Raw S rows have not been accepted by Native. The active front row, if any,
+	# stays until its real result/transfer completes; no accepted command drops.
+	if _live_ops.has("binding") and not _live_bindings.is_empty():
+		var active: Dictionary = _live_bindings.front()
+		_live_bindings = [active]
+	else: _live_bindings.clear()
+	_live_root_queue.clear()
+	return true
+
+func live_binding_ready_for_original_renderer_free(service_id: int) -> bool:
+	for row: Dictionary in _live_bindings:
+		if int(row.service_id) == service_id: return false
+	return _primitives.live_binding_transport_drained(service_id)
+
+func live_close_status() -> Dictionary:
+	var transport: bool = _primitives.live_operations_drained()
+	var bindings := _live_bindings.is_empty()
+	var roots: bool = _live_root_queue.is_empty() and _live_root_active.is_empty() and _primitives.live_roots_empty() and _primitives.live_escrow_empty()
+	var claims := _threaded_claims_retired and _orphaned_threaded_paths.is_empty() and _unresolved_threaded_paths.is_empty()
+	return {"status":"READY" if _live_closing and transport and bindings and roots and claims else "PENDING", "accepted_transport_drained":transport,"renderer_bindings_drained":bindings,"root_escrow_drained":roots,"claims_retired":claims}
+
+func live_binding_transaction_pending(id: int) -> bool:
+	for row: Dictionary in _live_bindings:
+		if int(row.service_id) == id: return true
+	return false
+
+func service_live_close_at_original_process_phase(frame: Dictionary) -> bool:
+	# Native Clock.stop has ended ordinary H/P. Root may call this ONLY from
+	# the real Main process_frame -> Native S close-service event, never from a
+	# result wake, a copied old PUBLISH frame, or an invented retry epoch.
+	if not _guard() or not _live_closing: return false
+	for field: String in ["source_process_frame", "actual_main_process_frame"]:
+		if not _require(frame.get(field) is int, "actual close process producer field absent: " + field): return false
+	if not _require(frame.get("closing_session") == true and int(frame.source_process_frame) > _live_last_close_process_frame and int(frame.actual_main_process_frame) > _live_last_actual_main_process_frame, "close cleanup is not a fresh actual P service event"): return false
+	_live_last_close_process_frame = int(frame.source_process_frame)
+	_live_last_actual_main_process_frame = int(frame.actual_main_process_frame)
+	var session: RefCounted = _primitives.live_source_session()
+	if not session.begin_resource_commit_phase(int(frame.source_process_frame)): return false
+	var committed: bool = _primitives.commit_live_results()
+	if not session.finish_resource_commit_phase() or not committed: return false
+	var token = deps.FrameBudget.begin(_budget_category, true)
+	if token == 0: return _require(false, "necessary original close scalar scope denied")
+	_live_poll_admitted(int(frame.source_process_frame))
+	deps.FrameBudget.end(token)
+	return _primitives.flush_live_submissions()

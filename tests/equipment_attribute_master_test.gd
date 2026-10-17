@@ -245,7 +245,7 @@ func _on_equipment_changed() -> void:
 
 
 func _assert_production_gender_gate_precedes_visual_resolution() -> void:
-	var player_state_file := FileAccess.open("res://scripts/player_state.gd", FileAccess.READ)
+	var player_state_file := FileAccess.open("res://scripts/gameplay/profile/profile_model.gd", FileAccess.READ)
 	assert(player_state_file != null)
 	var player_state_source := player_state_file.get_as_text()
 	var equip_start := player_state_source.find("func equip_inventory_index")

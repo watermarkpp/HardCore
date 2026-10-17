@@ -1,5 +1,7 @@
 extends RefCounted
 
+const CatalogGate := preload("res://scripts/gameplay/content/catalog_publication_gate.gd")
+
 const Registry := preload("res://scripts/identity/entity_registry.gd")
 const Categories := preload("res://scripts/identity/item_category_identity.gd")
 const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
@@ -10,10 +12,13 @@ const INSTANCE_CONTRACT := "hc.socketing.fixture.gem.v1"
 const MODULE := "hc.socketing_fixture"
 const ITEM_ID := 990001
 const ENTITY_ID := "hc.item.990001"
-static var _record: Dictionary = {}
+static var _record: Dictionary = {}:
+	set(value):
+		if CatalogGate.write_allowed(): _record = value
 
 static func ensure_loaded() -> bool:
 	if not _record.is_empty(): return true
+	if not CatalogGate.write_allowed(): return false
 	var document: Variant = JSON.parse_string(FileAccess.get_file_as_string(PATH))
 	var policy: Variant = JSON.parse_string(FileAccess.get_file_as_string(POLICY))
 	if not document is Dictionary or not policy is Dictionary:

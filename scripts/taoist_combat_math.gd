@@ -1,6 +1,8 @@
 class_name TaoistCombatMath
 extends RefCounted
 
+const CatalogGate := preload("res://scripts/gameplay/content/catalog_publication_gate.gd")
+
 const CombatUnitLegacyAdapterScript := preload(
 	"res://scripts/skills/combat_unit_legacy_adapter.gd"
 )
@@ -17,8 +19,12 @@ const MAX_SKILL_LEVEL := 3
 const SUMMON_GROWTH_POLICY_ID := "skills.summon.growth.hardcore.v2"
 const SUMMON_KILL_GROWTH_MULTIPLIER := 2
 
-static var _rules_cache: Dictionary = {}
-static var _summon_baseline_cache: Dictionary = {}
+static var _rules_cache: Dictionary = {}:
+	set(value):
+		if CatalogGate.write_allowed(): _rules_cache = value
+static var _summon_baseline_cache: Dictionary = {}:
+	set(value):
+		if CatalogGate.write_allowed(): _summon_baseline_cache = value
 
 
 static func clamp_skill_level(level_value: int) -> int:
@@ -217,6 +223,7 @@ static func summon_baseline_contract_id() -> String:
 
 
 static func clear_cache_for_tests() -> void:
+	if not CatalogGate.write_allowed(): return
 	_rules_cache = {}
 	_summon_baseline_cache = {}
 
@@ -258,6 +265,7 @@ static func _skill_rule(skill_id: String) -> Dictionary:
 static func _rules() -> Dictionary:
 	if not _rules_cache.is_empty():
 		return _rules_cache
+	if not CatalogGate.write_allowed(): return {}
 	var file := FileAccess.open(RULES_PATH, FileAccess.READ)
 	var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
 	_rules_cache = parsed if parsed is Dictionary else {}
@@ -267,6 +275,7 @@ static func _rules() -> Dictionary:
 static func _summon_baseline() -> Dictionary:
 	if not _summon_baseline_cache.is_empty():
 		return _summon_baseline_cache
+	if not CatalogGate.write_allowed(): return {}
 	var file := FileAccess.open(SUMMON_BASELINE_PATH, FileAccess.READ)
 	var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
 	_summon_baseline_cache = parsed if parsed is Dictionary else {}

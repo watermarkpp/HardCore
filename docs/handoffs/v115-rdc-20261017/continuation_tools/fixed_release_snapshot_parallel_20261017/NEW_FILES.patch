@@ -1,0 +1,656 @@
+--- /dev/null
++++ b/outputs/v115_multicore/fixed_release_snapshot_parallel_20261017/fixed_release_objects.py
+@@ -0,0 +1,182 @@
++"""Raw immutable Git objects. No commit command, index writes or ref movement."""
++from pathlib import Path
++import hashlib, io, json, os, re, stat, subprocess, tarfile, uuid, zlib
++from isolated_git import GitSandbox, IsolationError, physical
++
++sha=lambda b:hashlib.sha256(b).hexdigest()
++def require(ok, why):
++    if not ok: raise IsolationError(why)
++
++def relative(value):
++    require(isinstance(value,str) and value and '\\' not in value and ':' not in value and not value.startswith('/') and all(x not in ('','.','..') for x in value.split('/')) and not any(ord(c)<32 for c in value),'unsafe relative path')
++    return value
++
++def run(box,args,data=None):
++    box.verify()
++    allowed={'hash-object','cat-file','ls-tree','archive'}
++    require(args and args[0] in allowed,'object-only Git operation required')
++    proc=subprocess.run(['git','-c','core.autocrlf=false',*args],input=data,cwd=box.workspace,env=box.environment(),stdout=subprocess.PIPE,stderr=subprocess.PIPE)
++    require(proc.returncode==0,'private Git failed: '+proc.stderr.decode('utf-8',errors='replace')[:300])
++    return proc.stdout
++
++def object_write(box,kind,data):
++    require(kind in ('blob','tree','commit'),'unsupported Git object')
++    # Pure object construction avoids one Git process per asset, while later
++    # actual cat-file/archive validates Git's interpretation of these objects.
++    physical(box.git_dir,box.root)
++    marker=json.loads((box.git_dir/'codex-isolated.json').read_text())
++    require(marker=={'workspace':str(box.workspace),'git_dir':str(box.git_dir),'index':str(box.index),'ceiling':str(box.root)},'private repository marker mismatch')
++    require(all((box.git_dir/x).exists() for x in ('HEAD','refs','objects','config')),'incomplete private repository')
++    raw=(kind+' '+str(len(data))+'\0').encode()+data
++    oid=hashlib.sha1(raw).hexdigest();dst=physical(box.git_dir/'objects'/oid[:2]/oid[2:],box.root)
++    dst.parent.mkdir(exist_ok=True)
++    if dst.exists():require(zlib.decompress(dst.read_bytes())==raw,'existing private object differs')
++    else:
++        with dst.open('xb') as handle:handle.write(zlib.compress(raw))
++    return oid
++
++def custody(box):
++    box.verify()
++    result={}
++    for name in ['HEAD','config','private.index','packed-refs','logs/HEAD']:
++        p=box.git_dir/name
++        result[name]=sha(p.read_bytes()) if p.is_file() else None
++    for base in ['refs','logs/refs']:
++        root=box.git_dir/base
++        if root.exists():
++            for p in root.rglob('*'):
++                physical(p,box.root)
++                if p.is_file():result[p.relative_to(box.git_dir).as_posix()]=sha(p.read_bytes())
++    return result
++
++def baseline_modes(box,parent):
++    require(re.fullmatch('[0-9a-f]{40}',parent)!=None,'exact parent commit required')
++    require(run(box,['cat-file','-t',parent]).strip()==b'commit','parent is not a commit')
++    result={}
++    for item in run(box,['ls-tree','-rz','--full-tree',parent]).split(b'\0'):
++        if not item:continue
++        meta,path=item.split(b'\t',1);mode,kind,oid=meta.split(b' ')
++        result[path.decode('utf-8')]=mode.decode()
++    return result
++
++ROOT_FILES={'project.godot','export_presets.cfg','.gitattributes','.gitignore','icon.svg','icon.svg.import','icon.png','icon.png.import'}
++TOPS={'scripts','scenes','assets','native','tests','tools','addons'}
++BLOCK_DIRS={'.git','.godot','outputs','dev_art_sources','node_modules','__pycache__','.venv','venv','android-build','android-sdk','sdk','downloads','download','godot','godot-4.7','godot-4.6','engine','engines','build','dist'}
++BLOCK_SUFFIXES={'.exe','.dll','.so','.aar','.apk','.aab','.zip','.7z','.rar','.pck','.jks','.keystore','.p12','.pfx','.pem','.key','.pyc','.obj','.lib','.pdb','.log'}
++def selected(rel):
++    relative(rel);parts=rel.split('/')
++    if any(x.lower() in BLOCK_DIRS for x in parts):return False
++    if any(x.lower().startswith(('godot-','android-sdk','local-tools')) for x in parts[:-1]):return False
++    name=parts[-1].lower()
++    if name=='.env' or name.startswith('.env.') or name in ('credentials','credentials.json','secrets.json','.git-credentials','local.properties','export_credentials.cfg'):return False
++    if Path(name).suffix in BLOCK_SUFFIXES:return False
++    return rel in ROOT_FILES or parts[0] in TOPS
++
++def inventory(source):
++    source=Path(source).absolute();physical(source,source)
++    rows=[];seen=set()
++    def visit(folder):
++        physical(folder,source)
++        for p in sorted(folder.iterdir(),key=lambda x:x.name):
++            rel=p.relative_to(source).as_posix()
++            # No traversal into excluded trees, including shared local junctions.
++            if p.name.lower() in BLOCK_DIRS or (p.is_dir() and p.name.lower().startswith(('godot-','android-sdk','local-tools'))):continue
++            if p.is_symlink() or getattr(p.lstat(),'st_file_attributes',0)&getattr(stat,'FILE_ATTRIBUTE_REPARSE_POINT',1024):raise IsolationError('reparse source entry refused: '+rel)
++            if p.is_dir():
++                if rel.split('/')[0] in TOPS:visit(p)
++            elif p.is_file() and selected(rel):
++                physical(p,source);relative(rel)
++                require(rel.casefold() not in seen,'case-colliding source path');seen.add(rel.casefold())
++                data=p.read_bytes()
++                require(b'-----BEGIN PRIVATE KEY-----' not in data and b'-----BEGIN RSA PRIVATE KEY-----' not in data,'private key material refused: '+rel)
++                if p.suffix.lower()=='.cfg':
++                    require(not re.search(rb'(?mi)^\s*(?:keystore/(?:debug|release)_password|password)\s*=\s*"[^"\r\n]+"',data),'embedded export password refused: '+rel)
++                rows.append({'path':rel,'bytes':len(data),'sha256':sha(data)})
++    visit(source)
++    return sorted(rows,key=lambda r:r['path'])
++
++def build_from_rows(box,source,rows,parent,message='HardCore v115 immutable raw-byte build input'):
++    before=custody(box);modes=baseline_modes(box,parent);source=Path(source).absolute()
++    paths=set();entries={}
++    for row in rows:
++        rel=relative(row['path']);require(selected(rel),'excluded object input: '+rel)
++        require(rel.casefold() not in paths,'duplicate source path');paths.add(rel.casefold())
++        p=physical(source/rel,source);data=p.read_bytes()
++        require(len(data)==row['bytes'] and sha(data)==row['sha256'],'input drift: '+rel)
++        mode=modes.get(rel,'100644');require(mode in ('100644','100755'),'symlink/submodule mode refused')
++        node=entries
++        parts=rel.split('/')
++        for part in parts[:-1]:
++            require(not isinstance(node.get(part),tuple),'file/directory conflict')
++            node=node.setdefault(part,{})
++        require(parts[-1] not in node,'tree entry conflict')
++        node[parts[-1]]=(mode,object_write(box,'blob',data))
++    def tree(node):
++        children=[]
++        for name,value in node.items():
++            mode,oid=('40000',tree(value)) if isinstance(value,dict) else value
++            children.append((name.encode('utf-8')+(b'/' if mode=='40000' else b''),mode.encode()+b' '+name.encode()+b'\0'+bytes.fromhex(oid)))
++        return object_write(box,'tree',b''.join(x[1] for x in sorted(children)))
++    tree_id=tree(entries)
++    require('\n' not in message and '\r' not in message,'single-line commit description required')
++    # Fixed author/time makes identical parent+raw tree deterministic. No refs.
++    commit=('tree '+tree_id+'\nparent '+parent+'\nauthor HardCore Build Snapshot <build@invalid.local> 0 +0000\ncommitter HardCore Build Snapshot <build@invalid.local> 0 +0000\n\n'+message+'\n').encode()
++    commit_id=object_write(box,'commit',commit)
++    require(inventory(source)==rows,'source roster/content drift during object build')
++    require(custody(box)==before,'private HEAD/index/refs changed during object build')
++    return {'commit':commit_id,'tree':tree_id,'parent':parent,'files':rows,'custody':before}
++
++def verify_archive(box,commit,rows):
++    box.verify();expected={r['path']:r for r in rows};actual={}
++    # This is actual Git archive output, not a synthetic zip or tree decoder.
++    proc=subprocess.Popen(['git','-c','core.autocrlf=false','archive','--format=tar',commit],cwd=box.workspace,env=box.environment(),stdout=subprocess.PIPE,stderr=subprocess.PIPE)
++    try:
++        with tarfile.open(fileobj=proc.stdout,mode='r|') as archive:
++            for member in archive:
++                if member.isdir():continue
++                require(member.isfile(),'non-regular archive member')
++                rel=relative(member.name);require(rel not in actual,'duplicate archive member')
++                stream=archive.extractfile(member);digest=hashlib.sha256();size=0
++                while True:
++                    data=stream.read(1024*1024)
++                    if not data:break
++                    digest.update(data);size+=len(data)
++                actual[rel]={'path':rel,'bytes':size,'sha256':digest.hexdigest()}
++        error=proc.stderr.read();code=proc.wait()
++        require(code==0,'archive failed: '+error.decode(errors='replace')[:200])
++        require(actual==expected,'Git archive raw bytes/roster differ (attributes/export filters may be active)')
++        return {'status':'PASS','files':len(actual),'commit':commit,'raw_bytes_verified':True}
++    finally:
++        if proc.poll() is None:proc.kill();proc.wait()
++
++def loose_object(path):
++    raw=zlib.decompress(path.read_bytes());header,data=raw.split(b'\0',1);kind,size=header.split(b' ')
++    require(kind in (b'blob',b'tree',b'commit') and int(size)==len(data),'invalid loose object')
++    oid=hashlib.sha1(raw).hexdigest()
++    require(path.parent.name+path.name==oid,'loose object path/digest mismatch')
++    return oid,raw
++
++def publish_additive(box,destination,authorized_objects):
++    """Only additive loose objects; caller must separately prove production gate."""
++    box.verify();destination=Path(destination).absolute();authorized_objects=Path(authorized_objects).absolute()
++    require(destination==authorized_objects,'wrong destination objects root')
++    physical(destination,destination);require(destination.is_dir(),'existing destination object DB required')
++    added=[]
++    for fan in sorted((box.git_dir/'objects').iterdir()):
++        if not re.fullmatch('[0-9a-f]{2}',fan.name):continue
++        physical(fan,box.root)
++        for src in sorted(fan.iterdir()):
++            physical(src,box.root);oid,raw=loose_object(src)
++            dst=physical(destination/oid[:2]/oid[2:],destination)
++            dst.parent.mkdir(exist_ok=True)
++            if dst.exists():
++                require(loose_object(dst)[1]==raw,'existing destination object differs');continue
++            tmp=dst.parent/('.codex-object-'+uuid.uuid4().hex)
++            try:
++                with tmp.open('xb') as handle:handle.write(src.read_bytes());handle.flush();os.fsync(handle.fileno())
++                try:os.link(tmp,dst) # Atomic no-overwrite publication, even with a racing writer.
++                except FileExistsError:require(loose_object(dst)[1]==raw,'racing destination object differs')
++                require(loose_object(dst)[1]==raw,'published object verification failed');added.append(oid)
++            finally:
++                if tmp.exists():tmp.unlink()
++    return {'status':'PASS','added_objects':added,'refs_or_index_written':False}
+--- /dev/null
++++ b/outputs/v115_multicore/fixed_release_snapshot_parallel_20261017/fixed_release_snapshot.py
+@@ -0,0 +1,113 @@
++"""Formal gated CLI. This module has no component/mock/force gate override."""
++from pathlib import Path
++import argparse, json, re, sys
++from fixed_release_objects import *
++from isolated_git import input_rows
++
++R=Path('C:/Users/Administrator/.codex/worktrees/multicore-v115/HardCore')
++E=Path('C:/Users/Administrator/Documents/HardCore-engine-v115/godot')
++OUT=Path(__file__).resolve().parent
++HEAD='45170d0eaf4d2c642d4a03de392f64fa2b1e25bf'
++INDEX_SHA='3180f91855b8bc8d7a22848592ff9f95f2d19574a73f7a3eea90e962f7151b22'
++AGG='58a1b306f62b5d805bd2ff282ab37367cc807e7dd2672c0fb265c2e2289de5f8'
++NATIVE_SHA='0f3b37d1f43279e9b4633870768e64f610581a354afba777c9b404b7ac496178'
++CONSOLE_SHA='1b69c0d26f54df88301791e5f3dbd43f7e20aad30a727addfff3287ea9d11c91'
++MAIN_SHA='7f54a5090cfde94a7d2fcf37c22c14ecd23e00eefcc0bf5e23d1c0326bc7b8de'
++load=lambda p:json.loads(Path(p).read_text(encoding='utf-8-sig'))
++file_sha=lambda p:sha(Path(p).read_bytes())
++
++def real_layout(root):
++    root=Path(root).absolute();require(root==R,'wrong production root');physical(root,root)
++    line=(root/'.git').read_text().strip()
++    require(line.startswith('gitdir: '),'exact managed-worktree gitfile required')
++    gd=Path(line.removeprefix('gitdir: ')).absolute()
++    expected=Path('C:/Users/Administrator/Documents/HardCore/.git/worktrees/HardCore1')
++    require(gd==expected and gd.is_dir(),'wrong real Git directory')
++    common=(gd/(gd/'commondir').read_text().strip()).resolve(strict=True)
++    require(common==Path('C:/Users/Administrator/Documents/HardCore/.git'),'wrong common Git directory')
++    physical(gd,common);require((gd/'HEAD').read_text().strip()==HEAD,'actual detached HEAD differs')
++    require(file_sha(gd/'index')==INDEX_SHA,'actual protected index differs')
++    return gd,common
++
++def real_custody(root):
++    gd,common=real_layout(root);facts={}
++    paths=[gd/'index',gd/'HEAD',common/'HEAD',common/'config',common/'packed-refs']
++    for folder in (common/'refs',gd/'refs'):
++        if folder.exists():paths.extend(p for p in folder.rglob('*') if p.is_file())
++    for p in paths:
++        physical(p,common);facts[str(p)]=file_sha(p) if p.exists() else None
++    return facts
++
++def pinned(row):
++    require(isinstance(row,dict) and isinstance(row.get('path'),str) and re.fullmatch('[0-9a-f]{64}',row.get('sha256',''))!=None,'pinned file path/SHA required')
++    p=physical(Path(row['path']).absolute(),R)
++    require(p.is_file() and file_sha(p)==row['sha256'],'pinned file drift: '+str(p))
++    return p
++
++def validate_world(gate,source):
++    require(source==R,'wrong World source root')
++    runner_path=pinned(gate.get('runner_result'));protection_path=pinned(gate.get('protection'));manifest_path=pinned(gate.get('source_manifest'))
++    runner=load(runner_path);protection=load(protection_path);rows=load(manifest_path)
++    require(isinstance(rows,list) and rows,'World source manifest missing')
++    matches=[r for r in runner.get('results',[]) if r.get('test_name')=='character_source_full_world_20261016']
++    require(len(matches)==1,'one actual World start/normal-exit scene required');test=matches[0]
++    require(test.get('result')=='PASS' and test.get('effective_exit_code')==0 and test.get('timeout') is False and test.get('framework_receipt_valid') is True and runner.get('engine_log_errors')==0,'BLOCKED: real World/native/engine PASS missing')
++    require(protection.get('source_unchanged') is True and protection.get('real_index_preserved') is True and protection.get('native_runner_exit')==0,'BLOCKED: real World source/index/native protection missing')
++    require(test.get('source_content_sha256')==file_sha(manifest_path),'World source receipt/manifest mismatch')
++    warning=test.get('cleanup_warning_evidence',{})
++    require(warning.get('status')=='PASS' and warning.get('objectdb_leak_warning_count')==0,'World cleanup leak evidence missing')
++    fingerprints={r.get('sha256') for r in test.get('engine_fingerprints',[])+runner.get('engine_fingerprints',[])}
++    require({CONSOLE_SHA,MAIN_SHA}<=fingerprints,'World used a different actual Windows pair')
++    paths=set()
++    for row in rows:
++        rel=relative(row['path']);require(rel.casefold() not in paths,'duplicate World source path');paths.add(rel.casefold())
++    input_rows(source,rows) # Includes .godot/outputs/override witness inputs, though these are not shipped.
++    require(any(r['path']=='project.godot' for r in rows) and any(r['path'].startswith('scripts/') for r in rows) and any(r['path'].startswith('assets/') for r in rows),'incomplete World source manifest')
++    return {'runner':str(runner_path),'protection':str(protection_path),'manifest':str(manifest_path),'manifest_sha256':file_sha(manifest_path),'files':rows,'run_id':test.get('framework_run_id')}
++
++def validate_native():
++    base=R/'outputs/v115_multicore/codex_resume_20261015_182255'
++    manifest=base/'SOURCE_MANIFEST.map_reply_observation_20261017.json'
++    require(file_sha(manifest)==NATIVE_SHA,'fixed Native manifest differs');m=load(manifest)
++    require(m.get('source_sha256')==AGG and len(m.get('module_inputs',[]))==74 and len(m.get('changed_files',[]))==95 and len(m.get('reviewed_gd_seals',[]))==5,'fixed Native169/five-role schema differs')
++    for row in m['module_inputs']+m['changed_files']:
++        root=R if row['root']=='project' else E if row['root']=='engine' else None
++        require(root is not None,'unknown Native input root');input_rows(root,[row])
++    for row in m['reviewed_gd_seals']:input_rows(R,[{'path':row['path'],'sha256':row['after']}])
++    console=base/'windows_map_reply_observation_20261017_build/Godot_v115-stable_win64_console.exe'
++    main=console.with_name('Godot_v115-stable_win64.exe')
++    require(file_sha(console)==CONSOLE_SHA and file_sha(main)==MAIN_SHA and AGG.encode() in main.read_bytes(),'fixed actual PE pair/embedded Native identity differs')
++    return {'manifest_sha256':NATIVE_SHA,'native_source_sha256':AGG,'inputs':169,'sealed_roles':5,'console_sha256':CONSOLE_SHA,'main_sha256':MAIN_SHA}
++
++def main():
++    parser=argparse.ArgumentParser(description=__doc__)
++    parser.add_argument('--world-gate',type=Path,required=True,help='JSON with pinned runner_result/protection/source_manifest facts')
++    parser.add_argument('--output',type=Path,required=True,help='New physical child directory inside this exclusive delivery')
++    parser.add_argument('--publish-common-objects',action='store_true',help='After all gates, add verified immutable loose objects to the real common objects DB; no refs/index changes')
++    args=parser.parse_args()
++    output=physical(args.output.absolute(),OUT);require(output!=OUT and not output.exists(),'new exclusive output required')
++    real_before=real_custody(R);gate=load(args.world_gate);world=validate_world(gate,R);native=validate_native()
++    gd,common=real_layout(R)
++    rows=inventory(R);require({'project.godot','export_presets.cfg'}<={r['path'] for r in rows},'formal project/export inputs missing')
++    # Every measured source asset is included, not merely assets/data.
++    shipped={r['path']:r['sha256'] for r in rows}
++    for row in world['files']:
++        if row['path']=='project.godot' or row['path'].startswith(('scripts/','scenes/','assets/','tools/','tests/')):
++            require(shipped.get(row['path'])==row['sha256'],'measured input excluded or changed: '+row['path'])
++    output.mkdir(parents=True)
++    box=GitSandbox(output/'objects_workspace',OUT);box.initialize(HEAD,common/'objects')
++    built=build_from_rows(box,R,rows,HEAD)
++    built['archive']=verify_archive(box,built['commit'],rows)
++    require(inventory(R)==rows,'source changed before final approval/publication')
++    validate_world(gate,R);validate_native();require(real_custody(R)==real_before,'real index/HEAD/refs changed')
++    publication={'status':'NOT_RUN'}
++    if args.publish_common_objects:
++        publication=publish_additive(box,common/'objects',common/'objects')
++        require(real_custody(R)==real_before,'real custody changed during additive object publication')
++    result={'status':'PASS','scope':'FIXED_RAW_BUILD_OBJECT','production_commit_object_created_in_private_db':True,'common_object_publication':publication,'world':world,'native':native,'build':built,'real_custody_before':real_before,'real_custody_after':real_custody(R),'build_command_after_publication':['pwsh','-NoProfile','-File',str(R/'tools/build_android_isolated.ps1'),'-Commit',built['commit']]}
++    (output/'FIXED_RELEASE_RESULT.json').write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
++    print(json.dumps({'status':'PASS','commit':built['commit'],'common_objects':publication['status'],'receipt':str(output/'FIXED_RELEASE_RESULT.json')}))
++
++if __name__=='__main__':
++    try:main()
++    except Exception as exc:print('BLOCKED/FAIL: '+str(exc),file=sys.stderr);sys.exit(1)
+--- /dev/null
++++ b/outputs/v115_multicore/fixed_release_snapshot_parallel_20261017/freeze_delivery.py
+@@ -0,0 +1,14 @@
++from pathlib import Path
++import hashlib,json,difflib
++o=Path(__file__).resolve().parent
++sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
++r=json.loads((o/'COMPONENT_RESULT.json').read_text())
++assert r['status']=='PASS' and r['checks']==41 and r['failed']==0 and r['not_run']==0
++assert r['real_index_before']==r['real_index_after']=='3180f91855b8bc8d7a22848592ff9f95f2d19574a73f7a3eea90e962f7151b22'
++patch=''.join(''.join(difflib.unified_diff([],p.read_text(encoding='utf-8').splitlines(True),fromfile='/dev/null',tofile='b/outputs/v115_multicore/fixed_release_snapshot_parallel_20261017/'+p.name)) for p in [*sorted(o.glob('*.py')),o/'README.md'])
++(o/'NEW_FILES.patch').write_text(patch,encoding='utf-8',newline='\n')
++result={'status':'PASS','scope':'PRIVATE_GIT_COMPONENT_ONLY','actual_test':{'checks':41,'failed':0,'not_run':0,'native_exit':0,'receipt_sha256':sha(o/'COMPONENT_RESULT.json')},'production_snapshot':'NOT_RUN','production_common_objects_publication':'NOT_RUN','formal_CLI_runtime':'NOT_RUN','World_and_normal_exit':'FAIL upstream; not retested','SourceSave_six_stages':'NOT_RUN','viewport_followup':'NOT_RUN; not started per stop instruction','remote_ref_and_push':'NOT_RUN by worker; parent-owned handoff-only','real_index_preserved':True,'files':[{'path':p.name,'sha256':sha(p),'bytes':p.stat().st_size} for p in sorted(o.glob('*.py'))], 'remaining':['Parent review of formal CLI full production selection/gates','True World/normal-exit PASS required for formal release snapshot','Parent handoff-only documents/evidence policy and ref/push','Parent delivery archive validation must cover all assets/','Viewport identity and other known World blockers','SourceSave six actual180s stages and final APK/device gates']}
++(o/'FINAL_RESULT.json').write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
++files=[{'path':p.relative_to(o).as_posix(),'sha256':sha(p),'bytes':p.stat().st_size} for p in sorted(o.rglob('*')) if p.is_file() and p.name!='DELIVERY_SHA256.json']
++(o/'DELIVERY_SHA256.json').write_text(json.dumps({'frozen':True,'files':files},indent=2)+'\n',encoding='utf-8')
++print(json.dumps({'final_sha256':sha(o/'FINAL_RESULT.json'),'delivery_sha256':sha(o/'DELIVERY_SHA256.json'),'files':len(files),'component_receipt_sha256':sha(o/'COMPONENT_RESULT.json'),'tools':result['files']}))
+--- /dev/null
++++ b/outputs/v115_multicore/fixed_release_snapshot_parallel_20261017/isolated_git.py
+@@ -0,0 +1,71 @@
++"""Exact private Git custody; never discover a repository through parent folders."""
++from pathlib import Path
++import hashlib, json, os, re, stat, subprocess
++
++HEAD="45170d0eaf4d2c642d4a03de392f64fa2b1e25bf"
++OBJECTS=Path("C:/Users/Administrator/Documents/HardCore/.git/objects")
++class IsolationError(RuntimeError): pass
++
++def digest(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
++def physical(path,root):
++ path=Path(os.path.abspath(path));root=Path(os.path.abspath(root))
++ if path!=root and root not in path.parents:raise IsolationError("path escapes authorized output")
++ for part in [path,*path.parents]:
++  if part.exists() and (part.is_symlink() or getattr(part.lstat(),"st_file_attributes",0)&getattr(stat,"FILE_ATTRIBUTE_REPARSE_POINT",1024)):raise IsolationError("reparse path refused:"+str(part))
++  if part==root:break
++ return path
++
++def input_rows(root,rows):
++ root=Path(root)
++ for row in rows:
++  rel=row.get("path",row.get("relative_path",""))
++  if not isinstance(rel,str) or not rel or "\\" in rel or Path(rel).is_absolute() or ".." in Path(rel).parts or ":" in rel:raise IsolationError("unsafe manifest path")
++  p=physical(root/rel,root)
++  expected=row.get("sha256",row.get("after",""))
++  if not re.fullmatch("[0-9a-f]{64}",expected) or not p.is_file() or digest(p)!=expected:raise IsolationError("input drift:"+rel)
++ return True
++
++class GitSandbox:
++ def __init__(self,workspace,authorized_root):
++  self.root=physical(authorized_root,authorized_root)
++  self.workspace=physical(workspace,self.root)
++  if self.workspace==self.root:raise IsolationError("project must be a child of authorized output")
++  self.git_dir=self.workspace/".git";self.index=self.git_dir/"private.index"
++ def environment(self):
++  env=os.environ.copy()
++  # Ambient discovery and object/index overrides must not redirect any command.
++  for key in list(env):
++   if key.startswith("GIT_"):env.pop(key)
++  env.update(GIT_DIR=str(self.git_dir),GIT_WORK_TREE=str(self.workspace),GIT_INDEX_FILE=str(self.index),GIT_CEILING_DIRECTORIES=str(self.root),GIT_OPTIONAL_LOCKS="0",GIT_CONFIG_NOSYSTEM="1",GIT_CONFIG_GLOBAL=os.devnull)
++  return env
++ def _run(self,args):
++  return subprocess.run(["git",*args],cwd=self.workspace,env=self.environment(),check=True,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE).stdout.strip()
++ def verify(self):
++  physical(self.workspace,self.root);physical(self.git_dir,self.root);physical(self.index,self.root)
++  for name in ["HEAD","config","objects","refs","codex-isolated.json"]:
++   p=self.git_dir/name
++   if not p.exists():raise IsolationError("incomplete private repository:"+name)
++   physical(p,self.root)
++  marker=json.loads((self.git_dir/"codex-isolated.json").read_text())
++  if marker!={"workspace":str(self.workspace),"git_dir":str(self.git_dir),"index":str(self.index),"ceiling":str(self.root)}:raise IsolationError("private repository marker mismatch")
++  values={"workspace":self._run(["rev-parse","--show-toplevel"]),"git_dir":self._run(["rev-parse","--absolute-git-dir"]),"index":self._run(["rev-parse","--git-path","index"])}
++  for key,expected in [("workspace",self.workspace),("git_dir",self.git_dir),("index",self.index)]:
++   if Path(values[key]).resolve()!=expected.resolve():raise IsolationError("Git resolved wrong "+key)
++  return values
++ def initialize(self,head=HEAD,objects=OBJECTS):
++  if self.git_dir.exists():raise IsolationError("refuse to initialize existing repository")
++  if not re.fullmatch("[0-9a-f]{40}",head) or not Path(objects).is_dir():raise IsolationError("exact existing commit/objects required")
++  self.workspace.mkdir(parents=True,exist_ok=True)
++  for name in ["objects/info","refs"]:(self.git_dir/name).mkdir(parents=True,exist_ok=True)
++  (self.git_dir/"config").write_text("[core]\nrepositoryformatversion = 0\nbare = false\nfilemode = false\nlogallrefupdates = false\n",encoding="utf-8")
++  (self.git_dir/"HEAD").write_bytes((head+"\n").encode())
++  (self.git_dir/"objects/info/alternates").write_bytes((str(Path(objects).resolve()).replace("\\","/")+"\n").encode())
++  marker={"workspace":str(self.workspace),"git_dir":str(self.git_dir),"index":str(self.index),"ceiling":str(self.root)}
++  (self.git_dir/"codex-isolated.json").write_text(json.dumps(marker),encoding="utf-8")
++  self.verify()
++  self.mutate(["read-tree",head])
++  return self.verify()
++ def mutate(self,args):
++  self.verify() # No mutation can precede complete local files and exact path proof.
++  if not args or args[0] not in ["read-tree","hash-object","update-index"]:raise IsolationError("unapproved private Git mutation")
++  return self._run(args)
+--- /dev/null
++++ b/outputs/v115_multicore/fixed_release_snapshot_parallel_20261017/test_fixed_release_objects.py
+@@ -0,0 +1,126 @@
++"""Actual private Git objects/archive tests, explicitly NOT World evidence."""
++from pathlib import Path
++import json, os, shutil, sys, traceback
++import fixed_release_objects as F
++from isolated_git import GitSandbox, IsolationError
++
++OUT=Path(__file__).resolve().parent
++RUN=OUT/'component_run'
++checks=[]
++def check(name,condition):
++    checks.append({'name':name,'status':'PASS' if condition else 'FAIL'})
++def rejects(name,fn):
++    try:fn()
++    except Exception:check(name,True)
++    else:check(name,False)
++
++def owned_box(name):
++    box=GitSandbox(RUN/name,OUT)
++    box.workspace.mkdir(parents=True)
++    for rel in ('objects/info','refs'):(box.git_dir/rel).mkdir(parents=True,exist_ok=True)
++    (box.git_dir/'HEAD').write_text('0'*40+'\n')
++    (box.git_dir/'config').write_text('[core]\nrepositoryformatversion = 0\nbare = false\nfilemode = false\nautocrlf = true\nlogallrefupdates = false\n')
++    (box.git_dir/'codex-isolated.json').write_text(json.dumps({'workspace':str(box.workspace),'git_dir':str(box.git_dir),'index':str(box.index),'ceiling':str(box.root)}))
++    box.verify()
++    tree=F.object_write(box,'tree',b'')
++    base=F.object_write(box,'commit',('tree '+tree+'\nauthor Component <test@invalid.local> 0 +0000\ncommitter Component <test@invalid.local> 0 +0000\n\nComponent bootstrap\n').encode())
++    (box.git_dir/'HEAD').write_text(base+'\n')
++    box.mutate(['read-tree',base]);box.verify()
++    return box,base
++
++def put(root,rel,data):
++    p=root/rel;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(data)
++
++def main():
++    F.require(not RUN.exists(),'component evidence already exists')
++    RUN.mkdir()
++    real_index=Path('C:/Users/Administrator/Documents/HardCore/.git/worktrees/HardCore1/index')
++    index_before=F.sha(real_index.read_bytes())
++    box,bootstrap=owned_box('source')
++    source=RUN/'raw_source';source.mkdir()
++    initial={'project.godot':b'[application]\r\nconfig/name="Component"\r\n','export_presets.cfg':b'[preset.0]\r\nname="Android"\r\n','scripts/deleted.gd':b'extends RefCounted\n'}
++    for path,data in initial.items():put(source,path,data)
++    baseline=F.build_from_rows(box,source,F.inventory(source),bootstrap)
++    (box.git_dir/'HEAD').write_text(baseline['commit']+'\n');box.mutate(['read-tree',baseline['commit']])
++    (source/'scripts/deleted.gd').unlink()
++    expected={**{k:v for k,v in initial.items() if k!='scripts/deleted.gd'},'scripts/LF.gd':b'extends RefCounted\n# LF\n','scripts/CRLF.gd':b'extends RefCounted\r\n# CRLF\r\n','scenes/example.tscn':b'[gd_scene format=3]\n[node name="Example" type="Node"]\n','assets/ui/icon.png':b'\x89PNG\r\n\x1a\n\x00\xff\x00raw\r\n','tools/fresh.ps1':b'Write-Output "new untracked"\r\n','tests/component.gd':b'extends RefCounted\n'}
++    for path,data in expected.items():put(source,path,data)
++    for rel in ('outputs/ignored.txt','.godot/cache.bin','tools/godot-4.7/private.exe','tools/signing.jks','.env','tools/credentials.json'):
++        put(source,rel,b'component excluded data')
++    before=F.custody(box);rows=F.inventory(source)
++    check('current inventory includes all allowed dirty/untracked bytes',set(r['path'] for r in rows)==set(expected))
++    built=F.build_from_rows(box,source,rows,baseline['commit'])
++    archive=F.verify_archive(box,built['commit'],rows)
++    check('actual Git archive validates all raw byte SHA including PNG and scene/project',archive['raw_bytes_verified'] and archive['files']==len(expected))
++    for path,data in expected.items():
++        blob=F.run(box,['cat-file','blob',built['commit']+':'+path])
++        check('actual Git blob raw bytes '+path,blob==data)
++    rejects('tracked deletion absent from fixed commit',lambda:F.run(box,['cat-file','blob',built['commit']+':scripts/deleted.gd']))
++    check('parent identity retained',F.run(box,['cat-file','-p',built['commit']]).splitlines()[1]==('parent '+baseline['commit']).encode())
++    check('private HEAD/index/config/refs unchanged',F.custody(box)==before)
++    again=F.build_from_rows(box,source,rows,baseline['commit'])
++    check('identical raw snapshot deterministic commit',again['commit']==built['commit'])
++    check('source raw bytes unchanged',all((source/p).read_bytes()==v for p,v in expected.items()))
++    put(source,'scripts/LF.gd',b'changed\n')
++    rejects('content drift rejected before fixed snapshot accepted',lambda:F.build_from_rows(box,source,rows,baseline['commit']))
++    put(source,'scripts/LF.gd',expected['scripts/LF.gd'])
++    put(source,'scripts/late.gd',b'late\n')
++    rejects('roster drift rejected',lambda:F.build_from_rows(box,source,rows,baseline['commit']))
++    (source/'scripts/late.gd').unlink()
++    rejects('path escape rejected',lambda:F.build_from_rows(box,source,[{'path':'../escape','bytes':0,'sha256':'0'*64}],baseline['commit']))
++    rejects('absolute path rejected',lambda:F.relative('C:/escape'))
++    rejects('backslash path rejected',lambda:F.relative('assets\\escape'))
++    rejects('duplicate source path rejected',lambda:F.build_from_rows(box,source,rows+rows[:1],baseline['commit']))
++    rejects('excluded credential input rejected',lambda:F.build_from_rows(box,source,[{'path':'tools/key.jks','bytes':0,'sha256':'0'*64}],baseline['commit']))
++    put(source,'tools/embedded.txt',b'-----BEGIN PRIVATE KEY-----\ncomponent\n')
++    rejects('embedded private key refused',lambda:F.inventory(source));(source/'tools/embedded.txt').unlink()
++    put(source,'export_presets.cfg',b'keystore/release_password="component-secret"\n')
++    rejects('embedded export password refused',lambda:F.inventory(source));put(source,'export_presets.cfg',expected['export_presets.cfg'])
++    link=source/'assets/foreign'
++    try:
++        link.symlink_to(RUN/'raw_source/scripts',target_is_directory=True)
++    except OSError as exc:checks.append({'name':'actual symlink source negative','status':'NOT_RUN','reason':str(exc)})
++    else:
++        rejects('actual symlink source rejected',lambda:F.inventory(source));link.unlink()
++    marker=box.git_dir/'codex-isolated.json';original=marker.read_bytes();marker.write_text('{}')
++    rejects('wrong private root marker rejected',box.verify);marker.write_bytes(original)
++    (box.git_dir/'refs/heads').mkdir();ref=box.git_dir/'refs/heads/component';ref.write_text(bootstrap+'\n')
++    check('refs mutation visible to custody guard',F.custody(box)!=before);ref.unlink()
++    raw_index=box.index.read_bytes();box.index.write_bytes(raw_index+b'wrong')
++    check('index mutation visible to custody guard',F.custody(box)!=before);box.index.write_bytes(raw_index)
++    old=os.environ.get('GIT_DIR');os.environ['GIT_DIR']='C:/definitely-wrong-real-git'
++    old_obj=os.environ.get('GIT_OBJECT_DIRECTORY');os.environ['GIT_OBJECT_DIRECTORY']='C:/foreign-objects'
++    try:
++        env=box.environment();box.verify()
++        check('ambient Git redirection discarded',env['GIT_DIR']==str(box.git_dir) and 'GIT_OBJECT_DIRECTORY' not in env and env['GIT_WORK_TREE']==str(box.workspace) and env['GIT_INDEX_FILE']==str(box.index) and env['GIT_CEILING_DIRECTORIES']==str(OUT))
++    finally:
++        if old is None:os.environ.pop('GIT_DIR',None)
++        else:os.environ['GIT_DIR']=old
++        if old_obj is None:os.environ.pop('GIT_OBJECT_DIRECTORY',None)
++        else:os.environ['GIT_OBJECT_DIRECTORY']=old_obj
++    target,target_base=owned_box('destination');target_before=F.custody(target)
++    objects_before={p.relative_to(target.git_dir/'objects').as_posix():F.sha(p.read_bytes()) for p in (target.git_dir/'objects').rglob('*') if p.is_file()}
++    published=F.publish_additive(box,target.git_dir/'objects',target.git_dir/'objects')
++    check('actual publication added immutable objects',len(published['added_objects'])>0)
++    check('publication preserves destination old object bytes',all(F.sha((target.git_dir/'objects'/p).read_bytes())==v for p,v in objects_before.items()))
++    check('publication preserves destination HEAD/index/config/refs',F.custody(target)==target_before)
++    check('destination actual Git archive resolves published commit without source alternates',F.verify_archive(target,built['commit'],rows)['status']=='PASS')
++    check('repeat publication adds no duplicate objects',F.publish_additive(box,target.git_dir/'objects',target.git_dir/'objects')['added_objects']==[])
++    rejects('wrong publication object root rejected',lambda:F.publish_additive(box,target.git_dir/'objects',RUN/'wrong-objects'))
++    oid=next(iter(published['added_objects']));dst=target.git_dir/'objects'/oid[:2]/oid[2:];good=dst.read_bytes();dst.write_bytes(b'corrupt')
++    rejects('corrupt existing object refused without overwrite',lambda:F.publish_additive(box,target.git_dir/'objects',target.git_dir/'objects'))
++    check('corrupt existing destination not overwritten',dst.read_bytes()==b'corrupt');dst.write_bytes(good)
++    check('original source custody still unchanged',F.custody(box)==before)
++    check('real index read-only hash preserved',F.sha(real_index.read_bytes())==index_before)
++    # Formal CLI negative uses no fabricated positive World artifacts.
++    import fixed_release_snapshot as CLI
++    rejects('formal CLI wrong production root rejected',lambda:CLI.real_layout(source))
++    rejects('formal World gate requires pinned actual three evidence files',lambda:CLI.validate_world({},CLI.R))
++    report={'status':'PASS' if all(x['status']!='FAIL' for x in checks) else 'FAIL','scope':'PRIVATE_GIT_COMPONENT_ONLY_NOT_WORLD','checks':len(checks),'failed':sum(x['status']=='FAIL' for x in checks),'not_run':sum(x['status']=='NOT_RUN' for x in checks),'details':checks,'baseline_commit':baseline['commit'],'fixed_commit':built['commit'],'archive':archive,'publication':published,'real_index_before':index_before,'real_index_after':F.sha(real_index.read_bytes()),'production_snapshot':'NOT_RUN','production_publication':'NOT_RUN','command':sys.executable+' '+str(Path(__file__).resolve())}
++    (OUT/'COMPONENT_RESULT.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
++    print(json.dumps({'status':report['status'],'checks':report['checks'],'failed':report['failed'],'not_run':report['not_run']}))
++    return 0 if report['status']=='PASS' else 1
++
++if __name__=='__main__':
++    try:raise SystemExit(main())
++    except Exception:traceback.print_exc();raise
+--- /dev/null
++++ b/outputs/v115_multicore/fixed_release_snapshot_parallel_20261017/README.md
+@@ -0,0 +1,132 @@
++# Fixed release source objects — frozen component delivery
++
++Implemented tools are in this directory only. Production R, engine E, original
++userdata, real Git index/refs/HEAD/commonobjects were not modified. The actual
++private-Git test finished with **41 checks / 0 failed / 0 NOT_RUN, exit 0**.
++`COMPONENT_RESULT.json` is explicitly scoped to private Git objects and archive;
++it is not World, build, APK, SourceSave or device evidence.
++
++Files:
++
++- `isolated_git.py`: byte-identical copy of the reviewed chunk11 helper. Every
++  Git subprocess has explicit GIT_DIR/WORK_TREE/INDEX/CEILING, cleared ambient
++  Git redirections, complete local config/refs/HEAD and resolved-path verification.
++- `fixed_release_objects.py`: component API for raw object construction,
++  actual Git archive verification and additive loose-object publication.
++- `fixed_release_snapshot.py`: formal CLI with mandatory real World three-file
++  gate, exact protected root/HEAD/index, current58a Native169/five seals and
++  actual Windows pair gates. There is no force/mock/component gate override.
++- `test_fixed_release_objects.py`: actual private Git positive/negative tests.
++
++The original design considered one `hash-object --stdin` process per blob.
++The implementation instead encodes the standard raw Git object header, SHA1
++and zlib loose object directly in the validated private DB, then proves actual
++Git interpretation via `cat-file` and streaming `git archive`. This avoids
++thousands of Git subprocesses for assets. No clean filter, autocrlf conversion,
++index update, git commit command or ref move occurs during construction.
++All actual Git calls retain the four explicit isolation bindings.
++
++The source selection includes scripts, scenes, all permitted asset files,
++Native source, tools, tests, addons and required root project/export/attribute
++configuration. It scans raw current filesystem contents, so dirty and untracked
++sources are included and tracked deletions remain absent. Baseline executable
++modes are preserved; symlink/submodule modes are rejected. Symlinks/reparse
++entries under selected roots are rejected. Local engines/downloads, caches,
++outputs, known credentials, archives and compiled binaries are excluded.
++The formal gate additionally refuses any measured World source/scene/asset/tool/
++test file absent from the selected tree. It cannot silently omit a measured
++binary/archive. Any such policy conflict is BLOCKED for review, with no force.
++
++Original file bytes and the full selected roster are rechecked after object
++construction and again before formal publication. Actual Git archive is streamed
++and every member/byte count/SHA256 compared to the captured inventory. Thus any
++`.gitattributes` export-ignore/export-subst alteration also fails. Archive does
++not extract to a worktree and does not apply checkout newline filters.
++
++Additive publication validates each source object's encoded type/size/SHA1 and
++uses a temporary file plus atomic no-overwrite hardlink. Existing loose objects
++must decode identically; a corrupt existing object is rejected, never replaced.
++No destination ref, HEAD, config or index is written. Objects present only in a
++pack may acquire a same-content loose duplicate; this is additive, not replacement.
++
++## Actual verification
++
++Executed once:
++
++```powershell
++python C:/Users/Administrator/.codex/worktrees/multicore-v115/HardCore/outputs/v115_multicore/fixed_release_snapshot_parallel_20261017/test_fixed_release_objects.py
++```
++
++It created complete private source/destination Git repositories under
++`component_run/`, preserved an actual private baseline parent, modified raw LF/
++CRLF/project/scene/PNG inputs, deleted a tracked file, added untracked sources,
++constructed a real immutable commit, and verified actual Git blobs/archive.
++It then published into the second private object DB and archived that commit
++without using source alternates. Repeat publication added no objects.
++Actual drift, path escape, wrong marker/root, symlink, credentials, changed refs/
++index and corrupt-existing-object negatives were exercised. Ambient Git
++redirection was explicitly cleared. Test data labeled component-secret is a
++synthetic negative fixture, not a real signing credential.
++
++The actual R index was only read by its absolute path and remained
++`3180f91855b8bc8d7a22848592ff9f95f2d19574a73f7a3eea90e962f7151b22`.
++No real R Git command was executed. Per-subprocess raw Git logs were not retained;
++the complete executable test, exact command, actual resulting Git DBs/objects,
++archive checks, custody facts and 41-case receipt are retained.
++
++## Formal production use: NOT_RUN
++
++Actual World/normal-exit still has known failures. No production snapshot or
++commit object was created or published, no real index/ref moved, and no push,
++build/export/install/device run was performed by this block. Formal CLI runtime
++and its complete production selection have not been exercised. The component
++positive does not certify those gates. The five sealed GDS and Native are unchanged.
++
++After a true World normal-exit PASS, prepare a JSON gate with these three pinned
++facts (each `{ "path": "absolute-path", "sha256": "actual64hex" }`):
++`runner_result`, `protection`, `source_manifest`. No example PASS receipt is
++generated. Then the parent may run:
++
++```powershell
++python C:/Users/Administrator/.codex/worktrees/multicore-v115/HardCore/outputs/v115_multicore/fixed_release_snapshot_parallel_20261017/fixed_release_snapshot.py --world-gate <real-pinned-gate.json> --output C:/Users/Administrator/.codex/worktrees/multicore-v115/HardCore/outputs/v115_multicore/fixed_release_snapshot_parallel_20261017/production_review_01
++```
++
++That writes private objects only. For explicitly authorized actual additive
++publication, use a new output name and add `--publish-common-objects`. The CLI
++rechecks World, source, Native and real custody before publication. Its receipt
++supplies the immutable commit for the existing `build_android_isolated.ps1
++-Commit <actual-object-id>`; package/signing/content/device gates remain separate.
++Do not change the fixed58a/manifest/PE constants without a separately reviewed
++identity update if future Native or actual World binaries change.
++
++## Explicit handoff-only reuse
++
++Parent has separately authorized a remote handoff branch, which is not a
++release and need not pretend World PASS. Keep the formal CLI gate unchanged.
++The low-level component API can construct that explicitly labeled source object:
++
++```python
++from isolated_git import GitSandbox
++from fixed_release_objects import inventory, build_from_rows, verify_archive, publish_additive
++box = GitSandbox(new_private_child, authorized_output)
++box.initialize("45170d0eaf4d2c642d4a03de392f64fa2b1e25bf", exact_common / "objects")
++rows = inventory(R)
++built = build_from_rows(box, R, rows, "45170d0eaf4d2c642d4a03de392f64fa2b1e25bf",
++                        message="HardCore v115 handoff snapshot; World FAIL; not release")
++verify_archive(box, built["commit"], rows)
++# Parent approval and its real custody protection precede this actual write:
++publish_additive(box, exact_common / "objects", exact_common / "objects")
++```
++
++This selector excludes docs/outputs. Any remote handoff document or evidence
++must be explicitly reviewed and added by the parent's separate handoff tree
++policy (raw `object_write` is available); do not claim they were included here.
++Parent alone handles the authorized handoff ref and push. This worker did neither.
++
++Read-only finding for parent's delivery helper: its
++`delivery_current_source_binding_20261017.py` expected archive subset currently
++uses `assets/data/`. It should verify **all tested `assets/`**, plus scripts,
++scenes and project. This block did not edit that parent-owned helper.
++
++The requested viewport map-arrival identity block was **not started**, per the
++user's stop-and-handoff instruction. SourceSave six stages remain **NOT_RUN**.

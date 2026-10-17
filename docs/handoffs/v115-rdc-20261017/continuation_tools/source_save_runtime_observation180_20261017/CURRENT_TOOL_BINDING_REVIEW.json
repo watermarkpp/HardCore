@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "scope": "exact actual PE/Native manifest/unchanged guard bytes and AST preparation only",
+  "binding_sha256": "632fd320c0c9bb48d39e3ddcabccc473cead94fa2ee4f6d6d8e96b28d4137e09",
+  "ast_checks": [
+    {
+      "path": "prepare_snapshot.py",
+      "sha256": "3230ddd813e4332ac9c8427ceb69b4b492b76f5e108615fd5a5217f57cbba835",
+      "AST": "PASS"
+    },
+    {
+      "path": "run_stage.py",
+      "sha256": "6046aeed7b3fd4ec7c4c150a1779353309d52780e7ae113d058c45cf4041b594",
+      "AST": "PASS"
+    },
+    {
+      "path": "isolated_git.py",
+      "sha256": "c4f0d8ef265e70dda176e6fb60015e6938ca6ba9660cdc757251a9df7846bbcb",
+      "AST": "PASS"
+    }
+  ],
+  "fixture_files_verified": 6,
+  "new_snapshot_created": false,
+  "positive_stages_started": 0,
+  "still_blocked_on": "actual matching full World+normal-exit PASS framework receipt/runner/source manifest/protection from parent"
+}

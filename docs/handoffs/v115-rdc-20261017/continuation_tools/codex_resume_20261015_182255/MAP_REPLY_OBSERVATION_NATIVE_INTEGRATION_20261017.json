@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "scope": "Exact two mirror source integration and169-input Native seal only; new engine/World NOT_RUN",
+  "rows": [
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\native\\hardcore_simulation\\source_event_reply_mailbox.cpp",
+      "before": "332edb893f20b271b0fe8b816322645ff5d74d57d8d35ee9260eec7538fa78e3",
+      "after": "f96fca9250b5a044fdb2948954cf6e3fbbab4c328c1a24e392853d58f76f570f"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\source_event_reply_mailbox.cpp",
+      "before": "332edb893f20b271b0fe8b816322645ff5d74d57d8d35ee9260eec7538fa78e3",
+      "after": "f96fca9250b5a044fdb2948954cf6e3fbbab4c328c1a24e392853d58f76f570f"
+    }
+  ],
+  "before": {
+    "status": "PASS",
+    "inputs": 169,
+    "gd_seals": 5,
+    "engine_head": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+    "source_sha256": "4035170f8e8396d3cc25075a8a2c1860d024006ae314567cb38f0b61d3168558"
+  },
+  "after": {
+    "status": "PASS",
+    "inputs": 169,
+    "gd_seals": 5,
+    "engine_head": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+    "source_sha256": "58a1b306f62b5d805bd2ff282ab37367cc807e7dd2672c0fb265c2e2289de5f8"
+  },
+  "source_sha256": "58a1b306f62b5d805bd2ff282ab37367cc807e7dd2672c0fb265c2e2289de5f8",
+  "manifest_sha256": "0f3b37d1f43279e9b4633870768e64f610581a354afba777c9b404b7ac496178",
+  "manifest": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\SOURCE_MANIFEST.map_reply_observation_20261017.json",
+  "index_sha256": "3180f91855b8bc8d7a22848592ff9f95f2d19574a73f7a3eea90e962f7151b22"
+}

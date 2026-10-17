@@ -1,4 +1,5 @@
 extends RefCounted
+const ProfileContent := preload("res://scripts/gameplay/profile/legacy_profile_content.gd")
 
 const DropRules := preload("res://scripts/item_drop_instance_rules.gd")
 const RelicRules := preload("res://scripts/layers/rules/relic_synthesis_rules.gd")
@@ -23,7 +24,7 @@ const RUNE_ID := "hc.runes.primary"
 # Wire containers have one base. Runtime keeps that same base as the existing
 # flat item record; this private field owns extensions only, never attributes.
 # Old records retain their exact wire shape and old strict validators.
-static func decode_wire(record: Dictionary) -> Dictionary:
+static func decode_wire(record: Dictionary, content: ProfileContent.ContentPort = null) -> Dictionary:
 	# An explicit standalone owner also owns keys that today's container or
 	# runtime classifier reserves. Never recover an older asset over that owner.
 	if record.get("rune_instance_contract_id") is String:
@@ -70,9 +71,9 @@ static func decode_wire(record: Dictionary) -> Dictionary:
 		or not record.base is Dictionary or not record.extensions is Dictionary or not record.entity_id is String:
 		return _failure(INVALID, "invalid_item_container")
 	var base: Dictionary = record.base
-	if base.has(RUNTIME_EXTENSION) or _is_wire_container(base) or not _valid_extended_base(base, record.entity_id):
+	if base.has(RUNTIME_EXTENSION) or _is_wire_container(base) or not _valid_extended_base(base, record.entity_id, content):
 		return _failure(INVALID, "invalid_item_container_base")
-	var extensions := _validate_extensions(base, record.extensions)
+	var extensions := _validate_extensions(base, record.extensions, content)
 	if extensions.status != KNOWN_VALID:
 		return extensions
 	var runtime := base.duplicate(true)
@@ -80,62 +81,62 @@ static func decode_wire(record: Dictionary) -> Dictionary:
 		"extensions": record.extensions.duplicate(true)}
 	return _success(runtime)
 
-static func encode_runtime(record: Dictionary) -> Dictionary:
+static func encode_runtime(record: Dictionary, content: ProfileContent.ContentPort = null) -> Dictionary:
 	if _is_wire_container(record):
 		return _failure(INVALID, "wire_container_in_runtime")
 	if not record.has(RUNTIME_EXTENSION):
-		return decode_wire(record)
+		return decode_wire(record, content)
 	var metadata: Variant = record[RUNTIME_EXTENSION]
 	if not metadata is Dictionary or not _keys(metadata, ["contract_id", "format_version", "extensions"]):
 		return _failure(INVALID, "invalid_runtime_item_extension")
 	var base := record.duplicate(true)
 	base.erase(RUNTIME_EXTENSION)
 	var wire := {"contract_id": metadata.contract_id, "format_version": metadata.format_version,
-		"entity_id": GameData.item_entity_id(base), "base": base, "extensions": metadata.extensions}
-	var validation := decode_wire(wire)
+		"entity_id": ProfileContent.resolve(content).item_entity_id(base), "base": base, "extensions": metadata.extensions}
+	var validation := decode_wire(wire, content)
 	if validation.status != KNOWN_VALID:
 		return validation
 	return _success(wire)
 
-static func normalize_runtime(record: Dictionary) -> Dictionary:
+static func normalize_runtime(record: Dictionary, content: ProfileContent.ContentPort = null) -> Dictionary:
 	if _is_wire_container(record):
-		return decode_wire(record)
-	var validation := encode_runtime(record)
+		return decode_wire(record, content)
+	var validation := encode_runtime(record, content)
 	return _success(record) if validation.status == KNOWN_VALID else validation
 
-static func base_record(record: Dictionary) -> Dictionary:
+static func base_record(record: Dictionary, content: ProfileContent.ContentPort = null) -> Dictionary:
 	if _is_wire_container(record):
-		var decoded := decode_wire(record)
-		return base_record(decoded.item) if decoded.status == KNOWN_VALID else {}
+		var decoded := decode_wire(record, content)
+		return base_record(decoded.item, content) if decoded.status == KNOWN_VALID else {}
 	if not record.has(RUNTIME_EXTENSION):
 		return record
-	if encode_runtime(record).status != KNOWN_VALID:
+	if encode_runtime(record, content).status != KNOWN_VALID:
 		return {}
 	var base := record.duplicate(true)
 	base.erase(RUNTIME_EXTENSION)
 	return base
 
-static func with_extensions(base: Dictionary, extensions: Dictionary) -> Dictionary:
+static func with_extensions(base: Dictionary, extensions: Dictionary, content: ProfileContent.ContentPort = null) -> Dictionary:
 	var wire := {"contract_id": CONTRACT, "format_version": VERSION,
-		"entity_id": GameData.item_entity_id(base), "base": base, "extensions": extensions}
-	return decode_wire(wire)
+		"entity_id": ProfileContent.resolve(content).item_entity_id(base), "base": base, "extensions": extensions}
+	return decode_wire(wire, content)
 
-static func extensions(record: Dictionary) -> Dictionary:
+static func extensions(record: Dictionary, content: ProfileContent.ContentPort = null) -> Dictionary:
 	if _is_wire_container(record):
-		var decoded := decode_wire(record)
+		var decoded := decode_wire(record, content)
 		return record.extensions.duplicate(true) if decoded.status == KNOWN_VALID else {}
-	var encoded := encode_runtime(record)
+	var encoded := encode_runtime(record, content)
 	if encoded.status != KNOWN_VALID or not _is_wire_container(encoded.item):
 		return {}
 	return encoded.item.extensions.duplicate(true)
 
-static func decode_document(document: Dictionary) -> Dictionary:
-	return _map_document(document, false)
+static func decode_document(document: Dictionary, content: ProfileContent.ContentPort = null) -> Dictionary:
+	return _map_document(document, false, content)
 
-static func encode_document(document: Dictionary) -> Dictionary:
-	return _map_document(document, true)
+static func encode_document(document: Dictionary, content: ProfileContent.ContentPort = null) -> Dictionary:
+	return _map_document(document, true, content)
 
-static func _map_document(document: Dictionary, encode: bool) -> Dictionary:
+static func _map_document(document: Dictionary, encode: bool, content: ProfileContent.ContentPort = null) -> Dictionary:
 	var identity := Identity.support(document)
 	if identity.status != KNOWN_VALID:
 		return identity
@@ -154,7 +155,7 @@ static func _map_document(document: Dictionary, encode: bool) -> Dictionary:
 			var raw: Variant = mapped[index]
 			if not raw is Dictionary:
 				continue
-			var result := _map_document_item(raw, encode, encode or not bool(identity.formal))
+			var result := _map_document_item(raw, encode, encode or not bool(identity.formal), content)
 			if result.status != KNOWN_VALID:
 				if result.status == OPAQUE_UNSUPPORTED:
 					return result
@@ -176,10 +177,10 @@ static func _map_document(document: Dictionary, encode: bool) -> Dictionary:
 				# Only the explicit old equipment import may carry a display
 				# string. Validate its exact registered owner now; runtime's
 				# existing importer still owns instance/durability creation.
-				if not raw.is_empty() and Identity.normalize({"name": raw}, true).status != KNOWN_VALID:
+				if not raw.is_empty() and Identity.normalize({"name": raw}, true, content).status != KNOWN_VALID:
 					return _failure(OPAQUE_UNSUPPORTED, "unknown_legacy_equipment_identity")
 				continue
-			var result := _map_document_item(raw, encode, encode or not bool(identity.formal))
+			var result := _map_document_item(raw, encode, encode or not bool(identity.formal), content)
 			if result.status != KNOWN_VALID:
 				if result.status == OPAQUE_UNSUPPORTED:
 					return result
@@ -196,14 +197,14 @@ static func _map_document(document: Dictionary, encode: bool) -> Dictionary:
 		output[Identity.FIELD] = Identity.HEADER.duplicate()
 	return failure if not failure.is_empty() else {"status": KNOWN_VALID, "document": output, "reason": ""}
 
-static func _map_document_item(record: Dictionary, encode: bool, allow_legacy: bool) -> Dictionary:
+static func _map_document_item(record: Dictionary, encode: bool, allow_legacy: bool, content: ProfileContent.ContentPort = null) -> Dictionary:
 	# A prepared journal may combine unchanged wire records and changed runtime
 	# records. Validate either representation and publish only canonical wire.
-	var runtime := decode_wire(record) if not encode or _is_wire_container(record) else normalize_runtime(record)
+	var runtime := decode_wire(record, content) if not encode or _is_wire_container(record) else normalize_runtime(record, content)
 	if runtime.status != KNOWN_VALID: return runtime
-	var identity := Identity.normalize(runtime.item, allow_legacy)
+	var identity := Identity.normalize(runtime.item, allow_legacy, content)
 	if identity.status != KNOWN_VALID: return identity
-	return encode_runtime(identity.item) if encode else identity
+	return encode_runtime(identity.item, content) if encode else identity
 
 static func document_items(document: Dictionary) -> Array[Dictionary]:
 	var records: Array[Dictionary] = []
@@ -219,59 +220,59 @@ static func document_items(document: Dictionary) -> Array[Dictionary]:
 static func has_extensions(record: Dictionary) -> bool:
 	return record.has(RUNTIME_EXTENSION) or _is_wire_container(record) or record.has("gem_instance_contract_id") or record.has("rune_instance_contract_id")
 
-static func can_release_ownership(record: Dictionary) -> bool:
+static func can_release_ownership(record: Dictionary, content: ProfileContent.ContentPort = null) -> bool:
 	# Selling, destruction and material consumption cannot silently destroy an
 	# independently owned embedded item. Remove it through the common port first.
-	var normalized := normalize_runtime(record)
-	return normalized.status == KNOWN_VALID and embedded_records(normalized.item).is_empty()
+	var normalized := normalize_runtime(record, content)
+	return normalized.status == KNOWN_VALID and embedded_records(normalized.item, content).is_empty()
 
-static func embedded_records(record: Dictionary) -> Array[Dictionary]:
+static func embedded_records(record: Dictionary, content: ProfileContent.ContentPort = null) -> Array[Dictionary]:
 	var result: Array[Dictionary]=[]
-	var owned:=extensions(record)
+	var owned:=extensions(record, content)
 	for socket: Dictionary in owned.get(SOCKET_NAMESPACE,{}).get("sockets",[]):
 		result.append({"slot_id":socket.socket_id,"namespace_id":SOCKET_NAMESPACE,"item":socket.item})
 	for rune: Dictionary in owned.get(RUNE_NAMESPACE,{}).get("runes",[]):
 		result.append({"slot_id":rune.rune_slot_id,"namespace_id":RUNE_NAMESPACE,"item":rune.item})
 	return result
 
-static func ownership_ids(record: Dictionary) -> Array[String]:
-	var base := base_record(record)
+static func ownership_ids(record: Dictionary, content: ProfileContent.ContentPort = null) -> Array[String]:
+	var base := base_record(record, content)
 	var result: Array[String] = []
 	if base.is_empty():
 		return result
 	var instance: Variant = base.get("instance_id")
 	if instance is String and not instance.is_empty():
 		result.append(instance)
-	for socket: Dictionary in embedded_records(record):
-		var gem := decode_wire(socket.item)
+	for socket: Dictionary in embedded_records(record, content):
+		var gem := decode_wire(socket.item, content)
 		if gem.status == KNOWN_VALID:
 			result.append(str(gem.item.instance_id))
 	return result
 
-static func _valid_extended_base(base: Dictionary, entity_id: String) -> bool:
-	if entity_id.is_empty() or GameData.item_entity_id(base) != entity_id \
+static func _valid_extended_base(base: Dictionary, entity_id: String, content: ProfileContent.ContentPort = null) -> bool:
+	if entity_id.is_empty() or ProfileContent.resolve(content).item_entity_id(base) != entity_id \
 		or not base.get("instance_id") is String or base.instance_id.is_empty() or base.instance_id.length() > 128 \
 		or not _integer(base.get("count")) or base.count != 1:
 		return false
-	var catalog := GameData.get_entity_record(entity_id)
+	var catalog := ProfileContent.resolve(content).get_entity_record(entity_id)
 	if catalog.is_empty() or catalog.get("kind") != "equipment":
 		return false
 	if base.has("drop_instance_contract_id"):
-		return DropRules.validate_instance(base, catalog)
+		return ProfileContent.resolve(content).rules.item_instances.validate_instance(base, catalog)
 	var numeric_id := int(catalog.get("itemId", -1))
-	if RelicRules.is_synthesis_item(numeric_id):
-		return RelicRules.valid_instance(base, numeric_id)
+	if ProfileContent.resolve(content).rules.relic.is_synthesis_item(numeric_id):
+		return ProfileContent.resolve(content).rules.relic.valid_instance(base, numeric_id)
 	# Plain legacy equipment remains subject to the existing validator. The new
 	# extension boundary additionally requires an exact registered item identity.
 	return _integer(base.get("item_id")) and int(base.item_id) == numeric_id
 
-static func _validate_extensions(base: Dictionary, value: Dictionary) -> Dictionary:
+static func _validate_extensions(base: Dictionary, value: Dictionary, content: ProfileContent.ContentPort = null) -> Dictionary:
 	if value.size() > 2:
 		return _failure(INVALID, "item_extension_namespace_capacity")
 	var seen: Dictionary={}; seen[base.instance_id]=true
 	for namespace_id: Variant in value:
 		if namespace_id==RUNE_NAMESPACE:
-			var rune_status:=_validate_rune_extension(base,value[namespace_id])
+			var rune_status:=_validate_rune_extension(base,value[namespace_id], content)
 			if rune_status.status!=KNOWN_VALID: return rune_status
 			for rune: Dictionary in value[namespace_id].runes:
 				if seen.has(rune.item.instance_id): return _failure(INVALID,"duplicate_embedded_instance_identity")
@@ -291,7 +292,7 @@ static func _validate_extensions(base: Dictionary, value: Dictionary) -> Diction
 			if not socket is Dictionary or not _keys(socket, ["socket_id", "item"]) \
 				or not socket.socket_id is String or socket.socket_id != SOCKET_ID or not socket.item is Dictionary:
 				return _failure(INVALID, "invalid_socket_record")
-			var gem := decode_wire(socket.item)
+			var gem := decode_wire(socket.item, content)
 			if gem.status != KNOWN_VALID:
 				return gem
 			if gem.item.has(RUNTIME_EXTENSION) or not gem.item.get("instance_id") is String \
@@ -330,13 +331,13 @@ static func _extension_support_status(value: Dictionary) -> Dictionary:
 						return _failure(OPAQUE_UNSUPPORTED,"unsupported_embedded_item_container")
 	return {"status": KNOWN_VALID, "reason": ""}
 
-static func _validate_rune_extension(base: Dictionary,value: Variant) -> Dictionary:
+static func _validate_rune_extension(base: Dictionary,value: Variant, content: ProfileContent.ContentPort = null) -> Dictionary:
 	if not value is Dictionary or not _keys(value,["schema_version","runes"]) or not _integer(value.schema_version) \
 		or value.schema_version!=1 or not value.runes is Array or value.runes.size()>1: return _failure(INVALID,"invalid_rune_extension")
 	for rune: Variant in value.runes:
 		if not rune is Dictionary or not _keys(rune,["rune_slot_id","item"]) or rune.rune_slot_id!=RUNE_ID or not rune.item is Dictionary:
 			return _failure(INVALID,"invalid_rune_slot")
-		var item:=decode_wire(rune.item)
+		var item:=decode_wire(rune.item, content)
 		if item.status!=KNOWN_VALID: return item
 		if not RuneRules.valid_instance(item.item) or item.item.instance_id==base.instance_id: return _failure(INVALID,"invalid_embedded_rune")
 	return {"status":KNOWN_VALID,"reason":""}

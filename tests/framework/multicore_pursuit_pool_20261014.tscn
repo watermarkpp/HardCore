@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="Script" path="res://tests/framework/multicore_pursuit_pool_20261014.gd" id="1"]
+[node name="ActualPursuitPoolFixture" type="Node"]
+script = ExtResource("1")

@@ -1,5 +1,7 @@
 extends RefCounted
 
+const CatalogGate := preload("res://scripts/gameplay/content/catalog_publication_gate.gd")
+
 const Registry := preload("res://scripts/identity/entity_registry.gd")
 const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
 const PATH := "res://assets/data/identity/item_categories_v1.json"
@@ -7,12 +9,19 @@ const POLICY := "res://assets/data/source_priority_policy.json"
 const CONTRACT := "hardcore.item_categories.v1"
 const PHYSICAL_SLOTS := ["hc.slot.weapon", "hc.slot.armor", "hc.slot.helmet", "hc.slot.necklace",
 	"hc.slot.bracelet_left", "hc.slot.bracelet_right", "hc.slot.ring_left", "hc.slot.ring_right", "hc.slot.relic", "hc.slot.badge"]
-static var _by_id: Dictionary = {}
-static var _legacy: Dictionary = {}
-static var last_error := ""
+static var _by_id: Dictionary = {}:
+	set(value):
+		if CatalogGate.write_allowed(): _by_id = value
+static var _legacy: Dictionary = {}:
+	set(value):
+		if CatalogGate.write_allowed(): _legacy = value
+static var last_error := "":
+	set(value):
+		if CatalogGate.write_allowed(): last_error = value
 
 static func ensure_loaded() -> bool:
 	if not _by_id.is_empty(): return true
+	if not CatalogGate.write_allowed(): return false
 	var policy: Variant = JSON.parse_string(FileAccess.get_file_as_string(POLICY))
 	if not policy is Dictionary or policy.get("routing", {}).get("item_category_identity_and_slot_relations") != "item_categories":
 		return _fail("invalid_category_source_lane")
@@ -28,6 +37,7 @@ static func ensure_loaded() -> bool:
 	return publish(JSON.parse_string(FileAccess.get_file_as_string(PATH)))
 
 static func publish(document: Variant) -> bool:
+	if not CatalogGate.write_allowed(): return false
 	if not document is Dictionary or not _keys(document, ["schema_version", "contract_id", "records"]) \
 		or not _integer(document.schema_version) or document.schema_version != 1 or document.contract_id != CONTRACT \
 		or not document.records is Array or not Registry.ensure_loaded():
@@ -98,5 +108,6 @@ static func _integer(value: Variant) -> bool:
 	return (value is int or value is float) and is_finite(float(value)) and float(value) == floor(float(value))
 
 static func _fail(reason: String) -> bool:
+	if not CatalogGate.write_allowed(): return false
 	last_error = reason
 	return false

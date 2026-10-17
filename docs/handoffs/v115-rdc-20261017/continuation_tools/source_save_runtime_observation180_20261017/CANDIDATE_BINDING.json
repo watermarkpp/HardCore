@@ -1,0 +1,95 @@
+{
+  "scope": "Exact human180 Source save/warehouse tools with new actual Native58a read-only Map reply observation engine identity; all actual World/normal-exit/stages remain pending",
+  "files": [
+    {
+      "path": "prepare_snapshot.py",
+      "candidate_sha256": "3230ddd813e4332ac9c8427ceb69b4b492b76f5e108615fd5a5217f57cbba835",
+      "reviewed_parent_sha256": "fd0200a7bd96e08ab6c3b866ad38809e17d87787c57dd37ccfec2c2610ade6ff",
+      "previous_bundle_tool_sha256": "10cc1e1559c987ea94eb68be0a388aa0d07239c4e1c52077e7f5553b620a8611"
+    },
+    {
+      "path": "run_stage.py",
+      "candidate_sha256": "6046aeed7b3fd4ec7c4c150a1779353309d52780e7ae113d058c45cf4041b594",
+      "reviewed_parent_sha256": "0ae925a3edc2d8888dba1f3c92972fc897dfc89ab60b8b4004c9db7c46e14e9e",
+      "previous_bundle_tool_sha256": "c1a4cfb13c8f4b076caa45a49e04015403319eaf450b0eeebf377c097bea19a5"
+    },
+    {
+      "path": "runner_bridge.ps1",
+      "candidate_sha256": "5f61a869b475ff47aca9ca6015db9634c7e273d5205c1896c405ddf4e46ba62b",
+      "reviewed_parent_sha256": "81460a85e671394ed121e4e26da823558802e30714bce34b1d17e2cd89dfe23f",
+      "previous_bundle_tool_sha256": "5f61a869b475ff47aca9ca6015db9634c7e273d5205c1896c405ddf4e46ba62b"
+    },
+    {
+      "path": "isolated_git.py",
+      "candidate_sha256": "c4f0d8ef265e70dda176e6fb60015e6938ca6ba9660cdc757251a9df7846bbcb",
+      "reviewed_parent_sha256": "c4f0d8ef265e70dda176e6fb60015e6938ca6ba9660cdc757251a9df7846bbcb",
+      "previous_bundle_tool_sha256": "c4f0d8ef265e70dda176e6fb60015e6938ca6ba9660cdc757251a9df7846bbcb"
+    }
+  ],
+  "parent_binding_sha256": "b1c2668dc12c07af09b4767a8ca2f9706d4ea4582e8e2cdefaae30d03c64872b",
+  "source_changes": [
+    {
+      "path": "tools/run_multicore_v115_tests.ps1",
+      "before": "a6cfffd7c5c2c94cac39664ac31e45400198c00109478ec2623512ede8203ce5",
+      "after": "64ef66c46f375549993b581109773c6e157c3d369339918cad75390f96893959"
+    },
+    {
+      "path": "tools/run_godot_tests.ps1",
+      "before": "99506e9e4d9f5b9515516926fabad44a329da507d8f2dbaddc9ef74c71eb30c7",
+      "after": "7f1a25b023237e98f30b084bb9d368818021be988076928957b6f3fb5cc47eeb"
+    },
+    {
+      "path": "tests/framework/source_save_roundtrip_20261017.gd",
+      "before": "03388323222097f484099afaf0cfbe31581387fffc21f9fe152d053a83b929da",
+      "after": "676f697f8656bb7800668830a8b89c874365bacb082b9e69ed6b7b5c7937f6e0"
+    }
+  ],
+  "current_revision": {
+    "id": "source_save180_after_semantic_heavy60_20261017",
+    "previous_binding_sha256": "b7f85fd7025cd64018dd0fb737de2c942a6c593e595ac4338916ce02d0bfe548",
+    "historical_binding": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\source_save_runtime_180_20261017\\preparation\\CANDIDATE_BINDING.pre_semantic_heavy60_current_revision.json",
+    "reason": "Parent-authorized classification of the actual 310-check semantic scene as existing Heavy60; original source_changes are historical and retained verbatim",
+    "current_production_inputs": [
+      {
+        "path": "tools/run_multicore_v115_tests.ps1",
+        "historical_after_sha256": "64ef66c46f375549993b581109773c6e157c3d369339918cad75390f96893959",
+        "current_sha256": "64ef66c46f375549993b581109773c6e157c3d369339918cad75390f96893959"
+      },
+      {
+        "path": "tools/run_godot_tests.ps1",
+        "historical_after_sha256": "7f1a25b023237e98f30b084bb9d368818021be988076928957b6f3fb5cc47eeb",
+        "current_sha256": "c2353f58387772e612e8db73fdd689b07c3782f1a1c3492bfe8876bcc59f19f3"
+      },
+      {
+        "path": "tests/framework/source_save_roundtrip_20261017.gd",
+        "historical_after_sha256": "676f697f8656bb7800668830a8b89c874365bacb082b9e69ed6b7b5c7937f6e0",
+        "current_sha256": "676f697f8656bb7800668830a8b89c874365bacb082b9e69ed6b7b5c7937f6e0"
+      }
+    ],
+    "positive_stages_before_revision": 0,
+    "upstream_source_manifest_still_required": true
+  },
+  "previous_bundle_binding_sha256": "1d07002eec568509cc13e9aed788a5947c609d3a4cb3a38dcab3c58889b44482",
+  "native_revision": {
+    "id": "source_save180_map_reply_observation_20261017",
+    "native_source_sha256": "58a1b306f62b5d805bd2ff282ab37367cc807e7dd2672c0fb265c2e2289de5f8",
+    "native_manifest": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\SOURCE_MANIFEST.map_reply_observation_20261017.json",
+    "native_manifest_sha256": "0f3b37d1f43279e9b4633870768e64f610581a354afba777c9b404b7ac496178",
+    "actual_Windows_build_receipt": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_map_reply_observation_20261017_build\\BUILD_RECEIPT.json",
+    "actual_Windows_build_receipt_sha256": "5f9b793f4c5d4b29f98a9ce1d83db7afb33c84e9f04a9efb220afa9b276a6e4c",
+    "console": {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_map_reply_observation_20261017_build\\Godot_v115-stable_win64_console.exe",
+      "bytes": 298496,
+      "sha256": "1b69c0d26f54df88301791e5f3dbd43f7e20aad30a727addfff3287ea9d11c91"
+    },
+    "executing_PE": {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_map_reply_observation_20261017_build\\Godot_v115-stable_win64.exe",
+      "bytes": 175887872,
+      "sha256": "7f54a5090cfde94a7d2fcf37c22c14ecd23e00eefcc0bf5e23d1c0326bc7b8de"
+    },
+    "actual_PE_contains_complete_native_identity": true,
+    "new_snapshot_created": false,
+    "positive_stages_started": 0,
+    "actual_upstream_World_normal_exit": "NOT_RUN"
+  }
+}

@@ -67,7 +67,7 @@ func _run_physical_150() -> void:
 	enemy._physics_process(0.01)
 	await _advance_release(enemy)
 	_check(physical_descriptors.size() == 1, "ID150 accepted descriptor released")
-	var effect := _latest_effect()
+	var effect := _latest_effect(str(physical_descriptors.back().get("release_id", "")))
 	_check(effect != null, "ID150 accepted flight created")
 	var hp_before := player.current_hp
 	if effect != null:
@@ -85,7 +85,7 @@ func _run_physical_150() -> void:
 	enemy._attack_timer = 0.0
 	enemy._physics_process(0.01)
 	await _advance_release(enemy)
-	effect = _latest_effect()
+	effect = _latest_effect(str(physical_descriptors.back().get("release_id", "")))
 	if effect != null:
 		effect.set_physics_process(false)
 		_force_missing_visual(effect)
@@ -110,12 +110,15 @@ func _run_guard_194() -> void:
 	var dispatched := bool(enemy.call("_launch_monster_special_cell_delivery", player, 7, parent_release))
 	_check(dispatched, "ID194 formal guard delivery dispatches")
 	_check(special_descriptors.size() == 1, "ID194 accepted guard descriptor released")
-	var effect := _latest_effect()
+	var effect := _latest_effect(str(special_descriptors.back().get("release_id", "")))
+	_check(effect != null, "ID194 actual accepted guard flight selected by release identity")
 	if effect != null:
 		effect.set_physics_process(false)
 		_force_missing_visual(effect)
 		_check(not effect.visible, "ID194 missing visual is hidden")
 		enemy.call("_on_guard_projectile_contact", effect.release_descriptor.get("release_record", {}), player)
+	if player.current_hp >= hp_before:
+		print("ID194_GUARD_DIAGNOSTIC ", {"hp_before": hp_before, "hp_after": player.current_hp, "combat_epoch": player.combat_epoch, "transition": player.combat_transition_is_active(), "defense": [player.defense_min, player.defense_max, player.defense_buff], "evasion": PlayerState.computed_stats.get("magic_evasion", null), "descriptor": special_descriptors, "settled": enemy._special_delivery_settled_targets, "accuracy": enemy.last_physical_hit_resolution})
 	_check(player.current_hp < hp_before, "ID194 guard flight settles real HP")
 	var settled := player.current_hp
 	if effect != null:
@@ -145,9 +148,9 @@ func _advance_release(enemy: EnemyActor) -> void:
 	enemy.set_physics_process(false)
 	_check(false, "attack release completes")
 
-func _latest_effect() -> Node2D:
+func _latest_effect(accepted_release_id: String) -> Node2D:
 	for child: Node in get_children():
-		if child.get_script() == EffectScript: return child as Node2D
+		if child.get_script() == EffectScript and str(child.get("release_id")) == accepted_release_id: return child as Node2D
 	return null
 
 func _ground_to_screen(ground: Vector2) -> Vector2:

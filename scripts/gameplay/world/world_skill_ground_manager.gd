@@ -1,0 +1,351 @@
+extends RefCounted
+var _actors: RefCounted
+const TargetQueryCore := preload("res://scripts/gameplay/world/world_skill_target_query.gd")
+
+## Q2-B / HC-P1-007: unified scheduler for generic persistent ground effects.
+## Owned by GameRoot; reuses the shared Object through
+## the Object (no second enemy index). It only schedules
+## ticks and candidate processing; it never
+## computes damage values, decides skill ranges, creates visuals, rebuilds
+## snapshots or changes stacking rules. FireWall's formal path (controller +
+## 4 visual cells) stays independent.
+
+const Snapshot = preload("res://scripts/skills/skill_footprint_snapshot.gd")
+
+const CONTRACT_ID = "hardcore.combat.persistent_ground_effect_manager.v1"
+const EXPANSION_EPSILON_GU = 0.05
+
+
+var _spatial_index: Object
+## R1-C: shared damage-delivery authority for the callback-less fallback.
+## GameRoot injects its owned CombatRuntimeService instance (M30 ownership
+## contract); without an injection the fallback fails closed — the delivery
+## is refused and counted, never routed around the shared authority.
+var _combat_runtime: Object = null
+var damage_delivery_skip_count = 0
+## PERF-1: the manager broadphase enters the shared target-query service
+## (same instance pattern as the fire wall controller; the service is
+## stateless between queries and is rebuilt when the map id or the index
+## instance changes).
+var _target_query_service: Object
+var _target_query_service_map_id = -2
+var _target_query_service_index: Object
+var _service_envelope_scratch: Array[Object] = []
+var _effects: Dictionary = {}
+var _registration_sequence = 0
+var _rejection_reason = ""
+
+var tick_dispatch_count = 0
+var broadphase_query_count = 0
+var total_candidate_count = 0
+var max_candidate_count = 0
+var exact_intersection_test_count = 0
+var group_scan_count = 0
+var group_nodes_examined = 0
+var snapshot_rebuild_count = 0
+var damage_application_count = 0
+var claim_rejection_count = 0
+var expired_effect_count = 0
+var cancelled_effect_count = 0
+var cross_map_rejection_count = 0
+var spatial_index_unavailable_count = 0
+
+
+func _init(
+	spatial_index: Object,
+	combat_runtime: Object,
+	actors: RefCounted
+) -> void:
+	_actors = actors
+	_spatial_index = spatial_index
+	_combat_runtime = combat_runtime
+
+
+func _effect_target_query_service(
+	runtime_map_id: int
+) -> Object:
+	if (
+		_target_query_service == null
+		or _target_query_service_map_id != runtime_map_id
+		or _target_query_service_index != _spatial_index
+	):
+		_target_query_service = TargetQueryCore.new(
+			_spatial_index, runtime_map_id, _actors
+		)
+		_target_query_service_map_id = runtime_map_id
+		_target_query_service_index = _spatial_index
+	return _target_query_service
+
+
+func register(registration: Dictionary) -> bool:
+	var effect_id = int(registration.get("effect_runtime_id", 0))
+	if effect_id <= 0:
+		return false
+	var snapshot: Dictionary = registration.get("canonical_snapshot", {})
+	if (
+		int(snapshot.get("schema_version", 0))
+		!= Snapshot.SCHEMA_VERSION
+		or str(snapshot.get("coordinate_space", ""))
+		!= Snapshot.COORDINATE_SPACE_RUNTIME_MAP_ABSOLUTE_GROUND_GU
+	):
+		return false
+	_registration_sequence += 1
+	_effects[effect_id] = {
+		"effect_runtime_id": effect_id,
+		"registration_sequence": _registration_sequence,
+		"skill_id": str(registration.get("skill_id", "")),
+		"release_id": str(registration.get("release_id", "")),
+		"snapshot_id": str(registration.get("snapshot_id", "")),
+		"runtime_map_id": int(registration.get("runtime_map_id", -1)),
+		"caster_link": _actors.capture(registration.get("caster_reference")),
+		"canonical_snapshot": snapshot,
+		"expected_context": (
+			registration.get("expected_context", {})
+			if registration.get("expected_context", {}) is Dictionary
+			else {}
+		),
+		"tick_interval_s": maxf(
+			0.05,
+			float(registration.get("tick_interval_s", 0.8))
+		),
+		"elapsed_s": 0.0,
+		"next_tick_s": 0.0,
+		"expiration_s": maxf(
+			0.1,
+			float(registration.get("expiration_s", 4.0))
+		),
+		"stacking_policy": str(registration.get("stacking_policy", "")),
+		"claim_policy": str(registration.get("claim_policy", "")),
+		"manager_owned_damage_ticks": bool(
+			registration.get("manager_owned_damage_ticks", false)
+		),
+		"damage_callback": (
+			registration.get("damage_callback", Callable())
+			if registration.get("damage_callback", Callable()) is Callable
+			else Callable()
+		),
+		"lifecycle_callback": (
+			registration.get("lifecycle_callback", Callable())
+			if registration.get("lifecycle_callback", Callable()) is Callable
+			else Callable()
+		),
+		"effect_link": _actors.capture(registration.get("effect")),
+	}
+	return true
+
+
+func unregister(effect_runtime_id: int, reason = "cancelled") -> void:
+	if not _effects.has(effect_runtime_id):
+		return
+	var entry: Dictionary = _effects[effect_runtime_id]
+	_effects.erase(effect_runtime_id)
+	if reason == "expired":
+		expired_effect_count += 1
+	else:
+		cancelled_effect_count += 1
+	var lifecycle_callback: Callable = entry.get(
+		"lifecycle_callback",
+		Callable()
+	)
+	if lifecycle_callback.is_valid():
+		lifecycle_callback.call(reason, entry.get("effect_link").borrow_model())
+	entry.get("effect_link").dispose()
+	if entry.get("caster_link") != null: entry.caster_link.dispose()
+
+
+func clear_map(runtime_map_id: int) -> void:
+	var removed: Array[int] = []
+	for raw_id: Variant in _effects.keys():
+		var entry: Dictionary = _effects.get(raw_id, {})
+		if int(entry.get("runtime_map_id", -1)) == runtime_map_id:
+			removed.append(int(raw_id))
+	for effect_id: int in removed:
+		unregister(effect_id, "map_cleared")
+
+
+func clear_all() -> void:
+	## World-teardown sweep: the caller (GameRoot) frees every zone_content
+	## node on map transition; all manager registrations must leave with them.
+	var removed: Array[int] = []
+	for raw_id: Variant in _effects.keys():
+		removed.append(int(raw_id))
+	for effect_id: int in removed:
+		unregister(effect_id, "map_cleared")
+
+
+func registered_effect_count() -> int:
+	return _effects.size()
+
+
+func tick_frame(delta: float) -> void:
+	if delta <= 0.0 or _effects.is_empty():
+		return
+	var ordered = _sorted_entries()
+	for entry: Dictionary in ordered:
+		var effect_id = int(entry.get("effect_runtime_id", 0))
+		if not _effects.has(effect_id):
+			continue
+		var live: Dictionary = _effects[effect_id]
+		var effect_node: Variant = live.get("effect_link").borrow_model()
+		if (
+			effect_node == null
+			or not _actors.is_runtime_present(effect_node)
+			or (effect_node is Object and _actors.is_queued_for_retirement(effect_node))
+		):
+			unregister(effect_id, "node_freed")
+			continue
+		live["elapsed_s"] = float(live.get("elapsed_s", 0.0)) + delta
+		var elapsed = float(live.get("elapsed_s", 0.0))
+		var expires = elapsed >= float(live.get("expiration_s", 0.0))
+		if elapsed >= float(live.get("next_tick_s", 0.0)):
+			_dispatch_tick(live)
+		if expires:
+			unregister(effect_id, "expired")
+
+
+func persistent_ground_effect_diagnostics() -> Dictionary:
+	return {
+		"contract_id": CONTRACT_ID,
+		"registered_effect_count": _effects.size(),
+		"active_effect_count": _effects.size(),
+		"tick_dispatch_count": tick_dispatch_count,
+		"broadphase_query_count": broadphase_query_count,
+		"total_candidate_count": total_candidate_count,
+		"max_candidate_count": max_candidate_count,
+		"exact_intersection_test_count": exact_intersection_test_count,
+		"group_scan_count": group_scan_count,
+		"group_nodes_examined": group_nodes_examined,
+		"snapshot_rebuild_count": snapshot_rebuild_count,
+		"damage_application_count": damage_application_count,
+		"claim_rejection_count": claim_rejection_count,
+		"expired_effect_count": expired_effect_count,
+		"cancelled_effect_count": cancelled_effect_count,
+		"cross_map_rejection_count": cross_map_rejection_count,
+		"spatial_index_unavailable_count": spatial_index_unavailable_count,
+		"rejection_reason": _rejection_reason,
+	}
+
+
+func _sorted_entries() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for raw_id: Variant in _effects.keys():
+		result.append(_effects.get(raw_id, {}))
+	result.sort_custom(
+		func(a: Dictionary, b: Dictionary) -> bool:
+			var a_seq = int(a.get("registration_sequence", 0))
+			var b_seq = int(b.get("registration_sequence", 0))
+			if a_seq != b_seq:
+				return a_seq < b_seq
+			return int(a.get("effect_runtime_id", 0)) < int(
+				b.get("effect_runtime_id", 0)
+			)
+	)
+	return result
+
+
+func _dispatch_tick(entry: Dictionary) -> void:
+	tick_dispatch_count += 1
+	# Old cadence: after a tick the timer resets to a full interval (max one
+	# tick per physics frame, no multi-tick catch-up on long frames).
+	var elapsed = float(entry.get("elapsed_s", 0.0))
+	entry["next_tick_s"] = (
+		elapsed + float(entry.get("tick_interval_s", 0.8))
+	)
+	var runtime_map_id = int(entry.get("runtime_map_id", -1))
+	if (
+		_spatial_index == null
+		or not is_instance_valid(_spatial_index)
+	):
+		spatial_index_unavailable_count += 1
+		_rejection_reason = "spatial_index_unavailable"
+		return
+	var snapshot: Dictionary = entry.get("canonical_snapshot", {})
+	var expected_context: Dictionary = entry.get("expected_context", {})
+	if not bool(Snapshot.validate_for_consumer(
+		snapshot,
+		expected_context,
+		Snapshot.VALIDATION_STRICT_V2
+	).get("valid", false)):
+		_rejection_reason = "invalid_snapshot"
+		return
+	var effect: Object = entry.get("effect_link").borrow_model()
+	if effect == null or not _actors.is_runtime_present(effect):
+		return
+	if not (_actors.is_kind(effect, &"ground_effect")):
+		return
+	var ground_effect = effect
+	if (
+		not bool(entry.get("manager_owned_damage_ticks", false))
+		or not ground_effect.manager_owned_damage_ticks
+	):
+		return
+	broadphase_query_count += 1
+	# PERF-1: the manager broadphase enters the shared service through the
+	# allocation-conscious envelope path (caller-owned node output,
+	# query-stamp dedup, no candidate records). EXPANSION_EPSILON_GU keeps
+	# the record-query universe (bounds + epsilon + index max actor bounds);
+	# the exact gate, claim authority and damage routing below are
+	# unchanged. Candidate counters now reflect live nodes (the replaced
+	# record path also counted dying registrations).
+	var service = _effect_target_query_service(runtime_map_id)
+	_service_envelope_scratch.clear()
+	if not service.query_envelope_into(
+		_snapshot_bounds_ground_gu(snapshot),
+		_service_envelope_scratch,
+		true,
+		EXPANSION_EPSILON_GU,
+	):
+		# Fail-closed parity: the replaced record query answered an
+		# unavailable map/index with an empty candidate set; the tick
+		# delivers nothing either way.
+		return
+	total_candidate_count += _service_envelope_scratch.size()
+	max_candidate_count = maxi(
+		max_candidate_count, _service_envelope_scratch.size()
+	)
+	for enemy: Object in _service_envelope_scratch:
+		if (
+			not _actors.is_runtime_present(enemy)
+			or _actors.is_queued_for_retirement(enemy)
+			or not enemy.can_receive_damage()
+		):
+			continue
+		exact_intersection_test_count += 1
+		if not ground_effect.runtime_target_is_inside(enemy):
+			continue
+		if not ground_effect.claim_runtime_tick(enemy):
+			claim_rejection_count += 1
+			continue
+		_apply_damage(ground_effect, entry, enemy)
+
+
+func _apply_damage(
+	ground_effect: Object,
+	entry: Dictionary,
+	enemy: Object
+) -> void:
+	damage_application_count += 1
+	var damage_callback: Callable = entry.get("damage_callback", Callable())
+	if damage_callback.is_valid():
+		damage_callback.call(enemy, ground_effect.damage)
+	elif ground_effect.runtime_tick_adapter.is_valid():
+		ground_effect.runtime_tick_adapter.call(enemy, ground_effect.damage)
+	elif ground_effect.damage > 0:
+		# R1-C: the last direct-damage escape hatch is closed. The fallback
+		# delivers only through the shared CombatRuntimeService authority
+		# (same amount, same source attribution, service-side rejection and
+		# timing diagnostics); without an injected service the delivery is
+		# refused and counted.
+		if _combat_runtime != null and is_instance_valid(_combat_runtime):
+			_combat_runtime.apply_enemy_physical_damage(
+				enemy, ground_effect.damage, ground_effect.source_actor
+			)
+		else:
+			damage_delivery_skip_count += 1
+
+
+func _snapshot_bounds_ground_gu(snapshot: Dictionary) -> Rect2:
+	var result = Snapshot.ground_aabb(snapshot)
+	if not bool(result.get("valid", false)):
+		return Rect2(Vector2.ZERO, Vector2(-1.0, -1.0))
+	return result.get("bounds_ground_gu", Rect2(Vector2.ZERO, Vector2(-1.0, -1.0)))

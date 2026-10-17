@@ -43,7 +43,17 @@ var _layout_initialized := false
 var _layout_apply_count := 0
 
 
+# Main callback depth only. No new gameplay/IO owner or timer.
+var _original_main_callback_ledger: Dictionary = {}
+
+
 func _ready() -> void:
+	_original_main_callback_ledger["_ready"] = int(_original_main_callback_ledger.get("_ready",0)) + 1
+	_original_source_quest_panel__ready()
+	_original_main_callback_ledger["_ready"] -= 1
+
+
+func _original_source_quest_panel__ready() -> void:
 	set_anchors_preset(Control.PRESET_CENTER)
 	offset_left = -PANEL_SIZE.x * 0.5
 	offset_top = -PANEL_SIZE.y * 0.5
@@ -251,6 +261,12 @@ func _build_quest_detail() -> void:
 
 
 func open_for(display_name: String) -> void:
+	_original_main_callback_ledger["open_for"] = int(_original_main_callback_ledger.get("open_for",0)) + 1
+	_original_source_quest_panel_open_for(display_name)
+	_original_main_callback_ledger["open_for"] -= 1
+
+
+func _original_source_quest_panel_open_for(display_name: String) -> void:
 	_action_request_locked = false
 	_clear_action_feedback()
 	npc_display_name = display_name
@@ -260,6 +276,12 @@ func open_for(display_name: String) -> void:
 
 
 func refresh() -> void:
+	_original_main_callback_ledger["refresh"] = int(_original_main_callback_ledger.get("refresh",0)) + 1
+	_original_source_quest_panel_refresh()
+	_original_main_callback_ledger["refresh"] -= 1
+
+
+func _original_source_quest_panel_refresh() -> void:
 	if status_label == null:
 		return
 	_refresh_pending = false
@@ -389,6 +411,12 @@ func _rebuild_quest_cards(active_quest_id: String) -> void:
 
 
 func _refresh_selected_quest(active_quest_id: String) -> void:
+	_original_main_callback_ledger["_refresh_selected_quest"] = int(_original_main_callback_ledger.get("_refresh_selected_quest",0)) + 1
+	_original_source_quest_panel__refresh_selected_quest(active_quest_id)
+	_original_main_callback_ledger["_refresh_selected_quest"] -= 1
+
+
+func _original_source_quest_panel__refresh_selected_quest(active_quest_id: String) -> void:
 	action_button.disabled = false
 	_set_abandon_available(false)
 	var quest := GameData.get_bich_quest(_selected_quest_id)
@@ -455,6 +483,13 @@ func _select_quest(quest_id: String) -> void:
 
 
 func _quest_state_text(quest_id: String, active_quest_id: String) -> String:
+	_original_main_callback_ledger["_quest_state_text"] = int(_original_main_callback_ledger.get("_quest_state_text",0)) + 1
+	var original_result: Variant = _original_source_quest_panel__quest_state_text(quest_id,active_quest_id)
+	_original_main_callback_ledger["_quest_state_text"] -= 1
+	return original_result
+
+
+func _original_source_quest_panel__quest_state_text(quest_id: String, active_quest_id: String) -> String:
 	var state := str(PlayerState.quest_states.get(quest_id, {}).get("status", ""))
 	match state:
 		"claimed":
@@ -467,6 +502,12 @@ func _quest_state_text(quest_id: String, active_quest_id: String) -> String:
 
 
 func _act() -> void:
+	_original_main_callback_ledger["_act"] = int(_original_main_callback_ledger.get("_act",0)) + 1
+	_original_source_quest_panel__act()
+	_original_main_callback_ledger["_act"] -= 1
+
+
+func _original_source_quest_panel__act() -> void:
 	if _action_request_locked:
 		return
 	if current_quest_id.is_empty():
@@ -527,6 +568,12 @@ func _set_abandon_available(enabled: bool) -> void:
 
 
 func _request_abandon() -> void:
+	_original_main_callback_ledger["_request_abandon"] = int(_original_main_callback_ledger.get("_request_abandon",0)) + 1
+	_original_source_quest_panel__request_abandon()
+	_original_main_callback_ledger["_request_abandon"] -= 1
+
+
+func _original_source_quest_panel__request_abandon() -> void:
 	if current_quest_id.is_empty():
 		return
 	var state := str(PlayerState.quest_states.get(current_quest_id, {}).get("status", ""))
@@ -573,6 +620,12 @@ func _confirm_abandon() -> void:
 
 
 func apply_abandon_result(result: Dictionary) -> void:
+	_original_main_callback_ledger["apply_abandon_result"] = int(_original_main_callback_ledger.get("apply_abandon_result",0)) + 1
+	_original_source_quest_panel_apply_abandon_result(result)
+	_original_main_callback_ledger["apply_abandon_result"] -= 1
+
+
+func _original_source_quest_panel_apply_abandon_result(result: Dictionary) -> void:
 	var quest_id := str(result.get("quest_id", ""))
 	if not quest_id.is_empty() and quest_id != current_quest_id:
 		return

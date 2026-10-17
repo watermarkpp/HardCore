@@ -1,14 +1,21 @@
 extends RefCounted
 
+const CatalogGate := preload("res://scripts/gameplay/content/catalog_publication_gate.gd")
 const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
 const PATH := "res://assets/data/features/resource_registry.json"
 const AUDIO_SOURCE := "res://assets/data/audio/audio_bindings.source.json"
 const AUDIO_RUNTIME := "res://assets/data/audio/audio_bindings.runtime.json"
 const SOURCE_POLICY := "res://assets/data/source_priority_policy.json"
-static var _loaded := false
-static var _result: Dictionary = {}
+static var _loaded := false:
+	set(value):
+		if CatalogGate.write_allowed(): _loaded = value
+static var _result: Dictionary = {}:
+	set(value):
+		if CatalogGate.write_allowed(): _result = value
 
 static func declarations() -> Dictionary:
+	if OS.get_thread_caller_id() != OS.get_main_thread_id():
+		return _result if CatalogGate.has_active_reader() and _loaded and _result.get("success") == true else _reject(["feature_resource_domain_publication_missing"])
 	# Android defers the existing data authority until the startup cover is drawn.
 	# NOT_READY must not poison the permanent declaration result cache.
 	if not GameData.is_loaded():

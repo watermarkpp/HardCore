@@ -14,7 +14,7 @@ static func issue(overlay: Control, consumer: Node, generation: int) -> RefCount
 	if not overlay.has_method("code_preparation_cover_receipt"):
 		return null
 	var overlay_script: Script = overlay.get_script() as Script
-	if overlay_script == null or not _provider_path_current(overlay_script.resource_path, consumer) or not is_same(overlay.get_parent(), consumer):
+	if overlay_script == null or not _provider_path_current(overlay_script.resource_path, consumer) or not _same_cover_owner(overlay,consumer):
 		return null
 	if not consumer.has_method("is_code_preparation_generation_current"):
 		return null
@@ -49,9 +49,19 @@ func valid_for(consumer: Node, generation: int) -> bool:
 	if not is_instance_valid(current_overlay) or current_overlay.is_queued_for_deletion():
 		return false
 	var overlay_script: Script = current_overlay.get_script() as Script
-	if overlay_script == null or not _provider_path_current(overlay_script.resource_path, current_consumer) or not is_same(current_overlay.get_parent(), consumer):
+	if overlay_script == null or not _provider_path_current(overlay_script.resource_path, current_consumer) or not _same_cover_owner(current_overlay,current_consumer):
 		return false
 	return current_overlay.code_preparation_cover_current(_receipt)
+
+static func _same_cover_owner(overlay: Control, consumer: Node) -> bool:
+	if is_same(overlay.get_parent(),consumer): return true
+	# The actual CharacterSelect owns this exact screen-only carrier and its
+	# one original cover. This is not a generic descendant/CanvasLayer permit.
+	var script: Script = consumer.get_script() as Script
+	var carrier: CanvasLayer = overlay.get_parent() as CanvasLayer
+	if script == null or script.resource_path != "res://scripts/character_select.gd" or carrier == null: return false
+	if not is_same(carrier.get_parent(),consumer) or not is_same(consumer.get("_launch_loading_screen"),carrier) or not is_same(consumer.get("launch_loading_overlay"),overlay): return false
+	return carrier.is_inside_tree() and not carrier.is_queued_for_deletion() and carrier.get_script() == null and carrier.get_child_count(true) == 1 and is_same(carrier.get_child(0,true),overlay) and carrier.visible and not carrier.follow_viewport_enabled and carrier.transform == Transform2D.IDENTITY
 
 func cancel() -> void:
 	_cancelled = true

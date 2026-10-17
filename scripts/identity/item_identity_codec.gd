@@ -1,4 +1,5 @@
 extends RefCounted
+const ProfileContent := preload("res://scripts/gameplay/profile/legacy_profile_content.gd")
 
 const Registry := preload("res://scripts/identity/entity_registry.gd")
 const FIELD := "item_identity"
@@ -14,7 +15,7 @@ static func support(document: Dictionary) -> Dictionary:
 		return _failure("unsupported_item_identity_contract")
 	return {"status": "KNOWN_VALID", "formal": true, "reason": ""}
 
-static func normalize(record: Dictionary, allow_legacy: bool) -> Dictionary:
+static func normalize(record: Dictionary, allow_legacy: bool, content: ProfileContent.ContentPort = null) -> Dictionary:
 	if record.is_empty():
 		return _success(record)
 	var typed := record.has("item_id") or record.has("service_index")
@@ -22,7 +23,7 @@ static func normalize(record: Dictionary, allow_legacy: bool) -> Dictionary:
 		return _failure("missing_formal_item_identity")
 	# Only this explicit legacy import boundary may consult an old display name.
 	# GameData rejects malformed or conflicting supplied identities first.
-	var id := GameData.item_entity_id(record)
+	var id := ProfileContent.resolve(content).item_entity_id(record)
 	var entry := Registry.resolve(id)
 	if entry.get("kind") not in ["item", "service_item"]:
 		return _failure("unknown_or_conflicting_item_identity")

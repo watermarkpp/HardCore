@@ -1,10 +1,16 @@
 class_name RelicSynthesisService
 extends RefCounted
+const ProfileRuleSet := preload("res://scripts/gameplay/profile/profile_rule_set.gd")
+var _rules: ProfileRuleSet
+const ProfileContent := preload("res://scripts/gameplay/profile/legacy_profile_content.gd")
+var _content_port: ProfileContent.ContentPort
 
 const Rules := preload("res://scripts/layers/rules/relic_synthesis_rules.gd")
 const Professions := preload("res://scripts/profession_rules.gd")
 
-var _player: Node
+var _player_ref: WeakRef
+var _player: Object:
+	get: return _player_ref.get_ref()
 var _rng := RandomNumberGenerator.new()
 var _session_id := ""
 var _serial := 0
@@ -12,8 +18,18 @@ var _issued: Dictionary = {}
 var _busy := false
 
 
-func _init(player: Node) -> void:
-	_player = player
+func _init(player: Object, content: ProfileContent.ContentPort = null, owner_state: Dictionary = {}) -> void:
+	_player_ref = weakref(player)
+	_content_port = ProfileContent.resolve(content)
+	_rules = _content_port.rules
+	if not owner_state.is_empty():
+		assert(OS.get_thread_caller_id()!=OS.get_main_thread_id(),"loaded helper handoff is S-owned")
+		_rng = owner_state.rng
+		_session_id = owner_state._session_id
+		_serial = owner_state._serial
+		_issued = owner_state._issued
+		_busy = false # Handoff admission already proved the original helper idle.
+		return
 	_rng.randomize()
 	_session_id = "%d:%d" % [Time.get_ticks_usec(), _rng.randi()]
 
@@ -62,14 +78,14 @@ func commit_synthesis(quote: Dictionary, save_in_background := false) -> Diction
 	var next_tray: Array = tray_before.duplicate(true)
 	for index: int in indices:
 		next_tray[index] = {}
-	var catalog := Rules.record_for_id(int(quote.item_id))
+	var catalog := _rules.relic.record_for_id(int(quote.item_id))
 	var output: Dictionary = _player.call("_make_item_instance", str(catalog.name), catalog, -1, false)
-	var rolled := Rules.roll_instance(int(quote.item_id), str(quote.profession_id), _rng)
+	var rolled := _rules.relic.roll_instance(int(quote.item_id), str(quote.profession_id), _rng)
 	if rolled.is_empty():
 		_busy = false
 		return _failure("圣物属性生成失败，材料未消耗。")
 	output.merge(rolled, true)
-	if not Rules.valid_instance(output, int(quote.item_id)):
+	if not _rules.relic.valid_instance(output, int(quote.item_id)):
 		_busy = false
 		return _failure("圣物属性校验失败，材料未消耗。")
 	next_tray[0] = output
@@ -87,14 +103,14 @@ func commit_synthesis(quote: Dictionary, save_in_background := false) -> Diction
 
 
 func _build_quote(item_id: int, material_indices: Array[int], profession := "") -> Dictionary:
-	var catalog := Rules.record_for_id(item_id)
+	var catalog := _rules.relic.record_for_id(item_id)
 	if catalog.is_empty() or material_indices.size() != Rules.FRAGMENT_COUNT:
 		return _failure("请选择合成配方并放入4个远古圣物碎片。")
 	if profession.is_empty():
-		profession = str(_player.profession_id) if Rules.is_relic(item_id) else str(catalog.get("skillProfessionId", ""))
+		profession = str(_player.profession_id) if _rules.relic.is_relic(item_id) else str(catalog.get("skillProfessionId", ""))
 	else:
-		profession = Professions.import_profession_identity(profession)
-	if profession not in Rules.recipe_professions(item_id):
+		profession = _rules.professions.import_profession_identity(profession)
+	if profession not in _rules.relic.recipe_professions(item_id):
 		return _failure("该配方的技能职业无效。")
 	# All nine cells accept input. After consuming exactly four fragments,
 	# cell zero is free for the output, even when it held an input fragment.
@@ -109,7 +125,7 @@ func _build_quote(item_id: int, material_indices: Array[int], profession := "") 
 		var raw: Variant = _player.synthesis_tray[index]
 		if not raw is Dictionary or (raw as Dictionary).is_empty():
 			return _failure("合成材料已变化，请重新选择。")
-		var record := GameData.get_item_record(raw)
+		var record := _content_port.get_item_record(raw)
 		if int(record.get("itemId", -1)) != Rules.FRAGMENT_ID or int(raw.get("count", 1)) != 1:
 			return _failure("只能放入远古圣物碎片。")
 	if int(_player.gold) < Rules.GOLD_COST:

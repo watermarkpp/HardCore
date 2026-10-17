@@ -1,0 +1,211 @@
+{
+  "status": "PASS",
+  "scope": "PRIVATE_GIT_COMPONENT_ONLY_NOT_WORLD",
+  "checks": 41,
+  "failed": 0,
+  "not_run": 0,
+  "details": [
+    {
+      "name": "current inventory includes all allowed dirty/untracked bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "actual Git archive validates all raw byte SHA including PNG and scene/project",
+      "status": "PASS"
+    },
+    {
+      "name": "actual Git blob raw bytes project.godot",
+      "status": "PASS"
+    },
+    {
+      "name": "actual Git blob raw bytes export_presets.cfg",
+      "status": "PASS"
+    },
+    {
+      "name": "actual Git blob raw bytes scripts/LF.gd",
+      "status": "PASS"
+    },
+    {
+      "name": "actual Git blob raw bytes scripts/CRLF.gd",
+      "status": "PASS"
+    },
+    {
+      "name": "actual Git blob raw bytes scenes/example.tscn",
+      "status": "PASS"
+    },
+    {
+      "name": "actual Git blob raw bytes assets/ui/icon.png",
+      "status": "PASS"
+    },
+    {
+      "name": "actual Git blob raw bytes tools/fresh.ps1",
+      "status": "PASS"
+    },
+    {
+      "name": "actual Git blob raw bytes tests/component.gd",
+      "status": "PASS"
+    },
+    {
+      "name": "tracked deletion absent from fixed commit",
+      "status": "PASS"
+    },
+    {
+      "name": "parent identity retained",
+      "status": "PASS"
+    },
+    {
+      "name": "private HEAD/index/config/refs unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "identical raw snapshot deterministic commit",
+      "status": "PASS"
+    },
+    {
+      "name": "source raw bytes unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "content drift rejected before fixed snapshot accepted",
+      "status": "PASS"
+    },
+    {
+      "name": "roster drift rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "path escape rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "absolute path rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "backslash path rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "duplicate source path rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "excluded credential input rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "embedded private key refused",
+      "status": "PASS"
+    },
+    {
+      "name": "embedded export password refused",
+      "status": "PASS"
+    },
+    {
+      "name": "actual symlink source rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "wrong private root marker rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "refs mutation visible to custody guard",
+      "status": "PASS"
+    },
+    {
+      "name": "index mutation visible to custody guard",
+      "status": "PASS"
+    },
+    {
+      "name": "ambient Git redirection discarded",
+      "status": "PASS"
+    },
+    {
+      "name": "actual publication added immutable objects",
+      "status": "PASS"
+    },
+    {
+      "name": "publication preserves destination old object bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "publication preserves destination HEAD/index/config/refs",
+      "status": "PASS"
+    },
+    {
+      "name": "destination actual Git archive resolves published commit without source alternates",
+      "status": "PASS"
+    },
+    {
+      "name": "repeat publication adds no duplicate objects",
+      "status": "PASS"
+    },
+    {
+      "name": "wrong publication object root rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "corrupt existing object refused without overwrite",
+      "status": "PASS"
+    },
+    {
+      "name": "corrupt existing destination not overwritten",
+      "status": "PASS"
+    },
+    {
+      "name": "original source custody still unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "real index read-only hash preserved",
+      "status": "PASS"
+    },
+    {
+      "name": "formal CLI wrong production root rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "formal World gate requires pinned actual three evidence files",
+      "status": "PASS"
+    }
+  ],
+  "baseline_commit": "0c1b622d770917a9a20ea96cf1c9e413df7e9612",
+  "fixed_commit": "a1a353917c77b8b1c0092788e594d962e0966772",
+  "archive": {
+    "status": "PASS",
+    "files": 8,
+    "commit": "a1a353917c77b8b1c0092788e594d962e0966772",
+    "raw_bytes_verified": true
+  },
+  "publication": {
+    "status": "PASS",
+    "added_objects": [
+      "03c3d4aad948c8cc7f65cf2f9d218691525da86d",
+      "0c1b622d770917a9a20ea96cf1c9e413df7e9612",
+      "10cd2f2a0fd7268ef5b475474e2df399a6d4d033",
+      "1b7dc78c5270c095ffc8fdbdd240174cdd03aee9",
+      "24b816990ce022b4b8cf4edd2c8e39d71271767e",
+      "4a0e47a42f25bc610e9e273444efd010fdd758ea",
+      "4c8a659352c292df464fb92a549633dfbf24b6c4",
+      "579a0e1a262656ad7b19e6a9a3e17714f6be403e",
+      "8fefe511d1916a83cb536be4a910c756718de7c4",
+      "a1a353917c77b8b1c0092788e594d962e0966772",
+      "aa35f1b422e596c08b158888445d9d9ed9946ae6",
+      "b15a95d76b8cd6ce58660dfd2449b771091d7124",
+      "b507d4cd2b64e0f1c195988251fca5b268a46d92",
+      "bc01f2d98c34eaf78c5723435703779b07267e58",
+      "ce7380b4e2b576b43d8ce5221aad6935ce244393",
+      "ce7b92f9b0903d661a84ff49b2cf08edfc5c899a",
+      "e24697a946692e25121dea37d8f11c33965510e0",
+      "e7cbd106712bc5d0abffe9a07d209a8ffa1c78cb",
+      "f294a0736aadac14e16cf423a44603d7f6d7b2bc"
+    ],
+    "refs_or_index_written": false
+  },
+  "real_index_before": "3180f91855b8bc8d7a22848592ff9f95f2d19574a73f7a3eea90e962f7151b22",
+  "real_index_after": "3180f91855b8bc8d7a22848592ff9f95f2d19574a73f7a3eea90e962f7151b22",
+  "production_snapshot": "NOT_RUN",
+  "production_publication": "NOT_RUN",
+  "command": "C:\\Users\\Administrator\\AppData\\Local\\hermes\\hermes-agent\\venv\\Scripts\\python.exe C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\fixed_release_snapshot_parallel_20261017\\test_fixed_release_objects.py"
+}

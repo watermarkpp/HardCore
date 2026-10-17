@@ -1,0 +1,50 @@
+{
+  "status": "PASS",
+  "scope": "Python AST + exact unchanged guard identities only; no snapshot/Git/Godot/stage execution",
+  "python_ast": [
+    {
+      "path": "prepare_snapshot.py",
+      "sha256": "3230ddd813e4332ac9c8427ceb69b4b492b76f5e108615fd5a5217f57cbba835",
+      "parse": true
+    },
+    {
+      "path": "run_stage.py",
+      "sha256": "63c77c5516a7e4af3a534fb9529f01992dd9d748c8abf2be015f83cf02e6b15c",
+      "parse": true
+    },
+    {
+      "path": "isolated_git.py",
+      "sha256": "c4f0d8ef265e70dda176e6fb60015e6938ca6ba9660cdc757251a9df7846bbcb",
+      "parse": true
+    }
+  ],
+  "unchanged_guards": [
+    {
+      "path": "runner_bridge.ps1",
+      "same_exact_sha256": true,
+      "sha256": "5f61a869b475ff47aca9ca6015db9634c7e273d5205c1896c405ddf4e46ba62b"
+    },
+    {
+      "path": "isolated_git.py",
+      "same_exact_sha256": true,
+      "sha256": "c4f0d8ef265e70dda176e6fb60015e6938ca6ba9660cdc757251a9df7846bbcb"
+    },
+    {
+      "path": "STAGE_BUDGET_GATE.json",
+      "same_exact_sha256": true,
+      "sha256": "37b9cc447b3c33c16997cddc800cdb4beef57b4c061653a2ddccb3b38fd21d7c"
+    },
+    {
+      "path": "SOURCE_SAVE_FIXTURE_BINDING.json",
+      "same_exact_sha256": true,
+      "sha256": "cf7eaa1b107bf895f7ba4c1f685726694b4a64235e8fc8e2a60ef9921728b8b1"
+    }
+  ],
+  "historical_timeout_guard_receipt": {
+    "path": "UPSTREAM_TIMEOUT_SCOPE_GUARD_RESULT.json",
+    "sha256": "bfbf9866f6ecaa29aef3c592e524d833ae9ffbdc8dedd2c7b2db36e3473aa4c7",
+    "reused_not_rerun": true
+  },
+  "PE_binding": "PENDING",
+  "positive_stages": "NOT_RUN"
+}

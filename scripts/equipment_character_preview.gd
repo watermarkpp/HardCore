@@ -84,7 +84,17 @@ static var _classic_head_mask_cache_hits := 0
 static var _classic_head_mask_cache_misses := 0
 
 
+# Main callback depth only. No new gameplay/IO owner or timer.
+var _original_main_callback_ledger: Dictionary = {}
+
+
 func _ready() -> void:
+	_original_main_callback_ledger["_ready"] = int(_original_main_callback_ledger.get("_ready",0)) + 1
+	_original_source_equipment_character_preview__ready()
+	_original_main_callback_ledger["_ready"] -= 1
+
+
+func _original_source_equipment_character_preview__ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	clip_contents = true
@@ -138,6 +148,12 @@ func configure_presentation_mode(mode: String) -> void:
 
 
 func refresh() -> void:
+	_original_main_callback_ledger["refresh"] = int(_original_main_callback_ledger.get("refresh",0)) + 1
+	_original_source_equipment_character_preview_refresh()
+	_original_main_callback_ledger["refresh"] -= 1
+
+
+func _original_source_equipment_character_preview_refresh() -> void:
 	_ui_l1_preview_pending = false
 	_ui_l1_preview_refresh_count += 1
 	# Pin only the old texture references during replacement, not across frames.

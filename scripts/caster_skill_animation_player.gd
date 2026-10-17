@@ -1,6 +1,7 @@
 class_name CasterSkillAnimationPlayer
 extends Sprite2D
 
+const Structure := preload("res://scripts/gameplay/world/world_caster_visual_structure.gd")
 const TrialScreenShader := preload("res://assets/shaders/trial_magic_screen.gdshader")
 const FireWallMultiplyShader := preload("res://assets/shaders/fire_wall_screen_blend_multiply.gdshader")
 const FORWARD_ENDPOINT_FIT_CONTRACT_ID := (
@@ -155,18 +156,11 @@ func configure(
 			material = trial_material
 	_ensure_trial_screen_copy()
 	var animation := CasterSkillVisualRegistry.animation_profile(skill_id, phase_id)
-	if animation.get("contract", "") != "caster_skill_animation.v1":
-		return false
-	var sequences: Array = animation.get("sequences", [])
-	if sequences.is_empty():
-		return false
-	direction_index = CasterSkillVisualRegistry.direction_index(direction) if int(animation.get("direction_count", 1)) > 1 else 0
-	var selected: Dictionary = sequences[
-		CasterSkillVisualRegistry.sequence_index(direction_index, sequences)
-	]
-	_frames.assign(selected.get("frames", []))
-	if _frames.is_empty():
-		return false
+	var selection: Dictionary = Structure.select_sequence(animation,CasterSkillVisualRegistry.direction_index(direction))
+	if not selection.accepted: return false
+	direction_index = selection.direction_index
+	var selected: Dictionary = selection.sequence
+	_frames.assign(selection.frames)
 	_frame_time_seconds = maxf(0.001, float(animation.get("frame_time_ms", 50)) / 1000.0)
 	_loop = bool(animation.get("playback", "once") == "loop")
 	if loop_override is bool:

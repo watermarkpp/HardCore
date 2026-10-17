@@ -3,6 +3,7 @@ extends RefCounted
 # A pure request owner. It does not accept gameplay, reserve capacity, query
 # targets, write HP or allocate another planner. Root admission is a separate
 # prerequisite before the eventual domain consumer executes a planned child.
+const CatalogGate := preload("res://scripts/gameplay/content/catalog_publication_gate.gd")
 const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
 const Ids := preload("res://scripts/identity/entity_registry.gd")
 const Cast := preload("res://scripts/skills/skill_cast_request.gd")
@@ -17,8 +18,12 @@ var _command: Dictionary = {}
 var _definition: Dictionary = {}
 var _release_id := ""
 var _seed := 0
-static var _definitions: Dictionary = {}
-static var _catalog_attempted := false
+static var _definitions: Dictionary = {}:
+	set(value):
+		if CatalogGate.write_allowed(): _definitions = value
+static var _catalog_attempted := false:
+	set(value):
+		if CatalogGate.write_allowed(): _catalog_attempted = value
 
 static func create(command: Dictionary, world: RefCounted, release_id: String) -> Dictionary:
 	var rejected := {"success":false,"reason":"invalid_child_request","request":{}}
@@ -125,6 +130,8 @@ func chain_context() -> Dictionary:
 
 static func _definition_for(id: Variant) -> Dictionary:
 	if not id is String: return {}
+	if OS.get_thread_caller_id() != OS.get_main_thread_id():
+		return _definitions.get(id,{}) if CatalogGate.has_active_reader() and _catalog_attempted else {}
 	if _catalog_attempted: return _definitions.get(id,{})
 	_catalog_attempted=true
 	var parsed: Variant=JSON.parse_string(FileAccess.get_file_as_string(PATH))

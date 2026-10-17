@@ -1,0 +1,1373 @@
+{
+  "res://scripts/startup_loading.gd": {
+    "script_sha256": "4d84a8131f43a8c744c0f7ca165f8310f4b47b59fbf464595af29e2eb5baa24b",
+    "methods": [
+      {
+        "method": "_ready",
+        "await": false,
+        "source_line": 100,
+        "body_sha256": "97663e1e5d398d0fec29ea295beaf5a30620851b3b876244e776aad0fc6d5478",
+        "retained_method": "_original_source_startup_loading__ready"
+      },
+      {
+        "method": "_prepare_authoritative_data",
+        "await": true,
+        "source_line": 127,
+        "body_sha256": "d8814ddd6d043fafac1cfc1191ee2b962ff7cdcdfffad462f61d688501e97004",
+        "retained_method": "_original_source_startup_loading__prepare_authoritative_data"
+      },
+      {
+        "method": "_ensure_authoritative_step",
+        "await": false,
+        "source_line": 157,
+        "body_sha256": "5ced7adf82d4591d5bc0ec116d0ee5fe47e3d23e94f013a2da11767a68bdebd8",
+        "retained_method": "_original_source_startup_loading__ensure_authoritative_step"
+      },
+      {
+        "method": "_authoritative_failure_message",
+        "await": false,
+        "source_line": 207,
+        "body_sha256": "b87bf8bff450700acc59f52f0759c4bec24c0ff9e07d08efcd3c1481caea4cbb",
+        "retained_method": "_original_source_startup_loading__authoritative_failure_message"
+      },
+      {
+        "method": "_notification",
+        "await": false,
+        "source_line": 341,
+        "body_sha256": "4a32dc84cff16bffd0241569e544dcb4054218f60e09797a3a8f6e9ee7679395",
+        "retained_method": "_original_source_startup_loading__notification"
+      },
+      {
+        "method": "_request_application_quit",
+        "await": true,
+        "source_line": 346,
+        "body_sha256": "7eb4366fd726ef6b05cdfb1142d68115fa411b19156dcf77ce1dd8e0a457aa8c",
+        "retained_method": "_original_source_startup_loading__request_application_quit"
+      },
+      {
+        "method": "startup_diagnostic",
+        "await": false,
+        "source_line": 375,
+        "body_sha256": "c22e09ee1d634aff59ac5a921f1554cb48cc81a8385928ccdba9d91bf6b5fae1",
+        "retained_method": "_original_source_startup_loading_startup_diagnostic"
+      },
+      {
+        "method": "_recover_target_load",
+        "await": true,
+        "source_line": 487,
+        "body_sha256": "4ccd5ba543dde5b17c663b8f1ddbb7e60ef7f8152140340646c581d26829d3e3",
+        "retained_method": "_original_source_startup_loading__recover_target_load"
+      },
+      {
+        "method": "_process",
+        "await": false,
+        "source_line": 504,
+        "body_sha256": "fc813f197567614b3231229cf81872fb519f54766f79a81784af0eeaf773d2cd",
+        "retained_method": "_original_source_startup_loading__process"
+      },
+      {
+        "method": "_run_finite_loading_phase",
+        "await": true,
+        "source_line": 635,
+        "body_sha256": "b8fedb8affbb307039b128635e54de465446a1c0b69e099763e726a27912eef4",
+        "retained_method": "_original_source_startup_loading__run_finite_loading_phase"
+      },
+      {
+        "method": "_prepare_target_scene",
+        "await": true,
+        "source_line": 755,
+        "body_sha256": "9cebba43ba6c484b7340e3090bedfd7f4a6687630c2ba376798c588ac94d433f",
+        "retained_method": "_original_source_startup_loading__prepare_target_scene"
+      },
+      {
+        "method": "_prepare_main_scene_prefetch",
+        "await": true,
+        "source_line": 836,
+        "body_sha256": "18d66f34ff77f43005ecbf79728d7b5ddb112d17161b6f34e0a217b287b42a51",
+        "retained_method": "_original_source_startup_loading__prepare_main_scene_prefetch"
+      },
+      {
+        "method": "_exit_tree",
+        "await": false,
+        "source_line": 912,
+        "body_sha256": "e4172d332d4fc827f57741c0d8fcaf6dc20cade09e741daa4c5f94aaf4d109f3",
+        "retained_method": "_original_source_startup_loading__exit_tree"
+      }
+    ],
+    "read_fields": [
+      "startup_save_upgrade_result"
+    ]
+  },
+  "res://scripts/character_select.gd": {
+    "script_sha256": "3fe860c17362595677a93b90e9a0b2a8a992d473e018c8d49cc78332e9d8e5b9",
+    "methods": [
+      {
+        "method": "_ready",
+        "await": false,
+        "source_line": 111,
+        "body_sha256": "72db2c84eabe7bad385b1fecee8a62270121655c65141d4671443e14271f9e7c",
+        "retained_method": "_original_source_character_select__ready"
+      },
+      {
+        "method": "_exit_tree",
+        "await": false,
+        "source_line": 146,
+        "body_sha256": "e9d8951db4ef5a723ec797a26f919461973f5484509d059d966a021f9c288616",
+        "retained_method": "_original_source_character_select__exit_tree"
+      },
+      {
+        "method": "_notification",
+        "await": false,
+        "source_line": 162,
+        "body_sha256": "4a32dc84cff16bffd0241569e544dcb4054218f60e09797a3a8f6e9ee7679395",
+        "retained_method": "_original_source_character_select__notification"
+      },
+      {
+        "method": "_request_application_quit",
+        "await": false,
+        "source_line": 179,
+        "body_sha256": "66daa36d3e6665a762e809cca9fd51ac075beb89179bf2599245534dc33d8c8d",
+        "retained_method": "_original_source_character_select__request_application_quit"
+      },
+      {
+        "method": "_monitor_launch_scene_preload",
+        "await": true,
+        "source_line": 248,
+        "body_sha256": "b543bbe44aac3d232c17b20f18601aa643a624e854e78299c22fb0b372fd1e30",
+        "retained_method": "_original_source_character_select__monitor_launch_scene_preload"
+      },
+      {
+        "method": "_wait_for_launch_scene_preload",
+        "await": true,
+        "source_line": 288,
+        "body_sha256": "e53cdbbc0ca29982af6b91823186feec2e99a09fab9ad0eb9e8276ea56e0647e",
+        "retained_method": "_original_source_character_select__wait_for_launch_scene_preload"
+      },
+      {
+        "method": "_input",
+        "await": false,
+        "source_line": 317,
+        "body_sha256": "afcf3eda0f3aed41ac704462e74e1968de425840478ca6a31bdc884a0c402342",
+        "retained_method": "_original_source_character_select__input"
+      },
+      {
+        "method": "_refresh_profiles",
+        "await": false,
+        "source_line": 736,
+        "body_sha256": "97c7ab1fd15ea92ec21eb520680c7e9455d15bbdd330f4a0bc30837affb3223c",
+        "retained_method": "_original_source_character_select__refresh_profiles"
+      },
+      {
+        "method": "_profile_equipment_snapshot",
+        "await": false,
+        "source_line": 879,
+        "body_sha256": "bfdc6c7b495bd1aef8ca3d58cc7baf8a832ac909f0b28694da55c137e34edbe4",
+        "retained_method": "_original_source_character_select__profile_equipment_snapshot"
+      },
+      {
+        "method": "_select_main_profile",
+        "await": false,
+        "source_line": 915,
+        "body_sha256": "55bc622b0f6531bccc5481666f44833491248cffc61ec8149c321713a59959cc",
+        "retained_method": "_original_source_character_select__select_main_profile"
+      },
+      {
+        "method": "_create_character",
+        "await": false,
+        "source_line": 985,
+        "body_sha256": "6f92ee1ca6fe8d49a1eca2d336973ac4659dfc2b1caa4b94f5ed52e51e5a7569",
+        "retained_method": "_original_source_character_select__create_character"
+      },
+      {
+        "method": "_on_delete_confirmation_confirmed",
+        "await": false,
+        "source_line": 1033,
+        "body_sha256": "7b9609cac6ea71174c05fc71329d5974eae46a710c1ad18b8d405ac1688b703d",
+        "retained_method": "_original_source_character_select__on_delete_confirmation_confirmed"
+      },
+      {
+        "method": "_enter_selected_character",
+        "await": true,
+        "source_line": 1070,
+        "body_sha256": "9a4c3f0fe82d7678f97e1307063ac7baf97bad0252325f215e08bd38654e8289",
+        "retained_method": "_original_source_character_select__enter_selected_character"
+      },
+      {
+        "method": "_prepare_launch_code_if_cold",
+        "await": true,
+        "source_line": 1267,
+        "body_sha256": "44047493c19d14a56fbdf79f7a04ef73b8476400aaaf0a8dd2b54fc7232e78a9",
+        "retained_method": "_original_source_character_select__prepare_launch_code_if_cold"
+      }
+    ],
+    "read_fields": [
+      "active_profile_id",
+      "character_name",
+      "profile_directory",
+      "startup_save_upgrade_result",
+      "test_mode"
+    ]
+  },
+  "res://scripts/game_data.gd": {
+    "script_sha256": "f60978951677a1b27bf159b0daea9bc2a0d5903a5b09ebd54fd1e0e91e852322",
+    "methods": [
+      {
+        "method": "_ready",
+        "await": false,
+        "source_line": 256,
+        "body_sha256": "609bf2efefa5d59cb372bbc2b261924ebca54e2e6a633d4e103fc09707c8d6d1",
+        "retained_method": "_original_source_game_data__ready"
+      },
+      {
+        "method": "item_usage_summary",
+        "await": false,
+        "source_line": 2093,
+        "body_sha256": "5b17c7d1d692e672fbbe62bc0a19035804942e8cc331487412cf6995ad4b02c8",
+        "retained_method": "_original_source_game_data_item_usage_summary"
+      }
+    ],
+    "read_fields": [
+      "level"
+    ]
+  },
+  "res://scripts/layers/runtime/content_layer_registry.gd": {
+    "script_sha256": "69fb46187983518b810965fb09b58e03019cd7bce156df028148dd530d978e19",
+    "methods": [
+      {
+        "method": "_ready",
+        "await": false,
+        "source_line": 49,
+        "body_sha256": "609bf2efefa5d59cb372bbc2b261924ebca54e2e6a633d4e103fc09707c8d6d1",
+        "retained_method": "_original_source_content_layer_registry__ready"
+      },
+      {
+        "method": "_feature_reload_boundary",
+        "await": false,
+        "source_line": 116,
+        "body_sha256": "f4db4ac8373f5e8b08e4bf24de3d527faa7b3752e64ca16ba9cfec0139af9e39",
+        "retained_method": "_original_source_content_layer_registry__feature_reload_boundary"
+      },
+      {
+        "method": "reload_feature_catalog_async",
+        "await": true,
+        "source_line": 135,
+        "body_sha256": "fa3c4706198c98bc412f0987dd94950449ee5d77a746637ff8c2751c904a692b",
+        "retained_method": "_original_source_content_layer_registry_reload_feature_catalog_async"
+      },
+      {
+        "method": "_await_feature_application",
+        "await": true,
+        "source_line": 160,
+        "body_sha256": "5fdaf834f4692a4a51c313212ae5c1d214f75046a6b0d8bd2eda7b7a78d0085d",
+        "retained_method": "_original_source_content_layer_registry__await_feature_application"
+      },
+      {
+        "method": "_apply_prepared_feature_candidate",
+        "await": false,
+        "source_line": 198,
+        "body_sha256": "e8228e3bd39c0f04a825513129a8d00757e38d9d64280070978f250c076365ee",
+        "retained_method": "_original_source_content_layer_registry__apply_prepared_feature_candidate"
+      },
+      {
+        "method": "_publish_feature_configuration",
+        "await": false,
+        "source_line": 302,
+        "body_sha256": "ffd20216101f5f2819747251d9be7022703a6b350a2a530d20ee47e6467b4d9a",
+        "retained_method": "_original_source_content_layer_registry__publish_feature_configuration"
+      },
+      {
+        "method": "_feature_enabled_candidate",
+        "await": false,
+        "source_line": 370,
+        "body_sha256": "8e35f4ccffa52c2a05e0af0df1d9c90bdf8fd1dee4282763d0fbfd3240dfc56b",
+        "retained_method": "_original_source_content_layer_registry__feature_enabled_candidate"
+      },
+      {
+        "method": "set_feature_module_enabled_async",
+        "await": true,
+        "source_line": 399,
+        "body_sha256": "b6506759ed12e1cdd214ce7f48b871f4c63511883b8888fb07c5f61e4542b76c",
+        "retained_method": "_original_source_content_layer_registry_set_feature_module_enabled_async"
+      },
+      {
+        "method": "_apply_prepared_feature_module",
+        "await": false,
+        "source_line": 428,
+        "body_sha256": "033aec8e90813c02cb08cf15232c99e397b319bcf6286355244355cf0c2409dd",
+        "retained_method": "_original_source_content_layer_registry__apply_prepared_feature_module"
+      },
+      {
+        "method": "is_internal_code_publication_boundary_current",
+        "await": false,
+        "source_line": 737,
+        "body_sha256": "9815acc3b9f85a27cba6d65cba807c5ccdbc3661c85f5db7b1777447480926db",
+        "retained_method": "_original_source_content_layer_registry_is_internal_code_publication_boundary_current"
+      },
+      {
+        "method": "ensure_internal_code_catalogue_async",
+        "await": true,
+        "source_line": 827,
+        "body_sha256": "09e7e90003634b616a99898a3830742e79bcfd3bef0a0809bf10c6be14e0d9e0",
+        "retained_method": "_original_source_content_layer_registry_ensure_internal_code_catalogue_async"
+      },
+      {
+        "method": "prepare_internal_code_entry",
+        "await": true,
+        "source_line": 872,
+        "body_sha256": "0ccf235d9ad5c58365f0246f9525add1b85dc59ca67ec50566f67a967ec99eea",
+        "retained_method": "_original_source_content_layer_registry_prepare_internal_code_entry"
+      },
+      {
+        "method": "request_internal_prepared_script",
+        "await": true,
+        "source_line": 889,
+        "body_sha256": "fc6d4acc383b1dfd39caf35df10633f8ccac4c8910e2c7ca08c26cee9e0a245d",
+        "retained_method": "_original_source_content_layer_registry_request_internal_prepared_script"
+      }
+    ],
+    "read_fields": [
+      "active_profile_id"
+    ]
+  },
+  "res://scripts/layers/runtime/game_mode_service.gd": {
+    "script_sha256": "b431dbe6bd17d4bc0fa107b3a8a47c70e8621489ecb7e33c834c8a5927083385",
+    "methods": [
+      {
+        "method": "_ready",
+        "await": false,
+        "source_line": 8,
+        "body_sha256": "d3427cda23225c3923c44e5c3abacb346167be7919d89bdff8205f42191e6b66",
+        "retained_method": "_original_source_game_mode_service__ready"
+      },
+      {
+        "method": "_commit_mode_fields",
+        "await": false,
+        "source_line": 52,
+        "body_sha256": "2c3e72ea590882d2d22f83e2c767c910583740284b693dc49700c65182f78b5d",
+        "retained_method": "_original_source_game_mode_service__commit_mode_fields"
+      }
+    ],
+    "read_fields": [
+      "game_mode_id",
+      "later_content_enabled"
+    ]
+  },
+  "res://scripts/layers/runtime/domain_runtime_services.gd": {
+    "script_sha256": "e1ec3cb6edb0232a8683f76b6b37fabd164a8ec54d63bf07f0d0bde65143235f",
+    "methods": [
+      {
+        "method": "save",
+        "await": false,
+        "source_line": 28,
+        "body_sha256": "306befcaae4c8c6ffe715a97460149cdae2fb34840122815880db918385a3731",
+        "retained_method": "_original_source_domain_runtime_services_save"
+      }
+    ],
+    "read_fields": []
+  },
+  "res://scripts/layers/runtime/runtime_service_facade.gd": {
+    "script_sha256": "ccacb416da3fd12b9b5d5f06fe3fa8479768eb29d9582a2a3d7f5d13fa99b1f4",
+    "methods": [
+      {
+        "method": "save_active_character",
+        "await": false,
+        "source_line": 4,
+        "body_sha256": "6e8a9985ce11b30e1c8bc668967946c728a0abb5d3ebdcd0bbb5c0c5d735d0b0",
+        "retained_method": "_original_source_runtime_service_facade_save_active_character"
+      },
+      {
+        "method": "safe_logout_to_home",
+        "await": false,
+        "source_line": 8,
+        "body_sha256": "85feef9e1322b124b0220e6da06e16f02c908900cb344c2b4d56267d117b6036",
+        "retained_method": "_original_source_runtime_service_facade_safe_logout_to_home"
+      },
+      {
+        "method": "set_expansion_enabled",
+        "await": false,
+        "source_line": 16,
+        "body_sha256": "92aaf795b930ee710451a1e003e567cfee5441d96dbefb106d6af174820c749d",
+        "retained_method": "_original_source_runtime_service_facade_set_expansion_enabled"
+      }
+    ],
+    "read_fields": []
+  },
+  "res://scripts/equipment_character_preview.gd": {
+    "script_sha256": "0fe04dcdbabbee2f2a60d881ababf1d564414f00d02dced68785e6b62a5e33a5",
+    "methods": [
+      {
+        "method": "_ready",
+        "await": false,
+        "source_line": 87,
+        "body_sha256": "18f4000c9fbf645d3540785e7cb96fa6578497de45d8131530e35954f3adec52",
+        "retained_method": "_original_source_equipment_character_preview__ready"
+      },
+      {
+        "method": "refresh",
+        "await": false,
+        "source_line": 140,
+        "body_sha256": "e97e1af0164a72a1c6572f82646bc374e298f0200fc97413ad328cf87a92365b",
+        "retained_method": "_original_source_equipment_character_preview_refresh"
+      }
+    ],
+    "read_fields": [
+      "equipment",
+      "profession"
+    ]
+  },
+  "res://scripts/device_lab_runtime.gd": {
+    "script_sha256": "35e7625955146ada7e287d6ba4623df04bcac47b02febcfd37a9ec5a78bb7267",
+    "methods": [
+      {
+        "method": "_ready",
+        "await": false,
+        "source_line": 178,
+        "body_sha256": "0369762436a8e119ed6e44b6d97da28226531e854dce1da8d2bb9ebed0a23f31",
+        "retained_method": "_original_source_device_lab_runtime__ready"
+      },
+      {
+        "method": "_process",
+        "await": false,
+        "source_line": 192,
+        "body_sha256": "47fbba3a47ef0659f72b470e44c2411a2d78f912f2977d106fceddb7898f6506",
+        "retained_method": "_original_source_device_lab_runtime__process"
+      },
+      {
+        "method": "_notification",
+        "await": false,
+        "source_line": 213,
+        "body_sha256": "0404b31c223f31b858955f7130f9d22d46df621ed3ba98eeb4e1203b05750d73",
+        "retained_method": "_original_source_device_lab_runtime__notification"
+      },
+      {
+        "method": "_process_command_bytes",
+        "await": true,
+        "source_line": 295,
+        "body_sha256": "4f130b7d5f72183ccc7b83da21d66ff870e9900fa89f30570deb0dd4b711110c",
+        "retained_method": "_original_source_device_lab_runtime__process_command_bytes"
+      },
+      {
+        "method": "_execute",
+        "await": true,
+        "source_line": 487,
+        "body_sha256": "118b4d567e2e5502d60b875b6374666f07c9ae32a6a2d2880b1a247ca404e4ad",
+        "retained_method": "_original_source_device_lab_runtime__execute"
+      },
+      {
+        "method": "_repair_diagnostics",
+        "await": false,
+        "source_line": 571,
+        "body_sha256": "32ce2f0b838390b21fb305502d81f3dad0a3c5a5a6fc315420184c6ac7fada6c",
+        "retained_method": "_original_source_device_lab_runtime__repair_diagnostics"
+      },
+      {
+        "method": "_export_player_state",
+        "await": false,
+        "source_line": 614,
+        "body_sha256": "dac0e612c03d0b68e5da09e8e06444007677bf4e55c5a20c01ccc34f06955c89",
+        "retained_method": "_original_source_device_lab_runtime__export_player_state"
+      },
+      {
+        "method": "_ensure_chiyue_test_roster",
+        "await": false,
+        "source_line": 626,
+        "body_sha256": "fb1c7b2101c6be60b3199db8f2082268f4ebfe94cdb326ba0e13a549b5dcf4aa",
+        "retained_method": "_original_source_device_lab_runtime__ensure_chiyue_test_roster"
+      },
+      {
+        "method": "_apply_player_state",
+        "await": false,
+        "source_line": 632,
+        "body_sha256": "864fdf38c2a9e0746fb1c8cf72a534fdebb9c341135b3e812859f0ebeeb786c7",
+        "retained_method": "_original_source_device_lab_runtime__apply_player_state"
+      },
+      {
+        "method": "_rollback_player_state",
+        "await": false,
+        "source_line": 648,
+        "body_sha256": "9555bd51a382d43f13e2f4b727a3f1a3c9058835110b8ad283928f730a55b433",
+        "retained_method": "_original_source_device_lab_runtime__rollback_player_state"
+      },
+      {
+        "method": "_create_player_checkpoint",
+        "await": false,
+        "source_line": 682,
+        "body_sha256": "e7c33ab863728cb083b071354f2afb916d119a5f78768ffad704e02afcf21920",
+        "retained_method": "_original_source_device_lab_runtime__create_player_checkpoint"
+      },
+      {
+        "method": "_apply_ui_profile",
+        "await": true,
+        "source_line": 738,
+        "body_sha256": "c0979fefe5584540926b8207a47e444d6b89cb562d6f44252de2040a72538db8",
+        "retained_method": "_original_source_device_lab_runtime__apply_ui_profile"
+      },
+      {
+        "method": "_rollback_ui_profile",
+        "await": true,
+        "source_line": 772,
+        "body_sha256": "c4dd61e5e73f5f6ed57cfd7920b02e76acc739c91d22baf266aed10169ab3f69",
+        "retained_method": "_original_source_device_lab_runtime__rollback_ui_profile"
+      }
+    ],
+    "read_fields": [
+      "equipment"
+    ]
+  },
+  "res://scripts/hud.gd": {
+    "script_sha256": "601e139f5e689556a854c77b974625e7b62d021463868c80e0d8bda9845f25c2",
+    "methods": [
+      {
+        "method": "_ready",
+        "await": false,
+        "source_line": 255,
+        "body_sha256": "def52fa9778a2f7ef36ecb3db9affece32636cdec3e7aaafc71ef9884f8cbe50",
+        "retained_method": "_original_source_hud__ready"
+      },
+      {
+        "method": "_process",
+        "await": false,
+        "source_line": 265,
+        "body_sha256": "1a5a31952bb606459b3cc220beb2bbeef0170c8b6dc1b57b3793159f4a51ae58",
+        "retained_method": "_original_source_hud__process"
+      },
+      {
+        "method": "_exit_tree",
+        "await": false,
+        "source_line": 276,
+        "body_sha256": "5d887f5774df76018eff5bf192f3f3884a1b8e36239b4bc2a442e7f397261b81",
+        "retained_method": "_original_source_hud__exit_tree"
+      },
+      {
+        "method": "_build_approved_hud",
+        "await": false,
+        "source_line": 348,
+        "body_sha256": "dda2b4ee5421e108a56995a72c78d7265759f8be5cd7a4d20ecfdc700eae9dfe",
+        "retained_method": "_original_source_hud__build_approved_hud"
+      },
+      {
+        "method": "_build_experience_bar",
+        "await": false,
+        "source_line": 905,
+        "body_sha256": "6e6883f9ddebd4d2e7a17026849970894eedfeff747ecfa3a1a5711c289e436c",
+        "retained_method": "_original_source_hud__build_experience_bar"
+      },
+      {
+        "method": "update_experience_bar",
+        "await": false,
+        "source_line": 1006,
+        "body_sha256": "68a36d1d93190442b0b4f8578fcfe9bed3cad04e8f02f3aa01b360773604d4d6",
+        "retained_method": "_original_source_hud_update_experience_bar"
+      },
+      {
+        "method": "update_item_quick_slots",
+        "await": false,
+        "source_line": 1164,
+        "body_sha256": "ad1976f342f036592f6eec77b90016d2c3e7f2a4d38cf0249955e8792121f9a6",
+        "retained_method": "_original_source_hud_update_item_quick_slots"
+      },
+      {
+        "method": "_input",
+        "await": false,
+        "source_line": 1215,
+        "body_sha256": "dd082b2bd8fd481c3e848ff59d9c4735c9b2bc4f9e9361959ad7215b7cc4febe",
+        "retained_method": "_original_source_hud__input"
+      },
+      {
+        "method": "_notification",
+        "await": false,
+        "source_line": 1243,
+        "body_sha256": "d83de49f65cbe0e2ebc68070ed9200533471974e0b81a242d98d5359eeb28649",
+        "retained_method": "_original_source_hud__notification"
+      },
+      {
+        "method": "_item_quick_slot_candidates",
+        "await": false,
+        "source_line": 1378,
+        "body_sha256": "8f935c5f059400174ccdbe6e50c68e92ae162548e96e58a1701be8a1dcb361aa",
+        "retained_method": "_original_source_hud__item_quick_slot_candidates"
+      },
+      {
+        "method": "prewarm_all_panels",
+        "await": true,
+        "source_line": 1982,
+        "body_sha256": "d7dee1f1939a9e438955e9ef95c14deabbc4d8456bb96704c5f840e6018d7ea6",
+        "retained_method": "_original_source_hud_prewarm_all_panels"
+      },
+      {
+        "method": "_run_panel_prewarm",
+        "await": true,
+        "source_line": 1997,
+        "body_sha256": "d246413a77b64575f962ef69b1595adbcb1ede036ce020e93a39b9e29ce40804",
+        "retained_method": "_original_source_hud__run_panel_prewarm"
+      },
+      {
+        "method": "_prefetch_panel_scripts",
+        "await": true,
+        "source_line": 2258,
+        "body_sha256": "599351114a8d24ba591718345f450ae01f797605763553b0ded45f06ac0ecb2e",
+        "retained_method": "_original_source_hud__prefetch_panel_scripts"
+      },
+      {
+        "method": "_wait_for_layout_profiles",
+        "await": true,
+        "source_line": 2394,
+        "body_sha256": "326111c0497b5ebfb796a70630fc2254f275764d7f12c7d5c7be2cb33848f126",
+        "retained_method": "_original_source_hud__wait_for_layout_profiles"
+      },
+      {
+        "method": "update_profile",
+        "await": false,
+        "source_line": 2800,
+        "body_sha256": "43ee84a40e3373339de7abd5ac5f23dff8819113ce82371c3f0a199dafc08b23",
+        "retained_method": "_original_source_hud_update_profile"
+      },
+      {
+        "method": "update_quest_tracker",
+        "await": false,
+        "source_line": 2818,
+        "body_sha256": "d896d7a4187abf890bab87fd73096879d80d4f4d5e65b991c44715e4758a386c",
+        "retained_method": "_original_source_hud_update_quest_tracker"
+      },
+      {
+        "method": "_skill_name_for_slot",
+        "await": false,
+        "source_line": 3116,
+        "body_sha256": "8bf198d80420cbc9893d774bafff6be8140220ff2480ac7e5a99e47335ff852f",
+        "retained_method": "_original_source_hud__skill_name_for_slot"
+      },
+      {
+        "method": "_active_skill_button_assignments",
+        "await": false,
+        "source_line": 3143,
+        "body_sha256": "8782ce7295f7a396ebeb06873e50a704ee897efa466cdca3d7fc956e23f7a337",
+        "retained_method": "_original_source_hud__active_skill_button_assignments"
+      },
+      {
+        "method": "update_warrior_states",
+        "await": false,
+        "source_line": 3189,
+        "body_sha256": "292eb4c8b4ffffd4f8da7a9f69bc19aff7fa8b0856abc147197ee17b0e699d5b",
+        "retained_method": "_original_source_hud_update_warrior_states"
+      },
+      {
+        "method": "_ui_l1_wait_for_background_slot",
+        "await": true,
+        "source_line": 3278,
+        "body_sha256": "b0c3aabbacf00eea2128e9ea1a845bb0ce3fe026e1fce1d2fd97588a84d92c81",
+        "retained_method": "_original_source_hud__ui_l1_wait_for_background_slot"
+      }
+    ],
+    "read_fields": [
+      "computed_stats",
+      "experience",
+      "gold",
+      "inventory",
+      "level",
+      "profession",
+      "profession_id",
+      "quest_states",
+      "quick_slots"
+    ]
+  },
+  "res://scripts/inventory_panel.gd": {
+    "script_sha256": "e21b58c80b29075c3a928deb333825e1fddf620b7c5ea4fe5e79bff9c8b53914",
+    "methods": [
+      {
+        "method": "_ready",
+        "await": false,
+        "source_line": 114,
+        "body_sha256": "307e346e8ba190e3b6f193b92a371ac716bcf46b9d0333e0ec8502a37bf19f1f",
+        "retained_method": "_original_source_inventory_panel__ready"
+      },
+      {
+        "method": "_build_equipment_panel",
+        "await": false,
+        "source_line": 263,
+        "body_sha256": "dee9cefb9a5f7818965a5cceacf770677f9bf5d53b87fbb7dbc7391917040603",
+        "retained_method": "_original_source_inventory_panel__build_equipment_panel"
+      },
+      {
+        "method": "_refresh_equipment_slots",
+        "await": false,
+        "source_line": 563,
+        "body_sha256": "22cb2206097ced9d68fe1ac1e3c6ac44dbc1774aed382ad4150e9ead18ebad62",
+        "retained_method": "_original_source_inventory_panel__refresh_equipment_slots"
+      },
+      {
+        "method": "_refresh_character_stats",
+        "await": false,
+        "source_line": 602,
+        "body_sha256": "2c6d60d3fca29fdbde0d73c84db4c8a3a530e10e7fed3f472c88493084cf0400",
+        "retained_method": "_original_source_inventory_panel__refresh_character_stats"
+      },
+      {
+        "method": "_character_attribute_explanation",
+        "await": false,
+        "source_line": 670,
+        "body_sha256": "ccfab9527a3406f4650ab0c479ac2a5b74537788a185fee9b04e377a4606206c",
+        "retained_method": "_original_source_inventory_panel__character_attribute_explanation"
+      },
+      {
+        "method": "_refresh_bag_grid",
+        "await": false,
+        "source_line": 676,
+        "body_sha256": "c6ed6b4c802372d9ccb66e37682e93953d9c05a4d9a210237f2b7cf93101a692",
+        "retained_method": "_original_source_inventory_panel__refresh_bag_grid"
+      },
+      {
+        "method": "_continue_bag_cell_initialization",
+        "await": true,
+        "source_line": 701,
+        "body_sha256": "0a3949e2412af90592c3301f677f8dc0c60c20b77beddcf85cf654bb972ba9ba",
+        "retained_method": "_original_source_inventory_panel__continue_bag_cell_initialization"
+      },
+      {
+        "method": "wait_until_runtime_ready",
+        "await": true,
+        "source_line": 716,
+        "body_sha256": "2b53b7cba85619602cc01af2e566864632e39a868bfab2c895c80e9206a8745f",
+        "retained_method": "_original_source_inventory_panel_wait_until_runtime_ready"
+      },
+      {
+        "method": "_inventory_record",
+        "await": false,
+        "source_line": 795,
+        "body_sha256": "9a224faacaac367df23794a1dff7fcc917a570e364dfb992bd9f3ffcbbd7be9b",
+        "retained_method": "_original_source_inventory_panel__inventory_record"
+      },
+      {
+        "method": "_find_inventory_index_for_ref",
+        "await": false,
+        "source_line": 832,
+        "body_sha256": "589dee2ee0b8020b2af461f4c292e1abd73674be56ecf5e799333c6f4dace61c",
+        "retained_method": "_original_source_inventory_panel__find_inventory_index_for_ref"
+      },
+      {
+        "method": "_reconcile_selection",
+        "await": false,
+        "source_line": 849,
+        "body_sha256": "3f2ac63df212f9cbc5abd5c5efafbd87aa3661915ac6d122872abaa3db7d5a45",
+        "retained_method": "_original_source_inventory_panel__reconcile_selection"
+      },
+      {
+        "method": "_select_equipment_slot",
+        "await": false,
+        "source_line": 1008,
+        "body_sha256": "57062d7cb4089116b1184a1d8435e53531b918a2d05032c192786a7863f91d46",
+        "retained_method": "_original_source_inventory_panel__select_equipment_slot"
+      },
+      {
+        "method": "_show_equipment_detail",
+        "await": false,
+        "source_line": 1088,
+        "body_sha256": "120123b0b86d5edbc2c706695c022bfb1fd5b008d298358642a7dd0229b163cf",
+        "retained_method": "_original_source_inventory_panel__show_equipment_detail"
+      },
+      {
+        "method": "_refresh_selected_equipment_detail",
+        "await": false,
+        "source_line": 1103,
+        "body_sha256": "0bcfab6ee79dd6419791fb5a3df23569113d4b0e9b2d3e986930b69448b8b206",
+        "retained_method": "_original_source_inventory_panel__refresh_selected_equipment_detail"
+      },
+      {
+        "method": "_unequip_to_inventory_slot",
+        "await": false,
+        "source_line": 1141,
+        "body_sha256": "5abcba738f8e2b922f65caf58ad2b90fd5714285a0ab764a3e54a8888a7856fb",
+        "retained_method": "_original_source_inventory_panel__unequip_to_inventory_slot"
+      },
+      {
+        "method": "_context_menu_allowed",
+        "await": false,
+        "source_line": 1290,
+        "body_sha256": "945079fff42189f3b2bd74815d94a60db4d3c7402291e3b155bc4b1760b79c37",
+        "retained_method": "_original_source_inventory_panel__context_menu_allowed"
+      },
+      {
+        "method": "_open_long_press_menu",
+        "await": false,
+        "source_line": 1309,
+        "body_sha256": "223b7acf2c5ed2d3fe3e8eca262f6c6dba21e6aaf3c92c430a535a93f71d62c6",
+        "retained_method": "_original_source_inventory_panel__open_long_press_menu"
+      },
+      {
+        "method": "_on_context_action",
+        "await": false,
+        "source_line": 1355,
+        "body_sha256": "56b205fe2bab6eff118a37074fdf11f15db530a9f4f8b03d7eab1ebf07ea49ee",
+        "retained_method": "_original_source_inventory_panel__on_context_action"
+      },
+      {
+        "method": "_activate_inventory_index",
+        "await": false,
+        "source_line": 1463,
+        "body_sha256": "1f1c71aa9c1cff0195268179f7055197483e34eadc5287ceeaa79f0b114894f3",
+        "retained_method": "_original_source_inventory_panel__activate_inventory_index"
+      },
+      {
+        "method": "_on_auto_sort_pressed",
+        "await": false,
+        "source_line": 1543,
+        "body_sha256": "02c8445e259a304c2b69a5200f47cc7e00737ac9a4ac104d510b74484bf313b3",
+        "retained_method": "_original_source_inventory_panel__on_auto_sort_pressed"
+      },
+      {
+        "method": "_on_discard_pressed",
+        "await": false,
+        "source_line": 1560,
+        "body_sha256": "467035da992915f9d2e434b0b440eac4443352b6362a3d486982aeeff420f33d",
+        "retained_method": "_original_source_inventory_panel__on_discard_pressed"
+      },
+      {
+        "method": "_unequip_selected",
+        "await": false,
+        "source_line": 1605,
+        "body_sha256": "a8b452df61d650ac8aec9f6e9023052184db534046ecdc716e1476604d8734bc",
+        "retained_method": "_original_source_inventory_panel__unequip_selected"
+      },
+      {
+        "method": "_slot_is_empty",
+        "await": false,
+        "source_line": 1706,
+        "body_sha256": "6dff11bc059c3a59f474d1ad931f8584e83b94d47c705f40e76686042bdc0261",
+        "retained_method": "_original_source_inventory_panel__slot_is_empty"
+      }
+    ],
+    "read_fields": [
+      "character_name",
+      "computed_stats",
+      "equipment",
+      "experience",
+      "gold",
+      "inventory",
+      "level",
+      "profession",
+      "test_mode"
+    ]
+  },
+  "res://scripts/enhancement_panel.gd": {
+    "script_sha256": "245505461567797da5772229a4ece137cee4292a9944203af5b4dd3d85f406d3",
+    "methods": [
+      {
+        "method": "_ready",
+        "await": false,
+        "source_line": 50,
+        "body_sha256": "8d13692cf3c545a21224d50689296359db9f9a2bc235155fc736fc7ef85e45e9",
+        "retained_method": "_original_source_enhancement_panel__ready"
+      },
+      {
+        "method": "_refresh_forge_information",
+        "await": false,
+        "source_line": 439,
+        "body_sha256": "fa117c6b267369a093f8df1572fd786a286fefd98663e95fc31235d8a9fdd348",
+        "retained_method": "_original_source_enhancement_panel__refresh_forge_information"
+      },
+      {
+        "method": "_on_forge_slot_pressed",
+        "await": true,
+        "source_line": 507,
+        "body_sha256": "6a99fca2ebc430952b0fe86055e3f9cc8d01cee928f64842a85a3ab0db226069",
+        "retained_method": "_original_source_enhancement_panel__on_forge_slot_pressed"
+      },
+      {
+        "method": "_can_receive_selected_item_to_index",
+        "await": false,
+        "source_line": 538,
+        "body_sha256": "9ee3d81f1c15604a00109bd9296aafeb2358b98f357de1c4c388d64f0fe42b20",
+        "retained_method": "_original_source_enhancement_panel__can_receive_selected_item_to_index"
+      },
+      {
+        "method": "_receive_selected_item_to_index",
+        "await": true,
+        "source_line": 546,
+        "body_sha256": "afa5054c5b04e0141ddac8563312ff111264fde995d4607b9b416c1dabbcf6fa",
+        "retained_method": "_original_source_enhancement_panel__receive_selected_item_to_index"
+      },
+      {
+        "method": "_take_selected_workbench_item",
+        "await": true,
+        "source_line": 551,
+        "body_sha256": "dc51eb4a40c9478755b64fce13ac61c2a0e7f8d74146869b624df8c7d0b44bf9",
+        "retained_method": "_original_source_enhancement_panel__take_selected_workbench_item"
+      },
+      {
+        "method": "_on_forge_pressed",
+        "await": true,
+        "source_line": 601,
+        "body_sha256": "863f461b023e1a7201fdc44fa5f44bf2e1d876a7b118832d92776fe15ed882e0",
+        "retained_method": "_original_source_enhancement_panel__on_forge_pressed"
+      },
+      {
+        "method": "_play_forge_animation",
+        "await": true,
+        "source_line": 639,
+        "body_sha256": "cc1bea93e90898655fa08a5b02dc1266bf5b2f38339fa34615d63741c714af49",
+        "retained_method": "_original_source_enhancement_panel__play_forge_animation"
+      },
+      {
+        "method": "_play_synthesis_animation",
+        "await": true,
+        "source_line": 664,
+        "body_sha256": "e5452ccad3b33eda7ba32afbb05903e054cfdf87abda7e728c79ab5e90cab458",
+        "retained_method": "_original_source_enhancement_panel__play_synthesis_animation"
+      }
+    ],
+    "read_fields": [
+      "forge_tray",
+      "gold",
+      "synthesis_tray"
+    ]
+  },
+  "res://scripts/item_detail_presenter.gd": {
+    "script_sha256": "7fd2d425954ca25c966ca956f0d856ea2e1f69af9baf4f723c0dcb6ef236a639",
+    "methods": [
+      {
+        "method": "_ready",
+        "await": false,
+        "source_line": 94,
+        "body_sha256": "90478996f66179d3615e7d0cbcbebfbb71e9bda1f38f74352db0b17edb88c84a",
+        "retained_method": "_original_source_item_detail_presenter__ready"
+      }
+    ],
+    "read_fields": [
+      "level"
+    ]
+  },
+  "res://scripts/quest_panel.gd": {
+    "script_sha256": "74ba7ac22565ae52576de9257a47ab4467c0df5901767676ebc9867635f2dca9",
+    "methods": [
+      {
+        "method": "_ready",
+        "await": false,
+        "source_line": 46,
+        "body_sha256": "30b4d192f16dbe19aab099fc31bb026dd467f141d0f44994ac8b36870e56d65c",
+        "retained_method": "_original_source_quest_panel__ready"
+      },
+      {
+        "method": "open_for",
+        "await": false,
+        "source_line": 253,
+        "body_sha256": "db92a7f0b4065216cc14a247b3b782401a0dd393152c77bd6c6060f2df8077dc",
+        "retained_method": "_original_source_quest_panel_open_for"
+      },
+      {
+        "method": "refresh",
+        "await": false,
+        "source_line": 262,
+        "body_sha256": "57c152dcbd79cf1d196894cb64628f2ad36487fb17adbadbfe0d9a4f78348afc",
+        "retained_method": "_original_source_quest_panel_refresh"
+      },
+      {
+        "method": "_refresh_selected_quest",
+        "await": false,
+        "source_line": 391,
+        "body_sha256": "2db3181e96165d3b9076b66f2094de39635396bf6c7fbc0c5c537a7326a32f7c",
+        "retained_method": "_original_source_quest_panel__refresh_selected_quest"
+      },
+      {
+        "method": "_quest_state_text",
+        "await": false,
+        "source_line": 457,
+        "body_sha256": "4acdf4d42df1002205d50d60a81656ebf57807ee393341d28dfb8b2fdf716fea",
+        "retained_method": "_original_source_quest_panel__quest_state_text"
+      },
+      {
+        "method": "_act",
+        "await": false,
+        "source_line": 469,
+        "body_sha256": "93453a3c3f55c0b2e58c00a21a5fe225a63b17c81c2499e5fd8850f9af7fbfb7",
+        "retained_method": "_original_source_quest_panel__act"
+      },
+      {
+        "method": "_request_abandon",
+        "await": false,
+        "source_line": 529,
+        "body_sha256": "6f6b586d74cdfc1477870fad38d3a0fc71f33d220410ee87f5730582ebb0d9bb",
+        "retained_method": "_original_source_quest_panel__request_abandon"
+      },
+      {
+        "method": "apply_abandon_result",
+        "await": false,
+        "source_line": 575,
+        "body_sha256": "4f83e164ff087399d7cd20a388f33b1eae3264489cad0ba4b078342071a3e50f",
+        "retained_method": "_original_source_quest_panel_apply_abandon_result"
+      }
+    ],
+    "read_fields": [
+      "quest_states"
+    ]
+  },
+  "res://scripts/shop_panel.gd": {
+    "script_sha256": "e9bd5d242380d1b401f16f05f064d7319f929f84fb4551246b040d5cb7d21dd6",
+    "methods": [
+      {
+        "method": "_ready",
+        "await": false,
+        "source_line": 92,
+        "body_sha256": "f2c5a6637dad81f855c65d7678e0b9cd4a034ba799f782e46e2ab2bc72e6aa9c",
+        "retained_method": "_original_source_shop_panel__ready"
+      },
+      {
+        "method": "_collect_occupied_inventory_indices",
+        "await": false,
+        "source_line": 484,
+        "body_sha256": "b7dc6cdb4a6858eff51de8af5db49edf6a911065c71002a7634aeacde483a622",
+        "retained_method": "_original_source_shop_panel__collect_occupied_inventory_indices"
+      },
+      {
+        "method": "_ensure_goods_card_capacity",
+        "await": false,
+        "source_line": 513,
+        "body_sha256": "89bf2314079abd5ec28238247759d637c8bfe66cb4785fe3274f05706b24d076",
+        "retained_method": "_original_source_shop_panel__ensure_goods_card_capacity"
+      },
+      {
+        "method": "_set_active_sell_card_count",
+        "await": false,
+        "source_line": 529,
+        "body_sha256": "9b0fdd75028c767f4742ab01269e854566d8cace543d2a54d1b6e4d0a8e92366",
+        "retained_method": "_original_source_shop_panel__set_active_sell_card_count"
+      },
+      {
+        "method": "_rebind_sell_structure",
+        "await": false,
+        "source_line": 586,
+        "body_sha256": "0664b52234294cd48837b6bb68ad7e4e6f19c1c271ab957e1f8b98cda98afdf3",
+        "retained_method": "_original_source_shop_panel__rebind_sell_structure"
+      },
+      {
+        "method": "_patch_sell_quotes_only",
+        "await": false,
+        "source_line": 612,
+        "body_sha256": "31aa3c46500b31248d8bc7e30c874b5400c0e812a21eea30b4eaa45ca51b500a",
+        "retained_method": "_original_source_shop_panel__patch_sell_quotes_only"
+      },
+      {
+        "method": "_clear_goods_cards",
+        "await": false,
+        "source_line": 623,
+        "body_sha256": "f4c6c1986c65d17fa8f49b0ff24e47e909018dcaccd4e76df8a74795f791bcd0",
+        "retained_method": "_original_source_shop_panel__clear_goods_cards"
+      },
+      {
+        "method": "_acquire_goods_cards",
+        "await": false,
+        "source_line": 632,
+        "body_sha256": "80db59e29cf4972557404571a5972eff4b070ea8f4ad226f40909c021200bacb",
+        "retained_method": "_original_source_shop_panel__acquire_goods_cards"
+      },
+      {
+        "method": "_build_card_contents",
+        "await": false,
+        "source_line": 654,
+        "body_sha256": "4780b8c008cd55ac075fbda1d95d2d12a7bac4afc50f0720ed66c2811553e22d",
+        "retained_method": "_original_source_shop_panel__build_card_contents"
+      },
+      {
+        "method": "_request_sell_quotes",
+        "await": false,
+        "source_line": 870,
+        "body_sha256": "1dad30310ecac8378de911e7da69d4f803af7be40b48b44f8d1be2f37709a744",
+        "retained_method": "_original_source_shop_panel__request_sell_quotes"
+      },
+      {
+        "method": "_apply_inventory_change",
+        "await": false,
+        "source_line": 1157,
+        "body_sha256": "5d16ab8702381dc4a5e37ae4e0c6bb3d558b0edde54f2a3e51b763b191bc6c9f",
+        "retained_method": "_original_source_shop_panel__apply_inventory_change"
+      },
+      {
+        "method": "_refresh_gold",
+        "await": false,
+        "source_line": 1217,
+        "body_sha256": "dc49c9aa3397247956e4f314bd4fcc1fa196a6328efcadb80d5109a2416054cd",
+        "retained_method": "_original_source_shop_panel__refresh_gold"
+      },
+      {
+        "method": "_refresh_repair_preview",
+        "await": false,
+        "source_line": 1222,
+        "body_sha256": "5787d161d819abb49feb8790b6138cb97e72a48e26d209949ccfe856ecee92c5",
+        "retained_method": "_original_source_shop_panel__refresh_repair_preview"
+      },
+      {
+        "method": "_repair_all",
+        "await": false,
+        "source_line": 1287,
+        "body_sha256": "6851687d9f0181ee2c4e15fe3dea77a5595973b4d1a242c32758579978a2f9d6",
+        "retained_method": "_original_source_shop_panel__repair_all"
+      },
+      {
+        "method": "_inventory_record",
+        "await": false,
+        "source_line": 1387,
+        "body_sha256": "9a224faacaac367df23794a1dff7fcc917a570e364dfb992bd9f3ffcbbd7be9b",
+        "retained_method": "_original_source_shop_panel__inventory_record"
+      }
+    ],
+    "read_fields": [
+      "equipment",
+      "gold",
+      "inventory",
+      "test_mode"
+    ]
+  },
+  "res://scripts/skill_panel.gd": {
+    "script_sha256": "def69ca98ec44ab892df45ffdb105ffe7f640ed1a60ca095c7d86a019bd92b7b",
+    "methods": [
+      {
+        "method": "_ready",
+        "await": false,
+        "source_line": 66,
+        "body_sha256": "2a40360cda261333cd63408099bdb0f0e5d99c5b16931f9c9ca659c7a3795a8d",
+        "retained_method": "_original_source_skill_panel__ready"
+      },
+      {
+        "method": "open_for",
+        "await": false,
+        "source_line": 430,
+        "body_sha256": "94ccf677157f48eb06a19e2898d3f1cca458babae52423f84e28e867a0672b90",
+        "retained_method": "_original_source_skill_panel_open_for"
+      },
+      {
+        "method": "refresh",
+        "await": false,
+        "source_line": 496,
+        "body_sha256": "c942f7e87a9fdc85e25af7066073e9212159f0422e7e11095cd781ea1e848890",
+        "retained_method": "_original_source_skill_panel_refresh"
+      },
+      {
+        "method": "_sync_equipment_granted_entries",
+        "await": false,
+        "source_line": 528,
+        "body_sha256": "b1c14ad515e07544ebbf44edf0de675f80a9e4b576092535223f114a8d05c1a2",
+        "retained_method": "_original_source_skill_panel__sync_equipment_granted_entries"
+      },
+      {
+        "method": "_rebuild_skill_cards",
+        "await": false,
+        "source_line": 605,
+        "body_sha256": "bfde389fa1433f141cf2c0c671468de1c631df2e52c4d82aa9b36711f8505948",
+        "retained_method": "_original_source_skill_panel__rebuild_skill_cards"
+      },
+      {
+        "method": "_show_skill_detail",
+        "await": false,
+        "source_line": 681,
+        "body_sha256": "8c44dafe6ff5ae527461ad78accfb867cb52b99733284b4420f0559c9213df8b",
+        "retained_method": "_original_source_skill_panel__show_skill_detail"
+      },
+      {
+        "method": "_player_mechanics_description",
+        "await": false,
+        "source_line": 723,
+        "body_sha256": "72d8633d1304541eb2c7f12cc8304d58dbb58bf264da651463816e8ffe089e5f",
+        "retained_method": "_original_source_skill_panel__player_mechanics_description"
+      },
+      {
+        "method": "_assignment_skill_name",
+        "await": false,
+        "source_line": 756,
+        "body_sha256": "b434b1510aaf3780166782742f4e96e18896415f1ddcad2063f191744640b78c",
+        "retained_method": "_original_source_skill_panel__assignment_skill_name"
+      },
+      {
+        "method": "_open_assignment_popup_for",
+        "await": false,
+        "source_line": 863,
+        "body_sha256": "5a35cff46b800cd3412df8691757ab11b59ea1f22de93bd7d5d801a29c4fa292",
+        "retained_method": "_original_source_skill_panel__open_assignment_popup_for"
+      },
+      {
+        "method": "_assign_selected_to_target",
+        "await": false,
+        "source_line": 886,
+        "body_sha256": "de3b485162a42fa66cc970c7cf602dc446f516ec85f1e1022ab340f295ac8a3f",
+        "retained_method": "_original_source_skill_panel__assign_selected_to_target"
+      },
+      {
+        "method": "_request_clear_target",
+        "await": false,
+        "source_line": 924,
+        "body_sha256": "54f1db8ad32939397ad297f843ceccc5780e245edabc9d89fcf0b9c12ad95fc3",
+        "retained_method": "_original_source_skill_panel__request_clear_target"
+      }
+    ],
+    "read_fields": [
+      "computed_stats",
+      "learned_skills",
+      "level",
+      "profession",
+      "profession_id",
+      "quick_slots"
+    ]
+  },
+  "res://scripts/warehouse_panel.gd": {
+    "script_sha256": "c09946c548b2d7a287e2289e95fdd46883ea6e7a07aaf7b625ed36eec63e260f",
+    "methods": [
+      {
+        "method": "_ready",
+        "await": false,
+        "source_line": 102,
+        "body_sha256": "775274e98b5a957580ce7df52b8e2b2ae8f69ddf2861b34e7abfbe9e9ec77970",
+        "retained_method": "_original_source_warehouse_panel__ready"
+      },
+      {
+        "method": "refresh",
+        "await": false,
+        "source_line": 405,
+        "body_sha256": "061dbe89384697a14e0205bbe28c1df9b4054f779ad7b2fdda190f3864d51ca1",
+        "retained_method": "_original_source_warehouse_panel_refresh"
+      },
+      {
+        "method": "_continue_grid_cell_initialization",
+        "await": true,
+        "source_line": 514,
+        "body_sha256": "2114f2fa544f87d922b8ce26678b98323cf23f95ebd86b23723acd0aed8c15bb",
+        "retained_method": "_original_source_warehouse_panel__continue_grid_cell_initialization"
+      },
+      {
+        "method": "wait_until_runtime_ready",
+        "await": true,
+        "source_line": 552,
+        "body_sha256": "24038904579256ed8e70bb03f2287c0bf4609daadae7c720ce3f8062cc9e0bfd",
+        "retained_method": "_original_source_warehouse_panel_wait_until_runtime_ready"
+      },
+      {
+        "method": "_bank_transfer_amount",
+        "await": false,
+        "source_line": 747,
+        "body_sha256": "45b1a7f78d375cda7712bcc964a50c7bcf0edd13fb62f346cb83c5d50c5b4ed5",
+        "retained_method": "_original_source_warehouse_panel__bank_transfer_amount"
+      },
+      {
+        "method": "_bank_boundary_message",
+        "await": false,
+        "source_line": 751,
+        "body_sha256": "a66b21e9eb8878146327e5f687d7ef3ef647ac7c97ebc569c3aa42b422e4c3f4",
+        "retained_method": "_original_source_warehouse_panel__bank_boundary_message"
+      },
+      {
+        "method": "_refresh_bank_state",
+        "await": false,
+        "source_line": 766,
+        "body_sha256": "fcf4a79b069173a64c846b238cf1c7671da8ce4054d7c88ccda3f1b1b7c7ccd9",
+        "retained_method": "_original_source_warehouse_panel__refresh_bank_state"
+      },
+      {
+        "method": "_on_bank_transfer_pressed",
+        "await": false,
+        "source_line": 827,
+        "body_sha256": "57d7bd09200c84d114e8db5cae6c04c907858403d8dc23b9147b3e8790c49bbe",
+        "retained_method": "_original_source_warehouse_panel__on_bank_transfer_pressed"
+      },
+      {
+        "method": "_submit_bank_transfer",
+        "await": true,
+        "source_line": 848,
+        "body_sha256": "b14ee014e35bf78f90968e069637cbadf2aecaccb4b488719ac761093cddeebe",
+        "retained_method": "_original_source_warehouse_panel__submit_bank_transfer"
+      },
+      {
+        "method": "_deposit",
+        "await": true,
+        "source_line": 960,
+        "body_sha256": "df4c5fd1e479441a0fcacc2d7da9bd1dda9e685c2a031495ed52e9d803955b34",
+        "retained_method": "_original_source_warehouse_panel__deposit"
+      },
+      {
+        "method": "_withdraw",
+        "await": true,
+        "source_line": 1003,
+        "body_sha256": "a87c5f9d0213e841ee352b6f2d2a823130388c453e76e0aab079a7c756ce918d",
+        "retained_method": "_original_source_warehouse_panel__withdraw"
+      },
+      {
+        "method": "_selected_transfer_refs_after_deposit",
+        "await": false,
+        "source_line": 1081,
+        "body_sha256": "886017fdec63051c19091994565fc0a3ae2bd56865f7b051eaa362aeda8cbf70",
+        "retained_method": "_original_source_warehouse_panel__selected_transfer_refs_after_deposit"
+      },
+      {
+        "method": "_selected_transfer_refs_after_withdraw",
+        "await": false,
+        "source_line": 1110,
+        "body_sha256": "dac651c6beccc0d1c82be2327ceb598d26235617c9c18976a3f07a9180bbea2f",
+        "retained_method": "_original_source_warehouse_panel__selected_transfer_refs_after_withdraw"
+      },
+      {
+        "method": "_warehouse_record",
+        "await": false,
+        "source_line": 1221,
+        "body_sha256": "5a91affc94cace2bc444473739ea6bbc157996b1b97bc29d4bae6d47b1d8947f",
+        "retained_method": "_original_source_warehouse_panel__warehouse_record"
+      },
+      {
+        "method": "_bag_record",
+        "await": false,
+        "source_line": 1228,
+        "body_sha256": "a17add6cb5580d6135ff692489f34c25f4039d27c3a30d4fe4b796510e597608",
+        "retained_method": "_original_source_warehouse_panel__bag_record"
+      },
+      {
+        "method": "_find_ref_index",
+        "await": false,
+        "source_line": 1255,
+        "body_sha256": "e4243dfbbfa6da4782079a3bf5b464f04dd7652d0d63bb219cf16f90a461ace0",
+        "retained_method": "_original_source_warehouse_panel__find_ref_index"
+      },
+      {
+        "method": "_warehouse_slot_has_item",
+        "await": false,
+        "source_line": 1315,
+        "body_sha256": "743a3297221ff3d1a70b64a73a2c04b770945803f357d8efce0079223e308fda",
+        "retained_method": "_original_source_warehouse_panel__warehouse_slot_has_item"
+      },
+      {
+        "method": "_warehouse_occupied_count",
+        "await": false,
+        "source_line": 1324,
+        "body_sha256": "5c6c938e247cbc72549555d7df91d1386903f39c0d8c1d19fd60a325bc0f9799",
+        "retained_method": "_original_source_warehouse_panel__warehouse_occupied_count"
+      },
+      {
+        "method": "_ensure_warehouse_slot",
+        "await": false,
+        "source_line": 1349,
+        "body_sha256": "6de584fd46d93abf4d64ed12da9690dc53a7e9de950bce440141a92ed7b4d478",
+        "retained_method": "_original_source_warehouse_panel__ensure_warehouse_slot"
+      },
+      {
+        "method": "_trim_empty_warehouse_tail",
+        "await": false,
+        "source_line": 1354,
+        "body_sha256": "db1887c1c87592abf48b7e6ba3d5300ee5448043a2b4bcba031c9e8f224b38fb",
+        "retained_method": "_original_source_warehouse_panel__trim_empty_warehouse_tail"
+      }
+    ],
+    "read_fields": [
+      "active_profile_id",
+      "gold",
+      "inventory",
+      "warehouse_inventory"
+    ]
+  },
+  "res://scripts/layers/runtime/execution/paused_receipt_pump.gd": {
+    "script_sha256": "22feeec62c10c947b96f6a905b691a8a4510ce2ec9fdc9221607910df371711f",
+    "methods": [
+      {
+        "method": "_process",
+        "await": false,
+        "source_line": 11,
+        "body_sha256": "096e31a9337e4617ba8bcc3bba17b61d24bb585fb839246641faa2ce706acbe8",
+        "retained_method": "_original_source_paused_receipt_pump__process"
+      }
+    ],
+    "read_fields": [],
+    "receiver_kind": "actual_paused_Profile_receipt_child"
+  }
+}

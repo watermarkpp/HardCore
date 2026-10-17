@@ -1,34 +1,73 @@
 extends RefCounted
 
-## Ordered coordinator: all methods execute on main; workers own detached jobs.
+## Ordered coordinator: one explicit domain owner; I/O workers own detached jobs.
 ## Domain callbacks stay here and are never given to a worker object.
 const Job := preload("res://scripts/json_persistence_job.gd")
-const FrameBudget := preload("res://scripts/layers/runtime/execution/frame_budget.gd")
+const LegacyBudget := preload("res://scripts/gameplay/profile/legacy_persistence_budget.gd")
 const MAX_PENDING_REQUESTS := 64
 var _queue: Array[Dictionary] = []
 var _pump_active := false
 var _budget_category := "persistence:%d" % get_instance_id()
-var _process_owner := WeakRef.new()
+var _owner_thread_id := OS.get_thread_caller_id()
+var _owner_kind := "legacy_main" if _owner_thread_id == OS.get_main_thread_id() else "unconfigured"
+var _budget: RefCounted = LegacyBudget.new() if _owner_thread_id == OS.get_main_thread_id() else null
 var completed_count := 0
 var maximum_completion_latency_usec := 0
 
 func work_snapshot() -> Dictionary:
+	if not assert_owner():
+		return {}
 	var oldest_age_usec := 0
 	if not _queue.is_empty():
 		oldest_age_usec = maxi(0, Time.get_ticks_usec() - int(_queue[0].get("queued_at_usec", Time.get_ticks_usec())))
 	return {"pending": _queue.size(), "completed": completed_count,
 		"oldest_age_usec": oldest_age_usec, "maximum_completion_latency_usec": maximum_completion_latency_usec}
 
-func configure_process_owner(owner: Node) -> void:
-	_process_owner = weakref(owner)
+func configure_owner(kind: String, budget: RefCounted = null) -> bool:
+	if OS.get_thread_caller_id() != _owner_thread_id:
+		return false
+	if not _queue.is_empty() or _pump_active or kind not in ["legacy_main", "simulation"]:
+		return false
+	if kind == "legacy_main" and _owner_thread_id != OS.get_main_thread_id():
+		return false
+	if kind == "simulation" and budget is LegacyBudget:
+		return false
+	if _budget != null:
+		_budget.release(_budget_category)
+	_owner_kind = kind
+	_budget = budget if kind == "simulation" else (budget if budget != null else LegacyBudget.new())
+	return true
+
+
+func assert_owner() -> bool:
+	# A helper assertion does not stop its caller, even in debug builds.
+	# Every executing entry branches on this result before touching the queue.
+	return _owner_kind in ["legacy_main", "simulation"] and OS.get_thread_caller_id() == _owner_thread_id
+
+
+func owner_context() -> Dictionary:
+	if not assert_owner():
+		return {}
+	return {"kind": _owner_kind, "thread_id": _owner_thread_id}
+
+
+func configure_process_owner(owner: Node) -> bool:
+	if not assert_owner() or _owner_kind != "legacy_main" or _budget == null:
+		return false
+	_budget.configure(owner)
+	return true
 
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:
-		FrameBudget.mark_pending(_budget_category, false)
+		# RefCounted is already deleting here; avoid calling a method on self.
+		if _budget != null and _owner_kind in ["legacy_main", "simulation"] and OS.get_thread_caller_id() == _owner_thread_id:
+			_budget.release(_budget_category)
 
 
 func _refresh_budget_owner() -> bool:
+	if not assert_owner():
+		return false
 	var runnable := not _queue.is_empty()
 	if runnable:
 		var entry: Dictionary = _queue[0]
@@ -37,12 +76,14 @@ func _refresh_budget_owner() -> bool:
 			runnable = bool(entry.allow_promotion) or entry.job.cancellation_requested()
 		elif phase not in ["NEW", "NEW_UPDATE", "NEW_CLEANUP"]:
 			runnable = entry.job.is_stage_complete()
-	FrameBudget.mark_pending(_budget_category, not _queue.is_empty(), runnable, true, _process_owner.get_ref() as Node)
+	if _budget != null:
+		_budget.mark_pending(_budget_category, not _queue.is_empty(), runnable)
 	return runnable
 
 
 func submit(target: String, identity: Dictionary, snapshot: Dictionary, validator: Callable, guard := Callable(), create_only := false, known_previous_bytes: Variant = null, on_complete := Callable(), prepare_only := false, prepared_bytes: Variant = null, temporary := "", require_known_previous := false, document_update := Callable()) -> RefCounted:
-	assert(OS.get_thread_caller_id() == OS.get_main_thread_id(), "domain coordinator is main-thread owned")
+	if not assert_owner():
+		return null
 	if _queue.size() >= MAX_PENDING_REQUESTS or not _plain_json_value(snapshot) or not _plain_json_value(identity):
 		return null
 	var job := Job.new()
@@ -71,10 +112,14 @@ func submit(target: String, identity: Dictionary, snapshot: Dictionary, validato
 
 
 func pending_count() -> int:
+	if not assert_owner():
+		return -1
 	return _queue.size()
 
 
 func has_pending_domain(domain: String) -> bool:
+	if not assert_owner():
+		return false
 	for entry: Dictionary in _queue:
 		if str(entry.identity.get("domain", "")) == domain:
 			return true
@@ -82,6 +127,8 @@ func has_pending_domain(domain: String) -> bool:
 
 
 func cancel_uncommitted_domain(domain: String) -> void:
+	if not assert_owner():
+		return
 	for entry: Dictionary in _queue:
 		if str(entry.identity.get("domain", "")) == domain:
 			# Once promotion started the job refuses cancellation. Its receipt
@@ -90,7 +137,8 @@ func cancel_uncommitted_domain(domain: String) -> void:
 
 
 func submit_cleanup(directory: String, identity: Dictionary, through_sequence: int) -> RefCounted:
-	assert(OS.get_thread_caller_id() == OS.get_main_thread_id())
+	if not assert_owner():
+		return null
 	if _queue.size() >= MAX_PENDING_REQUESTS or through_sequence <= 0 or not _plain_json_value(identity):
 		return null
 	var job := Job.new()
@@ -102,7 +150,8 @@ func submit_cleanup(directory: String, identity: Dictionary, through_sequence: i
 
 
 func pump(wait := false) -> bool:
-	assert(OS.get_thread_caller_id() == OS.get_main_thread_id(), "domain approval and completion stay on main")
+	if not assert_owner():
+		return false
 	if _pump_active:
 		return false
 	var runnable := _refresh_budget_owner()
@@ -111,19 +160,21 @@ func pump(wait := false) -> bool:
 	var necessary := wait
 	if runnable and str(_queue[0].phase) in ["PROMOTING", "DISPOSING", "PRUNING"]:
 		necessary = true # Accepted durable completion/cleanup cannot be discarded.
-	var token := FrameBudget.begin(_budget_category, necessary)
+	var token := int(_budget.begin(_budget_category, necessary)) if _budget != null else 1
 	if token == 0:
 		return false
 	_pump_active = true
 	var progressed := _pump_once(wait)
 	_pump_active = false
-	FrameBudget.end(token)
+	if _budget != null:
+		_budget.end(token)
 	_refresh_budget_owner()
 	return progressed
 
 
 func _pump_once(wait: bool) -> bool:
-	assert(OS.get_thread_caller_id() == OS.get_main_thread_id(), "domain approval and completion stay on main")
+	if not assert_owner():
+		return false
 	if _queue.is_empty():
 		return false
 	var entry: Dictionary = _queue[0]
@@ -249,6 +300,8 @@ func _pump_once(wait: bool) -> bool:
 
 
 func finish(job: RefCounted, wait := false) -> Dictionary:
+	if not assert_owner():
+		return {"finished": false, "success": false, "reason": "persistence_owner_mismatch"}
 	if wait and _pump_active:
 		return {"finished": false, "success": false, "reason": "writer_reentrant_barrier"}
 	authorize(job)
@@ -264,6 +317,8 @@ func finish(job: RefCounted, wait := false) -> Dictionary:
 
 
 func drain() -> bool:
+	if not assert_owner():
+		return false
 	if _pump_active:
 		return false
 	while not _queue.is_empty():
@@ -274,6 +329,8 @@ func drain() -> bool:
 
 
 func authorize(job: RefCounted) -> void:
+	if not assert_owner():
+		return
 	for entry: Dictionary in _queue:
 		if entry.job == job:
 			if entry.has("allow_promotion"):
@@ -282,6 +339,8 @@ func authorize(job: RefCounted) -> void:
 
 
 func finish_preparation(job: RefCounted, wait := false) -> Dictionary:
+	if not assert_owner():
+		return {"finished": false, "success": false, "reason": "persistence_owner_mismatch"}
 	if wait and _pump_active:
 		return {"finished": false, "success": false, "reason": "writer_reentrant_barrier"}
 	if wait:
@@ -294,21 +353,29 @@ func finish_preparation(job: RefCounted, wait := false) -> Dictionary:
 
 
 func cancel(job: RefCounted) -> bool:
+	if not assert_owner():
+		return false
 	return job.request_cancel()
 
 
 func _guard_allows(entry: Dictionary) -> bool:
+	if not assert_owner():
+		return false
 	var guard: Callable = entry.guard
 	return not guard.is_valid() or bool(guard.call(entry.identity))
 
 
 func _fail(entry: Dictionary, result: Dictionary) -> void:
+	if not assert_owner():
+		return
 	entry.failure = result.duplicate(false)
 	entry.job.run_stage("DISCARD")
 	entry.phase = "DISPOSING"
 
 
 func _complete(entry: Dictionary, result: Dictionary) -> void:
+	if not assert_owner():
+		return
 	assert(entry == _queue[0])
 	var owned_document := bool(result.get("success", false)) and result.has("document")
 	if owned_document:
@@ -324,7 +391,7 @@ func _complete(entry: Dictionary, result: Dictionary) -> void:
 	if not bool(entry.job.preparation.get("finished", false)):
 		entry.job.preparation = response
 	_queue.pop_front()
-	# The owner consumes the receipt on main before the next queue item is
+	# The owner consumes the receipt on its domain thread before the next queue item is
 	# pumped. It must commit all fields before emitting potentially reentrant
 	# signals. No completion callable is stored in a worker object.
 	var on_complete: Callable = entry.on_complete
@@ -336,6 +403,8 @@ func _complete(entry: Dictionary, result: Dictionary) -> void:
 
 
 func _validate(validator: Callable, document: Dictionary) -> Dictionary:
+	if not assert_owner():
+		return {"valid": false, "terminal": true, "reason": "persistence_owner_mismatch"}
 	if not validator.is_valid():
 		return {"valid": true, "terminal": false}
 	var result: Variant = validator.call(document.duplicate(true))

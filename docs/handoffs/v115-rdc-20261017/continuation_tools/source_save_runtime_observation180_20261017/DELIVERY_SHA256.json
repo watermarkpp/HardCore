@@ -1,0 +1,100 @@
+{
+  "scope": "frozen tool revision before actual World proof; no snapshots/stages",
+  "files": [
+    {
+      "path": "CANDIDATE_BINDING.json",
+      "bytes": 5848,
+      "sha256": "632fd320c0c9bb48d39e3ddcabccc473cead94fa2ee4f6d6d8e96b28d4137e09"
+    },
+    {
+      "path": "CURRENT_TOOL_BINDING_REVIEW.json",
+      "bytes": 932,
+      "sha256": "0f44f7dfdaa61c13790b89257767c879e7a0f84fc47e5029e5ec9b656e78a4b0"
+    },
+    {
+      "path": "finalize_bundle.py",
+      "bytes": 4280,
+      "sha256": "13e3e0b44df4a64dce0ceab422bc016e9eb4c0542c631b35ac1797503f4dcb65"
+    },
+    {
+      "path": "isolated_git.py",
+      "bytes": 4644,
+      "sha256": "c4f0d8ef265e70dda176e6fb60015e6938ca6ba9660cdc757251a9df7846bbcb"
+    },
+    {
+      "path": "PENDING_BINDING.json",
+      "bytes": 2230,
+      "sha256": "e3f92657236442835372cb2534dfe07a11c44062476316365a571dd173dae2d7"
+    },
+    {
+      "path": "PREPARATION_GUARD_REVIEW.json",
+      "bytes": 1623,
+      "sha256": "5097ae0b1d10ea12ffd3435b148c833423892dcbd3b06563fd12fd6932c243bc"
+    },
+    {
+      "path": "prepare_bundle.py",
+      "bytes": 3446,
+      "sha256": "4216361ccc9427e48fdc024341cef57234e66a722b51face46d3cd2181cec0c9"
+    },
+    {
+      "path": "prepare_snapshot.help.log",
+      "bytes": 393,
+      "sha256": "86cad02e1aeb57d5cc3173193b8675a39751c73ffde6eb91b492b75598fa5fa4"
+    },
+    {
+      "path": "prepare_snapshot.py",
+      "bytes": 4182,
+      "sha256": "3230ddd813e4332ac9c8427ceb69b4b492b76f5e108615fd5a5217f57cbba835"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2794,
+      "sha256": "08e9542361ff240f7e9f0d3a4bbde9fe9e6edb006c3f65f9059d49b263bbc655"
+    },
+    {
+      "path": "run_stage.help.log",
+      "bytes": 1224,
+      "sha256": "9ce39026ae0393ac3d1f6cbea8fe71eb06d92a118a7438b36f50b746ac4a4c92"
+    },
+    {
+      "path": "run_stage.py",
+      "bytes": 14267,
+      "sha256": "6046aeed7b3fd4ec7c4c150a1779353309d52780e7ae113d058c45cf4041b594"
+    },
+    {
+      "path": "runner_bridge.ps1",
+      "bytes": 4320,
+      "sha256": "5f61a869b475ff47aca9ca6015db9634c7e273d5205c1896c405ddf4e46ba62b"
+    },
+    {
+      "path": "SIX_STAGE_COMMANDS.md",
+      "bytes": 7323,
+      "sha256": "01f1717cb51d733f1f54c25600fe97a108554e9f87d94815b4e2a1d8b470da17"
+    },
+    {
+      "path": "SIX_STAGE_COMMANDS.pending.md",
+      "bytes": 7270,
+      "sha256": "8ea691d2a62c9100730fc8d273a64992711f659510a48e510e1bc845737b5641"
+    },
+    {
+      "path": "SOURCE_SAVE_FIXTURE_BINDING.json",
+      "bytes": 1190,
+      "sha256": "cf7eaa1b107bf895f7ba4c1f685726694b4a64235e8fc8e2a60ef9921728b8b1"
+    },
+    {
+      "path": "STAGE_BUDGET_GATE.json",
+      "bytes": 356,
+      "sha256": "37b9cc447b3c33c16997cddc800cdb4beef57b4c061653a2ddccb3b38fd21d7c"
+    },
+    {
+      "path": "UPSTREAM_REVIEWED_BINDING.json",
+      "bytes": 3574,
+      "sha256": "1d07002eec568509cc13e9aed788a5947c609d3a4cb3a38dcab3c58889b44482"
+    },
+    {
+      "path": "UPSTREAM_TIMEOUT_SCOPE_GUARD_RESULT.json",
+      "bytes": 4547,
+      "sha256": "bfbf9866f6ecaa29aef3c592e524d833ae9ffbdc8dedd2c7b2db36e3473aa4c7"
+    }
+  ]
+}

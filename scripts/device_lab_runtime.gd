@@ -156,6 +156,10 @@ var _debug_gate_override := -1
 var _mailbox_initialized := false
 
 
+# Main callback depth only. No new gameplay/IO owner or timer.
+var _original_main_callback_ledger: Dictionary = {}
+
+
 func configure(game_root: Node) -> DeviceLabRuntime:
 	_game_root = game_root
 	return self
@@ -178,6 +182,14 @@ func _debug_enabled() -> bool:
 func _ready() -> void:
 	# A release APK has no active mailbox even if a stale user:// directory is
 	# present. OS.is_debug_build() is the only activation gate in this service.
+	_original_main_callback_ledger["_ready"] = int(_original_main_callback_ledger.get("_ready",0)) + 1
+	_original_source_device_lab_runtime__ready()
+	_original_main_callback_ledger["_ready"] -= 1
+
+
+func _original_source_device_lab_runtime__ready() -> void:
+	# A release APK has no active mailbox even if a stale user:// directory is
+	# present. OS.is_debug_build() is the only activation gate in this service.
 	if not _debug_enabled():
 		set_process(false)
 		return
@@ -190,6 +202,12 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	_original_main_callback_ledger["_process"] = int(_original_main_callback_ledger.get("_process",0)) + 1
+	_original_source_device_lab_runtime__process(delta)
+	_original_main_callback_ledger["_process"] -= 1
+
+
+func _original_source_device_lab_runtime__process(delta: float) -> void:
 	if not _debug_enabled():
 		return
 	# DeviceLab is the sole per-frame sampling owner. RuntimeDiagnostics still
@@ -211,6 +229,14 @@ func _process(delta: float) -> void:
 
 
 func _notification(what: int) -> void:
+	# perf-smoothness-r1 Phase A: an app pause is a measurement boundary for
+	# the Device Lab wall-clock frame sampler as well.
+	_original_main_callback_ledger["_notification"] = int(_original_main_callback_ledger.get("_notification",0)) + 1
+	_original_source_device_lab_runtime__notification(what)
+	_original_main_callback_ledger["_notification"] -= 1
+
+
+func _original_source_device_lab_runtime__notification(what: int) -> void:
 	# perf-smoothness-r1 Phase A: an app pause is a measurement boundary for
 	# the Device Lab wall-clock frame sampler as well.
 	if what in [NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_RESUMED,
@@ -293,6 +319,12 @@ func _retire_interrupted_processing_claim() -> void:
 
 
 func _process_command_bytes(bytes: PackedByteArray) -> void:
+	_original_main_callback_ledger["_process_command_bytes"] = int(_original_main_callback_ledger.get("_process_command_bytes",0)) + 1
+	await _original_source_device_lab_runtime__process_command_bytes(bytes)
+	_original_main_callback_ledger["_process_command_bytes"] -= 1
+
+
+func _original_source_device_lab_runtime__process_command_bytes(bytes: PackedByteArray) -> void:
 	_busy = true
 	var command := _parse_command(bytes)
 	var nonce := str(command.get("nonce", ""))
@@ -485,6 +517,13 @@ static func _is_hex(value: String) -> bool:
 
 
 func _execute(command: Dictionary) -> Dictionary:
+	_original_main_callback_ledger["_execute"] = int(_original_main_callback_ledger.get("_execute",0)) + 1
+	var original_result: Variant = await _original_source_device_lab_runtime__execute(command)
+	_original_main_callback_ledger["_execute"] -= 1
+	return original_result
+
+
+func _original_source_device_lab_runtime__execute(command: Dictionary) -> Dictionary:
 	var action := str(command.get("action", ""))
 	match action:
 		"status":
@@ -569,6 +608,13 @@ func status_snapshot() -> Dictionary:
 
 
 func _repair_diagnostics() -> Dictionary:
+	_original_main_callback_ledger["_repair_diagnostics"] = int(_original_main_callback_ledger.get("_repair_diagnostics",0)) + 1
+	var original_result: Variant = _original_source_device_lab_runtime__repair_diagnostics()
+	_original_main_callback_ledger["_repair_diagnostics"] -= 1
+	return original_result
+
+
+func _original_source_device_lab_runtime__repair_diagnostics() -> Dictionary:
 	var context: Dictionary = GameData.merchant_context("starter_gear")
 	var plan: Dictionary = PlayerState._repair_plan(context)
 	var quoted_by_slot := {}
@@ -612,6 +658,13 @@ func _repair_diagnostics() -> Dictionary:
 
 
 func _export_player_state() -> Dictionary:
+	_original_main_callback_ledger["_export_player_state"] = int(_original_main_callback_ledger.get("_export_player_state",0)) + 1
+	var original_result: Variant = _original_source_device_lab_runtime__export_player_state()
+	_original_main_callback_ledger["_export_player_state"] -= 1
+	return original_result
+
+
+func _original_source_device_lab_runtime__export_player_state() -> Dictionary:
 	var document: Dictionary = PlayerState.device_lab_active_save_document()
 	if document.is_empty():
 		return _error_result({"error": "active_save_unavailable"})
@@ -624,12 +677,26 @@ func _export_player_state() -> Dictionary:
 
 
 func _ensure_chiyue_test_roster() -> Dictionary:
+	_original_main_callback_ledger["_ensure_chiyue_test_roster"] = int(_original_main_callback_ledger.get("_ensure_chiyue_test_roster",0)) + 1
+	var original_result: Variant = _original_source_device_lab_runtime__ensure_chiyue_test_roster()
+	_original_main_callback_ledger["_ensure_chiyue_test_roster"] -= 1
+	return original_result
+
+
+func _original_source_device_lab_runtime__ensure_chiyue_test_roster() -> Dictionary:
 	var result: Dictionary = PlayerState.ensure_chiyue_test_roster()
 	result["action"] = "ensure_chiyue_test_roster"
 	return result
 
 
 func _apply_player_state(command: Dictionary) -> Dictionary:
+	_original_main_callback_ledger["_apply_player_state"] = int(_original_main_callback_ledger.get("_apply_player_state",0)) + 1
+	var original_result: Variant = _original_source_device_lab_runtime__apply_player_state(command)
+	_original_main_callback_ledger["_apply_player_state"] -= 1
+	return original_result
+
+
+func _original_source_device_lab_runtime__apply_player_state(command: Dictionary) -> Dictionary:
 	var loaded := _load_json_payload(command)
 	if not bool(loaded.get("ok", false)):
 		return _error_result(loaded)
@@ -646,6 +713,13 @@ func _apply_player_state(command: Dictionary) -> Dictionary:
 
 
 func _rollback_player_state(command: Dictionary) -> Dictionary:
+	_original_main_callback_ledger["_rollback_player_state"] = int(_original_main_callback_ledger.get("_rollback_player_state",0)) + 1
+	var original_result: Variant = _original_source_device_lab_runtime__rollback_player_state(command)
+	_original_main_callback_ledger["_rollback_player_state"] -= 1
+	return original_result
+
+
+func _original_source_device_lab_runtime__rollback_player_state(command: Dictionary) -> Dictionary:
 	var checkpoint := str(command.get("checkpoint", ""))
 	var path := CHECKPOINT_DIR + "/%s.json" % checkpoint
 	if not FileAccess.file_exists(path):
@@ -680,6 +754,13 @@ func _load_json_payload(command: Dictionary) -> Dictionary:
 
 
 func _create_player_checkpoint(label: String) -> String:
+	_original_main_callback_ledger["_create_player_checkpoint"] = int(_original_main_callback_ledger.get("_create_player_checkpoint",0)) + 1
+	var original_result: Variant = _original_source_device_lab_runtime__create_player_checkpoint(label)
+	_original_main_callback_ledger["_create_player_checkpoint"] -= 1
+	return original_result
+
+
+func _original_source_device_lab_runtime__create_player_checkpoint(label: String) -> String:
 	var document: Dictionary = PlayerState.device_lab_active_save_document()
 	if document.is_empty():
 		return ""
@@ -736,6 +817,13 @@ func _prune_checkpoints() -> void:
 
 
 func _apply_ui_profile(command: Dictionary) -> Dictionary:
+	_original_main_callback_ledger["_apply_ui_profile"] = int(_original_main_callback_ledger.get("_apply_ui_profile",0)) + 1
+	var original_result: Variant = await _original_source_device_lab_runtime__apply_ui_profile(command)
+	_original_main_callback_ledger["_apply_ui_profile"] -= 1
+	return original_result
+
+
+func _original_source_device_lab_runtime__apply_ui_profile(command: Dictionary) -> Dictionary:
 	var profile_id := str(command.get("profile", ""))
 	var contract_result := _load_external_contract(command)
 	if not bool(contract_result.get("ok", false)):
@@ -770,6 +858,13 @@ func _apply_ui_profile(command: Dictionary) -> Dictionary:
 
 
 func _rollback_ui_profile(command: Dictionary) -> Dictionary:
+	_original_main_callback_ledger["_rollback_ui_profile"] = int(_original_main_callback_ledger.get("_rollback_ui_profile",0)) + 1
+	var original_result: Variant = await _original_source_device_lab_runtime__rollback_ui_profile(command)
+	_original_main_callback_ledger["_rollback_ui_profile"] -= 1
+	return original_result
+
+
+func _original_source_device_lab_runtime__rollback_ui_profile(command: Dictionary) -> Dictionary:
 	var checkpoint := str(command.get("checkpoint", ""))
 	var path := CHECKPOINT_DIR + "/%s.json" % checkpoint
 	if not FileAccess.file_exists(path):

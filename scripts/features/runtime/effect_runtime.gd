@@ -11,6 +11,7 @@ const MAX_PENDING_FACTS := 8192
 const MAX_ACTIVE_STATES := 4096
 const MAX_RECEIPTS := 65536
 const MAX_STATES_PER_TARGET := preload("res://scripts/features/adapters/feature_authority.gd").MAX_STATES_PER_TARGET
+var _budget: Object = Budget
 var _world: RefCounted
 var _clock: RefCounted
 var _combat := WeakRef.new()
@@ -44,16 +45,26 @@ var _stats := {"ticks":0,"actual_loss":0,"started":0,"refreshed":0,"replaced":0,
 	"tick_delivery_count":0,"maximum_tick_delivery_lateness_usec":0,"child_actions":0,"peak_children":0}
 var errors: Array[String] = []
 
-func configure(world: RefCounted, clock: RefCounted, combat: Node, presentation: RefCounted = null) -> bool:
+func configure(world: RefCounted, clock: RefCounted, combat: Object, presentation: RefCounted = null) -> bool:
 	# An accepted state owns its clock, mutation port and cue lifecycle until
 	# terminal drain. Replacing that owner mid-flight would orphan the old cue.
 	if _pumping or has_work() or world == null or clock == null or not is_instance_valid(combat) \
-		or world.current_world_owner() == null:
+		or world.current_effect_owner() == null:
 		return false
+	if world.is_domain():
+		if combat is Node or presentation == null or presentation.get_script() != preload("res://scripts/features/presentation/domain_presentation_port.gd"):
+			return false
+		if combat.get_script() != preload("res://scripts/features/runtime/domain_combat_port.gd") or clock.get_script() != preload("res://scripts/features/runtime/domain_clock_port.gd"):
+			return false
+		if combat._world != world or presentation._world != world or combat._thread != OS.get_thread_caller_id() or clock._thread != OS.get_thread_caller_id(): return false
+		_budget = preload("res://scripts/features/runtime/domain_budget_port.gd").new(world.current_effect_owner())
+	else:
+		if not combat is Node: return false
+		_budget = Budget
 	_world = world; _clock = clock; _combat = weakref(combat)
 	_delivery_generation += 1
-	var owner: Node = world.current_world_owner()
-	_category = "feature_effects:" + str(owner.get_instance_id())
+	var owner: Object = world.current_effect_owner()
+	_category = "feature_effects:" + str(world.capture_world().world_runtime_id if world.is_domain() else owner.get_instance_id())
 	_presentation = presentation
 	if _presentation == null:
 		_presentation = Presentation.new()
@@ -69,7 +80,7 @@ func metrics() -> Dictionary: return Graph.capture(_stats).value
 func presentation() -> RefCounted: return _presentation
 
 func configure_child_executor(executor: Callable) -> bool:
-	if _pumping or _world==null or has_work() or not executor.is_valid() or executor.get_object()!=_world.current_world_owner(): return false
+	if _pumping or _world==null or has_work() or not executor.is_valid() or executor.get_object()!=_world.current_effect_owner(): return false
 	_child_executor=executor
 	return true
 
@@ -308,7 +319,7 @@ func _target_sources_fit(additional: Dictionary) -> bool:
 	return true
 
 func _sync_world() -> bool:
-	if _world == null or _world.current_world_owner() == null:
+	if _world == null or _world.current_effect_owner() == null:
 		clear(); return false
 	var current: Dictionary = _world.capture_world()
 	if current != _world_identity:
@@ -372,26 +383,26 @@ func pump() -> int:
 	# Serial residency and branch retirement require one consumer at a time.
 	if _pumping: return 0
 	if not _sync_world(): return 0
-	var owner: Node = _world.current_world_owner()
-	if owner.get_tree().paused: return 0
+	var owner: Object = _world.current_effect_owner()
+	if _world.feature_is_paused(): return 0
 	_pumping=true
 	var generation:=_delivery_generation
 	var served := 0
 	var runnable := _pending > 0 or has_due() or not _children.is_empty()
-	Budget.mark_pending(_category,runnable,true,false,owner,true)
+	_budget.mark_pending(_category,runnable,true,false,owner,true)
 	while runnable:
-		var token := Budget.begin(_category)
+		var token: int = _budget.begin(_category)
 		if token <= 0: break
 		# One admitted fact or one tick is a bounded quantum. Facts and bindings
 		# were frozen and capacity checked before this queue accepted them.
 		if has_due() and (_pending == 0 or _prefer_due): _tick_one(); _prefer_due = false
 		elif _pending>0: _dispatch_one_fact(); _prefer_due = true
 		else: _dispatch_one_child(); _prefer_due=true
-		Budget.end(token)
+		_budget.end(token)
 		served += 1
 		if generation!=_delivery_generation: break
 		runnable = _pending > 0 or has_due() or not _children.is_empty()
-		Budget.mark_pending(_category,runnable,true,false,owner,true)
+		_budget.mark_pending(_category,runnable,true,false,owner,true)
 	_pumping=false
 	return served
 
@@ -467,7 +478,7 @@ func _apply_command(command: Dictionary, entry: Dictionary) -> void:
 		return
 	if command.op == "ModifyResource" and command.handler_id == "hc.lifesteal.v1" \
 		and command.resource == "hp" and command.mode == "restore":
-		var combat: Node = _combat.get_ref() as Node
+		var combat: Object = _combat.get_ref()
 		if not is_instance_valid(combat): return
 		var result: Dictionary = combat.apply_feature_source_restore(entry.source,command.recipient,int(command.amount))
 		if not result.success: _error(str(result.reason)); return
@@ -475,7 +486,7 @@ func _apply_command(command: Dictionary, entry: Dictionary) -> void:
 		return
 	if command.op != "ApplyStatus" or command.handler_id != Handler.ID or command.effect_id != Handler.EFFECT_ID:
 		_error("unknown_feature_command"); return
-	var target: Node = entry.target.resolve()
+	var target: Object = _world.feature_actor_model(_world.resolve_feature_actor(entry.target))
 	if target == null or not target.has_method("has_actor_capability"): return
 	if target.has_actor_capability("hc.immune.periodic"): return
 	var target_key := JSON.stringify(command.target)
@@ -531,7 +542,7 @@ func _apply_command(command: Dictionary, entry: Dictionary) -> void:
 				if _reservations.has(admission_id) and not _reservations[admission_id].chain.is_empty():
 					var replacement_generation := _delivery_generation
 					_reclaim_invalid_state_loan(admission_id)
-					if replacement_generation != _delivery_generation or entry.target.resolve() == null: return
+					if replacement_generation != _delivery_generation or _world.resolve_feature_actor(entry.target) == null: return
 			if not _reservations.has(admission_id) or int(_reservations[admission_id].states) <= 0:
 				_error("feature_state_reservation_missing"); return
 			_reservations[admission_id].states -= 1; _reserved_states -= 1
@@ -563,7 +574,7 @@ func _apply_command(command: Dictionary, entry: Dictionary) -> void:
 		_reclaim_invalid_state_loan(admission_id)
 		# Stopping an old cue can synchronously retire its owner. Reclamation
 		# cannot grant an old command authority over that replacement runtime.
-		if generation!=_delivery_generation or not _reservations.has(admission_id) or entry.target.resolve()==null: return
+		if generation!=_delivery_generation or not _reservations.has(admission_id) or _world.resolve_feature_actor(entry.target)==null: return
 	var target_states: Dictionary=_states_per_target.get(target_key,{})
 	if _states.size() >= MAX_ACTIVE_STATES or target_states.size() >= MAX_STATES_PER_TARGET:
 		_error("feature_state_capacity"); return
@@ -595,13 +606,13 @@ func _tick_one() -> void:
 		_error("feature_heap_state_mismatch"); return
 	var state: Dictionary = _states[handle]
 	var generation := _delivery_generation
-	var target: Node = state.target.resolve()
-	var combat: Node = _combat.get_ref() as Node
+	var target: Object = _world.resolve_feature_actor(state.target)
+	var combat: Object = _combat.get_ref()
 	if target == null or not is_instance_valid(combat):
 		_stats.invalidated += 1; _stop(handle); return
 	if int(state.next_due) > int(state.expires):
 		_stats.expired += 1; _stop(handle); return
-	var source: Node2D = state.source.resolve(false) as Node2D if state.source != null else null
+	var source: Object = _world.resolve_feature_spatial_actor(state.source,false)
 	var batch: RefCounted=null
 	if not state.periodic_bindings.is_empty():
 		var made:=_begin_periodic_batch(handle,state)
@@ -630,7 +641,7 @@ func _tick_one() -> void:
 	_stats.ticks += 1; _stats.actual_loss += int(result.actual_loss)
 	if not current_owner: return
 	state.ticks += 1; state.next_due += int(state.period)
-	if state.target.resolve() == null:
+	if _world.resolve_feature_actor(state.target) == null:
 		_stats.invalidated += 1; _stop(handle)
 	elif int(state.next_due) > int(state.expires):
 		_stats.expired += 1; _stop(handle)
@@ -719,7 +730,7 @@ func _reclaim_invalid_state_loan(sequence: int) -> void:
 	# Existing committed facts/child branches are separate owners and remain
 	# queued; no receipt or still-valid state is evicted to make room.
 	for handle: String in _reservations[sequence].state_loan_handles.keys():
-		if _states[handle].target.resolve()!=null: continue
+		if _world.resolve_feature_actor(_states[handle].target)!=null: continue
 		_stats.invalidated+=1; _stop(handle)
 		return
 
@@ -764,7 +775,7 @@ func _dispatch_one_child() -> void:
 	var value: Dictionary=_reservations[sequence]
 	value.branches[work.release_id].stage="available"
 	var epoch:=_delivery_generation
-	var source: Node2D=work.source.resolve(false) as Node2D if work.source!=null else null
+	var source: Object=_world.resolve_feature_spatial_actor(work.source,false)
 	var result: Dictionary=_child_executor.call(work.request,work.ticket,value.bindings,source,work.resource_lease)
 	if epoch!=_delivery_generation: return
 	# A successful empty batch may close the last branch and its root inside
@@ -789,7 +800,10 @@ func clear() -> void:
 	_reservations.clear(); _reserved_facts = 0; _reserved_states = 0; _reserved_receipts = 0
 	_children.clear(); _reserved_children=0
 	_heap.clear(); _batch_head = 0; _batch_tail = 0; _pending = 0
-	if not _category.is_empty(): Budget.mark_pending(_category,false)
+	if not _category.is_empty(): _budget.mark_pending(_category,false)
 
 func _error(reason: String) -> void:
 	if reason not in errors: errors.append(reason)
+	if _world != null and _world.is_domain():
+		var owner: Object = _world.current_effect_owner()
+		if owner != null: owner.call("fault",reason,{"category":_category})

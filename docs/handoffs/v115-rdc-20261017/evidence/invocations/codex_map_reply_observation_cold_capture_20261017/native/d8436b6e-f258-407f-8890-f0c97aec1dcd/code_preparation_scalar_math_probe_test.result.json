@@ -1,0 +1,112 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "scalar math probe keeps the real non-test setting",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal runner supplies isolated APPDATA and run identity",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "math probe binds invocation and exact source content",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "only reviewed source-derived scalar math candidate bytes can compile",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "fixed source candidates grant no binary or folding permission",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "scalar math source commit matches the executing binary",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "executing native binary has an exact SHA256",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "target Script is cold before scalar metadata compilation",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "bounded one real eager scalar case has source-proven math forwarders",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "source-derived scalar utility reference compiles: sqrt",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "real eager constant owner bytes match the reviewed candidate",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "the exact real eager expression supports native constant folding",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "constant metadata contains a scalar result without invoking a method",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "each reviewed reference and folding case has one actual compile result",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "scalar probes leave the target Script cache unchanged and cold",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "scalar math metadata uses the formal evidence directory",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "scalar math artifact opens at one exact path",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "scalar math artifact bytes have an exact SHA256",
+      "passed": true
+    }
+  ],
+  "count": 18,
+  "engine_version": "4.7-stable (custom_build)",
+  "failed": 0,
+  "invocation_id": "daf70158-e120-463d-a65e-b824fef3a3f5",
+  "passed": 18,
+  "reported_checks": 18,
+  "reported_failures": 0,
+  "run_id": "d8436b6e-f258-407f-8890-f0c97aec1dcd",
+  "runtime_environment": {
+    "native_process_id": 4492,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/multicore-v115/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\.godot\\runtime_appdata\\multicore_v115\\runner_daf70158-e120-463d-a65e-b824fef3a3f5",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/multicore-v115/HardCore/.godot/runtime_appdata/multicore_v115/runner_daf70158-e120-463d-a65e-b824fef3a3f5/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "code_preparation_scalar_math_probe_test",
+  "schema_version": 1,
+  "source_content_sha256": "e2f403e5c062b0494e950a3c8347b288b1d77655721a526594c3b3c2c84ee8a5",
+  "status": "PASS"
+}

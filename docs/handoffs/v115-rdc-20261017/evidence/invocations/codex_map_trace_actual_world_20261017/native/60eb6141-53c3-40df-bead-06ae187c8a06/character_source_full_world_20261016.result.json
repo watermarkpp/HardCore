@@ -1,0 +1,122 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real production APIs use isolated user data",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "no Source catalog reader before actual launch",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "isolated save directory",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "original canonical character transaction: ",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "original persisted profile selected before Source handoff",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "exact approved diagnostic timeout",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "actual prepared production Host exposes exact terminal global RNG return contract",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "actual explicit Native manifest bytes match immutable invocation SHA",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "actual prepared production Host reports the exact compiled Native source fingerprint",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "actual compiled Native identity evidence directory",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "actual compiled Native identity evidence can be saved",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "actual original constructor captures the late-bound Background slot",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "original MonsterVisual test policy is captured from its actual owner",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "same physical NPC textures are pinned before actual Source start",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "actual World publication binds the one persistent Session",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "World does not republish Session authority: profile_publication",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "World does not republish Session authority: profile_state",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "World does not republish Session authority: content_snapshot",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "World does not republish Session authority: feature_resource_boot",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "actual Source fault: model_boundary_failed:on_phase",
+      "passed": false
+    }
+  ],
+  "count": 20,
+  "engine_version": "4.7-stable (custom_build)",
+  "failed": 1,
+  "invocation_id": "c33d7c12-3993-4076-b5ca-a0bb68c9da9d",
+  "passed": 19,
+  "reported_checks": 20,
+  "reported_failures": 1,
+  "run_id": "60eb6141-53c3-40df-bead-06ae187c8a06",
+  "runtime_environment": {
+    "native_process_id": 3164,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/multicore-v115/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\.godot\\runtime_appdata\\multicore_v115\\runner_c33d7c12-3993-4076-b5ca-a0bb68c9da9d",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/multicore-v115/HardCore/.godot/runtime_appdata/multicore_v115/runner_c33d7c12-3993-4076-b5ca-a0bb68c9da9d/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "character_source_full_world_20261016",
+  "schema_version": 1,
+  "source_content_sha256": "050135c4c282f5413c97dbc46a4cd6c6ff810f323149d81d2f1c5ed367b0be5d",
+  "status": "FAIL"
+}

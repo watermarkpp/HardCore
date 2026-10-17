@@ -78,6 +78,11 @@ performance/frame_optional_budget_usec=1200
 performance/frame_progress_budget_usec=6000
 performance/death_drop_slicing=true
 
+[physics]
+
+; The production Source owner receives the one Physics2D server at handoff.
+2d/external_owner_mode=true
+
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0

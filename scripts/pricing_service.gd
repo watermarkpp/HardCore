@@ -1,5 +1,6 @@
 class_name PricingService
 extends RefCounted
+const ProfileContent := preload("res://scripts/gameplay/profile/legacy_profile_content.gd")
 
 const CONTRACT_ID := "gameplay.pricing.authority.v1"
 const POLICY_PATH := "res://assets/data/pricing_policy_v1.json"
@@ -11,20 +12,26 @@ static var _cached_policy: Dictionary = {}
 static var _cached_policy_hash := ""
 
 
-static func policy(force_reload := false) -> Dictionary:
+static func policy(force_reload := false, content: ProfileContent.ContentPort = null) -> Dictionary:
+	if content != null and content.simulation_owner:
+		if force_reload or content.pricing_policy_cache.is_empty():
+			content.pricing_policy_cache = _load_policy(content)
+		return content.pricing_policy_cache.duplicate(true)
+	if OS.get_thread_caller_id() != OS.get_main_thread_id():
+		return {}
 	if force_reload or _cached_policy.is_empty():
-		_cached_policy = _load_policy()
+		_cached_policy = _load_policy(content)
 	return _cached_policy.duplicate(true)
 
 
-static func policy_version(policy_override := {}) -> String:
-	return str(_policy(policy_override).get("policyVersion", "invalid"))
+static func policy_version(policy_override := {}, content: ProfileContent.ContentPort = null) -> String:
+	return str(_policy(policy_override, content).get("policyVersion", "invalid"))
 
 
-static func adjusted_database_price(price_record: Dictionary, policy_override := {}) -> int:
+static func adjusted_database_price(price_record: Dictionary, policy_override := {}, content: ProfileContent.ContentPort = null) -> int:
 	if maxi(0, int(price_record.get("base_price", 0))) <= 0:
 		return 0
-	return _adjusted_database_price_resolved(price_record, _policy(policy_override))
+	return _adjusted_database_price_resolved(price_record, _policy(policy_override, content))
 
 
 static func _adjusted_database_price_resolved(
@@ -63,9 +70,9 @@ static func merchant_accepts_service_type(
 
 static func merchant_accepts_sell_item(
 	context: Dictionary, price_record: Dictionary, policy_override := {}
-) -> bool:
+, content: ProfileContent.ContentPort = null) -> bool:
 	return _merchant_accepts_sell_item_resolved(
-		context, price_record, _policy(policy_override)
+		context, price_record, _policy(policy_override, content)
 	)
 
 
@@ -83,13 +90,13 @@ static func _merchant_accepts_sell_item_resolved(
 
 static func merchant_supports_full_equipment_repair(
 	context: Dictionary, policy_override := {}
-) -> bool:
+, content: ProfileContent.ContentPort = null) -> bool:
 	if not bool(context.get("supports_repair", false)):
 		return false
 	var merchant_id := str(context.get("merchant_id", ""))
 	if merchant_id.is_empty():
 		return false
-	var active := _policy(policy_override)
+	var active := _policy(policy_override, content)
 	var repair_policy: Dictionary = active.get("repair", {})
 	var authorized_ids: Variant = repair_policy.get("authorizedFullEquipmentMerchantIds", [])
 	if not authorized_ids is Array:
@@ -100,8 +107,8 @@ static func merchant_supports_full_equipment_repair(
 	return false
 
 
-static func repair_batch_slot_order(policy_override := {}) -> Array[String]:
-	var active := _policy(policy_override)
+static func repair_batch_slot_order(policy_override := {}, content: ProfileContent.ContentPort = null) -> Array[String]:
+	var active := _policy(policy_override, content)
 	var repair_policy: Dictionary = active.get("repair", {})
 	var raw_slots: Variant = repair_policy.get("batchPrioritySlots", [])
 	var slots: Array[String] = []
@@ -120,10 +127,10 @@ static func quote_buy(
 	quantity := 1,
 	context := {},
 	policy_override := {}
-) -> Dictionary:
+, content: ProfileContent.ContentPort = null) -> Dictionary:
 	return _quote_buy_resolved(
-		price_record, quantity, context, _policy(policy_override)
-	)
+		price_record, quantity, context, _policy(policy_override, content)
+	, content)
 
 
 static func quote_sell(
@@ -133,9 +140,9 @@ static func quote_sell(
 	quantity := 1,
 	context := {},
 	policy_override := {}
-) -> Dictionary:
-	var active := _policy(policy_override)
-	var rejection := _quote_base("sell", price_record, quantity, active)
+, content: ProfileContent.ContentPort = null) -> Dictionary:
+	var active := _policy(policy_override, content)
+	var rejection := _quote_base("sell", price_record, quantity, active, content)
 	var sell_policy: Dictionary = active.get("sell", {})
 	if quantity <= 0:
 		rejection["reason"] = "出售数量无效。"
@@ -183,8 +190,9 @@ static func _quote_buy_resolved(
 	quantity: int,
 	context: Dictionary,
 	active: Dictionary,
+	content: ProfileContent.ContentPort = null
 ) -> Dictionary:
-	var rejection := _quote_base("buy", price_record, quantity, active)
+	var rejection := _quote_base("buy", price_record, quantity, active, content)
 	if quantity <= 0:
 		rejection["reason"] = "购买数量无效。"
 		return rejection
@@ -214,9 +222,9 @@ static func quote_repair(
 	instance: Dictionary,
 	context := {},
 	policy_override := {}
-) -> Dictionary:
-	var active := _policy(policy_override)
-	if active.is_empty(): return _quote_base("repair", price_record, 1, active)
+, content: ProfileContent.ContentPort = null) -> Dictionary:
+	var active := _policy(policy_override, content)
+	if active.is_empty(): return _quote_base("repair", price_record, 1, active, content)
 	if instance.has("durability_raw") or instance.has("max_durability_raw"):
 		var maximum_raw := maxi(1, int(instance.get(
 			"max_durability_raw",
@@ -225,11 +233,11 @@ static func quote_repair(
 		var current_raw := clampi(int(instance.get("durability_raw", maximum_raw)), 0, maximum_raw)
 		return quote_repair_raw_delta(
 			price_record, catalog, instance, maximum_raw - current_raw, context, active
-		)
+		, -1, -1, content)
 	var current := int(instance.get("durability", 0))
 	var maximum := maxi(1, int(instance.get("max_durability", catalog.get("maxDurability", 1))))
 	var missing := maximum - clampi(current, 0, maximum)
-	return quote_repair_delta(price_record, catalog, instance, missing, context, active)
+	return quote_repair_delta(price_record, catalog, instance, missing, context, active, content)
 
 
 static func quote_repair_delta(
@@ -239,15 +247,15 @@ static func quote_repair_delta(
 	repair_amount: int,
 	context := {},
 	policy_override := {}
-) -> Dictionary:
-	var active := _policy(policy_override)
-	if active.is_empty(): return _quote_base("repair", price_record, 1, active)
+, content: ProfileContent.ContentPort = null) -> Dictionary:
+	var active := _policy(policy_override, content)
+	if active.is_empty(): return _quote_base("repair", price_record, 1, active, content)
 	var maximum := maxi(1, int(instance.get("max_durability", catalog.get("maxDurability", 1))))
 	var current := clampi(int(instance.get("durability", 0)), 0, maximum)
 	var missing := maximum - current
 	if missing <= 0:
 		return _complete_quote(
-			_quote_base("repair", price_record, 1, active), 0, 1,
+			_quote_base("repair", price_record, 1, active, content), 0, 1,
 			{"missing_durability": 0, "missing_durability_raw": 0}
 		)
 	var applied_amount := clampi(repair_amount, 0, missing)
@@ -260,7 +268,7 @@ static func quote_repair_delta(
 		policy_override,
 		current * 1000,
 		maximum * 1000
-	)
+	, content)
 
 
 static func quote_repair_raw_delta(
@@ -272,15 +280,15 @@ static func quote_repair_raw_delta(
 	policy_override := {},
 	current_raw_override := -1,
 	maximum_raw_override := -1
-) -> Dictionary:
-	var active := _policy(policy_override)
-	var result := _quote_base("repair", price_record, 1, active)
+, content: ProfileContent.ContentPort = null) -> Dictionary:
+	var active := _policy(policy_override, content)
+	var result := _quote_base("repair", price_record, 1, active, content)
 	if active.is_empty(): return result
 	if not bool(context.get("supports_repair", true)):
 		result["reason"] = "该商人不提供维修服务。"
 		return result
 	var merchant_id := str(context.get("merchant_id", ""))
-	if not merchant_id.is_empty() and not merchant_supports_full_equipment_repair(context, active):
+	if not merchant_id.is_empty() and not merchant_supports_full_equipment_repair(context, active, content):
 		result["reason"] = "该商人不提供全装备维修服务。"
 		return result
 	var repair_policy: Dictionary = active.get("repair", {})
@@ -306,7 +314,7 @@ static func quote_repair_raw_delta(
 	if applied_raw <= 0:
 		result["reason"] = "修复量无效。"
 		return result
-	var buy_basis := quote_buy(price_record, 1, context, active)
+	var buy_basis := quote_buy(price_record, 1, context, active, content)
 	if not bool(buy_basis.get("valid", false)):
 		result["reason"] = str(buy_basis.get("reason", "该物品无法估值。"))
 		return result
@@ -337,8 +345,8 @@ static func estimate_forge_materials(
 	materials: Array,
 	price_records: Dictionary,
 	policy_override := {}
-) -> Dictionary:
-	var active := _policy(policy_override)
+, content: ProfileContent.ContentPort = null) -> Dictionary:
+	var active := _policy(policy_override, content)
 	if active.is_empty(): return {"valid": false, "reason": "价格策略无效。", "total_value": 0}
 	var total := 0
 	var lines: Array = []
@@ -363,7 +371,7 @@ static func estimate_forge_materials(
 		"valid": true,
 		"contract_id": CONTRACT_ID,
 		"policy_version": str(active.get("policyVersion", "")),
-		"policy_hash": _policy_hash(active),
+		"policy_hash": _policy_hash(active, content),
 		"valuation_only": true,
 		"materials": lines,
 		"total_value": total,
@@ -405,11 +413,11 @@ static func _instance_value(base_value: int, catalog: Dictionary, instance: Dict
 	return maxi(2, value - loss)
 
 
-static func _quote_base(action: String, price_record: Dictionary, quantity: int, active: Dictionary) -> Dictionary:
+static func _quote_base(action: String, price_record: Dictionary, quantity: int, active: Dictionary, content: ProfileContent.ContentPort = null) -> Dictionary:
 	return {
 		"contract_id": CONTRACT_ID,
 		"policy_version": str(active.get("policyVersion", "invalid")),
-		"policy_hash": _policy_hash(active),
+		"policy_hash": _policy_hash(active, content),
 		"action": action,
 		"item_key": str(price_record.get("item_key", "")),
 		"entity_id": str(price_record.get("entity_id", "")),
@@ -444,13 +452,13 @@ static func _round_half_up_ratio(value: int, numerator: int, denominator: int) -
 	return int((value * numerator + int(denominator / 2)) / denominator)
 
 
-static func _policy(policy_override: Variant) -> Dictionary:
+static func _policy(policy_override: Variant, content: ProfileContent.ContentPort = null) -> Dictionary:
 	if policy_override is Dictionary and not (policy_override as Dictionary).is_empty():
-		return _import_category_policy(policy_override)
-	return policy()
+		return _import_category_policy(policy_override, content)
+	return policy(false, content)
 
 
-static func _load_policy() -> Dictionary:
+static func _load_policy(content: ProfileContent.ContentPort = null) -> Dictionary:
 	if not FileAccess.file_exists(POLICY_PATH):
 		push_error("正式价格策略不存在：%s" % POLICY_PATH)
 		return {}
@@ -459,11 +467,14 @@ static func _load_policy() -> Dictionary:
 	if not parsed is Dictionary or str(parsed.get("contractId", "")) != CONTRACT_ID:
 		push_error("正式价格策略无效：%s" % POLICY_PATH)
 		return {}
-	_cached_policy_hash = policy_text.sha256_text()
-	return _import_category_policy(parsed)
+	if content != null and content.simulation_owner:
+		content.pricing_policy_hash = policy_text.sha256_text()
+	else:
+		_cached_policy_hash = policy_text.sha256_text()
+	return _import_category_policy(parsed, content)
 
 
-static func _import_category_policy(source: Dictionary) -> Dictionary:
+static func _import_category_policy(source: Dictionary, content: ProfileContent.ContentPort = null) -> Dictionary:
 	var result := source.duplicate(true)
 	var exceptions: Variant = result.get("sell", {}).get("nonTradableKindExceptions", {})
 	if not exceptions is Dictionary:
@@ -494,7 +505,7 @@ static func _import_category_policy(source: Dictionary) -> Dictionary:
 			var parts: PackedStringArray = key.split(":")
 			if parts.size() != 2 or parts[0] not in ["service", "item"] or not parts[1].is_valid_int() \
 				or str(int(parts[1])) != parts[1] or int(parts[1]) < 0: return {}
-		var record: Dictionary = GameData.get_item_price_record(key)
+		var record: Dictionary = ProfileContent.resolve(content).get_item_price_record(key)
 		var source_key := str(record.get("item_key", ""))
 		if source_key.is_empty() or item_modifiers.has(source_key): return {}
 		var bps: Variant = old_items[key]
@@ -504,7 +515,11 @@ static func _import_category_policy(source: Dictionary) -> Dictionary:
 	return result
 
 
-static func _policy_hash(active: Dictionary) -> String:
+static func _policy_hash(active: Dictionary, content: ProfileContent.ContentPort = null) -> String:
+	if content != null and content.simulation_owner:
+		if not content.pricing_policy_hash.is_empty() and active == content.pricing_policy_cache:
+			return content.pricing_policy_hash
+		return JSON.stringify(active).sha256_text()
 	if not _cached_policy_hash.is_empty() and active == _cached_policy:
 		return _cached_policy_hash
 	return JSON.stringify(active).sha256_text()

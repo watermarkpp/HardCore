@@ -38,7 +38,12 @@ function Get-NativeLogEvidence {
     for ($i = 0; $i -lt $lines.Count; $i++) {
         if ($lines[$i] -match '^ERROR:' -and -not $allowlisted.Contains($i)) { $unknown.Add($lines[$i]) }
     }
-    $objectDb = @($lines | Where-Object { $_ -match 'Leaked instance: ObjectDB:' -or $_ -match 'ObjectDB.*[Ll]eaked instance' -or $_ -match 'ObjectDB instances leaked at exit' })
+    $objectDb = @($lines | Where-Object {
+        $_ -match '^Leaked instance: [A-Za-z0-9_]+:' -or
+        $_ -match 'ObjectDB.*[Ll]eaked instance' -or
+        $_ -match 'ObjectDB instances leaked at exit' -or
+        $_ -match '^WARNING: \d+ ObjectDB (?:instance was|instances were) leaked at exit'
+    })
     $functionalMarker = @($lines | Where-Object { $_ -match '[A-Z0-9_]+_PASS(?:\b|\s)' }).Count -gt 0
     $receipt = $null
     $receiptReasons = [Collections.Generic.List[string]]::new()
