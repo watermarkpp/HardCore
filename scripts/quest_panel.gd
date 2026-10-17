@@ -503,7 +503,7 @@ func _original_source_quest_panel__quest_state_text(quest_id: String, active_que
 
 func _act() -> void:
 	_original_main_callback_ledger["_act"] = int(_original_main_callback_ledger.get("_act",0)) + 1
-	_original_source_quest_panel__act()
+	await _original_source_quest_panel__act()
 	_original_main_callback_ledger["_act"] -= 1
 
 
@@ -522,9 +522,9 @@ func _original_source_quest_panel__act() -> void:
 	)
 	var before_state := str(PlayerState.quest_states.get(current_quest_id, {}).get("status", ""))
 	if not PlayerState.quest_states.has(current_quest_id):
-		status_label.text = PlayerState.accept_quest(current_quest_id)
+		status_label.text = await preload("res://scripts/gameplay/source/main_profile_ui_command.gd").call_owner(&"accept_quest",[current_quest_id])
 	else:
-		status_label.text = PlayerState.claim_quest(current_quest_id)
+		status_label.text = await preload("res://scripts/gameplay/source/main_profile_ui_command.gd").call_owner(&"claim_quest",[current_quest_id])
 	var after_state := str(PlayerState.quest_states.get(current_quest_id, {}).get("status", ""))
 	if after_state == before_state:
 		_action_failure = {"quest_id": current_quest_id, "state": after_state, "message": status_label.text}

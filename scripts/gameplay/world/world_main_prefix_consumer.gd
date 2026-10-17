@@ -7,6 +7,8 @@ var _dispatcher: Object
 var _held: Dictionary = {}
 var _next_event := 0
 var _fault: Dictionary = {}
+var _observe_prefix := false
+var _prefix_observation: Dictionary = {}
 
 func _init(host: Object, dispatcher: Object) -> void:
 	assert(OS.get_thread_caller_id() == OS.get_main_thread_id())
@@ -15,17 +17,22 @@ func _init(host: Object, dispatcher: Object) -> void:
 	assert(dispatcher.has_method("apply_original_main_journal_event"))
 	_host = host
 	_dispatcher = dispatcher
+	_observe_prefix = bool(ProjectSettings.get_setting("hardcore/diagnostics/main_boot_trace",false))
 
 func apply_prefix(prefix: Dictionary) -> Dictionary:
 	assert(OS.get_thread_caller_id() == OS.get_main_thread_id())
 	if not _fault.is_empty(): return {"status":"INVALID", "error":_fault}
 	if _held.is_empty():
+		var reply_at: int = Time.get_ticks_usec() if _observe_prefix else 0
 		var replies: Dictionary=flush_original_main_replies()
+		_observe_prefix_stage("reply_flush",reply_at)
 		if replies.get("status")!="READY": return replies
 	if not _held.is_empty() and _held.main_prefix != prefix:
 		return {"status":"BUSY"}
 	if _held.is_empty():
+		var acquire_at: int = Time.get_ticks_usec() if _observe_prefix else 0
 		var delta: Dictionary = _host.acquire_original_main_prefix(prefix)
+		_observe_prefix_stage("native_acquire",acquire_at)
 		if delta.is_empty(): return {"status":"BUSY"}
 		if delta.get("main_prefix") != prefix or not delta.get("events") is Array:
 			_fault = {"kind":"native_actual_prefix_delta_invalid"}
@@ -34,7 +41,9 @@ func apply_prefix(prefix: Dictionary) -> Dictionary:
 		_next_event = 0
 	while _next_event < _held.events.size():
 		var event: Dictionary = _held.events[_next_event]
+		var dispatch_at: int = Time.get_ticks_usec() if _observe_prefix else 0
 		var actual: Variant = _dispatcher.apply_original_main_journal_event(event)
+		_observe_prefix_stage("event:"+str(event.get("operation",event.get("kind",""))),dispatch_at)
 		if actual is Dictionary:
 			if actual.get("status")=="PENDING": return {"status":"PENDING"}
 			actual=actual.get("status")=="APPLIED" and actual.get("success")==true
@@ -75,3 +84,10 @@ func flush_original_main_replies() -> Dictionary:
 func actual_current_original_prefix() -> Dictionary:
 	if OS.get_thread_caller_id() != OS.get_main_thread_id() or _held.is_empty() or _next_event >= _held.events.size(): return {}
 	return _held.main_prefix.duplicate(true)
+
+func _observe_prefix_stage(stage: String, started_usec: int) -> void:
+	if not _observe_prefix: return
+	var elapsed: int = maxi(0,Time.get_ticks_usec()-started_usec)
+	if not _prefix_observation.has(stage): _prefix_observation[stage] = {"calls":0,"total_usec":0,"maximum_usec":0,"last_usec":0}
+	var row: Dictionary = _prefix_observation[stage]
+	row.calls += 1; row.total_usec += elapsed; row.maximum_usec = maxi(row.maximum_usec,elapsed); row.last_usec = elapsed

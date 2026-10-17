@@ -16,7 +16,7 @@ const MapExecutor := preload("res://scripts/gameplay/world/world_map_event_main.
 const CALLS := {
 	"hud":["show_message","show_error_message","show_success_message","update_resources","update_warrior_states","update_status_buffs","cancel_attack_inputs","cancel_skill_inputs","cancel_item_slot_input_boundary","cancel_movement_input","set_item_quick_slots","set_skill_button_assignments","update_target","set_zone_name","begin_loading_transition","update_loading_progress","finish_loading_transition","set_shop_sell_quotes","set_shop_buy_quotes","apply_shop_buy_result","apply_shop_sell_result","apply_quest_abandon_result","apply_warehouse_sort_result","set_map_teleport_availability","set_auto_target_enabled","show_death_screen","show_loot_batch","update_hp","apply_revival_result"],
 	"camera":["force_update_scroll","reset_smoothing"],"system_menu":["open_menu","close_menu","show_save_exit_failure"],
-	"town_music":["set_town_presence","begin_map_transition","set_map_context","cancel"],"item_audio":["play_item_event","play_event"],"level_up":["replay"],"relic_proc":["replay"]
+	"town_music":["set_town_presence","begin_map_transition","set_map_context","cancel"],"item_audio":["play_item_event","play_event","stop_all_audio"],"level_up":["replay"],"relic_proc":["replay"]
 }
 const PROPERTIES := {"camera":["global_position","position","zoom","offset","position_smoothing_enabled"]}
 const INPUT_ARITIES := {"movement_changed":1,"interact_pressed":0,"skill_slot_pressed":2,"target_switch_pressed":0,"auto_target_changed":1,
@@ -475,7 +475,7 @@ func apply_original_main_journal_event(event: Dictionary) -> Variant:
 			if args.size()!=1 or not args[0] is Dictionary: return false
 			preload("res://scripts/gameplay/profile/legacy_loot_trace_port.gd").new().write_trace(args[0]); return true
 		&"original_profile_view":
-			return args.size()==1 and _profile_view.accept_original_journal_snapshot(args[0])
+			return args.size()==1 and _profile_view.accept_original_journal_snapshot(args[0],_transport.apply_original_profile_read_view_event.bind(event))
 		&"original_character_select_transition":
 			return args.is_empty() and _transport.request_original_character_select_transition(_world)
 		&"original_tree_quit":

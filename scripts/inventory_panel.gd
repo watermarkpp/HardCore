@@ -590,6 +590,7 @@ func _original_source_inventory_panel__refresh_equipment_slots() -> void:
 	for slot: String in PlayerState.EQUIPMENT_SLOTS:
 		var button: Button = equipment_buttons.get(slot)
 		var record: Variant = PlayerState.equipment.get(slot, {})
+		button.set_meta("original_item_selection",preload("res://scripts/gameplay/source/main_profile_ui_command.gd").capture_selection("equipment",slot,record if record is Dictionary else {}))
 		var name := str(record.get("name", "")) if record is Dictionary else str(record)
 		button.icon = null
 		button.text = ""
@@ -833,6 +834,7 @@ func _update_bag_cell(index: int, stack: Dictionary) -> void:
 	# Inventory records may be mutated in place (for example a consumed stack).
 	# Store a value snapshot, never an alias to the authoritative record.
 	cell.set_meta("item_presentation", presentation.duplicate(true))
+	cell.set_meta("original_item_selection",preload("res://scripts/gameplay/source/main_profile_ui_command.gd").capture_selection("inventory",index,stack))
 	_bag_cell_update_count += 1
 	button.name = "ItemButton" if occupied else "EmptySlotBackground"
 	button.disabled = not occupied and not can_receive_unequip
@@ -862,9 +864,34 @@ func _original_source_inventory_panel__inventory_record(index: int) -> Dictionar
 	return record if record is Dictionary and not (record as Dictionary).is_empty() else {}
 
 
+
+func _displayed_inventory_selection(index: int) -> Dictionary:
+	if index<0 or index>=_bag_cells.size(): return {}
+	var shown: Dictionary=_bag_cells[index].get_meta("original_item_selection",{})
+	if shown.get("profile_id")!=PlayerState.active_profile_id: return {}
+	return preload("res://scripts/gameplay/source/main_profile_ui_command.gd").capture_selection("inventory",index,shown.get("record",{}))
+
+func _displayed_equipment_selection(slot: String) -> Dictionary:
+	var button: Button=equipment_buttons.get(slot)
+	if button==null: return {}
+	var shown: Dictionary=button.get_meta("original_item_selection",{})
+	if shown.get("profile_id")!=PlayerState.active_profile_id: return {}
+	return preload("res://scripts/gameplay/source/main_profile_ui_command.gd").capture_selection("equipment",slot,shown.get("record",{}))
+
+func _selected_inventory_witnesses(indices: Array) -> Array:
+	var result: Array=[]
+	for raw: Variant in indices:
+		var witness: Dictionary={}
+		for selected: Dictionary in selected_inventory_refs:
+			if int(selected.get("slot",-1))==int(raw): witness=selected.get("selection",{}).duplicate(true);break
+		result.append(witness)
+	return result
+
 func _inventory_selection_ref(index: int, record: Dictionary) -> Dictionary:
 	var instance_id := str(record.get("instance_id", ""))
 	return {
+		"selection": _displayed_inventory_selection(index),
+		"record": record.duplicate(true),
 		"container": "inventory",
 		"slot": index,
 		"index": index,
@@ -875,6 +902,7 @@ func _inventory_selection_ref(index: int, record: Dictionary) -> Dictionary:
 
 func _equipment_selection_ref(slot: String, record: Dictionary) -> Dictionary:
 	return {
+		"selection": _displayed_equipment_selection(slot),
 		"container": "equipment",
 		"slot": slot,
 		"instance_id": str(record.get("instance_id", "")),
@@ -904,10 +932,13 @@ func _original_source_inventory_panel__find_inventory_index_for_ref(selection_re
 		return -1
 	var instance_id := str(selection_ref.get("instance_id", ""))
 	if not instance_id.is_empty():
+		var found := -1
 		for index in range(PlayerState.inventory.size()):
 			var record := _inventory_record(index)
 			if str(record.get("instance_id", "")) == instance_id:
-				return index
+				if found>=0 or record!=selection_ref.get("record",{}): return -1
+				found=index
+		return found
 	var index := int(selection_ref.get("slot", selection_ref.get("index", -1)))
 	if index < 0 or index >= PlayerState.inventory.size() or _inventory_record(index).is_empty():
 		return -1
@@ -975,7 +1006,7 @@ func _select_inventory_item(index: int) -> void:
 		return
 	if _inventory_record(index).is_empty():
 		if _can_receive_selected_item_to_index(index):
-			_receive_selected_item_to_index(index)
+			await _receive_selected_item_to_index(index)
 		else:
 			_ui_dismiss_selection()
 		return
@@ -1083,7 +1114,7 @@ func _show_item_notice(
 
 func _select_equipment_slot(slot: String) -> void:
 	_original_main_callback_ledger["_select_equipment_slot"] = int(_original_main_callback_ledger.get("_select_equipment_slot",0)) + 1
-	_original_source_inventory_panel__select_equipment_slot(slot)
+	await _original_source_inventory_panel__select_equipment_slot(slot)
 	_original_main_callback_ledger["_select_equipment_slot"] -= 1
 
 
@@ -1111,7 +1142,7 @@ func _original_source_inventory_panel__select_equipment_slot(slot: String) -> vo
 				return
 			var source_index := selected_inventory_index
 			var expected_instance_id := str(selected_inventory_ref.get("instance_id", ""))
-			var result: Dictionary = PlayerState.equip_inventory_index_result(source_index, slot, expected_instance_id)
+			var result: Dictionary = await preload("res://scripts/gameplay/source/main_profile_ui_command.gd").call_owner(&"equip_inventory_index_result",[source_index, slot, expected_instance_id, selected_inventory_ref.get("selection",{})])
 			if bool(result.get("success", false)):
 				_selection_revision = maxi(_selection_revision, int(result.get("revision", _selection_revision)))
 				selected_inventory_index = -1
@@ -1221,7 +1252,7 @@ func _can_receive_selected_item_to_index(index: int) -> bool:
 
 
 func _receive_selected_item_to_index(index: int) -> void:
-	_unequip_to_inventory_slot(index)
+	await _unequip_to_inventory_slot(index)
 
 
 func _can_receive_unequip_to_index(index: int) -> bool:
@@ -1234,7 +1265,7 @@ func _can_receive_unequip_to_index(index: int) -> bool:
 
 func _unequip_to_inventory_slot(index: int) -> void:
 	_original_main_callback_ledger["_unequip_to_inventory_slot"] = int(_original_main_callback_ledger.get("_unequip_to_inventory_slot",0)) + 1
-	_original_source_inventory_panel__unequip_to_inventory_slot(index)
+	await _original_source_inventory_panel__unequip_to_inventory_slot(index)
 	_original_main_callback_ledger["_unequip_to_inventory_slot"] -= 1
 
 
@@ -1243,7 +1274,7 @@ func _original_source_inventory_panel__unequip_to_inventory_slot(index: int) -> 
 		return
 	var slot := selected_equipment_slot
 	var expected_instance_id := str(selected_equipment_ref.get("instance_id", ""))
-	var result: Dictionary = PlayerState.unequip_to_inventory_slot(slot, index, expected_instance_id)
+	var result: Dictionary = await preload("res://scripts/gameplay/source/main_profile_ui_command.gd").call_owner(&"unequip_to_inventory_slot",[slot, index, expected_instance_id, selected_equipment_ref.get("selection",{})])
 	if not bool(result.get("success", false)):
 		# Keep the source slot selected after any rejection (stale, occupied,
 		# overweight, capacity or save failure). The rejection itself surfaces
@@ -1306,7 +1337,7 @@ func _inventory_input(event: InputEvent, index: int, button: Button) -> void:
 		_clear_inventory_selection_styles()
 		var item := GameData.get_item_record(stack)
 		if str(item.get("kind", "")) == "equipment":
-			_select_inventory_item(index)
+			await _select_inventory_item(index)
 			# Button.pressed follows gui_input for the same physical gesture.  Keep
 			# the explicit equipment selection, then suppress its duplicate toggle.
 			_suppress_next_pressed_index = index
@@ -1314,7 +1345,7 @@ func _inventory_input(event: InputEvent, index: int, button: Button) -> void:
 			# Consumable activation rebuilds the grid synchronously; suppress the
 			# pressed callback that still belongs to the original gesture.
 			_suppress_next_pressed_index = index
-			_activate_inventory_index(index)
+			await _activate_inventory_index(index)
 		_clear_pressed_suppression.call_deferred(index)
 		return
 	_handle_press_event(event, {"source": "inventory", "index": index}, button)
@@ -1462,12 +1493,15 @@ func _add_context_action(label: String, action: Dictionary, disabled := false) -
 	var id := _context_actions.size() + 1
 	context_menu.add_item(label, id)
 	context_menu.set_item_disabled(context_menu.item_count - 1, disabled)
-	_context_actions[id] = action
+	var retained := action.duplicate(true)
+	if action.get("action") in ["equip","use"]: retained["selection"]=_displayed_inventory_selection(int(action.get("index",-1)))
+	elif action.get("action")=="unequip": retained["selection"]=_displayed_equipment_selection(str(action.get("slot","")))
+	_context_actions[id] = retained
 
 
 func _on_context_action(id: int) -> void:
 	_original_main_callback_ledger["_on_context_action"] = int(_original_main_callback_ledger.get("_on_context_action",0)) + 1
-	_original_source_inventory_panel__on_context_action(id)
+	await _original_source_inventory_panel__on_context_action(id)
 	_original_main_callback_ledger["_on_context_action"] -= 1
 
 
@@ -1481,7 +1515,7 @@ func _original_source_inventory_panel__on_context_action(id: int) -> void:
 		"equip":
 			var equip_index := int(action.get("index", -1))
 			var equip_record := _inventory_record(equip_index)
-			result = PlayerState.equip_inventory_index_result(equip_index, str(action.get("slot", "")), str(equip_record.get("instance_id", "")))
+			result = await preload("res://scripts/gameplay/source/main_profile_ui_command.gd").call_owner(&"equip_inventory_index_result",[equip_index, str(action.get("slot", "")), str(action.get("selection",{}).get("record",{}).get("instance_id", "")), action.get("selection",{})])
 		"unequip":
 			var target_slot := _first_empty_inventory_slot()
 			if target_slot < 0:
@@ -1492,11 +1526,11 @@ func _original_source_inventory_panel__on_context_action(id: int) -> void:
 			var equipped: Variant = PlayerState.equipment.get(str(action.get("slot", "")), {})
 			if equipped is Dictionary:
 				unequip_record = equipped
-			result = PlayerState.unequip_to_inventory_slot(str(action.get("slot", "")), target_slot, str(equipped.get("instance_id", "")) if equipped is Dictionary else "")
+			result = await preload("res://scripts/gameplay/source/main_profile_ui_command.gd").call_owner(&"unequip_to_inventory_slot",[str(action.get("slot", "")), target_slot, str(action.get("selection",{}).get("record",{}).get("instance_id", "")), action.get("selection",{})])
 		"use":
 			var use_index := int(action.get("index", -1))
 			use_item_record = GameData.get_item_record(_inventory_record(use_index))
-			use_result = PlayerState.use_inventory_index_result(use_index, not PlayerState.test_mode)
+			use_result = await preload("res://scripts/gameplay/source/main_profile_ui_command.gd").call_owner(&"use_inventory_index_result",[use_index, not PlayerState.test_mode, action.get("selection",{})])
 		_:
 			return
 	if not use_result.is_empty():
@@ -1576,21 +1610,21 @@ func _original_source_inventory_panel__on_context_action(id: int) -> void:
 func _activate_selected_item(preferred_slot := "") -> void:
 	if _inventory_record(selected_inventory_index).is_empty():
 		return
-	_activate_inventory_index(selected_inventory_index, preferred_slot)
+	await _activate_inventory_index(selected_inventory_index, preferred_slot)
 
 
 func _activate_inventory_index(index: int, preferred_slot := "") -> void:
 	# preferred_slot stays empty for direct double-click activation: PlayerState
 	# is the authoritative equipment-slot resolver, so the UI never hardcodes a side.
 	_original_main_callback_ledger["_activate_inventory_index"] = int(_original_main_callback_ledger.get("_activate_inventory_index",0)) + 1
-	_original_source_inventory_panel__activate_inventory_index(index,preferred_slot)
+	await _original_source_inventory_panel__activate_inventory_index(index,preferred_slot)
 	_original_main_callback_ledger["_activate_inventory_index"] -= 1
 
 
 func _original_source_inventory_panel__activate_inventory_index(index: int, preferred_slot := "") -> void:
 	# preferred_slot stays empty for direct double-click activation: PlayerState
 	# is the authoritative equipment-slot resolver, so the UI never hardcodes a side.
-	var stack := _inventory_record(index)
+	var stack: Dictionary = _displayed_inventory_selection(index).get("record",{})
 	if stack.is_empty():
 		return
 	_cancel_long_press()
@@ -1610,7 +1644,7 @@ func _original_source_inventory_panel__activate_inventory_index(index: int, pref
 		selected_inventory_index = -1
 		selected_inventory_indices.clear()
 	if is_equipment:
-		var result: Dictionary = PlayerState.equip_inventory_index_result(index, preferred_slot, str(selected_inventory_ref.get("instance_id", "")))
+		var result: Dictionary = await preload("res://scripts/gameplay/source/main_profile_ui_command.gd").call_owner(&"equip_inventory_index_result",[index, preferred_slot, str(selected_inventory_ref.get("instance_id", "")), selected_inventory_ref.get("selection",{})])
 		if bool(result.get("success", false)):
 			_selection_revision = maxi(_selection_revision, int(result.get("revision", _selection_revision)))
 			_clear_inventory_selection_styles()
@@ -1637,7 +1671,7 @@ func _original_source_inventory_panel__activate_inventory_index(index: int, pref
 				2.0
 			)
 		return
-	var use_result := PlayerState.use_inventory_index_result(index, not PlayerState.test_mode)
+	var use_result : Dictionary = await preload("res://scripts/gameplay/source/main_profile_ui_command.gd").call_owner(&"use_inventory_index_result",[index, not PlayerState.test_mode, selected_inventory_ref.get("selection",{})])
 	_clear_inventory_selection_styles()
 	refresh()
 	if bool(use_result.get("success", false)):
@@ -1669,14 +1703,14 @@ func _first_empty_inventory_slot() -> int:
 
 func _on_auto_sort_pressed() -> void:
 	_original_main_callback_ledger["_on_auto_sort_pressed"] = int(_original_main_callback_ledger.get("_on_auto_sort_pressed",0)) + 1
-	_original_source_inventory_panel__on_auto_sort_pressed()
+	await _original_source_inventory_panel__on_auto_sort_pressed()
 	_original_main_callback_ledger["_on_auto_sort_pressed"] -= 1
 
 
 func _original_source_inventory_panel__on_auto_sort_pressed() -> void:
 	_clear_inventory_action_feedback()
 	GothicUIThemeScript.set_button_feedback(auto_sort_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "inventory.sort")
-	var result: Dictionary = PlayerState.sort_inventory_deterministic()
+	var result: Dictionary = await preload("res://scripts/gameplay/source/main_profile_ui_command.gd").call_owner(&"sort_inventory_deterministic",[])
 	_clear_inventory_selection_styles()
 	_clear_equipment_selection()
 	refresh()
@@ -1692,7 +1726,7 @@ func _original_source_inventory_panel__on_auto_sort_pressed() -> void:
 
 func _on_discard_pressed() -> void:
 	_original_main_callback_ledger["_on_discard_pressed"] = int(_original_main_callback_ledger.get("_on_discard_pressed",0)) + 1
-	_original_source_inventory_panel__on_discard_pressed()
+	await _original_source_inventory_panel__on_discard_pressed()
 	_original_main_callback_ledger["_on_discard_pressed"] -= 1
 
 
@@ -1701,7 +1735,7 @@ func _original_source_inventory_panel__on_discard_pressed() -> void:
 		return
 	var indices: Array = selected_inventory_indices.keys()
 	_clear_inventory_action_feedback()
-	var result: Dictionary = PlayerState.destroy_inventory_indices(indices)
+	var result: Dictionary = await preload("res://scripts/gameplay/source/main_profile_ui_command.gd").call_owner(&"destroy_inventory_indices",[indices, _selected_inventory_witnesses(indices)])
 	var destroyed := int(result.get("destroyed", 0))
 	var complete := bool(result.get("success", false)) and destroyed == indices.size()
 	_ui_dismiss_selection()
@@ -1743,7 +1777,7 @@ func _clear_inventory_action_feedback() -> void:
 
 func _unequip_selected() -> void:
 	_original_main_callback_ledger["_unequip_selected"] = int(_original_main_callback_ledger.get("_unequip_selected",0)) + 1
-	_original_source_inventory_panel__unequip_selected()
+	await _original_source_inventory_panel__unequip_selected()
 	_original_main_callback_ledger["_unequip_selected"] -= 1
 
 
@@ -1756,7 +1790,7 @@ func _original_source_inventory_panel__unequip_selected() -> void:
 		_show_error_message("背包已满，没有空位可以卸下装备。")
 		return
 	var slot := selected_equipment_slot
-	var result: Dictionary = PlayerState.unequip_to_inventory_slot(slot, target_slot, str(selected_equipment_ref.get("instance_id", "")))
+	var result: Dictionary = await preload("res://scripts/gameplay/source/main_profile_ui_command.gd").call_owner(&"unequip_to_inventory_slot",[slot, target_slot, str(selected_equipment_ref.get("instance_id", "")), selected_equipment_ref.get("selection",{})])
 	if not bool(result.get("success", false)):
 		_show_equipment_detail(slot)
 		_show_error_message(

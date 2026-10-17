@@ -1,0 +1,19 @@
+{
+  "baseline": "45170d0eaf4d2c642d4a03de392f64fa2b1e25bf",
+  "source_content_sha256": "7312f8f0544143d3bf4685e94e7e2d013b2124847410c3c25bb0f12c34754b5e",
+  "source_manifest": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_full_world_immutable_prefix_20261018_40\\SOURCE_MANIFEST.json",
+  "real_index_before": "3180f91855b8bc8d7a22848592ff9f95f2d19574a73f7a3eea90e962f7151b22",
+  "approved_full_world_120": false,
+  "approved_full_world_180": true,
+  "approved_source_save_180": false,
+  "command": [
+    "tools/run_godot_tests.ps1",
+    "-GodotExecutable",
+    "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_immutable_prefix_cache_20261018_build\\Godot_v115-stable_win64_console.exe",
+    "-TestPaths",
+    "tests/framework/character_source_full_world_20261016.tscn",
+    "-TimeoutSeconds",
+    "180",
+    "-ApprovedFullWorld180"
+  ]
+}

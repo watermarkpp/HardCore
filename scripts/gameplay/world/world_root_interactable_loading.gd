@@ -316,7 +316,7 @@ func _active_skill_workset_candidates() -> Array[String]:
 	var display_names: Array = []
 	for identity: Variant in raw:
 		display_names.append(SkillDataLoaderScript.display_name(str(identity)))
-	return Workset.workset_skill_order(display_names, 7)
+	return Workset.workset_skill_order(display_names, _world.profile._rules.professions, 7)
 
 
 ## PERF-R2 R8: thread-pump texture paths with a REAL absolute deadline.

@@ -1,0 +1,192 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "actual Native observer and original Main vault configured",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "actual Native cache miss preserves its typed-null Object distinction",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "actual typed-null resource encodes to plain NIL before Native validation",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "nested actual cache miss also normalizes without a physical token",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "nullable original command arguments use the same plain NIL representation",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "command scene is the actual SceneTree current scene",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "retirement owns a fresh reference to the same actual physical Resource",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "an older reference release preserves the new actual retirement owner",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "a later cached Resource result receives an independent release obligation",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "the independent retirement reference releases exactly once",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "actual Objects and callback captured without crossing threads",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "one command reuses each physical Object or callback loan",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "fresh command token resolves the actual existing Resource",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "unimported command cannot retire custody",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "different argument receipt cannot acknowledge original import",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "matching actual import acknowledges the same captured packet",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "consumed command association retires after import",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "retiring command association preserves Source-owned physical token",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "later command receives an independent token for the same physical Resource",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "original reference retirement consumes only the first fresh token",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "late first release preserves stable publication and later command token",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "unsupported Signal rejects the original graph",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "rejected graph rolls back only unpublished fresh tokens and preserves sequence",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "invalid callback remains an actual value for the original callback validity check",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "a skipped command identity cannot create custody",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "actual loan releases through original vault retirement",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "actual loan releases through original vault retirement",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "actual loan releases through original vault retirement",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "actual loan releases through original vault retirement",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "actual loan releases through original vault retirement",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "actual loan releases through original vault retirement",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "remaining actual command association closes once",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "remaining actual command association closes once",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "all exact physical tokens and command associations drain",
+      "passed": true
+    }
+  ],
+  "count": 34,
+  "engine_version": "4.7-stable (custom_build)",
+  "failed": 0,
+  "invocation_id": "98158f8a-2221-4071-ae89-59101ba6211a",
+  "passed": 34,
+  "reported_checks": 34,
+  "reported_failures": 0,
+  "run_id": "a92bdd70-0dd0-4402-ac4d-e2250f5fb01e",
+  "runtime_environment": {
+    "native_process_id": 22640,
+    "project_root": "C:/Users/Administrator/.codex/worktrees/multicore-v115/HardCore/",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\.godot\\runtime_appdata\\multicore_v115\\runner_98158f8a-2221-4071-ae89-59101ba6211a",
+    "user_data_directory": "C:/Users/Administrator/.codex/worktrees/multicore-v115/HardCore/.godot/runtime_appdata/multicore_v115/runner_98158f8a-2221-4071-ae89-59101ba6211a/Godot/app_userdata/HardCore"
+  },
+  "scene_id": "main_feature_command_loans_20261016",
+  "schema_version": 1,
+  "source_content_sha256": "9b2ab902673a719658440621f98bfc2526835eb3f5dc2b59371c5a2db0b9b46e",
+  "status": "PASS"
+}

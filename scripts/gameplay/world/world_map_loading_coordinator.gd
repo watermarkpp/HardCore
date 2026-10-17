@@ -4,8 +4,10 @@ var _owner := OS.get_thread_caller_id()
 var _runtime: RefCounted
 var _resources: RefCounted
 var _claim_owner: RefCounted
+var _observe_continuations := false
+var _continuation_observation: Dictionary = {}
 func owner_thread_id() -> int: return _owner
-func configure_owner(runtime: RefCounted, resources: RefCounted, claim_owner: RefCounted) -> bool:
+func configure_owner(runtime: RefCounted, resources: RefCounted, claim_owner: RefCounted, observe_continuations := false) -> bool:
 	if _runtime != null or _owner == OS.get_main_thread_id(): return false
 	for port: RefCounted in [runtime,resources,claim_owner]:
 		if port == null or port is Resource or not port.has_method("owner_thread_id"): return false
@@ -19,6 +21,7 @@ func configure_owner(runtime: RefCounted, resources: RefCounted, claim_owner: Re
 	_runtime = runtime
 	_resources = resources
 	_claim_owner = claim_owner
+	_observe_continuations = observe_continuations
 	return true
 
 # ── P1-B / P1-004: Staged World Bootstrap Coordinator ──
@@ -653,11 +656,15 @@ func _process_staged_queue(
 ) -> void:
 	var owner_generation := generation
 	while is_generation_current(owner_generation) and not queue.is_empty():
+		_observe_staged_continuation("before_slice",kind,queue,owner_generation)
 		await _process_staged_queue_slice(queue, handler, max_items, budget_ms, kind)
+		_observe_staged_continuation("after_slice",kind,queue,owner_generation)
 		if not is_generation_current(owner_generation):
 			return
 		if not queue.is_empty() and defer_between_slices:
+			_observe_staged_continuation("before_between_service",kind,queue,owner_generation)
 			await _runtime.next_service()
+			_observe_staged_continuation("after_between_service",kind,queue,owner_generation)
 
 
 func _process_staged_queue_slice(
@@ -675,8 +682,10 @@ func _process_staged_queue_slice(
 		if item is Dictionary:
 			var item_started_usec := Time.get_ticks_usec()
 			var result: Variant
+			_observe_staged_continuation("before_handler",kind,queue,owner_generation)
 			if kind == "map": result = await handler.call(item as Dictionary)
 			else: result = handler.call(item as Dictionary)
+			_observe_staged_continuation("after_handler",kind,queue,owner_generation,{"dictionary_result":result is Dictionary,"ok":result.get("ok",false) if result is Dictionary else false})
 			# A real callback may replace this generation synchronously. Neither
 			# its returned item nor its slice belongs to the replacement owner.
 			if not is_generation_current(owner_generation):
@@ -727,6 +736,24 @@ func _process_staged_queue_slice(
 		actor_max_items_in_slice = maxi(actor_max_items_in_slice, processed)
 		actor_max_slice_ms = maxf(actor_max_slice_ms, slice_ms)
 
+
+func _observe_staged_continuation(point: String, kind: String, queue: Array, owner_generation: int, result: Dictionary = {}) -> void:
+	if not _observe_continuations: return
+	if point=="after_handler": diagnostic["actual_last_handler_result"]=result.duplicate(true)
+	_continuation_observation={"point":point,"kind":kind,"remaining":queue.size(),"owner_generation":owner_generation,"generation":generation,"generation_valid":_generation_valid,"built_map_items":built_map_item_count,"runtime_id":_runtime.get_instance_id(),"usec":Time.get_ticks_usec(),"result":result.duplicate(true)}
+
+func actual_staged_continuation_observation() -> Dictionary:
+	if not _observe_continuations: return {}
+	var out := _continuation_observation.duplicate(true)
+	out["coordinator_id"]=get_instance_id()
+	out["stage"]=stage
+	out["last_failure"]=last_failure.duplicate(true)
+	out["current_generation_valid"]=_generation_valid
+	out["runtime_last_P"]=_runtime.get("_last_service_sequence")
+	out["runtime_waiters"]=_runtime.original_resource_service_waiter_count()
+	out["map_queue_count"]=_map_build_queue.size()
+	out["last_handler_result"]=diagnostic.get("actual_last_handler_result",{})
+	return out
 
 func record_sync_load() -> void:
 	_synchronous_load_during_spawn += 1

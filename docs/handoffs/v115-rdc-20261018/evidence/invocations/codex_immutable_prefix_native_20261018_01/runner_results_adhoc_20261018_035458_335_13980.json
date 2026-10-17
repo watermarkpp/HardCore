@@ -1,0 +1,499 @@
+{
+  "engine_fingerprints": [
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_immutable_prefix_cache_20261018_build\\Godot_v115-stable_win64_console.exe",
+      "sha256": "3d6a00e8c2216af21cb900c3c9895c69bfd41653037abeb044a73d5c150f280c",
+      "bytes": 298496
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_immutable_prefix_cache_20261018_build\\Godot_v115-stable_win64.exe",
+      "sha256": "f26c17c00fb11f1a2dcb07d3b079d744554bf0355a2e3e2642bb15ed55a6d373",
+      "bytes": 175889920
+    }
+  ],
+  "engine_log_errors": 0,
+  "invocation_id": "98158f8a-2221-4071-ae89-59101ba6211a",
+  "failed": 0,
+  "source_content_sha256": "9b2ab902673a719658440621f98bfc2526835eb3f5dc2b59371c5a2db0b9b46e",
+  "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+  "git_head": "45170d0eaf4d2c642d4a03de392f64fa2b1e25bf",
+  "total": 6,
+  "generated_at": "2026-10-18T03:54:58.3356706+08:00",
+  "passed": 6,
+  "results": [
+    {
+      "test_name": "publication_prefix_immutable_20261018",
+      "test_path": "tests/framework/publication_prefix_immutable_20261018.tscn",
+      "wrapper_process_id": 16176,
+      "wrapper_started_utc": "2026-10-17T19:53:13.7223132Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\.godot\\runtime_appdata\\multicore_v115\\runner_98158f8a-2221-4071-ae89-59101ba6211a",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-17T19:53:43.7266109Z",
+      "native_exit_observed_utc": "2026-10-17T19:53:35.9865286Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "cleanup_warning_evidence": {
+        "status": "PASS",
+        "allowlisted_errors": {
+          "string_formatting": {
+            "count": 0,
+            "lines": []
+          },
+          "resources_in_use": {
+            "count": 0,
+            "lines": []
+          },
+          "rid_leak": {
+            "count": 0,
+            "lines": []
+          },
+          "null_parameter": {
+            "count": 0,
+            "lines": []
+          }
+        },
+        "unknown_error_lines": [],
+        "unknown_error_count": 0,
+        "objectdb_leak_warning_lines": [],
+        "objectdb_leak_warning_count": 0,
+        "functional_marker_observed": true,
+        "formal_evidence_status": "MISSING",
+        "formal_evidence_reason": "upstream_native_and_full_receipt_validation_required",
+        "receipt_validation_reasons": [],
+        "candidate_receipt_correlation": true,
+        "upstream_result": "NOT_RUN",
+        "raw_log_paths": [
+          "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\logs\\publication_prefix_immutable_20261018.stdout.log",
+          "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\logs\\publication_prefix_immutable_20261018.stderr.log",
+          "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\logs\\publication_prefix_immutable_20261018.godot.log"
+        ],
+        "receipt_path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\test_logs\\framework\\publication_prefix_immutable_20261018.result.json",
+        "expected_scene_id": "publication_prefix_immutable_20261018",
+        "expected_invocation_id": "98158f8a-2221-4071-ae89-59101ba6211a"
+      },
+      "framework_run_id": "96f84a04-b3f5-466f-8dbf-98771cf0c174",
+      "framework_receipt_valid": true,
+      "source_content_sha256": "9b2ab902673a719658440621f98bfc2526835eb3f5dc2b59371c5a2db0b9b46e",
+      "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+      "engine_fingerprints": [
+        {
+          "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_immutable_prefix_cache_20261018_build\\Godot_v115-stable_win64_console.exe",
+          "sha256": "3d6a00e8c2216af21cb900c3c9895c69bfd41653037abeb044a73d5c150f280c",
+          "bytes": 298496
+        },
+        {
+          "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_immutable_prefix_cache_20261018_build\\Godot_v115-stable_win64.exe",
+          "sha256": "f26c17c00fb11f1a2dcb07d3b079d744554bf0355a2e3e2642bb15ed55a6d373",
+          "bytes": 175889920
+        }
+      ],
+      "formal_evidence_status": "PASS",
+      "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "multicore_v115_script_semantic_20261015",
+      "test_path": "tests/framework/multicore_v115_script_semantic_20261015.tscn",
+      "wrapper_process_id": 1436,
+      "wrapper_started_utc": "2026-10-17T19:53:37.5963924Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\.godot\\runtime_appdata\\multicore_v115\\runner_98158f8a-2221-4071-ae89-59101ba6211a",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-17T19:54:37.6005300Z",
+      "native_exit_observed_utc": "2026-10-17T19:54:05.2038285Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "cleanup_warning_evidence": {
+        "status": "PASS",
+        "allowlisted_errors": {
+          "string_formatting": {
+            "count": 0,
+            "lines": []
+          },
+          "resources_in_use": {
+            "count": 0,
+            "lines": []
+          },
+          "rid_leak": {
+            "count": 0,
+            "lines": []
+          },
+          "null_parameter": {
+            "count": 0,
+            "lines": []
+          }
+        },
+        "unknown_error_lines": [],
+        "unknown_error_count": 0,
+        "objectdb_leak_warning_lines": [],
+        "objectdb_leak_warning_count": 0,
+        "functional_marker_observed": true,
+        "formal_evidence_status": "MISSING",
+        "formal_evidence_reason": "upstream_native_and_full_receipt_validation_required",
+        "receipt_validation_reasons": [],
+        "candidate_receipt_correlation": true,
+        "upstream_result": "NOT_RUN",
+        "raw_log_paths": [
+          "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\logs\\multicore_v115_script_semantic_20261015.stdout.log",
+          "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\logs\\multicore_v115_script_semantic_20261015.stderr.log",
+          "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\logs\\multicore_v115_script_semantic_20261015.godot.log"
+        ],
+        "receipt_path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\test_logs\\framework\\multicore_v115_script_semantic_20261015.result.json",
+        "expected_scene_id": "multicore_v115_script_semantic_20261015",
+        "expected_invocation_id": "98158f8a-2221-4071-ae89-59101ba6211a"
+      },
+      "framework_run_id": "97d4fa7c-d82b-4f84-ab67-b00eae454265",
+      "framework_receipt_valid": true,
+      "source_content_sha256": "9b2ab902673a719658440621f98bfc2526835eb3f5dc2b59371c5a2db0b9b46e",
+      "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+      "engine_fingerprints": [
+        {
+          "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_immutable_prefix_cache_20261018_build\\Godot_v115-stable_win64_console.exe",
+          "sha256": "3d6a00e8c2216af21cb900c3c9895c69bfd41653037abeb044a73d5c150f280c",
+          "bytes": 298496
+        },
+        {
+          "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_immutable_prefix_cache_20261018_build\\Godot_v115-stable_win64.exe",
+          "sha256": "f26c17c00fb11f1a2dcb07d3b079d744554bf0355a2e3e2642bb15ed55a6d373",
+          "bytes": 175889920
+        }
+      ],
+      "formal_evidence_status": "PASS",
+      "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "main_feature_command_loans_20261016",
+      "test_path": "tests/framework/main_feature_command_loans_20261016.tscn",
+      "wrapper_process_id": 20784,
+      "wrapper_started_utc": "2026-10-17T19:54:06.7270763Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\.godot\\runtime_appdata\\multicore_v115\\runner_98158f8a-2221-4071-ae89-59101ba6211a",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-17T19:54:36.7272287Z",
+      "native_exit_observed_utc": "2026-10-17T19:54:25.1396620Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "cleanup_warning_evidence": {
+        "status": "PASS",
+        "allowlisted_errors": {
+          "string_formatting": {
+            "count": 0,
+            "lines": []
+          },
+          "resources_in_use": {
+            "count": 0,
+            "lines": []
+          },
+          "rid_leak": {
+            "count": 0,
+            "lines": []
+          },
+          "null_parameter": {
+            "count": 0,
+            "lines": []
+          }
+        },
+        "unknown_error_lines": [],
+        "unknown_error_count": 0,
+        "objectdb_leak_warning_lines": [],
+        "objectdb_leak_warning_count": 0,
+        "functional_marker_observed": true,
+        "formal_evidence_status": "MISSING",
+        "formal_evidence_reason": "upstream_native_and_full_receipt_validation_required",
+        "receipt_validation_reasons": [],
+        "candidate_receipt_correlation": true,
+        "upstream_result": "NOT_RUN",
+        "raw_log_paths": [
+          "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\logs\\main_feature_command_loans_20261016.stdout.log",
+          "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\logs\\main_feature_command_loans_20261016.stderr.log",
+          "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\logs\\main_feature_command_loans_20261016.godot.log"
+        ],
+        "receipt_path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\test_logs\\framework\\main_feature_command_loans_20261016.result.json",
+        "expected_scene_id": "main_feature_command_loans_20261016",
+        "expected_invocation_id": "98158f8a-2221-4071-ae89-59101ba6211a"
+      },
+      "framework_run_id": "a92bdd70-0dd0-4402-ac4d-e2250f5fb01e",
+      "framework_receipt_valid": true,
+      "source_content_sha256": "9b2ab902673a719658440621f98bfc2526835eb3f5dc2b59371c5a2db0b9b46e",
+      "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+      "engine_fingerprints": [
+        {
+          "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_immutable_prefix_cache_20261018_build\\Godot_v115-stable_win64_console.exe",
+          "sha256": "3d6a00e8c2216af21cb900c3c9895c69bfd41653037abeb044a73d5c150f280c",
+          "bytes": 298496
+        },
+        {
+          "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_immutable_prefix_cache_20261018_build\\Godot_v115-stable_win64.exe",
+          "sha256": "f26c17c00fb11f1a2dcb07d3b079d744554bf0355a2e3e2642bb15ed55a6d373",
+          "bytes": 175889920
+        }
+      ],
+      "formal_evidence_status": "PASS",
+      "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "code_preparation_engine_namespace_capture_test",
+      "test_path": "tests/framework/code_preparation_engine_namespace_capture_test.tscn",
+      "wrapper_process_id": 8020,
+      "wrapper_started_utc": "2026-10-17T19:54:26.6327064Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\.godot\\runtime_appdata\\multicore_v115\\runner_98158f8a-2221-4071-ae89-59101ba6211a",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-17T19:54:56.6328656Z",
+      "native_exit_observed_utc": "2026-10-17T19:54:34.8674884Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "cleanup_warning_evidence": {
+        "status": "PASS",
+        "allowlisted_errors": {
+          "string_formatting": {
+            "count": 0,
+            "lines": []
+          },
+          "resources_in_use": {
+            "count": 0,
+            "lines": []
+          },
+          "rid_leak": {
+            "count": 0,
+            "lines": []
+          },
+          "null_parameter": {
+            "count": 0,
+            "lines": []
+          }
+        },
+        "unknown_error_lines": [],
+        "unknown_error_count": 0,
+        "objectdb_leak_warning_lines": [],
+        "objectdb_leak_warning_count": 0,
+        "functional_marker_observed": true,
+        "formal_evidence_status": "MISSING",
+        "formal_evidence_reason": "upstream_native_and_full_receipt_validation_required",
+        "receipt_validation_reasons": [],
+        "candidate_receipt_correlation": true,
+        "upstream_result": "NOT_RUN",
+        "raw_log_paths": [
+          "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\logs\\code_preparation_engine_namespace_capture_test.stdout.log",
+          "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\logs\\code_preparation_engine_namespace_capture_test.stderr.log",
+          "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\logs\\code_preparation_engine_namespace_capture_test.godot.log"
+        ],
+        "receipt_path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\test_logs\\framework\\code_preparation_engine_namespace_capture_test.result.json",
+        "expected_scene_id": "code_preparation_engine_namespace_capture_test",
+        "expected_invocation_id": "98158f8a-2221-4071-ae89-59101ba6211a"
+      },
+      "framework_run_id": "debe701a-0c85-4cd1-a864-ae2ec0d3ff54",
+      "framework_receipt_valid": true,
+      "source_content_sha256": "9b2ab902673a719658440621f98bfc2526835eb3f5dc2b59371c5a2db0b9b46e",
+      "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+      "engine_fingerprints": [
+        {
+          "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_immutable_prefix_cache_20261018_build\\Godot_v115-stable_win64_console.exe",
+          "sha256": "3d6a00e8c2216af21cb900c3c9895c69bfd41653037abeb044a73d5c150f280c",
+          "bytes": 298496
+        },
+        {
+          "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_immutable_prefix_cache_20261018_build\\Godot_v115-stable_win64.exe",
+          "sha256": "f26c17c00fb11f1a2dcb07d3b079d744554bf0355a2e3e2642bb15ed55a6d373",
+          "bytes": 175889920
+        }
+      ],
+      "formal_evidence_status": "PASS",
+      "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "code_preparation_native_symbol_probe_test",
+      "test_path": "tests/framework/code_preparation_native_symbol_probe_test.tscn",
+      "wrapper_process_id": 12668,
+      "wrapper_started_utc": "2026-10-17T19:54:36.2630505Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\.godot\\runtime_appdata\\multicore_v115\\runner_98158f8a-2221-4071-ae89-59101ba6211a",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-17T19:55:06.2631804Z",
+      "native_exit_observed_utc": "2026-10-17T19:54:45.9377417Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "cleanup_warning_evidence": {
+        "status": "PASS",
+        "allowlisted_errors": {
+          "string_formatting": {
+            "count": 0,
+            "lines": []
+          },
+          "resources_in_use": {
+            "count": 0,
+            "lines": []
+          },
+          "rid_leak": {
+            "count": 0,
+            "lines": []
+          },
+          "null_parameter": {
+            "count": 0,
+            "lines": []
+          }
+        },
+        "unknown_error_lines": [],
+        "unknown_error_count": 0,
+        "objectdb_leak_warning_lines": [],
+        "objectdb_leak_warning_count": 0,
+        "functional_marker_observed": true,
+        "formal_evidence_status": "MISSING",
+        "formal_evidence_reason": "upstream_native_and_full_receipt_validation_required",
+        "receipt_validation_reasons": [],
+        "candidate_receipt_correlation": true,
+        "upstream_result": "NOT_RUN",
+        "raw_log_paths": [
+          "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\logs\\code_preparation_native_symbol_probe_test.stdout.log",
+          "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\logs\\code_preparation_native_symbol_probe_test.stderr.log",
+          "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\logs\\code_preparation_native_symbol_probe_test.godot.log"
+        ],
+        "receipt_path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\test_logs\\framework\\code_preparation_native_symbol_probe_test.result.json",
+        "expected_scene_id": "code_preparation_native_symbol_probe_test",
+        "expected_invocation_id": "98158f8a-2221-4071-ae89-59101ba6211a"
+      },
+      "framework_run_id": "840835de-3d80-4d09-8ddd-7d149756009b",
+      "framework_receipt_valid": true,
+      "source_content_sha256": "9b2ab902673a719658440621f98bfc2526835eb3f5dc2b59371c5a2db0b9b46e",
+      "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+      "engine_fingerprints": [
+        {
+          "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_immutable_prefix_cache_20261018_build\\Godot_v115-stable_win64_console.exe",
+          "sha256": "3d6a00e8c2216af21cb900c3c9895c69bfd41653037abeb044a73d5c150f280c",
+          "bytes": 298496
+        },
+        {
+          "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_immutable_prefix_cache_20261018_build\\Godot_v115-stable_win64.exe",
+          "sha256": "f26c17c00fb11f1a2dcb07d3b079d744554bf0355a2e3e2642bb15ed55a6d373",
+          "bytes": 175889920
+        }
+      ],
+      "formal_evidence_status": "PASS",
+      "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "code_preparation_scalar_math_probe_test",
+      "test_path": "tests/framework/code_preparation_scalar_math_probe_test.tscn",
+      "wrapper_process_id": 20668,
+      "wrapper_started_utc": "2026-10-17T19:54:47.4651681Z",
+      "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\.godot\\runtime_appdata\\multicore_v115\\runner_98158f8a-2221-4071-ae89-59101ba6211a",
+      "fixed_fps": 0,
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-17T19:55:17.4652944Z",
+      "native_exit_observed_utc": "2026-10-17T19:54:56.8200345Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "cleanup_warning_evidence": {
+        "status": "PASS",
+        "allowlisted_errors": {
+          "string_formatting": {
+            "count": 0,
+            "lines": []
+          },
+          "resources_in_use": {
+            "count": 0,
+            "lines": []
+          },
+          "rid_leak": {
+            "count": 0,
+            "lines": []
+          },
+          "null_parameter": {
+            "count": 0,
+            "lines": []
+          }
+        },
+        "unknown_error_lines": [],
+        "unknown_error_count": 0,
+        "objectdb_leak_warning_lines": [],
+        "objectdb_leak_warning_count": 0,
+        "functional_marker_observed": true,
+        "formal_evidence_status": "MISSING",
+        "formal_evidence_reason": "upstream_native_and_full_receipt_validation_required",
+        "receipt_validation_reasons": [],
+        "candidate_receipt_correlation": true,
+        "upstream_result": "NOT_RUN",
+        "raw_log_paths": [
+          "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\logs\\code_preparation_scalar_math_probe_test.stdout.log",
+          "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\logs\\code_preparation_scalar_math_probe_test.stderr.log",
+          "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\logs\\code_preparation_scalar_math_probe_test.godot.log"
+        ],
+        "receipt_path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\test_logs\\framework\\code_preparation_scalar_math_probe_test.result.json",
+        "expected_scene_id": "code_preparation_scalar_math_probe_test",
+        "expected_invocation_id": "98158f8a-2221-4071-ae89-59101ba6211a"
+      },
+      "framework_run_id": "8fcf684f-c7f4-4d90-9cf6-94618e93f4ef",
+      "framework_receipt_valid": true,
+      "source_content_sha256": "9b2ab902673a719658440621f98bfc2526835eb3f5dc2b59371c5a2db0b9b46e",
+      "source_binding_scope": "External immutable input freeze required; env label alone is not a source scan",
+      "engine_fingerprints": [
+        {
+          "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_immutable_prefix_cache_20261018_build\\Godot_v115-stable_win64_console.exe",
+          "sha256": "3d6a00e8c2216af21cb900c3c9895c69bfd41653037abeb044a73d5c150f280c",
+          "bytes": 298496
+        },
+        {
+          "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_immutable_prefix_cache_20261018_build\\Godot_v115-stable_win64.exe",
+          "sha256": "f26c17c00fb11f1a2dcb07d3b079d744554bf0355a2e3e2642bb15ed55a6d373",
+          "bytes": 175889920
+        }
+      ],
+      "formal_evidence_status": "PASS",
+      "formal_evidence_reason": "Requires matching external source/input freeze and this native result",
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "runtime_environment": {
+    "project_root": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore",
+    "runtime_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\.godot\\runtime_appdata\\multicore_v115\\runner_98158f8a-2221-4071-ae89-59101ba6211a",
+    "runner_process_id": 13980
+  },
+  "suite": "adhoc"
+}

@@ -1642,9 +1642,26 @@ func remove_item(item_name: String, amount := 1) -> bool:
 
 
 
-func _consume_inventory_index(index: int, amount := 1, save_in_background := false) -> bool:
+
+func _selected_item_matches(container: String, slot: Variant, selection: Dictionary) -> bool:
+	if selection.is_empty(): return true # Existing internal/Main callers only; Source UI admission requires a witness.
+	var records: Variant = equipment if container=="equipment" else (warehouse_inventory if container=="warehouse" else inventory)
+	return preload("res://scripts/gameplay/profile/profile_item_selection.gd").matches(active_profile_id,container,records,slot,selection)
+
+func _selected_batch_matches(container: String, slots: Array, selections: Array) -> bool:
+	if selections.is_empty(): return true # Source UI forbids an omitted selection list.
+	if selections.size()!=slots.size(): return false
+	for i: int in slots.size():
+		if not selections[i] is Dictionary or not _selected_item_matches(container,slots[i],selections[i]): return false
+	return true
+
+func _selection_changed_result() -> Dictionary:
+	return {"success":false,"ok":false,"complete":false,"destroyed":0,"transferred":0,"reason":"selection_changed","message":"所选物品已变化，请重新选择。"}
+
+func _consume_inventory_index(index: int, amount := 1, save_in_background := false, selection: Dictionary = {}) -> bool:
 	if not save_in_background:
 		_before_state_transaction()
+	if not _selected_item_matches("inventory",index,selection): return false
 	var inventory_before := inventory.duplicate(true)
 	if not _consume_inventory_index_without_commit(index, amount):
 		return false
@@ -1677,7 +1694,7 @@ func _consume_inventory_index_without_commit(index: int, amount := 1) -> bool:
 	return true
 
 
-func destroy_inventory_indices(indices: Array) -> Dictionary:
+func destroy_inventory_indices(indices: Array, selections: Array = []) -> Dictionary:
 	# Protect both selected identities and promised removal output slots before
 	# the save barrier can publish a new asset into the caller's empty index.
 	if _item_transaction_port != null:
@@ -1694,6 +1711,7 @@ func destroy_inventory_indices(indices: Array) -> Dictionary:
 	# discard can reach disk while the UI reports the preceding save failure.
 	if _item_save_failed or _item_save_revision > _item_saved_revision:
 		return {"success": false, "destroyed": 0, "reason": "save_failed", "message": "物品存档失败，暂不能丢弃。"}
+	if not _selected_batch_matches("inventory",indices,selections): return _selection_changed_result()
 	var targets: Array[int] = []
 	for raw_index: Variant in indices:
 		var index := int(raw_index)
@@ -2582,11 +2600,12 @@ func use_inventory_index(index: int) -> String:
 ## Structured use contract (R1.1 closure): {"success", "reason", "message"}.
 ## "message" is always player-readable Chinese; "reason" is a machine token
 ## for diagnostics only and never reaches the player UI.
-func use_inventory_index_result(index: int, save_in_background := false) -> Dictionary:
+func use_inventory_index_result(index: int, save_in_background := false, selection: Dictionary = {}) -> Dictionary:
 	if not save_in_background:
 		_before_state_transaction()
 	elif not _can_accept_immediate_item_use():
 		return _use_item_failure("save_unavailable", "角色存档尚未就绪，暂不能使用物品")
+	if not _selected_item_matches("inventory",index,selection): return _selection_changed_result()
 	if index < 0 or index >= inventory.size() or not inventory[index] is Dictionary or (inventory[index] as Dictionary).is_empty():
 		return _use_item_failure("no_item_selected", "请先选择物品")
 	var item := _content_port.get_item_record(inventory[index])
@@ -2598,7 +2617,7 @@ func use_inventory_index_result(index: int, save_in_background := false) -> Dict
 	var effect := str(item.get("useEffect", ""))
 	if kind == "skill_book":
 		var skill_id: String = _content_port.skill_book_skill_id(inventory[index])
-		return _learn_skill_result(skill_id, index, save_in_background)
+		return _learn_skill_result(skill_id, index, save_in_background, selection)
 	if item.get("usable", true) == false:
 		return _use_item_failure("no_local_rule", "%s当前没有可执行的本地规则" % item_name)
 	if kind == "scroll":
@@ -2613,7 +2632,7 @@ func use_inventory_index_result(index: int, save_in_background := false) -> Dict
 					return _use_item_failure("blessing_rng_not_ready", "祝福油随机源尚未就绪")
 				var blessing_result := use_blessing_oil_inventory_index(
 					index,
-					_blessing_oil_rng, save_in_background
+					_blessing_oil_rng, save_in_background, selection
 				)
 				if bool(blessing_result.get("ok", false)):
 					scroll_requested.emit(entity_id)
@@ -2623,8 +2642,8 @@ func use_inventory_index_result(index: int, save_in_background := false) -> Dict
 					str(blessing_result.get("message", "祝福油使用失败"))
 				)
 			if effect in ["repair_oil", "war_god_oil"]:
-				return _use_weapon_repair_oil_item_result(index, effect == "war_god_oil", save_in_background)
-		if _consume_inventory_index(index, 1, save_in_background):
+				return _use_weapon_repair_oil_item_result(index, effect == "war_god_oil", save_in_background, selection)
+		if _consume_inventory_index(index, 1, save_in_background, selection):
 			scroll_requested.emit(entity_id)
 			if _last_item_commit_succeeded():
 				_emit_item_audio_committed(item, "use_success")
@@ -2640,7 +2659,7 @@ func use_inventory_index_result(index: int, save_in_background := false) -> Dict
 			return _use_item_failure("weapon_required", "需要先装备武器")
 		if _blessing_oil_rng == null:
 			return _use_item_failure("blessing_rng_not_ready", "祝福油随机源尚未就绪")
-		var blessing_result := use_blessing_oil_inventory_index(index, _blessing_oil_rng, save_in_background)
+		var blessing_result := use_blessing_oil_inventory_index(index, _blessing_oil_rng, save_in_background, selection)
 		if bool(blessing_result.get("ok", false)):
 			consumable_requested.emit(entity_id)
 			return _use_item_success(str(blessing_result.get("message", "祝福油使用成功")))
@@ -2672,7 +2691,7 @@ func use_inventory_index_result(index: int, save_in_background := false) -> Dict
 		inventory_changed.emit()
 		_emit_item_audio_committed(item, "use_success")
 		return _use_item_success("使用：%s" % item_name)
-	if _consume_inventory_index(index, 1, save_in_background):
+	if _consume_inventory_index(index, 1, save_in_background, selection):
 		consumable_requested.emit(entity_id)
 		if _last_item_commit_succeeded():
 			_emit_item_audio_committed(item, "use_success")
@@ -2680,9 +2699,10 @@ func use_inventory_index_result(index: int, save_in_background := false) -> Dict
 	return _use_item_failure("insufficient_items", "物品数量不足")
 
 
-func _use_weapon_repair_oil_item_result(index: int, full_repair: bool, save_in_background := false) -> Dictionary:
+func _use_weapon_repair_oil_item_result(index: int, full_repair: bool, save_in_background := false, selection: Dictionary = {}) -> Dictionary:
 	if not save_in_background:
 		_before_state_transaction()
+	if not _selected_item_matches("inventory",index,selection): return _selection_changed_result()
 	if index < 0 or index >= inventory.size() or not inventory[index] is Dictionary or (inventory[index] as Dictionary).is_empty():
 		return _use_item_failure("insufficient_items", "物品数量不足")
 	var weapon_value: Variant = equipment.get("hc.slot.weapon", {})
@@ -2889,10 +2909,12 @@ func apply_blessing_oil_with_rolls(unlucky_roll: int, success_roll: int, upper_s
 func use_blessing_oil_inventory_index(
 	index: int,
 	rng: RandomNumberGenerator,
-	save_in_background := false
+	save_in_background := false,
+	selection: Dictionary = {}
 ) -> Dictionary:
 	if not save_in_background:
 		_before_state_transaction()
+	if not _selected_item_matches("inventory",index,selection): return _selection_changed_result()
 	if rng == null:
 		return {"ok": false, "reason": "rng_unavailable", "message": "祝福油随机源尚未就绪"}
 	if (
@@ -2909,6 +2931,8 @@ func use_blessing_oil_inventory_index(
 		return {"ok": false, "reason": "item_inputs_reserved", "message": "武器正在处理中。"}
 	if _content_port.get_item_record(weapon_value).is_empty():
 		return {"ok": false, "reason": "invalid_weapon", "message": "武器数据无效"}
+	if not selection.is_empty():
+		return use_blessing_oil_inventory_index_with_rolls(index,0,0,-1,save_in_background,selection,rng)
 	var rolls := _blessing_oil_rolls(weapon_value, rng)
 	return use_blessing_oil_inventory_index_with_rolls(
 		index,
@@ -2923,10 +2947,13 @@ func use_blessing_oil_inventory_index_with_rolls(
 	unlucky_roll: int,
 	success_roll: int,
 	upper_stage_roll := -1,
-	save_in_background := false
+	save_in_background := false,
+	selection: Dictionary = {},
+	deferred_rng: RandomNumberGenerator = null
 ) -> Dictionary:
 	if not save_in_background:
 		_before_state_transaction()
+	if not _selected_item_matches("inventory",index,selection): return _selection_changed_result()
 	var oil_catalog := _content_port.get_entity_record(BLESSING_OIL_ENTITY_ID)
 	if (
 		str(oil_catalog.get("useEffect", "")) != "blessing_oil"
@@ -2945,6 +2972,9 @@ func use_blessing_oil_inventory_index_with_rolls(
 		return {"ok": false, "reason": "no_weapon", "message": "需要先装备武器"}
 	if _item_transaction_port != null and _item_transaction_port.record_reserved(weapon_value):
 		return {"ok": false, "reason": "item_inputs_reserved", "message": "武器正在处理中。"}
+	if deferred_rng != null:
+		var rolls := _blessing_oil_rolls(weapon_value,deferred_rng)
+		unlucky_roll=int(rolls.get("unlucky_roll",0));success_roll=int(rolls.get("success_roll",0));upper_stage_roll=int(rolls.get("upper_stage_roll",-1))
 	var inventory_before := inventory.duplicate(true)
 	var equipment_before := equipment.duplicate(true)
 	if not _consume_inventory_index_without_commit(index):
@@ -3296,33 +3326,37 @@ func _gameplay_experience_threshold(source_experience: int) -> int:
 	)
 
 
-func equip_inventory_index_result(index: int, preferred_slot := "", expected_instance_id := "") -> Dictionary:
+func equip_inventory_index_result(index: int, preferred_slot := "", expected_instance_id := "", selection: Dictionary = {}) -> Dictionary:
 	if not expected_instance_id.is_empty() and (
 		index < 0 or index >= inventory.size() or not inventory[index] is Dictionary
 		or str(inventory[index].get("instance_id", "")) != expected_instance_id
 	):
 		return {"success": false, "reason": "stale_instance", "message": "所选装备已变化", "revision": equipment_transaction_revision}
-	var message := equip_inventory_index(index, preferred_slot)
+	var message := equip_inventory_index(index, preferred_slot, expected_instance_id, selection)
 	var result := _last_equipment_transaction_result.duplicate(true)
 	result["message"] = message
 	return result
 
 
-func unequip_to_inventory_slot(slot: String, inventory_slot: int, expected_instance_id := "") -> Dictionary:
+func unequip_to_inventory_slot(slot: String, inventory_slot: int, expected_instance_id := "", selection: Dictionary = {}) -> Dictionary:
 	var current: Variant = equipment.get(slot, {})
 	if not expected_instance_id.is_empty() and (
 		not current is Dictionary or str(current.get("instance_id", "")) != expected_instance_id
 	):
 		return {"success": false, "reason": "stale_instance", "message": "所选装备已变化", "revision": equipment_transaction_revision}
-	var message := unequip_slot(slot, inventory_slot)
+	var message := unequip_slot(slot, inventory_slot, expected_instance_id, selection)
 	var result := _last_equipment_transaction_result.duplicate(true)
 	result["message"] = message
 	return result
 
 
-func equip_inventory_index(index: int, preferred_slot := "") -> String:
+func equip_inventory_index(index: int, preferred_slot := "", expected_instance_id := "", selection: Dictionary = {}) -> String:
 	_before_state_transaction()
 	_last_equipment_transaction_result = {"success": false, "reason": "rejected", "revision": equipment_transaction_revision}
+	var selected_value: Variant = inventory[index] if index>=0 and index<inventory.size() else {}
+	if not _selected_item_matches("inventory",index,selection) or (not expected_instance_id.is_empty() and (not selected_value is Dictionary or str(selected_value.get("instance_id",""))!=expected_instance_id)):
+		_last_equipment_transaction_result["reason"]="selection_changed"
+		return "所选装备已变化，请重新选择。"
 	if index < 0 or index >= inventory.size() or not inventory[index] is Dictionary or (inventory[index] as Dictionary).is_empty():
 		return "请先选择物品"
 	var inventory_record: Dictionary = inventory[index]
@@ -3418,9 +3452,13 @@ func equip_inventory_index(index: int, preferred_slot := "") -> String:
 	return "已装备：%s" % item_name
 
 
-func unequip_slot(slot: String, destination_slot := -1) -> String:
+func unequip_slot(slot: String, destination_slot := -1, expected_instance_id := "", selection: Dictionary = {}) -> String:
 	_before_state_transaction()
 	_last_equipment_transaction_result = {"success": false, "reason": "rejected", "revision": equipment_transaction_revision}
+	var selected_value: Variant = equipment.get(slot,{})
+	if not _selected_item_matches("equipment",slot,selection) or (not expected_instance_id.is_empty() and (not selected_value is Dictionary or str(selected_value.get("instance_id",""))!=expected_instance_id)):
+		_last_equipment_transaction_result["reason"]="selection_changed"
+		return "所选装备已变化，请重新选择。"
 	if slot not in EQUIPMENT_SLOTS:
 		return "无效装备槽"
 	var equipped_value: Variant = equipment.get(slot, {})
@@ -3476,9 +3514,10 @@ func learn_skill(skill_name: String, inventory_index := -1) -> String:
 ## Structured learn contract (R1.1 closure): {"success", "reason", "message"}.
 ## "message" is always player-readable Chinese; "reason" is a machine token
 ## for diagnostics only and never reaches the player UI.
-func _learn_skill_result(skill_ref: String, inventory_index := -1, save_in_background := false) -> Dictionary:
+func _learn_skill_result(skill_ref: String, inventory_index := -1, save_in_background := false, selection: Dictionary = {}) -> Dictionary:
 	if not save_in_background:
 		_before_state_transaction()
+	if not _selected_item_matches("inventory",inventory_index,selection): return _selection_changed_result()
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_ref)
 	if stable_skill_id.is_empty():
 		return _use_item_failure("skill_data_missing", "技能数据不存在")
@@ -7069,7 +7108,7 @@ func deposit_to_warehouse(inventory_index: int, warehouse_slot: int) -> Dictiona
 
 
 ## Moves one selected batch with one two-file persistence transaction.
-func deposit_to_warehouse_batch(inventory_indices: Array, warehouse_slots: Array, prepare_only := false) -> Dictionary:
+func deposit_to_warehouse_batch(inventory_indices: Array, warehouse_slots: Array, prepare_only := false, selections: Array = []) -> Dictionary:
 	_before_state_transaction()
 	var requested := inventory_indices.size()
 	var result := {
@@ -7086,6 +7125,10 @@ func deposit_to_warehouse_batch(inventory_indices: Array, warehouse_slots: Array
 	}
 	if not (test_mode and not _shared_warehouse_test_isolation_enabled()) and not _ensure_shared_warehouse_ready():
 		result["message"] = "公共仓库不可用，物品未改变。"
+		return result
+	if not _selected_batch_matches("inventory",inventory_indices,selections):
+		result["reason"]="selection_changed"
+		result["message"]="所选物品已变化，请重新选择。"
 		return result
 	if requested <= 0:
 		result["message"] = "存入位置无效。"
@@ -7177,7 +7220,7 @@ func withdraw_from_warehouse(warehouse_slot: int) -> Dictionary:
 
 
 ## Moves the largest valid prefix with one two-file persistence transaction.
-func withdraw_from_warehouse_batch(warehouse_slots: Array, prepare_only := false) -> Dictionary:
+func withdraw_from_warehouse_batch(warehouse_slots: Array, prepare_only := false, selections: Array = []) -> Dictionary:
 	_before_state_transaction()
 	var requested := warehouse_slots.size()
 	var result := {
@@ -7193,6 +7236,10 @@ func withdraw_from_warehouse_batch(warehouse_slots: Array, prepare_only := false
 	}
 	if not (test_mode and not _shared_warehouse_test_isolation_enabled()) and not _ensure_shared_warehouse_ready():
 		result["message"] = "公共仓库不可用，物品未改变。"
+		return result
+	if not _selected_batch_matches("warehouse",warehouse_slots,selections):
+		result["reason"]="selection_changed"
+		result["message"]="所选物品已变化，请重新选择。"
 		return result
 	if requested <= 0:
 		result["message"] = "仓库位置无效。"
@@ -8759,13 +8806,13 @@ func _prepare_shared_gold_request(deposit: bool, transaction_id: String, transac
 	return await _prepare_warehouse_transfer("bank", [], [], plan)
 
 
-func transfer_warehouse_prepared(operation: String, source_indices: Array, target_slots: Array = []) -> Dictionary:
+func transfer_warehouse_prepared(operation: String, source_indices: Array, target_slots: Array = [], selections: Array = []) -> Dictionary:
 	if test_mode and not _shared_warehouse_test_isolation_enabled():
-		return deposit_to_warehouse_batch(source_indices, target_slots) if operation == "deposit" else withdraw_from_warehouse_batch(source_indices)
+		return deposit_to_warehouse_batch(source_indices, target_slots, false, selections) if operation == "deposit" else withdraw_from_warehouse_batch(source_indices, false, selections)
 	if _warehouse_preparation_pending:
 		return _warehouse_preparation_failure("仓库存取正在处理中。")
 	_warehouse_preparation_pending = true
-	var result: Dictionary = await _prepare_warehouse_transfer(operation, source_indices, target_slots)
+	var result: Dictionary = await _prepare_warehouse_transfer(operation, source_indices, target_slots, {}, selections)
 	_warehouse_preparation_pending = false
 	_warehouse_active_preparation = null
 	return result
@@ -8795,13 +8842,13 @@ func _continue_ui_work_slice(started_usec: int) -> int:
 	return started_usec
 
 
-func _prepare_warehouse_transfer(operation: String, source_indices: Array, target_slots: Array, bank_plan: Dictionary = {}) -> Dictionary:
+func _prepare_warehouse_transfer(operation: String, source_indices: Array, target_slots: Array, bank_plan: Dictionary = {}, selections: Array = []) -> Dictionary:
 	if operation not in ["deposit", "withdraw", "bank"]:
 		return _warehouse_preparation_failure("仓库存取操作无效。")
 	if not await _await_character_writes_for_ui():
 		return _warehouse_preparation_failure("人物存档尚未保存成功，请稍后重试。")
 	var is_bank := operation == "bank"
-	var plan := bank_plan if is_bank else (deposit_to_warehouse_batch(source_indices, target_slots, true) if operation == "deposit" else withdraw_from_warehouse_batch(source_indices, true))
+	var plan := bank_plan if is_bank else (deposit_to_warehouse_batch(source_indices, target_slots, true, selections) if operation == "deposit" else withdraw_from_warehouse_batch(source_indices, true, selections))
 	if not bool(plan.get("success", false)):
 		return plan
 	if not is_bank:

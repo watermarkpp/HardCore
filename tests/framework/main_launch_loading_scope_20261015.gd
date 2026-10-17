@@ -128,7 +128,12 @@ func _inspect_actual_launch(_request: Dictionary) -> void:
 	var birth_inputs: Dictionary = Identity.capture_actual_original_world_birth_inputs(_root,observed.world)
 	check(birth_inputs.get("success") == true,"real covered guarded Root produces actual original Root scope and service constructor inputs")
 	if birth_inputs.get("success") == true:
-		check(birth_inputs.publication.original_root_scope.node_id == _root.get_instance_id() and birth_inputs.publication.service_birth_scopes.size() == 5,"one actual Root identity supplies its own structural scope and all original service prototypes")
+		var expected_kinds: Array = ["loot_runtime_manager","m30_summon_queue","monster_visual","node_timer","player_visual","polygon_pursuit_driver"]
+		var actual_kinds: Array = birth_inputs.publication.service_birth_scopes.keys()
+		actual_kinds.sort()
+		check(birth_inputs.publication.original_root_scope.node_id == _root.get_instance_id() and actual_kinds == expected_kinds,"one actual Root identity supplies its structural scope and exact six original service kinds including Native Timer")
+		var timer: Dictionary = birth_inputs.publication.original_service_constructor_witnesses.get("node_timer",{})
+		check(timer.get("original_class") == "Timer" and timer.get("actual_original_child_count") == 0 and timer.get("timer_constructor",{}).get("time_left") == 0.0,"original Timer constructor is captured without starting or attaching it")
 		check(_root.get_child_count(true) == 0 and _root.current_map_id == -1 and _root._zone_generation == 0,"birth publication does not execute player/combat/READY/map activation")
 	var foreign_birth_world: Dictionary = observed.world.duplicate(true)
 	foreign_birth_world.profile_id += ".foreign"

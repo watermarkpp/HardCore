@@ -1,0 +1,17 @@
+{
+  "status": "NOT_RUN",
+  "RED": "WORLD38_RENDERER_INVALID_RED.json; original early INVALID123232109us before Root_after_children123419549us",
+  "scope": "defer actual producer until same original Source scope exit callbacks complete; preserve strict port rejection and genuine INVALID; no timers, callback replay, death/XP/drop or Native changes",
+  "files": [
+    {
+      "path": "scripts/gameplay/world/world_main_service_support.gd",
+      "before": "91acca5c4aa5afdc1f2e570fa3c0a872fc8ac09586addfdbc29c0a428eb10b1d",
+      "after": "c61b099dd9a8103b9c76abced627bbd7784f4718fce50cee079456aaf5e5f668"
+    },
+    {
+      "path": "scripts/gameplay/world/world_live_close_phase.gd",
+      "before": "ef717d6f25788d42fd2b12b02fb4f311a1559ee6e7fbc8769a8290221a7181a5",
+      "after": "e1fb0d8823c2e1e6a50572c757579b3e1e87df08c097e7a38626a897062f24eb"
+    }
+  ]
+}

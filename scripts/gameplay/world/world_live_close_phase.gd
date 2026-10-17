@@ -44,9 +44,13 @@ func original_p_close_commit(frame: Dictionary) -> Dictionary:
 	# gameplay, discard accepted transfer, or blanket-free Main Nodes.
 	if _phase=="ACCEPTED_BINDINGS":
 		for id: int in _ids:
-			if not _streamer.live_binding_ready_for_original_renderer_free(id): return {"status":"PENDING","phase":_phase,"service_id":id}
+			if not _streamer.live_binding_ready_for_original_renderer_free(id): return _observe_pending_renderer("binding_transport",id)
 			if not _destruction_requested.has(id):
-				if not _renderer.request_original_renderer_destruction(id): return {"status":"PENDING","phase":_phase,"service_id":id}
+				var destruction: Dictionary = _renderer.request_original_renderer_destruction(id)
+				if destruction.get("status") in ["PENDING","BUSY","BACKPRESSURE"]: return _observe_pending_renderer(str(destruction.get("error","actor_free_call")),id)
+				# A genuine canonical/physical failure remains a failure, never a
+				# false boolean silently retried forever as pending close progress.
+				if destruction.get("status") != "READY": return {"status":"INVALID","error":"actual_renderer_destruction_failed","phase":_phase,"service_id":id,"actual_failure":destruction}
 				_destruction_requested[id]=true
 		_phase="RENDERER_RETIREMENT"
 	if _phase=="RENDERER_RETIREMENT":
@@ -75,3 +79,20 @@ func finish_at_original_world_free() -> bool:
 func original_world_retirement_complete() -> bool: return _phase=="CLOSED"
 
 func original_renderer_retirement_complete() -> bool: return _phase in ["RENDERER_READY","READY","CLOSED"]
+
+func _observe_pending_renderer(reason: String, service_id: int) -> Dictionary:
+	var result := {"status":"PENDING","phase":_phase,"service_id":service_id,"error":reason}
+	if not _core.get_ref().get("_boot").get("project_settings",{}).get("hardcore/diagnostics/main_boot_trace",false): return result
+	# Read actual same-owner value ledgers. Never poll Native again, manufacture
+	# a receipt, retain a Node/Callable, clear a queue or restart an operation.
+	var bindings: Array = _streamer.get("_live_bindings")
+	var primitives: RefCounted = _streamer.get("_primitives")
+	var identities: Dictionary = _renderer.get("_renderer_actors")
+	var actor: Dictionary = identities.get(service_id,{})
+	var free_rows: Dictionary = _renderer.get("_actor_free")
+	var free_row: Dictionary = free_rows.get(int(actor.get("runtime_id",0)),{})
+	var binding: RefCounted = _renderer.get("_native")
+	var application: RefCounted = binding.get("_application_live") if binding != null else null
+	var pending: Dictionary = application.get("_pending") if application != null else {}
+	result.observation = {"binding_count":bindings.size(),"binding_head_service":bindings.front().get("service_id",0) if not bindings.is_empty() else 0,"binding_head_operation":str(bindings.front().get("op","")) if not bindings.is_empty() else "", "live_intents":primitives.get("_live_intents").size(),"live_ticket_services":primitives.get("_live_ticket_services").size(),"actor_id":actor.get("runtime_id",0),"actor_free_present":not free_row.is_empty(),"actor_free_last_status":free_row.get("last_observed_status",""),"actor_free_last_error":free_row.get("last_observed_error",""),"actor_free_receipt_status":free_row.get("receipt",{}).get("status",""),"actor_free_failure":free_row.get("failure",{}).get("error",""),"application_operation":pending.get("operation",""),"application_identity":pending.get("identity",{}),"application_applied":pending.get("applied",false),"application_consumed":pending.get("consumed",false)}
+	return result

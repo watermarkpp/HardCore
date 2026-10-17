@@ -36,6 +36,12 @@ func service_original_close_session_resource_obligations(session: RefCounted, co
 	if _final or not is_same(_session.get_ref(),session): return false
 	# Existing held-Core entry, same budget. Neither method begins another scope.
 	return _monster_frames.service_original_close_session_resource_obligations(session,core,frame) and _io.service_original_source_main_io_cleanup(session,core,frame)
+func service_original_close_session_obligations(session: RefCounted, frame: Dictionary) -> bool:
+	# The live Session retains these actual persistent owners after World free.
+	# All World resource debts were proved terminal by prepare before relinquish.
+	if _final or not _prepared or not is_same(_session.get_ref(),session) or not _monster_frames.prepare_original_source_session_close(session): return false
+	if not _frames.has_method("service_original_close_session_obligations"): return false
+	return _frames.service_original_close_session_obligations(session,frame)
 func prepare_original_source_session_close(session: RefCounted) -> bool:
 	if _final: return is_same(_session.get_ref(),session)
 	if not is_same(_session.get_ref(),session) or not _frames.prepare_original_source_session_close(session) or not _monster_frames.prepare_original_source_session_close(session): return false

@@ -8,7 +8,7 @@ OriginalPrimitiveMailbox::OriginalPrimitiveMailbox(uint64_t generation,size_t re
 bool OriginalPrimitiveMailbox::equal(const Bytes&a,const Bytes&b){return a&&b&&*a==*b;}
 bool OriginalPrimitiveMailbox::equal(const Prefix&a,const Prefix&b){if(a.generation!=b.generation||a.journal_generation!=b.journal_generation||a.through!=b.through||!equal(a.bytes,b.bytes)||a.events.size()!=b.events.size())return false;for(size_t n=0;n<a.events.size();++n)if(a.events[n].ordinal!=b.events[n].ordinal||!equal(a.events[n].bytes,b.events[n].bytes))return false;return true;}
 bool OriginalPrimitiveMailbox::equal(const Reply&a,const Reply&b){return a.identity==b.identity&&a.started_usec==b.started_usec&&a.finished_usec==b.finished_usec&&equal(a.request_bytes,b.request_bytes)&&equal(a.bytes,b.bytes);}
-bool OriginalPrimitiveMailbox::register_events(const Prefix&p){
+bool OriginalPrimitiveMailbox::register_events(const Prefix&p,bool commit){
     // prefix_capacity_ bounds outstanding packets/tickets, not the number of
     // original display events inside one valid packet. A single real P batch
     // already contains 35 events (37440 bytes) with a 32-packet production FIFO.
@@ -25,6 +25,7 @@ bool OriginalPrimitiveMailbox::register_events(const Prefix&p){
         prior=e.ordinal;
     }
     if(prior!=p.through)return false;
+    if(!commit)return true;
     // Admission is atomic: invalid ordinals/bytes never partially consume the
     // journal budget. Only the original S ACK/continuation path releases it.
     for(const auto&e:p.events)known_events_[e.ordinal]=e.bytes;
@@ -130,13 +131,20 @@ void OriginalPrimitiveMailbox::advance_frontiers(){
     while(true){auto i=admissions_.find(completed_+1);if(i==admissions_.end()||!i->second.committed)break;++completed_;}
     while(true){auto i=admissions_.find(retired_+1);if(i==admissions_.end()||!i->second.retired)break;++retired_;admissions_.erase(i);}
 }
-OriginalPrimitiveMailbox::AsyncAdmission OriginalPrimitiveMailbox::admit_async(const Request&r){
+OriginalPrimitiveMailbox::AsyncAdmission OriginalPrimitiveMailbox::admit_async(const Request&r,bool reject_closing){
     if(std::this_thread::get_id()!=owner_)return AsyncAdmission::INVALID;
     std::unique_lock<std::mutex>lock(mutex_,std::try_to_lock);if(!lock.owns_lock())return AsyncAdmission::BUSY;
-    if(active_valid_||quiescent_||admissions_.size()>=prefix_capacity_)return AsyncAdmission::BACKPRESSURE;
+    if(reject_closing&&(active_valid_||quiescent_))return AsyncAdmission::INVALID;
+    if(!reject_closing&&(active_valid_||quiescent_||admissions_.size()>=prefix_capacity_))return AsyncAdmission::BACKPRESSURE;
     if(r.identity.generation!=generation_||r.identity.sequence!=admitted_+1||r.predecessor!=admitted_||!r.source_site_bytes||r.call_ordinal!=((completed_calls_.find(*r.source_site_bytes)==completed_calls_.end())?1:completed_calls_.at(*r.source_site_bytes)+1))return AsyncAdmission::INVALID;
     if(r.submitted_usec==0||r.deadline_usec==0||!r.bytes||r.bytes->size()>request_capacity_||r.source_site_bytes->empty()||r.source_site_bytes->size()>request_capacity_)return AsyncAdmission::INVALID;
     bool known=false;for(const auto&e:published_)if(equal(e.prefix,r.prefix)){known=true;break;}
+    // Close may decline only a fully validated fresh intent. This path must
+    // not register events, reserve a slot or advance the Original allocator.
+    if(reject_closing){
+        if(!known&&!register_events(r.prefix,false))return AsyncAdmission::INVALID;
+        return AsyncAdmission::NOT_ADMITTED_CLOSING;
+    }
     if(!known){if(published_.size()>=prefix_capacity_)return AsyncAdmission::BACKPRESSURE;if(!register_events(r.prefix))return AsyncAdmission::INVALID;published_.push_back({r.prefix,false});}
     return admit_locked(r)?AsyncAdmission::ACCEPTED:AsyncAdmission::INVALID;
 }

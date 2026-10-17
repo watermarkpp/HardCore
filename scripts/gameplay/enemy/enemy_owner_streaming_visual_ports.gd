@@ -44,7 +44,15 @@ func emit_visual(service_id: int, operation: StringName, arguments: Array) -> vo
 	# Host applies the earlier Main journal prefix first. This mutation itself
 	# is NOT added to that journal and therefore cannot execute a second time.
 	if _resource_primitives.live_resource_phase():
-		_numeric_coordinator.enqueue_live_binding_event(service_id, operation, arguments)
+		if operation == &"visual_create_body_sprite":
+			# Creation is structural: its original journal position must precede
+			# the region/position writes emitted next by the same Source ready.
+			# Queuing a later creation primitive freezes those dependent writes
+			# into its prerequisite prefix and executes them without a Sprite.
+			super.emit_visual(service_id, operation, arguments)
+			_require(_numeric_coordinator.enqueue_live_binding_observation(service_id), "actual initial Sprite observation was not retained")
+		else:
+			_numeric_coordinator.enqueue_live_binding_event(service_id, operation, arguments)
 		return
 	_require(_resource_primitives.apply_binding_event(service_id, operation, arguments), "actual binding mutation did not complete")
 
@@ -52,7 +60,13 @@ func confirmed_uses_final_art(service_id: int, active_resources: Dictionary) -> 
 	if not _require(_resource_primitives != null and _resource_primitives.is_configured() and OS.get_thread_caller_id() == _owner, "final-art read outside configured owner"): return false
 	if _resource_primitives.live_resource_phase():
 		# Actual Loading/birth binding is a required gameplay closure.
-		if not _require(_resource_primitives.has_binding_fact(service_id), "LIVE final-art read without actual initial binding closure"): return false
+		if not _resource_primitives.has_binding_fact(service_id):
+			var pending: Array = _numeric_coordinator.get("_live_bindings")
+			var own: Array = []
+			for row: Dictionary in pending:
+				if row.get("service_id") == service_id: own.append({"op":str(row.get("op")),"cleanup":row.get("cleanup"),"await_initial_binding":row.get("await_initial_binding",false)})
+			_require(false, "LIVE final-art read without actual initial binding closure: "+JSON.stringify({"service_id":service_id,"queue_size":pending.size(),"head":{} if pending.is_empty() else {"service_id":pending.front().get("service_id"),"op":str(pending.front().get("op"))},"own_rows":own}))
+			return false
 	if not _resource_primitives.has_binding_fact(service_id):
 		if not _require(_resource_primitives.observe_binding(service_id), "initial actual binding observation missing"): return false
 	var fact: Dictionary = _resource_primitives.binding_fact(service_id)

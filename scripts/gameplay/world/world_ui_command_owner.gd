@@ -25,7 +25,9 @@ func configure_owner(core: RefCounted, root: RefCounted, hud: RefCounted, menu: 
 	return true
 func _context(event: Dictionary, field: String) -> Variant:
 	var context: Dictionary = event.get("view_context",{})
-	if context.get("actual_Main_capture") != true or context.get("world_context") != _core.get_ref().current_world_identity() or not context.has(field): return null
+	if context.get("actual_Main_capture") != true or not context.has(field): return null
+	if context.get("world_context") != _core.get_ref().current_world_identity():
+		if not (event.get("kind") == "world_viewport_publication" and context.get("world_context") is Dictionary and _viewport.can_accept_original_main_world(context.world_context)): return null
 	return context.get(field)
 func dispatch_original_hud_event(event: Dictionary) -> bool:
 	if not event.get("kind") is String or not event.get("arguments") is Array: return false
@@ -37,7 +39,7 @@ func dispatch_original_hud_event(event: Dictionary) -> bool:
 			return args.size()==1 and args[0] is Dictionary and _hud.deliver_original_loading_cover(args[0],event.get("view_context",{}))
 		"world_viewport_publication":
 			var observation: Variant = _context(event,"actual_hud_observation")
-			return args.size()==1 and args[0] is Dictionary and observation is Dictionary and _hud.accept_actual_original_hud_observation(observation) and _viewport.accept_original_main(args[0])
+			return args.size()==1 and args[0] is Dictionary and args[0].get("world_identity") == event.get("view_context",{}).get("world_context") and observation is Dictionary and _hud.accept_actual_original_hud_observation(observation) and _viewport.accept_original_main(args[0])
 		"shop_sell_quotes_requested":
 			if args.size() != 1 or not args[0] is Array: return false
 			_hud.set_shop_sell_quotes(profile.shop_sell_quotes(args[0]))

@@ -12,6 +12,10 @@ func _init(world: RefCounted, host: Object) -> void:
 	_world = weakref(world)
 	_host = host
 func owner_thread_id() -> int: return _owner
+func status() -> Dictionary:
+	# This is the actual Native diagnostic snapshot, not another state owner.
+	assert(OS.get_thread_caller_id() == _owner)
+	return _host.status()
 func capabilities() -> Dictionary: return _host.capabilities()
 func next_original_operation_sequence() -> int: return _host.next_original_operation_sequence()
 func completed_original_operation_sequence() -> int: return _host.completed_original_operation_sequence()

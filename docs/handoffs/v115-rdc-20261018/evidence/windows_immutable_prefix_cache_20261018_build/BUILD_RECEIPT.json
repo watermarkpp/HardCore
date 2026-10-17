@@ -1,0 +1,22 @@
+{
+  "status": "BUILD_WINDOWS_ONLY_PASS",
+  "started": "2026-10-17T19:49:05.129522+00:00",
+  "scope": "Deeply immutable Main accepted-prefix reuse; retained original LIVE cleanup and ACK wake; fixed source/pre-post/actual PE required. Whole game and Android acceptance remain NOT_RUN.",
+  "manifest_sha256": "422f0773560e1a3cc07c1d92ea8b86b13a3445204e05662cb78063dfd322c06c",
+  "source_sha256": "037be686708445d86cc4abc6bd6b13072f3de9e67ebeb6b32051d45434415cfb",
+  "artifacts": [
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_immutable_prefix_cache_20261018_build\\Godot_v115-stable_win64_console.exe",
+      "bytes": 298496,
+      "sha256": "3d6a00e8c2216af21cb900c3c9895c69bfd41653037abeb044a73d5c150f280c"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_immutable_prefix_cache_20261018_build\\Godot_v115-stable_win64.exe",
+      "bytes": 175889920,
+      "sha256": "f26c17c00fb11f1a2dcb07d3b079d744554bf0355a2e3e2642bb15ed55a6d373"
+    }
+  ],
+  "pid": 24324,
+  "exit_code": 0,
+  "finished": "2026-10-17T19:50:42.193617+00:00"
+}

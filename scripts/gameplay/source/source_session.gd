@@ -164,9 +164,16 @@ func adopt_world_core(core: RefCounted, actor_access: RefCounted, clock_ports: R
 	return true
 func release_world_core(core: RefCounted) -> bool:
 	if _core == null or not is_same(_core.get_ref(), core) or _budget.resource_external_segment_active(): return false
+	var close_scope: Dictionary = {}
+	if _host.current_clock_frame().get("closing_session") == true:
+		close_scope = core.capture_original_persistent_close_scope()
+		if close_scope.get("contract_id") != "hardcore.source.persistent_close_scope.v1" or close_scope.get("source_core_id") != core.get_instance_id() or close_scope.get("world_context") != core.current_world_identity() or close_scope.get("owner_session_id") != _id: return false
 	if _path_slot != null and not _path_slot.release_world(core): return false
 	if not _actor_router.release_world(core): return false
 	_persistent_world_context = core.current_world_identity().duplicate(true)
+	if not close_scope.is_empty():
+		_persistent_close_scope = close_scope
+		_persistent_entry_ordinal = int(close_scope.entry_ordinal)
 	_core = null
 	_release_count += 1
 	# Preserve budget, accepted tickets, Profile, scopes, journal and leases.
@@ -602,6 +609,44 @@ func service_original_close_process_signal_without_world(frame: Dictionary) -> b
 	# Empty Profile is the already-admitted genuine unselected Startup state.
 	if _profile.is_empty(): return true
 	return _profile.runtime.service_original_close_process_signal(int(frame.source_process_frame),int(frame.actual_main_process_frame),int(frame.published_signal_highwater))
+
+var _persistent_close_scope: Dictionary = {}
+func service_original_close_session_obligations(frame: Dictionary, actual_receipts: Callable) -> bool:
+	if OS.get_thread_caller_id() != _owner or _core != null and _core.get_ref() != null or frame != _host.current_clock_frame() or frame.get("closing_session") != true or not actual_receipts.is_valid(): return false
+	var publication: Variant = frame.get("closing_process_publication")
+	if not publication is Dictionary or publication.get("contract_id") != "hardcore.source.closing_process_frame.v1" or publication.get("main_process_frame") != frame.get("actual_main_process_frame"): return false
+	var boundary: String = str(frame.get("source_boundary",""))
+	if boundary not in ["PROCESS_SIGNAL","NODE_PROCESS_SERVICE"] or publication.get("phase") != boundary or frame.get("phase") != ("P_CLOSE_SIGNAL" if boundary == "PROCESS_SIGNAL" else "P_CLOSE_SERVICE"): return false
+	var sequence: int = int(frame.source_process_frame)
+	var main_frame: int = int(frame.actual_main_process_frame)
+	if _persistent_close_scope.is_empty():
+		# A genuinely unselected/no-World Session may start here. A released
+		# World must instead hand over its exact half-pair and entry frontier.
+		if _adopt_count != 0 or _release_count != 0 or boundary != "PROCESS_SIGNAL": return false
+		_persistent_close_scope = {"baseline":frame,"last_source_frame":sequence-1,"last_Main_frame":-1,"pending_service":false}
+	for key: String in ["epoch","source_physics_frame","h_ordinal","simulation_elapsed"]:
+		if frame.get(key) != _persistent_close_scope.baseline.get(key): return false
+	if boundary == "PROCESS_SIGNAL":
+		if _persistent_close_scope.pending_service or sequence != _persistent_close_scope.last_source_frame+1 or main_frame <= _persistent_close_scope.last_Main_frame: return false
+		_persistent_close_scope.last_source_frame=sequence;_persistent_close_scope.last_Main_frame=main_frame;_persistent_close_scope.pending_service=true
+		_persistent_entry_ordinal=0
+		if not _invoke_original_persistent_close_entry("SceneTree.process_frame",Callable(self,"service_original_close_process_signal_without_world"),[frame]): return false
+		return _invoke_original_persistent_close_entry("SceneTree.P_GROUP:after_process_frame",Callable(_host,"flush_source_deferred"),[&"P",&"P_GROUP:after_process_frame"])
+	if not _persistent_close_scope.pending_service or sequence != _persistent_close_scope.last_source_frame or main_frame != _persistent_close_scope.last_Main_frame: return false
+	if not _invoke_original_persistent_close_entry("Session.accepted_close_cleanup",actual_receipts,[]): return false
+	if not _invoke_original_persistent_close_entry("SceneTree.P_GROUP:end_group",Callable(_host,"flush_source_deferred"),[&"P",&"P_GROUP:end_group"]): return false
+	_persistent_close_scope.pending_service=false
+	return not is_faulted()
+
+func _invoke_original_persistent_close_entry(entry: String, callback: Callable, arguments: Array) -> bool:
+	var frame: Dictionary = _host.current_clock_frame()
+	if _feature.is_empty() or _persistent_world_context.is_empty() or frame.get("closing_session") != true or frame.get("phase") not in ["P_CLOSE_SIGNAL","P_CLOSE_SERVICE"] or _budget.resource_external_segment_active() or int(_budget.snapshot().open_scopes) != 0: return false
+	_persistent_entry_ordinal += 1
+	var site := {"clock_epoch":int(frame.epoch),"domain":&"P","entry_id":entry,"entry_ordinal":_persistent_entry_ordinal,"bootstrap":int(frame.epoch)==0,"observation_process_epoch":int(frame.source_process_frame),"world_context":_persistent_world_context,"deadline_usec":int(frame.next_release_usec)}
+	if not _feature.primitives.begin_original_phase(site): return false
+	var result: Variant = callback.callv(arguments)
+	var finished: bool = _feature.primitives.finish_original_phase() and _host.finish_original_call_site(site)
+	return finished and (not result is bool or result)
 func service_original_session_resource_close_at_actual_P(core: RefCounted, frame: Dictionary) -> bool:
 	assert(OS.get_thread_caller_id()==_owner)
 	if core==null or core.owner_thread_id()!=_owner or frame!=_host.current_clock_frame() or str(frame.get("source_boundary",""))!="NODE_PROCESS_SERVICE" or frame.get("closing_session")!=true: return false

@@ -274,7 +274,7 @@ func run_bindings(frame: Dictionary) -> void:
 		else:
 			record(policy_checks == 4, "actual committed callbacks exercised budget, fairness, life and world boundaries")
 			record(session.actual_native_backpressure > 0 and pressure_done == [true,true], "real two-slot Native capacity returned BACKPRESSURE and both accepted status operations settled")
-			record(first_pending_checked, "Main deliberately withheld a real result across Source P polls")
+			_check_fixture_pending_main()
 			valid = session.original_event_journal().append({"operation":&"fixture_renderer_destroy","arguments":[registry.handle.get_instance_id()]})
 			cleanup_receipts = primitives.live_collection_receipts()
 			stage = "cleanup"
@@ -310,3 +310,6 @@ func close_session() -> bool:
 		session_tag = null
 		released = true
 	return true
+
+func _check_fixture_pending_main() -> void:
+	record(first_pending_checked, "Main deliberately withheld a real result across Source P polls")

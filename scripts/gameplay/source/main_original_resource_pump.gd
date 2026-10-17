@@ -5,6 +5,8 @@ extends RefCounted
 const Feature := preload("res://scripts/features/runtime/feature_resource_main_primitives.gd")
 const Streaming := preload("res://scripts/gameplay/enemy/enemy_main_resource_primitives.gd")
 const Prefix := preload("res://scripts/gameplay/world/world_main_prefix_consumer.gd")
+const FrameBudget := preload("res://scripts/layers/runtime/execution/frame_budget.gd")
+const PUBLICATION_BUDGET_CATEGORY := "original_Main_published_prefixes"
 var _host: Object
 var _prefix: RefCounted
 var _feature: RefCounted
@@ -28,6 +30,8 @@ var _live_completed := 0
 var _fault: Dictionary = {}
 var _actual_transport: WeakRef
 var _terminal: Dictionary = {}
+var _observe_publications := false
+var _publication_observation: Dictionary = {}
 
 func configure_main(host: Object, prefix: RefCounted, feature: RefCounted, generation: int) -> bool:
 	if OS.get_thread_caller_id() != OS.get_main_thread_id() or _host != null or generation <= 0: return false
@@ -38,6 +42,7 @@ func configure_main(host: Object, prefix: RefCounted, feature: RefCounted, gener
 	var facade: Variant = feature.get("_facade")
 	if not facade is Node or not is_instance_valid(facade) or not facade.is_inside_tree(): return false
 	_host = host; _prefix = prefix; _feature = feature; _generation = generation
+	_observe_publications = bool(ProjectSettings.get_setting("hardcore/diagnostics/main_boot_trace",false))
 	return true
 
 func bind_actual_original_streaming(executor: RefCounted) -> bool:
@@ -61,7 +66,7 @@ func service_original_main_resources() -> Dictionary:
 		var live: Dictionary = service_original_live_resources()
 		if live.get("status") not in ["PENDING","SERVICED"]: return live
 		progress = progress or live.status == "SERVICED"
-	var published: Dictionary = service_original_main_publications()
+	var published: Dictionary = _service_original_ready_publications()
 	if published.get("status") not in ["PENDING","SERVICED"]: return published
 	progress = progress or published.status == "SERVICED"
 	# A map result can become sendable after an ACK even when no new packet
@@ -81,6 +86,28 @@ func service_original_main_resources() -> Dictionary:
 			var vault_close: Dictionary = _host.finalize_original_main_resource_vault()
 			if vault_close.get("status") not in ["READY","PENDING"]: return _fail("actual_final_Main_resource_vault_close_failed",vault_close)
 			progress = progress or vault_close.status == "READY"
+	return {"status":"SERVICED" if progress else "PENDING"}
+
+func _service_original_ready_publications() -> Dictionary:
+	# Bound this synchronous batch by the actual FIFO already admitted at entry.
+	# Concurrent Source production cannot extend it. Each item still uses the
+	# sole original cursor, physical writes, Native ACK and local confirmation.
+	var snapshot_at: int = Time.get_ticks_usec() if _observe_publications else 0
+	var admitted: int = maxi(1,int(_host.status().get("unsettled_original_published_prefixes",0)))
+	_observe_publication_stage("queue_snapshot",snapshot_at)
+	var progress := false
+	for index: int in admitted:
+		var token: int = FrameBudget.begin_progress(PUBLICATION_BUDGET_CATEGORY)
+		if token == 0:
+			if index > 0: break
+			# Preserve the original one service opportunity even if optional Main
+			# capacity is exhausted. Charge it; extra items never get this exception.
+			token = FrameBudget.begin(PUBLICATION_BUDGET_CATEGORY,true)
+		var result: Dictionary = service_original_main_publications()
+		FrameBudget.end(token)
+		if result.get("status") not in ["PENDING","SERVICED"]: return result
+		if result.status == "PENDING": break
+		progress = true
 	return {"status":"SERVICED" if progress else "PENDING"}
 
 func service_actual_original_main_transport(host: Object, prefix: RefCounted, transport: RefCounted) -> Dictionary:
@@ -180,19 +207,36 @@ func service_original_main_publications() -> Dictionary:
 	# claim to another cold/ordinary prefix while an original write is pending.
 	if not _held.is_empty() or not _live_held.is_empty(): return {"status":"PENDING"}
 	if _published.is_empty():
+		var inspected_at: int = Time.get_ticks_usec() if _observe_publications else 0
 		var pending: Dictionary = _host.inspect_next_original_published_prefix()
+		_observe_publication_stage("inspect",inspected_at)
 		if pending.get("status") in ["BUSY","PENDING"]: return {"status":"PENDING"}
 		if pending.get("status") != "READY" or not pending.get("prefix") is Dictionary or pending.prefix.get("bridge_generation") != _generation: return _fail("actual_published_prefix_packet_invalid",pending)
 		_published = pending.prefix
+	var applied_at: int = Time.get_ticks_usec() if _observe_publications else 0
 	var applied: Dictionary = _prefix.apply_prefix(_published)
+	_observe_publication_stage("apply",applied_at)
 	if applied.get("status") in ["BUSY","PENDING"]: return {"status":"PENDING"}
 	if applied.get("status") != "APPLIED" or applied.get("main_prefix") != _published: return _fail("actual_published_prefix_not_applied",applied)
 	var ack := {"bridge_generation":_published.bridge_generation,"journal_generation":_published.journal_generation,"through_ordinal":_published.through_ordinal,"applied":true}
-	if not _host.ack_published_original_main_prefix(_published,ack): return _fail("actual_published_prefix_Native_ack_rejected")
-	if not _prefix.confirm_prefix_acknowledged(_published,ack): return _fail("actual_published_prefix_local_confirmation_rejected")
+	var acknowledged_at: int = Time.get_ticks_usec() if _observe_publications else 0
+	var acknowledged: bool = _host.ack_published_original_main_prefix(_published,ack)
+	_observe_publication_stage("native_ack",acknowledged_at)
+	if not acknowledged: return _fail("actual_published_prefix_Native_ack_rejected")
+	var confirmed_at: int = Time.get_ticks_usec() if _observe_publications else 0
+	var confirmed: bool = _prefix.confirm_prefix_acknowledged(_published,ack)
+	_observe_publication_stage("local_confirm",confirmed_at)
+	if not confirmed: return _fail("actual_published_prefix_local_confirmation_rejected")
 	_published_completed += 1
 	_published = {}
 	return {"status":"SERVICED","native_main_prefix_receipt":ack}
+
+func _observe_publication_stage(stage: String, started_usec: int) -> void:
+	if not _observe_publications: return
+	var elapsed: int = maxi(0,Time.get_ticks_usec()-started_usec)
+	if not _publication_observation.has(stage): _publication_observation[stage] = {"calls":0,"total_usec":0,"maximum_usec":0,"last_usec":0}
+	var row: Dictionary = _publication_observation[stage]
+	row.calls += 1; row.total_usec += elapsed; row.maximum_usec = maxi(row.maximum_usec,elapsed); row.last_usec = elapsed
 
 func bind_actual_original_live_feature() -> bool:
 	if OS.get_thread_caller_id() != OS.get_main_thread_id() or _host == null or _live_feature_bound: return false
@@ -279,7 +323,7 @@ func service_original_live_feature_retirement() -> Dictionary:
 func inspect_actual_original_pending_resources() -> Dictionary:
 	if OS.get_thread_caller_id() != OS.get_main_thread_id(): return {"status":"INVALID"}
 	# This is a local IO observation, never a terminal/quiescence proof.
-	return {"status":"READY" if _fault.is_empty() else "INVALID","held":not _held.is_empty(),"executed":not _reply.is_empty(),"completed":_completed,"published_held":not _published.is_empty(),"published_completed":_published_completed,"live_held":not _live_held.is_empty(),"live_completed":_live_completed,"live_feature_closed":_live_feature_closed,"fault":_fault.duplicate(true),
+	return {"status":"READY" if _fault.is_empty() else "INVALID","held":not _held.is_empty(),"executed":not _reply.is_empty(),"completed":_completed,"published_held":not _published.is_empty(),"published_completed":_published_completed,"publication_stage_observations":_publication_observation.duplicate(true),"prefix_stage_observations":_prefix.get("_prefix_observation").duplicate(true),"live_held":not _live_held.is_empty(),"live_completed":_live_completed,"live_feature_closed":_live_feature_closed,"fault":_fault.duplicate(true),
 		"actual_cold_prefix_through":_held.get("main_prefix",{}).get("through_ordinal",-1),"actual_published_prefix_through":_published.get("through_ordinal",-1),"actual_live_prefix_through":_live_held.get("request",{}).get("main_prefix",{}).get("through_ordinal",-1),"actual_live_prefix_acknowledged":_live_acknowledged,"actual_live_result_submitted":_live_result_submitted,"actual_live_operation":str(_live_held.get("request",{}).get("op",""))}
 
 func _fail(reason: String, details: Dictionary = {}) -> Dictionary:

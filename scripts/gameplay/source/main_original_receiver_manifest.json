@@ -671,166 +671,166 @@
     ]
   },
   "res://scripts/inventory_panel.gd": {
-    "script_sha256": "e21b58c80b29075c3a928deb333825e1fddf620b7c5ea4fe5e79bff9c8b53914",
+    "script_sha256": "e9d4e23b6ebf7243f5a0db7a1c636661ba6d9f8e95d55dd2fed8b22e1f3cbe2d",
     "methods": [
       {
         "method": "_ready",
         "await": false,
-        "source_line": 114,
+        "source_line": 118,
         "body_sha256": "307e346e8ba190e3b6f193b92a371ac716bcf46b9d0333e0ec8502a37bf19f1f",
         "retained_method": "_original_source_inventory_panel__ready"
       },
       {
         "method": "_build_equipment_panel",
         "await": false,
-        "source_line": 263,
+        "source_line": 276,
         "body_sha256": "dee9cefb9a5f7818965a5cceacf770677f9bf5d53b87fbb7dbc7391917040603",
         "retained_method": "_original_source_inventory_panel__build_equipment_panel"
       },
       {
         "method": "_refresh_equipment_slots",
         "await": false,
-        "source_line": 563,
-        "body_sha256": "22cb2206097ced9d68fe1ac1e3c6ac44dbc1774aed382ad4150e9ead18ebad62",
+        "source_line": 582,
+        "body_sha256": "6471da3d631975f4a750c60be478165d149998e1d9e358e4de5352285e8d8ee5",
         "retained_method": "_original_source_inventory_panel__refresh_equipment_slots"
       },
       {
         "method": "_refresh_character_stats",
         "await": false,
-        "source_line": 602,
+        "source_line": 628,
         "body_sha256": "2c6d60d3fca29fdbde0d73c84db4c8a3a530e10e7fed3f472c88493084cf0400",
         "retained_method": "_original_source_inventory_panel__refresh_character_stats"
       },
       {
         "method": "_character_attribute_explanation",
         "await": false,
-        "source_line": 670,
+        "source_line": 702,
         "body_sha256": "ccfab9527a3406f4650ab0c479ac2a5b74537788a185fee9b04e377a4606206c",
         "retained_method": "_original_source_inventory_panel__character_attribute_explanation"
       },
       {
         "method": "_refresh_bag_grid",
         "await": false,
-        "source_line": 676,
+        "source_line": 715,
         "body_sha256": "c6ed6b4c802372d9ccb66e37682e93953d9c05a4d9a210237f2b7cf93101a692",
         "retained_method": "_original_source_inventory_panel__refresh_bag_grid"
       },
       {
         "method": "_continue_bag_cell_initialization",
         "await": true,
-        "source_line": 701,
+        "source_line": 746,
         "body_sha256": "0a3949e2412af90592c3301f677f8dc0c60c20b77beddcf85cf654bb972ba9ba",
         "retained_method": "_original_source_inventory_panel__continue_bag_cell_initialization"
       },
       {
         "method": "wait_until_runtime_ready",
         "await": true,
-        "source_line": 716,
+        "source_line": 767,
         "body_sha256": "2b53b7cba85619602cc01af2e566864632e39a868bfab2c895c80e9206a8745f",
         "retained_method": "_original_source_inventory_panel_wait_until_runtime_ready"
       },
       {
         "method": "_inventory_record",
         "await": false,
-        "source_line": 795,
-        "body_sha256": "9a224faacaac367df23794a1dff7fcc917a570e364dfb992bd9f3ffcbbd7be9b",
+        "source_line": 853,
+        "body_sha256": "f53adfaf788784da5d1af24a0b46437396bf43b05629332f294f4f7e0a5ae59d",
         "retained_method": "_original_source_inventory_panel__inventory_record"
       },
       {
         "method": "_find_inventory_index_for_ref",
         "await": false,
-        "source_line": 832,
-        "body_sha256": "589dee2ee0b8020b2af461f4c292e1abd73674be56ecf5e799333c6f4dace61c",
+        "source_line": 923,
+        "body_sha256": "ca51beb1c358b644f2a96a32696338a688a364a0de2295d551e344dbaf067cf3",
         "retained_method": "_original_source_inventory_panel__find_inventory_index_for_ref"
       },
       {
         "method": "_reconcile_selection",
         "await": false,
-        "source_line": 849,
+        "source_line": 950,
         "body_sha256": "3f2ac63df212f9cbc5abd5c5efafbd87aa3661915ac6d122872abaa3db7d5a45",
         "retained_method": "_original_source_inventory_panel__reconcile_selection"
       },
       {
         "method": "_select_equipment_slot",
-        "await": false,
-        "source_line": 1008,
-        "body_sha256": "57062d7cb4089116b1184a1d8435e53531b918a2d05032c192786a7863f91d46",
+        "await": true,
+        "source_line": 1115,
+        "body_sha256": "c37b2e05545478249a082d8eead729ee58c726df877f3acbc3690d01dc5a4577",
         "retained_method": "_original_source_inventory_panel__select_equipment_slot"
       },
       {
         "method": "_show_equipment_detail",
         "await": false,
-        "source_line": 1088,
+        "source_line": 1201,
         "body_sha256": "120123b0b86d5edbc2c706695c022bfb1fd5b008d298358642a7dd0229b163cf",
         "retained_method": "_original_source_inventory_panel__show_equipment_detail"
       },
       {
         "method": "_refresh_selected_equipment_detail",
         "await": false,
-        "source_line": 1103,
+        "source_line": 1222,
         "body_sha256": "0bcfab6ee79dd6419791fb5a3df23569113d4b0e9b2d3e986930b69448b8b206",
         "retained_method": "_original_source_inventory_panel__refresh_selected_equipment_detail"
       },
       {
         "method": "_unequip_to_inventory_slot",
-        "await": false,
-        "source_line": 1141,
-        "body_sha256": "5abcba738f8e2b922f65caf58ad2b90fd5714285a0ab764a3e54a8888a7856fb",
+        "await": true,
+        "source_line": 1266,
+        "body_sha256": "c37d0c02b88556282eb5de3f861067ea3efef5b2903dd953b3872328c2dc26a4",
         "retained_method": "_original_source_inventory_panel__unequip_to_inventory_slot"
       },
       {
         "method": "_context_menu_allowed",
         "await": false,
-        "source_line": 1290,
+        "source_line": 1421,
         "body_sha256": "945079fff42189f3b2bd74815d94a60db4d3c7402291e3b155bc4b1760b79c37",
         "retained_method": "_original_source_inventory_panel__context_menu_allowed"
       },
       {
         "method": "_open_long_press_menu",
         "await": false,
-        "source_line": 1309,
+        "source_line": 1447,
         "body_sha256": "223b7acf2c5ed2d3fe3e8eca262f6c6dba21e6aaf3c92c430a535a93f71d62c6",
         "retained_method": "_original_source_inventory_panel__open_long_press_menu"
       },
       {
         "method": "_on_context_action",
-        "await": false,
-        "source_line": 1355,
-        "body_sha256": "56b205fe2bab6eff118a37074fdf11f15db530a9f4f8b03d7eab1ebf07ea49ee",
+        "await": true,
+        "source_line": 1502,
+        "body_sha256": "4b5665ba7bce0fee261e8aeba3ef2ff458493d1eef47921fb236d0996bf7de92",
         "retained_method": "_original_source_inventory_panel__on_context_action"
       },
       {
         "method": "_activate_inventory_index",
-        "await": false,
-        "source_line": 1463,
-        "body_sha256": "1f1c71aa9c1cff0195268179f7055197483e34eadc5287ceeaa79f0b114894f3",
+        "await": true,
+        "source_line": 1616,
+        "body_sha256": "06380e9e7c87ffbcd9ce92da9ad7e153d5bc17e955c444f09d85489739441570",
         "retained_method": "_original_source_inventory_panel__activate_inventory_index"
       },
       {
         "method": "_on_auto_sort_pressed",
-        "await": false,
-        "source_line": 1543,
-        "body_sha256": "02c8445e259a304c2b69a5200f47cc7e00737ac9a4ac104d510b74484bf313b3",
+        "await": true,
+        "source_line": 1704,
+        "body_sha256": "4a454d491fe329ad59718048821d78ac91fa3c58248ac7c7c9572b466499d21c",
         "retained_method": "_original_source_inventory_panel__on_auto_sort_pressed"
       },
       {
         "method": "_on_discard_pressed",
-        "await": false,
-        "source_line": 1560,
-        "body_sha256": "467035da992915f9d2e434b0b440eac4443352b6362a3d486982aeeff420f33d",
+        "await": true,
+        "source_line": 1727,
+        "body_sha256": "d25aae139fa3fa78c600f047cc56bd539bf9e955697e58866ed015f2a609af7c",
         "retained_method": "_original_source_inventory_panel__on_discard_pressed"
       },
       {
         "method": "_unequip_selected",
-        "await": false,
-        "source_line": 1605,
-        "body_sha256": "a8b452df61d650ac8aec9f6e9023052184db534046ecdc716e1476604d8734bc",
+        "await": true,
+        "source_line": 1778,
+        "body_sha256": "5c4d74c233fe23f81ac984be2e02dcd825c75bcbdb255289bab4902e0d85b523",
         "retained_method": "_original_source_inventory_panel__unequip_selected"
       },
       {
         "method": "_slot_is_empty",
         "await": false,
-        "source_line": 1706,
+        "source_line": 1885,
         "body_sha256": "6dff11bc059c3a59f474d1ad931f8584e83b94d47c705f40e76686042bdc0261",
         "retained_method": "_original_source_inventory_panel__slot_is_empty"
       }
@@ -848,69 +848,69 @@
     ]
   },
   "res://scripts/enhancement_panel.gd": {
-    "script_sha256": "245505461567797da5772229a4ece137cee4292a9944203af5b4dd3d85f406d3",
+    "script_sha256": "cea88aa11bb5c9768fc0f04146fbf7238d3f1d7979ae4ff59b4f09791d47a1d2",
     "methods": [
       {
         "method": "_ready",
-        "await": false,
-        "source_line": 50,
-        "body_sha256": "8d13692cf3c545a21224d50689296359db9f9a2bc235155fc736fc7ef85e45e9",
+        "await": true,
+        "source_line": 52,
+        "body_sha256": "ea29ec064156ff0e74aa4f6b8eb0de2ca43461d116c71caa807a4cac7667348f",
         "retained_method": "_original_source_enhancement_panel__ready"
       },
       {
         "method": "_refresh_forge_information",
-        "await": false,
+        "await": true,
         "source_line": 439,
-        "body_sha256": "fa117c6b267369a093f8df1572fd786a286fefd98663e95fc31235d8a9fdd348",
+        "body_sha256": "b51b09aa9a8ddfbf00c596aa4562014dcab68e1be3625a5dd9e404edd732daf3",
         "retained_method": "_original_source_enhancement_panel__refresh_forge_information"
       },
       {
         "method": "_on_forge_slot_pressed",
         "await": true,
-        "source_line": 507,
-        "body_sha256": "6a99fca2ebc430952b0fe86055e3f9cc8d01cee928f64842a85a3ab0db226069",
+        "source_line": 521,
+        "body_sha256": "eecec1189904a91482d2c83ad8bb66723f3cf5cb629d6d8ea351cbddcc8ed57e",
         "retained_method": "_original_source_enhancement_panel__on_forge_slot_pressed"
       },
       {
         "method": "_can_receive_selected_item_to_index",
         "await": false,
-        "source_line": 538,
+        "source_line": 558,
         "body_sha256": "9ee3d81f1c15604a00109bd9296aafeb2358b98f357de1c4c388d64f0fe42b20",
         "retained_method": "_original_source_enhancement_panel__can_receive_selected_item_to_index"
       },
       {
         "method": "_receive_selected_item_to_index",
         "await": true,
-        "source_line": 546,
+        "source_line": 573,
         "body_sha256": "afa5054c5b04e0141ddac8563312ff111264fde995d4607b9b416c1dabbcf6fa",
         "retained_method": "_original_source_enhancement_panel__receive_selected_item_to_index"
       },
       {
         "method": "_take_selected_workbench_item",
         "await": true,
-        "source_line": 551,
-        "body_sha256": "dc51eb4a40c9478755b64fce13ac61c2a0e7f8d74146869b624df8c7d0b44bf9",
+        "source_line": 584,
+        "body_sha256": "3928f4452398ec66fcbedcabcc96470a56f680903590e9b6bd8a5cf9e0a04b79",
         "retained_method": "_original_source_enhancement_panel__take_selected_workbench_item"
       },
       {
         "method": "_on_forge_pressed",
         "await": true,
-        "source_line": 601,
-        "body_sha256": "863f461b023e1a7201fdc44fa5f44bf2e1d876a7b118832d92776fe15ed882e0",
+        "source_line": 640,
+        "body_sha256": "151b946525bf76c3efd1b76641cd875ac5a435a9c1d3c4b0f9ac8b8595631569",
         "retained_method": "_original_source_enhancement_panel__on_forge_pressed"
       },
       {
         "method": "_play_forge_animation",
         "await": true,
-        "source_line": 639,
-        "body_sha256": "cc1bea93e90898655fa08a5b02dc1266bf5b2f38339fa34615d63741c714af49",
+        "source_line": 684,
+        "body_sha256": "75fdcef8fcff7d9e3e1d83f7b897d2e09f84df3afe1548d5427341a8332e1cf5",
         "retained_method": "_original_source_enhancement_panel__play_forge_animation"
       },
       {
         "method": "_play_synthesis_animation",
         "await": true,
-        "source_line": 664,
-        "body_sha256": "e5452ccad3b33eda7ba32afbb05903e054cfdf87abda7e728c79ab5e90cab458",
+        "source_line": 713,
+        "body_sha256": "260523795bdc1cf332472aa98c2152e626712d6c74b0f9d4c660f6c6c107540b",
         "retained_method": "_original_source_enhancement_panel__play_synthesis_animation"
       }
     ],
@@ -936,61 +936,61 @@
     ]
   },
   "res://scripts/quest_panel.gd": {
-    "script_sha256": "74ba7ac22565ae52576de9257a47ab4467c0df5901767676ebc9867635f2dca9",
+    "script_sha256": "5cdddbbc6230945b5a092cdca7fbffbaf8513ce69b726b931af6647ebff599df",
     "methods": [
       {
         "method": "_ready",
         "await": false,
-        "source_line": 46,
+        "source_line": 50,
         "body_sha256": "30b4d192f16dbe19aab099fc31bb026dd467f141d0f44994ac8b36870e56d65c",
         "retained_method": "_original_source_quest_panel__ready"
       },
       {
         "method": "open_for",
         "await": false,
-        "source_line": 253,
+        "source_line": 263,
         "body_sha256": "db92a7f0b4065216cc14a247b3b782401a0dd393152c77bd6c6060f2df8077dc",
         "retained_method": "_original_source_quest_panel_open_for"
       },
       {
         "method": "refresh",
         "await": false,
-        "source_line": 262,
+        "source_line": 278,
         "body_sha256": "57c152dcbd79cf1d196894cb64628f2ad36487fb17adbadbfe0d9a4f78348afc",
         "retained_method": "_original_source_quest_panel_refresh"
       },
       {
         "method": "_refresh_selected_quest",
         "await": false,
-        "source_line": 391,
+        "source_line": 413,
         "body_sha256": "2db3181e96165d3b9076b66f2094de39635396bf6c7fbc0c5c537a7326a32f7c",
         "retained_method": "_original_source_quest_panel__refresh_selected_quest"
       },
       {
         "method": "_quest_state_text",
         "await": false,
-        "source_line": 457,
+        "source_line": 485,
         "body_sha256": "4acdf4d42df1002205d50d60a81656ebf57807ee393341d28dfb8b2fdf716fea",
         "retained_method": "_original_source_quest_panel__quest_state_text"
       },
       {
         "method": "_act",
-        "await": false,
-        "source_line": 469,
-        "body_sha256": "93453a3c3f55c0b2e58c00a21a5fe225a63b17c81c2499e5fd8850f9af7fbfb7",
+        "await": true,
+        "source_line": 504,
+        "body_sha256": "ec2574c098357715fc52ffb827ab7ca2a125ed96c8d6bf3e2198fd535b12072a",
         "retained_method": "_original_source_quest_panel__act"
       },
       {
         "method": "_request_abandon",
         "await": false,
-        "source_line": 529,
+        "source_line": 570,
         "body_sha256": "6f6b586d74cdfc1477870fad38d3a0fc71f33d220410ee87f5730582ebb0d9bb",
         "retained_method": "_original_source_quest_panel__request_abandon"
       },
       {
         "method": "apply_abandon_result",
         "await": false,
-        "source_line": 575,
+        "source_line": 622,
         "body_sha256": "4f83e164ff087399d7cd20a388f33b1eae3264489cad0ba4b078342071a3e50f",
         "retained_method": "_original_source_quest_panel_apply_abandon_result"
       }
@@ -1000,110 +1000,110 @@
     ]
   },
   "res://scripts/shop_panel.gd": {
-    "script_sha256": "e9bd5d242380d1b401f16f05f064d7319f929f84fb4551246b040d5cb7d21dd6",
+    "script_sha256": "7cbbd5801fe7c9b5c72f81ee02674da4c5a461bd2187a6689cb96135e0a9583c",
     "methods": [
       {
         "method": "_ready",
-        "await": false,
-        "source_line": 92,
-        "body_sha256": "f2c5a6637dad81f855c65d7678e0b9cd4a034ba799f782e46e2ab2bc72e6aa9c",
+        "await": true,
+        "source_line": 96,
+        "body_sha256": "5c8d5e30f253a634dae5fadbcabe4e21e0062fb4f5cbb92d5cda253357e64d6a",
         "retained_method": "_original_source_shop_panel__ready"
       },
       {
         "method": "_collect_occupied_inventory_indices",
         "await": false,
-        "source_line": 484,
+        "source_line": 494,
         "body_sha256": "b7dc6cdb4a6858eff51de8af5db49edf6a911065c71002a7634aeacde483a622",
         "retained_method": "_original_source_shop_panel__collect_occupied_inventory_indices"
       },
       {
         "method": "_ensure_goods_card_capacity",
         "await": false,
-        "source_line": 513,
+        "source_line": 530,
         "body_sha256": "89bf2314079abd5ec28238247759d637c8bfe66cb4785fe3274f05706b24d076",
         "retained_method": "_original_source_shop_panel__ensure_goods_card_capacity"
       },
       {
         "method": "_set_active_sell_card_count",
         "await": false,
-        "source_line": 529,
+        "source_line": 552,
         "body_sha256": "9b0fdd75028c767f4742ab01269e854566d8cace543d2a54d1b6e4d0a8e92366",
         "retained_method": "_original_source_shop_panel__set_active_sell_card_count"
       },
       {
         "method": "_rebind_sell_structure",
         "await": false,
-        "source_line": 586,
+        "source_line": 615,
         "body_sha256": "0664b52234294cd48837b6bb68ad7e4e6f19c1c271ab957e1f8b98cda98afdf3",
         "retained_method": "_original_source_shop_panel__rebind_sell_structure"
       },
       {
         "method": "_patch_sell_quotes_only",
         "await": false,
-        "source_line": 612,
+        "source_line": 649,
         "body_sha256": "31aa3c46500b31248d8bc7e30c874b5400c0e812a21eea30b4eaa45ca51b500a",
         "retained_method": "_original_source_shop_panel__patch_sell_quotes_only"
       },
       {
         "method": "_clear_goods_cards",
         "await": false,
-        "source_line": 623,
+        "source_line": 666,
         "body_sha256": "f4c6c1986c65d17fa8f49b0ff24e47e909018dcaccd4e76df8a74795f791bcd0",
         "retained_method": "_original_source_shop_panel__clear_goods_cards"
       },
       {
         "method": "_acquire_goods_cards",
         "await": false,
-        "source_line": 632,
+        "source_line": 681,
         "body_sha256": "80db59e29cf4972557404571a5972eff4b070ea8f4ad226f40909c021200bacb",
         "retained_method": "_original_source_shop_panel__acquire_goods_cards"
       },
       {
         "method": "_build_card_contents",
         "await": false,
-        "source_line": 654,
+        "source_line": 710,
         "body_sha256": "4780b8c008cd55ac075fbda1d95d2d12a7bac4afc50f0720ed66c2811553e22d",
         "retained_method": "_original_source_shop_panel__build_card_contents"
       },
       {
         "method": "_request_sell_quotes",
         "await": false,
-        "source_line": 870,
+        "source_line": 939,
         "body_sha256": "1dad30310ecac8378de911e7da69d4f803af7be40b48b44f8d1be2f37709a744",
         "retained_method": "_original_source_shop_panel__request_sell_quotes"
       },
       {
         "method": "_apply_inventory_change",
         "await": false,
-        "source_line": 1157,
+        "source_line": 1232,
         "body_sha256": "5d16ab8702381dc4a5e37ae4e0c6bb3d558b0edde54f2a3e51b763b191bc6c9f",
         "retained_method": "_original_source_shop_panel__apply_inventory_change"
       },
       {
         "method": "_refresh_gold",
         "await": false,
-        "source_line": 1217,
+        "source_line": 1298,
         "body_sha256": "dc49c9aa3397247956e4f314bd4fcc1fa196a6328efcadb80d5109a2416054cd",
         "retained_method": "_original_source_shop_panel__refresh_gold"
       },
       {
         "method": "_refresh_repair_preview",
-        "await": false,
-        "source_line": 1222,
-        "body_sha256": "5787d161d819abb49feb8790b6138cb97e72a48e26d209949ccfe856ecee92c5",
+        "await": true,
+        "source_line": 1309,
+        "body_sha256": "ed385e07165bbc2fc7e6cf6c3c6a453b2193e527ede16b96d7eaf7063e2f7212",
         "retained_method": "_original_source_shop_panel__refresh_repair_preview"
       },
       {
         "method": "_repair_all",
-        "await": false,
-        "source_line": 1287,
-        "body_sha256": "6851687d9f0181ee2c4e15fe3dea77a5595973b4d1a242c32758579978a2f9d6",
+        "await": true,
+        "source_line": 1380,
+        "body_sha256": "5f7782f59fb79f9428b5c056bdf98b5cd75dfa4f5eea67d65c563830aeb08f04",
         "retained_method": "_original_source_shop_panel__repair_all"
       },
       {
         "method": "_inventory_record",
         "await": false,
-        "source_line": 1387,
+        "source_line": 1486,
         "body_sha256": "9a224faacaac367df23794a1dff7fcc917a570e364dfb992bd9f3ffcbbd7be9b",
         "retained_method": "_original_source_shop_panel__inventory_record"
       }
@@ -1206,145 +1206,145 @@
     ]
   },
   "res://scripts/warehouse_panel.gd": {
-    "script_sha256": "c09946c548b2d7a287e2289e95fdd46883ea6e7a07aaf7b625ed36eec63e260f",
+    "script_sha256": "e730d53a73428e87500acc8a375353792b2194f893241db865178a38b28dae8e",
     "methods": [
       {
         "method": "_ready",
         "await": false,
-        "source_line": 102,
+        "source_line": 106,
         "body_sha256": "775274e98b5a957580ce7df52b8e2b2ae8f69ddf2861b34e7abfbe9e9ec77970",
         "retained_method": "_original_source_warehouse_panel__ready"
       },
       {
         "method": "refresh",
-        "await": false,
-        "source_line": 405,
-        "body_sha256": "061dbe89384697a14e0205bbe28c1df9b4054f779ad7b2fdda190f3864d51ca1",
+        "await": true,
+        "source_line": 415,
+        "body_sha256": "729062c4dbbf90ee97b0f1d24133cdfb569c206768c526434ad6ca366624b187",
         "retained_method": "_original_source_warehouse_panel_refresh"
       },
       {
         "method": "_continue_grid_cell_initialization",
         "await": true,
-        "source_line": 514,
+        "source_line": 530,
         "body_sha256": "2114f2fa544f87d922b8ce26678b98323cf23f95ebd86b23723acd0aed8c15bb",
         "retained_method": "_original_source_warehouse_panel__continue_grid_cell_initialization"
       },
       {
         "method": "wait_until_runtime_ready",
         "await": true,
-        "source_line": 552,
+        "source_line": 574,
         "body_sha256": "24038904579256ed8e70bb03f2287c0bf4609daadae7c720ce3f8062cc9e0bfd",
         "retained_method": "_original_source_warehouse_panel_wait_until_runtime_ready"
       },
       {
         "method": "_bank_transfer_amount",
         "await": false,
-        "source_line": 747,
+        "source_line": 776,
         "body_sha256": "45b1a7f78d375cda7712bcc964a50c7bcf0edd13fb62f346cb83c5d50c5b4ed5",
         "retained_method": "_original_source_warehouse_panel__bank_transfer_amount"
       },
       {
         "method": "_bank_boundary_message",
         "await": false,
-        "source_line": 751,
+        "source_line": 787,
         "body_sha256": "a66b21e9eb8878146327e5f687d7ef3ef647ac7c97ebc569c3aa42b422e4c3f4",
         "retained_method": "_original_source_warehouse_panel__bank_boundary_message"
       },
       {
         "method": "_refresh_bank_state",
-        "await": false,
-        "source_line": 766,
-        "body_sha256": "fcf4a79b069173a64c846b238cf1c7671da8ce4054d7c88ccda3f1b1b7c7ccd9",
+        "await": true,
+        "source_line": 809,
+        "body_sha256": "ce3d19c66dce4cb0d289e99d064bc79d9b07880aa158f3cdde02bb76e5ae1e7c",
         "retained_method": "_original_source_warehouse_panel__refresh_bank_state"
       },
       {
         "method": "_on_bank_transfer_pressed",
-        "await": false,
-        "source_line": 827,
-        "body_sha256": "57d7bd09200c84d114e8db5cae6c04c907858403d8dc23b9147b3e8790c49bbe",
+        "await": true,
+        "source_line": 884,
+        "body_sha256": "686b282a26008f6d76d2785a6d5b6105228e390218c6a95168a4e0d83254eeee",
         "retained_method": "_original_source_warehouse_panel__on_bank_transfer_pressed"
       },
       {
         "method": "_submit_bank_transfer",
         "await": true,
-        "source_line": 848,
-        "body_sha256": "b14ee014e35bf78f90968e069637cbadf2aecaccb4b488719ac761093cddeebe",
+        "source_line": 911,
+        "body_sha256": "fdd9f1c241b993fffb06a2a04ea680acb422df4f0568cb381b1d130bec377128",
         "retained_method": "_original_source_warehouse_panel__submit_bank_transfer"
       },
       {
         "method": "_deposit",
         "await": true,
-        "source_line": 960,
-        "body_sha256": "df4c5fd1e479441a0fcacc2d7da9bd1dda9e685c2a031495ed52e9d803955b34",
+        "source_line": 1029,
+        "body_sha256": "47e4a705f5ab9fa9492fbda5b75bd8024c9474df317a85f13035c94eb119fb64",
         "retained_method": "_original_source_warehouse_panel__deposit"
       },
       {
         "method": "_withdraw",
         "await": true,
-        "source_line": 1003,
-        "body_sha256": "a87c5f9d0213e841ee352b6f2d2a823130388c453e76e0aab079a7c756ce918d",
+        "source_line": 1078,
+        "body_sha256": "1549858626d04587488f5a2d56292ce1252cbff052e44a394165d1ba2af550e0",
         "retained_method": "_original_source_warehouse_panel__withdraw"
       },
       {
         "method": "_selected_transfer_refs_after_deposit",
         "await": false,
-        "source_line": 1081,
+        "source_line": 1162,
         "body_sha256": "886017fdec63051c19091994565fc0a3ae2bd56865f7b051eaa362aeda8cbf70",
         "retained_method": "_original_source_warehouse_panel__selected_transfer_refs_after_deposit"
       },
       {
         "method": "_selected_transfer_refs_after_withdraw",
         "await": false,
-        "source_line": 1110,
+        "source_line": 1197,
         "body_sha256": "dac651c6beccc0d1c82be2327ceb598d26235617c9c18976a3f07a9180bbea2f",
         "retained_method": "_original_source_warehouse_panel__selected_transfer_refs_after_withdraw"
       },
       {
         "method": "_warehouse_record",
         "await": false,
-        "source_line": 1221,
+        "source_line": 1314,
         "body_sha256": "5a91affc94cace2bc444473739ea6bbc157996b1b97bc29d4bae6d47b1d8947f",
         "retained_method": "_original_source_warehouse_panel__warehouse_record"
       },
       {
         "method": "_bag_record",
         "await": false,
-        "source_line": 1228,
-        "body_sha256": "a17add6cb5580d6135ff692489f34c25f4039d27c3a30d4fe4b796510e597608",
+        "source_line": 1328,
+        "body_sha256": "329af12e9f7a4c69a770eed35876062a058f001a4e616c06b3b9be7941f5b792",
         "retained_method": "_original_source_warehouse_panel__bag_record"
       },
       {
         "method": "_find_ref_index",
         "await": false,
-        "source_line": 1255,
-        "body_sha256": "e4243dfbbfa6da4782079a3bf5b464f04dd7652d0d63bb219cf16f90a461ace0",
+        "source_line": 1385,
+        "body_sha256": "3d8b443e7b13e12b224910cb8d3fce64cc88e05d82f56b0c935cc9481ab9b644",
         "retained_method": "_original_source_warehouse_panel__find_ref_index"
       },
       {
         "method": "_warehouse_slot_has_item",
         "await": false,
-        "source_line": 1315,
+        "source_line": 1455,
         "body_sha256": "743a3297221ff3d1a70b64a73a2c04b770945803f357d8efce0079223e308fda",
         "retained_method": "_original_source_warehouse_panel__warehouse_slot_has_item"
       },
       {
         "method": "_warehouse_occupied_count",
         "await": false,
-        "source_line": 1324,
+        "source_line": 1471,
         "body_sha256": "5c6c938e247cbc72549555d7df91d1386903f39c0d8c1d19fd60a325bc0f9799",
         "retained_method": "_original_source_warehouse_panel__warehouse_occupied_count"
       },
       {
         "method": "_ensure_warehouse_slot",
         "await": false,
-        "source_line": 1349,
+        "source_line": 1503,
         "body_sha256": "6de584fd46d93abf4d64ed12da9690dc53a7e9de950bce440141a92ed7b4d478",
         "retained_method": "_original_source_warehouse_panel__ensure_warehouse_slot"
       },
       {
         "method": "_trim_empty_warehouse_tail",
         "await": false,
-        "source_line": 1354,
+        "source_line": 1514,
         "body_sha256": "db1887c1c87592abf48b7e6ba3d5300ee5448043a2b4bcba031c9e8f224b38fb",
         "retained_method": "_original_source_warehouse_panel__trim_empty_warehouse_tail"
       }

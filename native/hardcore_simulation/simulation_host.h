@@ -52,6 +52,11 @@ class HardCoreSimulationHost : public RefCounted, private hardcore::simulation::
 	Thread thread;
 	using OriginalMailbox = hardcore::simulation::OriginalPrimitiveMailbox;
 	std::unique_ptr<OriginalMailbox> original_primitives;
+	// Main-only cache of the actual accepted immutable Native wire. It is not
+	// a publication, claim, receipt, event cursor or gameplay authority.
+	OriginalMailbox::Prefix main_published_prefix_cache;
+	Dictionary main_published_prefix_value;
+	bool cached_original_published_prefix(const Dictionary &p_value, OriginalMailbox::Prefix &r_prefix) const;
     std::unique_ptr<hardcore::simulation::AsyncLiveResourceMailbox> live_resources;
     bool gameplay_random_captured=false;
     std::unique_ptr<hardcore::simulation::SourceAdmissionScopeLedger> source_admission_scopes;

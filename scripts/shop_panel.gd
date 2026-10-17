@@ -95,7 +95,7 @@ var _original_main_callback_ledger: Dictionary = {}
 
 func _ready() -> void:
 	_original_main_callback_ledger["_ready"] = int(_original_main_callback_ledger.get("_ready",0)) + 1
-	_original_source_shop_panel__ready()
+	await _original_source_shop_panel__ready()
 	_original_main_callback_ledger["_ready"] -= 1
 
 
@@ -133,7 +133,7 @@ func _original_source_shop_panel__ready() -> void:
 	PlayerState.inventory_changed.connect(_on_inventory_changed)
 	visibility_changed.connect(_on_visibility_changed)
 	_refresh_gold()
-	_refresh_repair_preview()
+	await _refresh_repair_preview()
 	_apply_layout_profile_once("shop_buy")
 	UISelectionDismissGuardScript.attach(self)
 	preload("res://scripts/ui_item_selection_lifecycle.gd").attach(self)
@@ -421,7 +421,7 @@ func open_for(display_name: String, new_stock: Array, merchant_context: Dictiona
 	if item_detail_presenter != null:
 		item_detail_presenter.hide_detail()
 	_refresh_gold()
-	_refresh_repair_preview()
+	await _refresh_repair_preview()
 	show()
 	# CanvasItem propagates child visibility after the parent's signal. At this
 	# boundary the action children are visible and their row can be measured.
@@ -1225,7 +1225,7 @@ func _on_visibility_changed() -> void:
 		return
 	if visible and _inventory_refresh_pending and _trade_mode == "sell":
 		_apply_inventory_change()
-	_ui_l1_flush_repair_view_if_dirty()
+	await _ui_l1_flush_repair_view_if_dirty()
 	_layout_trade_actions()
 
 
@@ -1308,7 +1308,7 @@ func _original_source_shop_panel__refresh_gold() -> void:
 
 func _refresh_repair_preview() -> void:
 	_original_main_callback_ledger["_refresh_repair_preview"] = int(_original_main_callback_ledger.get("_refresh_repair_preview",0)) + 1
-	_original_source_shop_panel__refresh_repair_preview()
+	await _original_source_shop_panel__refresh_repair_preview()
 	_original_main_callback_ledger["_refresh_repair_preview"] -= 1
 
 
@@ -1325,7 +1325,7 @@ func _original_source_shop_panel__refresh_repair_preview() -> void:
 	if repair_button.disabled:
 		return
 	_ui_l1_repair_plan_count += 1
-	var cost := PlayerState.repair_cost(context)
+	var cost : int = await preload("res://scripts/gameplay/source/main_profile_ui_command.gd").call_owner(&"repair_cost",[context])
 	repair_button.text = "维修全部\n（%d金币）" % cost if cost > 0 else "装备无需维修"
 	_layout_trade_actions()
 
@@ -1379,7 +1379,7 @@ func _sell_card_for_inventory_index(inventory_index: int) -> Button:
 
 func _repair_all() -> void:
 	_original_main_callback_ledger["_repair_all"] = int(_original_main_callback_ledger.get("_repair_all",0)) + 1
-	_original_source_shop_panel__repair_all()
+	await _original_source_shop_panel__repair_all()
 	_original_main_callback_ledger["_repair_all"] -= 1
 
 
@@ -1392,7 +1392,7 @@ func _original_source_shop_panel__repair_all() -> void:
 	)
 	var equipment_before := PlayerState.equipment.duplicate(true)
 	var gold_before := PlayerState.gold
-	_ui_show_shop_message(PlayerState.repair_all_equipment(_active_merchant_context()))
+	_ui_show_shop_message(await preload("res://scripts/gameplay/source/main_profile_ui_command.gd").call_owner(&"repair_all_equipment",[_active_merchant_context()]))
 	_refresh_gold()
 	var repair_changed_state := (
 		PlayerState.gold < gold_before
@@ -1574,9 +1574,9 @@ func _ui_l1_queue_repair_view() -> void:
 
 func _ui_l1_flush_queued_repair_view() -> void:
 	_ui_l1_repair_queued = false
-	_ui_l1_flush_repair_view_if_dirty()
+	await _ui_l1_flush_repair_view_if_dirty()
 
 func _ui_l1_flush_repair_view_if_dirty() -> void:
 	if _ui_l1_repair_dirty and is_inside_tree() and is_visible_in_tree() and _trade_mode == "buy":
-		_refresh_repair_preview()
+		await _refresh_repair_preview()
 # UI-L1 SUPPLEMENT END

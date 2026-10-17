@@ -175,6 +175,7 @@ func capture_original_profile_ui_view(source_state: Dictionary) -> Dictionary:
 			if source_state.source_fields.has(field): fields[field] = source_state.source_fields[field]
 			elif derived.has(field): fields[field] = derived[field]
 			else: return _fail("MISSING:actual_Profile_UI_read_field:"+field)
+	fields[preload("res://scripts/gameplay/profile/profile_original_ui_queries.gd").FIELD] = preload("res://scripts/gameplay/profile/profile_original_ui_queries.gd").capture(model)
 	var graph: RefCounted = ClassDB.instantiate("HardCoreContentValueGraph")
 	var captured: Dictionary = graph.capture(fields,true,false)
 	if captured.get("success")!=true: return _fail("MISSING:opaque_UI_field_canonical_view",captured)

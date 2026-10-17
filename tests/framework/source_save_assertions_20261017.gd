@@ -15,7 +15,7 @@ func _ready() -> void:
 		for count: int in range(0,7):
 			check(Catalog.accepts(method,count)==(count in Catalog.ARITIES[method]),"official unique arity catalog "+method+"/"+str(count))
 	for method: String in ["__unknown__","deposit_to_warehouse","withdraw_from_warehouse","_model"]:check(not Catalog.accepts(method,0),"unknown/unadmitted direct mutation rejects "+method)
-	check(Catalog.accepts("transfer_warehouse_prepared",2) and Catalog.accepts("transfer_warehouse_prepared",3) and not Catalog.accepts("transfer_warehouse_prepared",1),"formal prepared transfer default and explicit target arities")
+	check(Catalog.accepts("transfer_warehouse_prepared",4) and not Catalog.accepts("transfer_warehouse_prepared",3) and not Catalog.accepts("transfer_warehouse_prepared",2),"formal prepared transfer requires exact selected records and explicit target array")
 	check(Audit.equal(4,4.0) and not Audit.equal(4,4.0000001) and not Audit.equal(4,4.9) and not Audit.equal(NAN,NAN),"exact JSON int normalization without tolerance/truncation")
 	var gear: Dictionary={"item_id":"hc.item.known","instance_id":"actual-equipment","count":1,"affixes":[{"id":"power","value":17}],"durability_raw":8123,"mystery":{"rolled":19}}
 	var a: Dictionary={"inventory":[],"equipment":{"hc.slot.helmet":gear},"warehouse_inventory":[]}

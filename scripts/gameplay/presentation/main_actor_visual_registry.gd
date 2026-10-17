@@ -15,6 +15,8 @@ var _failure: Dictionary = {}
 var _header_prefix_consumer: WeakRef
 var _header_resources: RefCounted
 var _player_input_template: Dictionary
+var _enemy_input_template: Dictionary
+var _enemy_input_loading: RefCounted
 var _player_input_loading: RefCounted
 var _loot_registry: RefCounted
 
@@ -133,6 +135,7 @@ func _bind_original_actor_view(publication: Dictionary, assets: RefCounted, prep
 		_actors[id].actor_header = structural.actor_header
 		_actors[id].visual_header = structural.visual_header
 		_actors[id].kind = "enemy"
+		_actors[id].last_enemy_event = structural.last_enemy_event
 	if publication.kind == "player": _player_id = id
 	return {"success":true,"view":view,"identity":publication.identity,"renderer_node_id":view.get_instance_id()}
 
@@ -141,7 +144,11 @@ func apply_source_projection(publication: Dictionary) -> bool:
 	var id: int = publication.identity.runtime_id
 	if not _actors.has(id) or _retiring.has(id): return false
 	var row: Dictionary = _actors[id]
-	if row.get("structural_only") == true: return false # MISSING genuine complete asset/binding caller
+	if row.get("structural_only") == true:
+		# This is the first real complete Source publication, not an inferred
+		# snapshot at the earlier overhead child constructor.
+		if publication.kind!="enemy" or row.assets==null or not row.view.has_actual_original_enemy_birth_inputs(publication.identity): return false
+		return _bind_original_actor_view(publication,row.assets,row.view).get("success")==true
 	if publication.publication_sequence == row.last.publication_sequence: return publication == row.last
 	if publication.publication_sequence != row.last.publication_sequence + 1 or publication.source_process_frame < row.last.source_process_frame or publication.clock_epoch < row.last.clock_epoch: return false
 	if publication.advance_visual and publication.source_process_frame <= row.last_advance_source_process_frame: return false
@@ -219,8 +226,10 @@ func apply_original_enemy_actor_operation(operation: StringName, arguments: Arra
 			if arguments.size() != 1: return false
 			preload("res://scripts/monster_visual.gd").configure_actor_y_sort_item(view,"actor_root")
 		&"enemy_overhead_create":
-			if arguments.size() != 5 or not arguments[1] is String or not arguments[2] is bool or not arguments[3] is int or not arguments[4] is int: return false
-			return view.create_original_overhead(arguments[1],arguments[2],arguments[3],arguments[4])
+			if arguments.size()!=6 or not arguments[1] is String or not arguments[2] is bool or not arguments[3] is int or not arguments[4] is int or not arguments[5] is Dictionary: return false
+			if not _prepare_original_enemy_overhead_inputs(arguments): return false
+			if not view.create_original_overhead(arguments[1],arguments[2],arguments[3],arguments[4]): return false
+			return row.assets.bind_actual_original_instance(view)
 		&"enemy_overhead_health":
 			if arguments.size() != 3 or view.overhead == null or not arguments[1] is int or not arguments[2] is int: return false
 			view.overhead.set_health(arguments[1],arguments[2])
@@ -456,6 +465,8 @@ func capture_original_world_exit_state(world: Dictionary) -> Dictionary:
 		if pending.node_receipt.is_empty(): return {"success":true,"status":"PENDING"}
 		facts.append(pending.node_receipt.duplicate(true))
 	if is_instance_valid(_prepared_player_shell): return {"success":true,"status":"PENDING"}
+	var template_exit: Dictionary=_retire_original_input_templates_after_actor_free()
+	if template_exit.get("status")!="READY": return template_exit
 	_world_retirement.receipt = {"success":true,"status":"READY","world":world,"actual_original_exit":true,"actual_actor_nodes_absent":true,"actual_enemy_effect_nodes_absent":_enemy_effect_registry==null or _enemy_effect_registry.actual_nodes_absent(),"actual_enemy_effect_exit":_world_retirement.get("actual_enemy_effect_exit",{}),"actual_loot_nodes_absent":_loot_registry==null or _loot_registry.actual_nodes_absent(),"actual_loot_exit":_world_retirement.get("actual_loot_exit",{}),"actual_actor_facts":facts,"actual_prepared_shell_id":_prepared_player_receipt.get("actual_node_id",0),"actual_prepared_shell_absent":not is_instance_valid(_prepared_player_shell),"actual_registry_id":get_instance_id(),"actual_Main_process_frame":Engine.get_process_frames()}
 	return _world_retirement.receipt
 
@@ -553,3 +564,47 @@ func prepare_actual_original_map_arrival_effect_exit(transaction: Dictionary) ->
 	var event: Dictionary=consumer.actual_current_original_event()
 	if transaction.get("before_world")!=_world or event.get("kind")!="original_world_presentation" or event.get("operation")!=&"source_map_arrival" or event.get("arguments")!=[transaction] or not consumer.get("_host").verify_committed_original_map_arrival(transaction): return false
 	return _enemy_effect_registry==null or _enemy_effect_registry.prepare_actual_map_melee_exit(transaction).get("status")=="READY"
+
+func configure_original_enemy_input_template(loading: RefCounted, template: Dictionary) -> bool:
+	if not _main() or _header_resources==null or _header_prefix_consumer==null or _enemy_input_loading!=null or loading==null or template.get("success")!=true or template.get("phase")!="INPUTS_PINNED" or template.get("world_context")!=_world or not template.get("template_key") is String: return false
+	if loading.verify_actual_original_loading_scope(template.get("loading_scope",{})).get("success")!=true: return false
+	var ledger: RefCounted=_header_resources.get("_actor_assets")
+	if ledger==null or ledger.inspect_actual_original_input_template(template).get("success")!=true or ledger.get("_templates").get(template.template_key,{}).get("recipe",{}).get("kind")!="enemy": return false
+	_enemy_input_loading=loading;_enemy_input_template=template.duplicate(true)
+	return true
+
+func _prepare_original_enemy_overhead_inputs(arguments: Array) -> bool:
+	if not _main() or _header_prefix_consumer==null or _header_prefix_consumer.get_ref()==null or _enemy_input_loading==null or _enemy_input_template.is_empty() or arguments.size()!=6 or not arguments[5] is Dictionary: return false
+	var event: Dictionary=_header_prefix_consumer.get_ref().actual_current_original_event()
+	if event.get("kind")!="original_world_presentation" or event.get("operation")!=&"enemy_overhead_create" or event.get("arguments")!=arguments: return false
+	var context: Dictionary=arguments[5]
+	if not preload("res://scripts/gameplay/presentation/enemy_overhead_birth_context.gd").validate(context) or context.actor_identity.world!=_world or context.actor_identity.runtime_id!=arguments[0] or not _actors.has(arguments[0]) or _retiring.has(arguments[0]): return false
+	var row: Dictionary=_actors[arguments[0]]
+	if row.get("structural_only")!=true or row.identity!=context.actor_identity or row.assets!=null or not is_instance_valid(row.view) or row.view.overhead!=null or row.view.get_parent()!=_root or not row.view.is_inside_tree() or row.view.is_queued_for_deletion(): return false
+	var owner := {"contract_id":"hardcore.actor.renderer_owner.v1","actor_identity":row.identity,"renderer_registry_id":get_instance_id(),"kind":"enemy"}
+	var scope: Dictionary=_enemy_input_template.loading_scope
+	var bound: Dictionary=_header_resources.bind_original_actor_renderer_inputs(owner,_enemy_input_template.template_key,scope)
+	if bound.get("success")!=true: return false
+	var assets := preload("res://scripts/gameplay/presentation/actor_main_asset_port.gd").new()
+	if not assets.configure_main(_header_resources,_enemy_input_loading,owner,scope): return false
+	# Retain accepted ownership even if physical construction below fails;
+	# the original retirement ledger must see every accepted pin.
+	row.assets=assets
+	return row.view.prepare_original_enemy_overhead_context(context,assets)
+
+func _retire_original_input_templates_after_actor_free() -> Dictionary:
+	if not _main() or _world_retirement.is_empty(): return {"success":false,"status":"INVALID"}
+	if not _world_retirement.has("released_input_templates"): _world_retirement.released_input_templates={}
+	for template: Dictionary in [_player_input_template,_enemy_input_template]:
+		if template.is_empty(): continue
+		if _header_resources==null: return {"success":false,"status":"INVALID"}
+		var key: String=template.template_key
+		if _world_retirement.released_input_templates.has(key): continue
+		var actual: Dictionary=_header_resources.release_original_actor_input_template(key)
+		if actual.get("status")=="PENDING": return {"success":true,"status":"PENDING"}
+		if actual.get("status")!="READY" or actual.get("actual_template_released")!=key: return {"success":false,"status":"INVALID","error":"actual_actor_template_retirement_failed"}
+		_world_retirement.released_input_templates[key]=actual.duplicate(true)
+	if not _player_input_template.is_empty() or not _enemy_input_template.is_empty():
+		var ledger: RefCounted=_header_resources.get("_actor_assets")
+		if ledger==null or not ledger.terminal(): return {"success":true,"status":"PENDING"}
+	return {"success":true,"status":"READY","actual_released_input_templates":_world_retirement.released_input_templates.duplicate(true)}

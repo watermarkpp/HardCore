@@ -1,0 +1,407 @@
+/**************************************************************************/
+/*  character_body_2d.cpp                                                 */
+/**************************************************************************/
+/*                         This file is part of:                          */
+/*                             GODOT ENGINE                               */
+/*                        https://godotengine.org                         */
+/**************************************************************************/
+/* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
+/* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
+/*                                                                        */
+/* Permission is hereby granted, free of charge, to any person obtaining  */
+/* a copy of this software and associated documentation files (the        */
+/* "Software"), to deal in the Software without restriction, including    */
+/* without limitation the rights to use, copy, modify, merge, publish,    */
+/* distribute, sublicense, and/or sell copies of the Software, and to     */
+/* permit persons to whom the Software is furnished to do so, subject to  */
+/* the following conditions:                                              */
+/*                                                                        */
+/* The above copyright notice and this permission notice shall be         */
+/* included in all copies or substantial portions of the Software.        */
+/*                                                                        */
+/* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,        */
+/* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF     */
+/* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. */
+/* IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY   */
+/* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,   */
+/* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE      */
+/* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
+/**************************************************************************/
+
+#include "character_body_2d.h"
+
+#include "core/config/engine.h"
+#include "core/object/class_db.h"
+
+#ifndef DISABLE_DEPRECATED
+#include "servers/physics_2d/physics_server_2d_extension.h"
+#endif
+
+namespace {
+struct CharacterMotion2DNodeAdapter final : CharacterMotion2DAdapter {
+	CharacterBody2D &body;
+	explicit CharacterMotion2DNodeAdapter(CharacterBody2D &p_body, bool p_only_update) : body(p_body), only_update(p_only_update) {}
+	bool only_update = false;
+	Transform2D get_transform() const override { return body.get_global_transform(); }
+	void set_transform(const Transform2D &p_transform) override { body.set_global_transform(p_transform); }
+	bool only_update_transform_changes() const override { return only_update; }
+	bool test_motion(const PhysicsServer2D::MotionParameters &p_parameters, PhysicsServer2D::MotionResult &r_result) override {
+		return PhysicsServer2D::get_singleton()->body_test_motion(body.get_rid(), p_parameters, &r_result);
+	}
+	PhysicsDirectBodyState2D *body_get_direct_state(RID p_body) override {
+		return PhysicsServer2D::get_singleton()->body_get_direct_state(p_body);
+	}
+	uint32_t get_collision_layer(PhysicsDirectBodyState2D *bs, RID p_body) override {
+#ifndef DISABLE_DEPRECATED
+		PhysicsDirectBodyState2DExtension *bs_ext = Object::cast_to<PhysicsDirectBodyState2DExtension>(bs);
+		if (bs_ext != nullptr && !GDVIRTUAL_IS_OVERRIDDEN_PTR(bs_ext, _get_collision_layer)) {
+			return PhysicsServer2D::get_singleton()->body_get_collision_layer(p_body);
+		}
+#endif
+		return bs->get_collision_layer();
+	}
+	bool is_character(ObjectID p_object, RID) override { return ObjectDB::get_instance<CharacterBody2D>(p_object) != nullptr; }
+};
+} // namespace
+
+bool CharacterBody2D::move_and_slide() {
+	double delta = Engine::get_singleton()->is_in_physics_frame() ? get_physics_process_delta_time() : get_process_delta_time();
+	return move_and_slide_with_delta(delta);
+}
+
+bool CharacterBody2D::move_and_slide_with_delta(double p_delta) {
+	CharacterMotion2DNodeAdapter adapter(*this, is_only_update_transform_changes_enabled());
+	return CharacterMotion2DState::move_and_slide(adapter, p_delta);
+}
+
+void CharacterBody2D::apply_floor_snap() {
+	CharacterMotion2DNodeAdapter adapter(*this, is_only_update_transform_changes_enabled());
+	CharacterMotion2DState::_apply_floor_snap(adapter);
+}
+
+const Vector2 &CharacterBody2D::get_velocity() const {
+	return velocity;
+}
+
+void CharacterBody2D::set_velocity(const Vector2 &p_velocity) {
+	velocity = p_velocity;
+}
+
+bool CharacterBody2D::is_on_floor() const {
+	return on_floor;
+}
+
+bool CharacterBody2D::is_on_floor_only() const {
+	return on_floor && !on_wall && !on_ceiling;
+}
+
+bool CharacterBody2D::is_on_wall() const {
+	return on_wall;
+}
+
+bool CharacterBody2D::is_on_wall_only() const {
+	return on_wall && !on_floor && !on_ceiling;
+}
+
+bool CharacterBody2D::is_on_ceiling() const {
+	return on_ceiling;
+}
+
+bool CharacterBody2D::is_on_ceiling_only() const {
+	return on_ceiling && !on_floor && !on_wall;
+}
+
+const Vector2 &CharacterBody2D::get_floor_normal() const {
+	return floor_normal;
+}
+
+const Vector2 &CharacterBody2D::get_wall_normal() const {
+	return wall_normal;
+}
+
+const Vector2 &CharacterBody2D::get_last_motion() const {
+	return last_motion;
+}
+
+Vector2 CharacterBody2D::get_position_delta() const {
+	return get_global_transform().columns[2] - previous_position;
+}
+
+const Vector2 &CharacterBody2D::get_real_velocity() const {
+	return real_velocity;
+}
+
+real_t CharacterBody2D::get_floor_angle(const Vector2 &p_up_direction) const {
+	ERR_FAIL_COND_V(p_up_direction == Vector2(), 0);
+	return Math::acos(floor_normal.dot(p_up_direction));
+}
+
+const Vector2 &CharacterBody2D::get_platform_velocity() const {
+	return platform_velocity;
+}
+
+int CharacterBody2D::get_slide_collision_count() const {
+	return motion_results.size();
+}
+
+PhysicsServer2D::MotionResult CharacterBody2D::get_slide_collision(int p_bounce) const {
+	ERR_FAIL_INDEX_V(p_bounce, motion_results.size(), PhysicsServer2D::MotionResult());
+	return motion_results[p_bounce];
+}
+
+Ref<KinematicCollision2D> CharacterBody2D::_get_slide_collision(int p_bounce) {
+	ERR_FAIL_INDEX_V(p_bounce, motion_results.size(), Ref<KinematicCollision2D>());
+	if (p_bounce >= slide_colliders.size()) {
+		slide_colliders.resize(p_bounce + 1);
+	}
+
+	// Create a new instance when the cached reference is invalid or still in use in script.
+	if (slide_colliders[p_bounce].is_null() || slide_colliders[p_bounce]->get_reference_count() > 1) {
+		slide_colliders.write[p_bounce].instantiate();
+		slide_colliders.write[p_bounce]->owner_id = get_instance_id();
+	}
+
+	slide_colliders.write[p_bounce]->result = motion_results[p_bounce];
+	return slide_colliders[p_bounce];
+}
+
+Ref<KinematicCollision2D> CharacterBody2D::_get_last_slide_collision() {
+	if (motion_results.is_empty()) {
+		return Ref<KinematicCollision2D>();
+	}
+	return _get_slide_collision(motion_results.size() - 1);
+}
+
+void CharacterBody2D::set_safe_margin(real_t p_margin) {
+	margin = p_margin;
+}
+
+real_t CharacterBody2D::get_safe_margin() const {
+	return margin;
+}
+
+bool CharacterBody2D::is_floor_stop_on_slope_enabled() const {
+	return floor_stop_on_slope;
+}
+
+void CharacterBody2D::set_floor_stop_on_slope_enabled(bool p_enabled) {
+	floor_stop_on_slope = p_enabled;
+}
+
+bool CharacterBody2D::is_floor_constant_speed_enabled() const {
+	return floor_constant_speed;
+}
+
+void CharacterBody2D::set_floor_constant_speed_enabled(bool p_enabled) {
+	floor_constant_speed = p_enabled;
+}
+
+bool CharacterBody2D::is_floor_block_on_wall_enabled() const {
+	return floor_block_on_wall;
+}
+
+void CharacterBody2D::set_floor_block_on_wall_enabled(bool p_enabled) {
+	floor_block_on_wall = p_enabled;
+}
+
+bool CharacterBody2D::is_slide_on_ceiling_enabled() const {
+	return slide_on_ceiling;
+}
+
+void CharacterBody2D::set_slide_on_ceiling_enabled(bool p_enabled) {
+	slide_on_ceiling = p_enabled;
+}
+
+uint32_t CharacterBody2D::get_platform_floor_layers() const {
+	return platform_floor_layers;
+}
+
+void CharacterBody2D::set_platform_floor_layers(uint32_t p_exclude_layers) {
+	platform_floor_layers = p_exclude_layers;
+}
+
+uint32_t CharacterBody2D::get_platform_wall_layers() const {
+	return platform_wall_layers;
+}
+
+void CharacterBody2D::set_platform_wall_layers(uint32_t p_exclude_layers) {
+	platform_wall_layers = p_exclude_layers;
+}
+
+void CharacterBody2D::set_motion_mode(MotionMode p_mode) {
+	motion_mode = p_mode;
+}
+
+CharacterBody2D::MotionMode CharacterBody2D::get_motion_mode() const {
+	return static_cast<MotionMode>(motion_mode);
+}
+
+void CharacterBody2D::set_platform_on_leave(PlatformOnLeave p_on_leave_apply_velocity) {
+	platform_on_leave = p_on_leave_apply_velocity;
+}
+
+CharacterBody2D::PlatformOnLeave CharacterBody2D::get_platform_on_leave() const {
+	return static_cast<PlatformOnLeave>(platform_on_leave);
+}
+
+int CharacterBody2D::get_max_slides() const {
+	return max_slides;
+}
+
+void CharacterBody2D::set_max_slides(int p_max_slides) {
+	ERR_FAIL_COND(p_max_slides < 1);
+	max_slides = p_max_slides;
+}
+
+real_t CharacterBody2D::get_floor_max_angle() const {
+	return floor_max_angle;
+}
+
+void CharacterBody2D::set_floor_max_angle(real_t p_radians) {
+	floor_max_angle = p_radians;
+}
+
+real_t CharacterBody2D::get_floor_snap_length() {
+	return floor_snap_length;
+}
+
+void CharacterBody2D::set_floor_snap_length(real_t p_floor_snap_length) {
+	ERR_FAIL_COND(p_floor_snap_length < 0);
+	floor_snap_length = p_floor_snap_length;
+}
+
+real_t CharacterBody2D::get_wall_min_slide_angle() const {
+	return wall_min_slide_angle;
+}
+
+void CharacterBody2D::set_wall_min_slide_angle(real_t p_radians) {
+	wall_min_slide_angle = p_radians;
+}
+
+const Vector2 &CharacterBody2D::get_up_direction() const {
+	return up_direction;
+}
+
+void CharacterBody2D::set_up_direction(const Vector2 &p_up_direction) {
+	ERR_FAIL_COND_MSG(p_up_direction == Vector2(), "up_direction can't be equal to Vector2.ZERO, consider using Floating motion mode instead.");
+	up_direction = p_up_direction.normalized();
+}
+
+void CharacterBody2D::_notification(int p_what) {
+	switch (p_what) {
+		case NOTIFICATION_ENTER_TREE: {
+			// Reset move_and_slide() data.
+			on_floor = false;
+			platform_rid = RID();
+			platform_object_id = ObjectID();
+			on_ceiling = false;
+			on_wall = false;
+			motion_results.clear();
+			platform_velocity = Vector2();
+		} break;
+	}
+}
+
+void CharacterBody2D::_validate_property(PropertyInfo &p_property) const {
+	if (!Engine::get_singleton()->is_editor_hint()) {
+		return;
+	}
+	if (motion_mode == MOTION_MODE_FLOATING) {
+		if (p_property.name.begins_with("floor_") || p_property.name == "up_direction" || p_property.name == "slide_on_ceiling") {
+			p_property.usage = PROPERTY_USAGE_NO_EDITOR;
+		}
+	} else {
+		if (p_property.name == "wall_min_slide_angle") {
+			p_property.usage = PROPERTY_USAGE_NO_EDITOR;
+		}
+	}
+}
+
+void CharacterBody2D::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("move_and_slide"), &CharacterBody2D::move_and_slide);
+	ClassDB::bind_method(D_METHOD("apply_floor_snap"), &CharacterBody2D::apply_floor_snap);
+
+	ClassDB::bind_method(D_METHOD("set_velocity", "velocity"), &CharacterBody2D::set_velocity);
+	ClassDB::bind_method(D_METHOD("get_velocity"), &CharacterBody2D::get_velocity);
+
+	ClassDB::bind_method(D_METHOD("set_safe_margin", "margin"), &CharacterBody2D::set_safe_margin);
+	ClassDB::bind_method(D_METHOD("get_safe_margin"), &CharacterBody2D::get_safe_margin);
+	ClassDB::bind_method(D_METHOD("is_floor_stop_on_slope_enabled"), &CharacterBody2D::is_floor_stop_on_slope_enabled);
+	ClassDB::bind_method(D_METHOD("set_floor_stop_on_slope_enabled", "enabled"), &CharacterBody2D::set_floor_stop_on_slope_enabled);
+	ClassDB::bind_method(D_METHOD("set_floor_constant_speed_enabled", "enabled"), &CharacterBody2D::set_floor_constant_speed_enabled);
+	ClassDB::bind_method(D_METHOD("is_floor_constant_speed_enabled"), &CharacterBody2D::is_floor_constant_speed_enabled);
+	ClassDB::bind_method(D_METHOD("set_floor_block_on_wall_enabled", "enabled"), &CharacterBody2D::set_floor_block_on_wall_enabled);
+	ClassDB::bind_method(D_METHOD("is_floor_block_on_wall_enabled"), &CharacterBody2D::is_floor_block_on_wall_enabled);
+	ClassDB::bind_method(D_METHOD("set_slide_on_ceiling_enabled", "enabled"), &CharacterBody2D::set_slide_on_ceiling_enabled);
+	ClassDB::bind_method(D_METHOD("is_slide_on_ceiling_enabled"), &CharacterBody2D::is_slide_on_ceiling_enabled);
+
+	ClassDB::bind_method(D_METHOD("set_platform_floor_layers", "exclude_layer"), &CharacterBody2D::set_platform_floor_layers);
+	ClassDB::bind_method(D_METHOD("get_platform_floor_layers"), &CharacterBody2D::get_platform_floor_layers);
+	ClassDB::bind_method(D_METHOD("set_platform_wall_layers", "exclude_layer"), &CharacterBody2D::set_platform_wall_layers);
+	ClassDB::bind_method(D_METHOD("get_platform_wall_layers"), &CharacterBody2D::get_platform_wall_layers);
+
+	ClassDB::bind_method(D_METHOD("get_max_slides"), &CharacterBody2D::get_max_slides);
+	ClassDB::bind_method(D_METHOD("set_max_slides", "max_slides"), &CharacterBody2D::set_max_slides);
+	ClassDB::bind_method(D_METHOD("get_floor_max_angle"), &CharacterBody2D::get_floor_max_angle);
+	ClassDB::bind_method(D_METHOD("set_floor_max_angle", "radians"), &CharacterBody2D::set_floor_max_angle);
+	ClassDB::bind_method(D_METHOD("get_floor_snap_length"), &CharacterBody2D::get_floor_snap_length);
+	ClassDB::bind_method(D_METHOD("set_floor_snap_length", "floor_snap_length"), &CharacterBody2D::set_floor_snap_length);
+	ClassDB::bind_method(D_METHOD("get_wall_min_slide_angle"), &CharacterBody2D::get_wall_min_slide_angle);
+	ClassDB::bind_method(D_METHOD("set_wall_min_slide_angle", "radians"), &CharacterBody2D::set_wall_min_slide_angle);
+	ClassDB::bind_method(D_METHOD("get_up_direction"), &CharacterBody2D::get_up_direction);
+	ClassDB::bind_method(D_METHOD("set_up_direction", "up_direction"), &CharacterBody2D::set_up_direction);
+	ClassDB::bind_method(D_METHOD("set_motion_mode", "mode"), &CharacterBody2D::set_motion_mode);
+	ClassDB::bind_method(D_METHOD("get_motion_mode"), &CharacterBody2D::get_motion_mode);
+	ClassDB::bind_method(D_METHOD("set_platform_on_leave", "on_leave_apply_velocity"), &CharacterBody2D::set_platform_on_leave);
+	ClassDB::bind_method(D_METHOD("get_platform_on_leave"), &CharacterBody2D::get_platform_on_leave);
+
+	ClassDB::bind_method(D_METHOD("is_on_floor"), &CharacterBody2D::is_on_floor);
+	ClassDB::bind_method(D_METHOD("is_on_floor_only"), &CharacterBody2D::is_on_floor_only);
+	ClassDB::bind_method(D_METHOD("is_on_ceiling"), &CharacterBody2D::is_on_ceiling);
+	ClassDB::bind_method(D_METHOD("is_on_ceiling_only"), &CharacterBody2D::is_on_ceiling_only);
+	ClassDB::bind_method(D_METHOD("is_on_wall"), &CharacterBody2D::is_on_wall);
+	ClassDB::bind_method(D_METHOD("is_on_wall_only"), &CharacterBody2D::is_on_wall_only);
+	ClassDB::bind_method(D_METHOD("get_floor_normal"), &CharacterBody2D::get_floor_normal);
+	ClassDB::bind_method(D_METHOD("get_wall_normal"), &CharacterBody2D::get_wall_normal);
+	ClassDB::bind_method(D_METHOD("get_last_motion"), &CharacterBody2D::get_last_motion);
+	ClassDB::bind_method(D_METHOD("get_position_delta"), &CharacterBody2D::get_position_delta);
+	ClassDB::bind_method(D_METHOD("get_real_velocity"), &CharacterBody2D::get_real_velocity);
+	ClassDB::bind_method(D_METHOD("get_floor_angle", "up_direction"), &CharacterBody2D::get_floor_angle, DEFVAL(Vector2(0.0, -1.0)));
+	ClassDB::bind_method(D_METHOD("get_platform_velocity"), &CharacterBody2D::get_platform_velocity);
+	ClassDB::bind_method(D_METHOD("get_slide_collision_count"), &CharacterBody2D::get_slide_collision_count);
+	ClassDB::bind_method(D_METHOD("get_slide_collision", "slide_idx"), &CharacterBody2D::_get_slide_collision);
+	ClassDB::bind_method(D_METHOD("get_last_slide_collision"), &CharacterBody2D::_get_last_slide_collision);
+
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "motion_mode", PROPERTY_HINT_ENUM, "Grounded,Floating", PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_UPDATE_ALL_IF_MODIFIED), "set_motion_mode", "get_motion_mode");
+	ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "up_direction"), "set_up_direction", "get_up_direction");
+	ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "velocity", PROPERTY_HINT_NONE, "suffix:px/s", PROPERTY_USAGE_NO_EDITOR), "set_velocity", "get_velocity");
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "slide_on_ceiling"), "set_slide_on_ceiling_enabled", "is_slide_on_ceiling_enabled");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "max_slides", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR), "set_max_slides", "get_max_slides");
+	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "wall_min_slide_angle", PROPERTY_HINT_RANGE, "0,180,0.1,radians_as_degrees", PROPERTY_USAGE_DEFAULT), "set_wall_min_slide_angle", "get_wall_min_slide_angle");
+
+	ADD_GROUP("Floor", "floor_");
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "floor_stop_on_slope"), "set_floor_stop_on_slope_enabled", "is_floor_stop_on_slope_enabled");
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "floor_constant_speed"), "set_floor_constant_speed_enabled", "is_floor_constant_speed_enabled");
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "floor_block_on_wall"), "set_floor_block_on_wall_enabled", "is_floor_block_on_wall_enabled");
+	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "floor_max_angle", PROPERTY_HINT_RANGE, "0,180,0.1,radians_as_degrees"), "set_floor_max_angle", "get_floor_max_angle");
+	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "floor_snap_length", PROPERTY_HINT_RANGE, "0,32,0.1,or_greater,suffix:px"), "set_floor_snap_length", "get_floor_snap_length");
+
+	ADD_GROUP("Moving Platform", "platform_");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "platform_on_leave", PROPERTY_HINT_ENUM, "Add Velocity,Add Upward Velocity,Do Nothing", PROPERTY_USAGE_DEFAULT), "set_platform_on_leave", "get_platform_on_leave");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "platform_floor_layers", PROPERTY_HINT_LAYERS_2D_PHYSICS), "set_platform_floor_layers", "get_platform_floor_layers");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "platform_wall_layers", PROPERTY_HINT_LAYERS_2D_PHYSICS), "set_platform_wall_layers", "get_platform_wall_layers");
+
+	ADD_GROUP("Collision", "");
+	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "safe_margin", PROPERTY_HINT_RANGE, "0.001,256,0.001,suffix:px"), "set_safe_margin", "get_safe_margin");
+
+	BIND_ENUM_CONSTANT(MOTION_MODE_GROUNDED);
+	BIND_ENUM_CONSTANT(MOTION_MODE_FLOATING);
+
+	BIND_ENUM_CONSTANT(PLATFORM_ON_LEAVE_ADD_VELOCITY);
+	BIND_ENUM_CONSTANT(PLATFORM_ON_LEAVE_ADD_UPWARD_VELOCITY);
+	BIND_ENUM_CONSTANT(PLATFORM_ON_LEAVE_DO_NOTHING);
+}
+
+CharacterBody2D::CharacterBody2D() :
+		PhysicsBody2D(PhysicsServer2D::BODY_MODE_KINEMATIC) {
+}

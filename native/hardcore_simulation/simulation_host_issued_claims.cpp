@@ -16,7 +16,7 @@ constexpr const char*WARM_PATH="res://scripts/gameplay/world/world_caster_warm_m
 // only with a new exact source manifest and actual semantic review.
 constexpr const char*FEATURE_SHA="e6ed41a4444084e8892818c68adb96a3c5895559774d88b7b210b41461d509e6";
 constexpr const char*ORIGIN_SHA="8884d1b1ebe232f10605cdea0eced15b686244c45f677ebfb59fd078387bfae1";
-constexpr const char*SOURCE_SHA="6ba6941921d31088d12ad4233697336ec839ea65c79f307b4c69d38de8bc9efa";
+constexpr const char*SOURCE_SHA="5372ae5df9c90177ba5dcb9919db62187fde4c716771ce7f720a761bb41912db";
 constexpr const char*WARM_SHA="5cae0c8d8e39d93fa5230bd9ca2543b43512acbecafa13c41f27e36cc9fff65c";
 constexpr const char*WARM_PORT_SHA="148c2e8d4c3e7dc8ccac844426e37014022a1304b2e9fe2185f0cad9b733a3d5";
 bool ci(const Dictionary&d,const char*k,int64_t&n){if(!d.has(k)||d[k].get_type()!=Variant::INT)return false;n=d[k];return true;}

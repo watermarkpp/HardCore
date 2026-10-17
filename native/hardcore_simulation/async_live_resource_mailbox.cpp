@@ -19,14 +19,24 @@ AsyncLiveResourceMailbox::Slot* AsyncLiveResourceMailbox::find(const Identity&id
 const AsyncLiveResourceMailbox::Slot* AsyncLiveResourceMailbox::find(const Identity&id)const{for(const auto&s:slots_)if(s.state!=State::FREE&&s.request.original.identity==id)return &s;return nullptr;}
 bool AsyncLiveResourceMailbox::bind_owner(){std::lock_guard<std::mutex>lock(mutex_);if(std::this_thread::get_id()==main_||owner_!=std::thread::id{})return false;owner_=std::this_thread::get_id();return true;}
 AsyncLiveResourceMailbox::Probe AsyncLiveResourceMailbox::probe_submission(uint64_t session,uint64_t reservation,const Bytes&wire){if(std::this_thread::get_id()!=owner_)return {Admission::INVALID,{}};std::unique_lock<std::mutex>lock(mutex_,std::try_to_lock);if(!lock.owns_lock())return {Admission::BUSY,{}};for(const auto&s:slots_)if(s.state!=State::FREE&&s.request.reservation.owner_session==session&&s.request.reservation.id==reservation)return {equal(wire,s.request.pre_admission_bytes)?Admission::DUPLICATE:Admission::INVALID,s.request};return {};}
-AsyncLiveResourceMailbox::Admission AsyncLiveResourceMailbox::submit(const Request&r){
+AsyncLiveResourceMailbox::Admission AsyncLiveResourceMailbox::submit(const Request&r,bool*not_admitted_closing){
+  if(not_admitted_closing)*not_admitted_closing=false;
   if(std::this_thread::get_id()!=owner_)return Admission::INVALID;
   std::unique_lock<std::mutex>lock(mutex_,std::try_to_lock);if(!lock.owns_lock())return Admission::BUSY;
   if(auto*prior=find(r.original.identity))return equal(prior->request,r)?Admission::DUPLICATE:Admission::INVALID;
-  if(r.original.identity.generation!=generation_||!r.original.identity.sequence||!r.original.bytes||r.original.bytes->size()>request_bytes_||!r.order_key||r.order_key->empty()||r.order_key->size()>request_bytes_||r.priority<0||r.priority>2||r.reservation.id==0||r.reservation.owner_session==0||r.reservation.lane>2||!r.reservation.category||r.reservation.category->empty()||r.reservation.category->size()>request_bytes_||(r.pre_admission_bytes&&r.pre_admission_bytes->size()>request_bytes_)||(r.issued_claim_context&&r.issued_claim_context->size()>request_bytes_)||r.dependencies.size()>slots_.size()+1||r.reservation.issued_usec>r.original.submitted_usec||(closing_&&!r.cleanup))return Admission::INVALID;
+  if(r.original.identity.generation!=generation_||!r.original.identity.sequence||!r.original.bytes||r.original.bytes->size()>request_bytes_||!r.order_key||r.order_key->empty()||r.order_key->size()>request_bytes_||r.priority<0||r.priority>2||r.reservation.id==0||r.reservation.owner_session==0||r.reservation.lane>2||!r.reservation.category||r.reservation.category->empty()||r.reservation.category->size()>request_bytes_||(r.pre_admission_bytes&&r.pre_admission_bytes->size()>request_bytes_)||(r.issued_claim_context&&r.issued_claim_context->size()>request_bytes_)||r.dependencies.size()>slots_.size()+1||r.reservation.issued_usec>r.original.submitted_usec)return Admission::INVALID;
   for(const auto&s:slots_)if(s.state!=State::FREE&&s.request.reservation.id==r.reservation.id&&s.request.reservation.owner_session==r.reservation.owner_session)return Admission::INVALID;
   if(r.original.channel!=Original::Channel::RESOURCE)return Admission::INVALID;
   for(const auto&d:r.dependencies)if(d.identity.generation!=generation_||!d.identity.sequence||d.identity.sequence>=r.original.identity.sequence||static_cast<unsigned>(d.after)>static_cast<unsigned>(After::RETIRED))return Admission::INVALID;
+  // The same LIVE mutex decides close versus admission. Accepted duplicate
+  // probes and every structural/dependency check above retain their contract.
+  if(closing_&&!r.cleanup){
+    const auto checked=original_.admit_async(r.original,true);
+    if(checked==Original::AsyncAdmission::BUSY)return Admission::BUSY;
+    if(checked!=Original::AsyncAdmission::NOT_ADMITTED_CLOSING)return Admission::INVALID;
+    if(not_admitted_closing)*not_admitted_closing=true;
+    return Admission::BACKPRESSURE;
+  }
   Slot*free=nullptr;for(auto&s:slots_)if(s.state==State::FREE){free=&s;break;}if(!free)return Admission::BACKPRESSURE;
   auto result=original_.admit_async(r.original);if(result==Original::AsyncAdmission::BUSY)return Admission::BUSY;if(result==Original::AsyncAdmission::BACKPRESSURE)return Admission::BACKPRESSURE;if(result!=Original::AsyncAdmission::ACCEPTED)return Admission::INVALID;
   free->request=r;free->state=State::QUEUED;free->prefix_applied=false;free->lease_retired=false;return Admission::ACCEPTED;

@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "scope": "bounded same FIFO batching; actual Native component RED26/2; preserve original one opportunity, existing shared Main progress ledger, snapshot queue bound, unchanged cursor and ACK",
+  "before": "ca099a50446aee024076c5ca51609e955f8029e9e23ec8d61ab5c71575fce226",
+  "after": "dfcbb71903dfa64d92dff369018b3c56b319d8d387d15bc503055b869f2efc0e",
+  "fixture_correction": "configure_for_tests requires a valid epoch callback; otherwise original _sync_epoch intentionally reloads ProjectSettings. First GREEN01 was fixture setup failure, not a proven pump regression. Original raw FAIL retained.",
+  "native_171_and_5_seals": "unchanged",
+  "original_bootstrap_timeout_msec": 60000,
+  "actual_native_regression": "RED02 26 checks/2 failures native1/errors0 -> GREEN03 26/0 native0/errors0/source-index preserved",
+  "semantic": "GREEN02 actual336/0 native0; source exact pump sha unchanged",
+  "scope_limitation": "component-only, not World/device proof",
+  "fixture_notes": "GREEN01 epoch callback setup error; GREEN02 mistakenly equated Main ACK with later Source retirement. Correct test observes real Native unacknowledged FIFO; Source receipt and journal retirement remain independently asserted. Raw FAILs retained."
+}

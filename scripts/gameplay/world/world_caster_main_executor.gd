@@ -48,11 +48,12 @@ var _actual_event_claimed_usec := 0
 var _closed := false
 
 func can_commit_actual_original_map_arrival(transaction: Dictionary) -> bool:
-	return OS.get_thread_caller_id() == OS.get_main_thread_id() and _root != null and not _closed and _world == transaction.get("before_world") and _claimed_event.is_empty() and _claimed_ticket.is_empty() and not _awaiting_reply and _host.verify_committed_original_map_arrival(transaction) and (_original_audio_service == null or _original_audio_service.can_commit_actual_original_map_arrival(transaction,_original_audio_projection))
+	return OS.get_thread_caller_id() == OS.get_main_thread_id() and _root != null and not _closed and _world == transaction.get("before_world") and _claimed_event.is_empty() and _claimed_ticket.is_empty() and not _awaiting_reply and _host.verify_committed_original_map_arrival(transaction) and (_original_audio_service == null or _original_audio_service.can_commit_actual_original_map_arrival(transaction,_original_audio_projection)) and (_interactable == null or _interactable.can_commit_actual_original_map_arrival(transaction))
 func commit_actual_original_map_arrival(transaction: Dictionary) -> bool:
 	if not can_commit_actual_original_map_arrival(transaction): return false
 	if _warm_main != null and not _warm_main.commit_actual_original_map_arrival(transaction): return false
 	if _original_audio_service != null and not _original_audio_service.commit_actual_original_map_arrival(transaction,_original_audio_projection): return false
+	if _interactable != null and not _interactable.commit_actual_original_map_arrival(transaction): return false
 	_world = transaction.after_world.duplicate(true)
 	# Keep the initial loading proof and all already-generated replies exactly
 	# as issued. Only a new command uses the current routing identity.

@@ -28,6 +28,18 @@ func start_original_profile_command(packet: Dictionary) -> bool:
 	if made.get("success")!=true: return false
 	var profile: RefCounted=made.profile
 	if profile.get_script()!=Model or profile._owner_thread_id!=_owner or packet.profile_id!=profile.active_profile_id or not Catalog.accepts(packet.method,packet.arguments.size()) or not profile.has_method(packet.method): return false
+	var selection_at: Dictionary={"equip_inventory_index_result":3,"unequip_to_inventory_slot":3,"use_inventory_index_result":2,"destroy_inventory_indices":1,"transfer_warehouse_prepared":3}
+	if selection_at.has(packet.method):
+		var supplied: Variant=packet.arguments[selection_at[packet.method]]
+		var batch: bool = packet.method in ["destroy_inventory_indices","transfer_warehouse_prepared"]
+		if batch and not supplied is Array: return false
+		var selections: Array=supplied if batch else [supplied]
+		var slots: Array=packet.arguments[1] if packet.method=="transfer_warehouse_prepared" else (packet.arguments[0] if batch else [packet.arguments[0]])
+		var container := "equipment" if packet.method=="unequip_to_inventory_slot" else ("warehouse" if packet.method=="transfer_warehouse_prepared" and packet.arguments[0]=="withdraw" else "inventory")
+		if selections.size()!=slots.size(): return false
+		for i: int in selections.size():
+			var selected: Variant=selections[i]
+			if not preload("res://scripts/gameplay/profile/profile_item_selection.gd").valid(selected) or selected.session_id!=_session_id or selected.profile_id!=packet.profile_id or selected.container!=container or selected.slot!=slots[i]: return false
 	var graph: RefCounted=ClassDB.instantiate("HardCoreContentValueGraph")
 	var captured: Dictionary=graph.capture(packet,true,false)
 	if captured.get("success")!=true: return false
@@ -51,6 +63,7 @@ func emit_original_profile_command_receipt(receipt: Dictionary) -> bool:
 	var profile: RefCounted=made.profile
 	var fields: Dictionary={}
 	for field: String in Catalog.READ_FIELDS: fields[field]=profile.get(field)
+	fields[preload("res://scripts/gameplay/profile/profile_original_ui_queries.gd").FIELD]=preload("res://scripts/gameplay/profile/profile_original_ui_queries.gd").capture(profile)
 	var graph: RefCounted=ClassDB.instantiate("HardCoreContentValueGraph")
 	var snapshot: Dictionary=graph.capture(fields,true,false)
 	if snapshot.get("success")!=true:
@@ -66,7 +79,7 @@ func emit_original_profile_command_receipt(receipt: Dictionary) -> bool:
 	actual.profile_view={"sequence":_view_sequence,"fields":snapshot.value}
 	var immutable: Dictionary=graph.capture(actual,true,false)
 	if immutable.get("success")!=true: return false
-	if not _session.get_ref().original_event_journal().append({"operation":&"original_profile_command_receipt","arguments":[immutable.value]}): return false
+	if not _session.get_ref().original_event_journal().append({"kind":"original_profile_transport","operation":&"original_profile_command_receipt","arguments":[immutable.value]}): return false
 	_published_results[id]=immutable.value
 	return true
 func accept_original_profile_receipt_ack(packet: Dictionary) -> bool:
@@ -82,7 +95,7 @@ func accept_original_profile_receipt_ack(packet: Dictionary) -> bool:
 	return flush_original_acknowledgements()
 func flush_original_acknowledgements() -> bool:
 	for id: int in _pending_ack_facts.keys():
-		if not _session.get_ref().original_event_journal().append({"operation":&"original_profile_command_acknowledged","arguments":[_pending_ack_facts[id]]}): return false
+		if not _session.get_ref().original_event_journal().append({"kind":"original_profile_transport","operation":&"original_profile_command_acknowledged","arguments":[_pending_ack_facts[id]]}): return false
 		_pending_ack_facts.erase(id)
 	return true
 func close_original_command_admission() -> void:

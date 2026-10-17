@@ -1,0 +1,19 @@
+{
+  "status": "NOT_RUN",
+  "scope": "Main exact deeply immutable prefix snapshot -> reuse same accepted wire for acquire/ACK; same Native claim/physical event delta/ACK/receipt; mutable copies retain original full-validation fallback",
+  "RED": "codex_immutable_prefix_RED_20261018_01 actual31/3 native1/errors0/protectiontrue",
+  "World39": "FAIL initial_bootstrap_timeout before exit fix exercised; repeated Native acquisition/ACK encoding dominant, raw retained",
+  "files": [
+    {
+      "name": "simulation_host.h",
+      "before": "5ec3e26e834b01060e7c54608658ad089a44f162a8687ed9067471e87b11638f",
+      "after": "c8aca53bee9c5bef9b5412c165165fccadca6dc01a3ec1c64bcea5e611330d07"
+    },
+    {
+      "name": "simulation_host_original_primitives.cpp",
+      "before": "387badc92ae1c422810979a2c3d62aaf77e9e65622a180377fe7fb4b08a9d080",
+      "after": "1889829d9e4360999f0151afecf81892acb85ee7b01b2959d76c36494de2d53d"
+    }
+  ],
+  "required": "new Native seal + Windows/Android builds + component GREEN + fixed-source World + six save stages + genuine115 APK"
+}

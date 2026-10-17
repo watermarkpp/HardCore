@@ -1,0 +1,232 @@
+ChatGPT 说：
+审阅结论
+
+这项优化的范围和原 claim/ACK 接线可以保留，但我读到的当前实现还有一个必须修正的安全缺口：seal_main_prefix_value() 没有处理 Packed*Array，因此“顶层 Dictionary 身份相同＋read_only”尚不能证明完整快照仍与缓存 wire 一致。当前不能给这版缓存快路径安全通过。
+
+这不是对性能方向的否定，也不是要求恢复所有重复编码。最小安全修正是限定快路径资格：只有已证明整棵树不可变的 prefix 才共享快照并复用原 wire；包含 Packed 数组的 prefix 暂时保留原完整校验路径，不拒绝其业务数据。
+
+本轮依据是 R 的两个 Native 文件、D 中相关 preimage、E 的对应 seal 实现及实际容器源码，以及当前真实 prefix 组件源码。下述反例是静态推导，未运行；没有新引擎 GREEN 或 World 通过结论。
+
+1. 必须修正：Packed 子数组可以变，父 Dictionary 的 id 和只读状态不变
+当前代码存在的缺口
+
+在 native/hardcore_simulation/simulation_host_original_primitives.cpp：
+
+plain() 对 ARRAY、DICTIONARY 递归，对 OBJECT/CALLABLE/RID/SIGNAL 拒绝；PACKED_*_ARRAY 落入 default: return true。
+seal_main_prefix_value() 只递归冻结 ARRAY、DICTIONARY。
+cached_original_published_prefix() 检查顶层 value.is_read_only()、Dictionary.id()、缓存 bytes 和 generation，没有其他完整不可变资格。
+
+这意味着包含 PackedByteArray、PackedVector2Array 等叶子的 prefix，目前也会进入缓存。
+
+这不是泛指“可能存在别名”，当前 E 实现可以直接支持这个结论
+
+我回读了以下实际引擎实现：
+
+E/core/variant/variant.cpp::Variant::reference()
+Packed 数组分支对原 PackedArrayRef 调用 reference()，复制 Variant 时共享该 PackedArrayRef，并非每次建立独立数组对象。
+
+E/core/variant/variant_internal.h:606–611
+_VariantInternalAccessorPackedArrayRef::get(Variant *) 返回该共享 PackedArrayRef 中 array 的引用。
+
+E/core/variant/variant_setget.cpp 的 Packed 数组 indexed setter
+通过上述 accessor 写入数组；它没有父 Dictionary/Array 的只读资格，也没有因为父容器 read-only 而阻止这次写入。普通 Array 的 indexed setter 则有自己的 read-only 检查。
+
+因此，不能用底层 Vector 的写时复制性质，推导出“从 Dictionary 取出 Packed Variant 后修改，只改了副本”。这里共享的是承载 Vector 的 PackedArrayRef。
+
+对该快路径的具体影响
+
+给真实 Source 组件的原事件加入一个 Packed 叶子后，可以构成下面的静态反例：
+
+纯文本
+Source 原事件含 nested.packed = PackedByteArray([1, 2])
+→ 原 Native 接受该 prefix
+→ Main inspect 解码并 seal Dictionary/Array，缓存原 wire
+→ Main 取出 nested.packed 的 Variant 别名并修改一个元素
+→ 父 prefix 的 Dictionary.id 不变
+→ 父 prefix 的 is_read_only 仍为 true
+→ acquire/ACK 命中缓存，复用修改前的原 wire
+
+此时会出现：
+
+纯文本
+main_prefix 中可观察到的 Packed 内容：修改后
+cached Prefix.bytes / event bytes：修改前
+
+原 Mailbox 的严格比较不能补上这一层缺口。 因为它收到的是缓存中未变的原 Mailbox::Prefix，不是重新编码后的当前 Dictionary；原 bytes 与自身当然仍能匹配。
+
+也要限定影响：这不等于被修改的 Packed 值会自动写回 Native，或直接变成 Node 执行参数。 你的 delta 仍从原 event bytes 独立解码，执行数据可以仍是原值。问题是它破坏了此优化依赖的“这份 Dictionary 就是原接受 wire 的不可变视图”这一证明，允许快路径接受一份内容已不相符的快照。
+
+定位：simulation_host_original_primitives.cpp::plain()、seal_main_prefix_value()、cached_original_published_prefix()、acquire_original_main_prefix()、ack_published_original_main_prefix()。
+
+2. Dictionary/普通 Array 的递归 seal 本身没有读到漏层
+
+对于不含上述可变叶子的树，当前递归方式是成立的。
+
+Array 使用 const Array &read 遍历子值，再 make_read_only()；Dictionary 同时遍历 key 和 value，先递归，再冻结本层。不是仅冻结 events 或顶层 Dictionary，也没有漏掉作为 Dictionary key 的集合。
+
+另外，seal 之前的 thaw() 已检查：
+
+纯文本
+wire 非空、长度合法
+→ decode 完整消费所有 bytes
+→ plain() 通过
+
+plain() 的递归深度限制为 64；seal 接收的是新解码的已验证数据，不是任意调用者传入的循环容器。本轮没有发现需要给这个既有有界解码树另加重试或特殊遍历调度的问题。
+
+不过，准确的审阅表述应是：
+
+当前覆盖了全部嵌套 Dictionary/普通 Array；尚未覆盖全部允许通过 plain() 的可变引用类型。
+
+不能把前半句扩展成“所有 plain 值均已深只读”。
+
+3. Dictionary.id 与生命周期：当前保留方式正确，问题不在指针身份本身
+
+E/core/variant/dictionary.cpp::Dictionary::id() 返回内部 _p。R 的 Host 保存的是一个真实 Dictionary main_published_prefix_value，不是只保存 _p 地址或一个整数 ID。
+
+所以在缓存有效期间：
+
+纯文本
+Host 持有 Dictionary
+→ Dictionary 内部存储仍存活
+→ 其子树仍被该容器持有
+→ 其他已释放 Dictionary 的地址复用，不能冒充这个仍存活对象
+
+这解决了仅保存裸地址时的生命周期风险。等值 duplicate() 有不同顶层容器身份，不会因此命中快路径；另一 Host inspect 出来的快照也不是本 Host 保存的那一个对象。
+
+成功 ACK 后执行：
+
+C++
+main_published_prefix_value = Dictionary();
+main_published_prefix_cache = Mailbox::Prefix();
+
+这是释放 Host 对缓存的持有，不会使 Main caller 尚持有的 Dictionary 变成悬空引用。旧 caller 再提交它时，不能依靠已清空的缓存获得资格，仍需走原校验及 Mailbox 状态检查。
+
+因此不建议改用 hash、序号或字符串化 ObjectID 替代当前 Dictionary.id()。 应修的是“哪些树允许被这个身份代表”，而不是换掉身份比较。
+
+定位：simulation_host.h:53–59；simulation_host_original_primitives.cpp::cached_original_published_prefix()、ack_published_original_main_prefix()；E/core/variant/dictionary.cpp::id()、复制及引用管理路径。
+
+4. 原 Prefix wire 复用与 Native claim/ACK：接线没有被绕过
+
+这部分我对照了 preimage 和当前 Mailbox 实现，未读到新增的放宽。
+
+缓存来自真实已接受 FIFO，不来自调用者自行声明
+
+inspect_next_original_published_prefix() 仍先调用：
+
+C++
+original_primitives->inspect_next_published_prefix()
+
+只有真实 READY 才安装缓存。保存的是同一次 read.prefix 的完整 Mailbox::Prefix，包含原 generation、journal、through、完整 bytes 及逐事件 bytes。
+
+OriginalPrimitiveMailbox::Bytes 是：
+
+C++
+std::shared_ptr<const std::vector<uint8_t>>
+
+因此缓存保留原 bytes 的生命期，Source 移除已确认 FIFO 记录，不会让这些 bytes 悬空。这里比较 bytes 的共享指针用于识别是否需要重新解码，不是以内容 hash 代替业务身份验证。
+
+acquire 与 ACK 仍经过原完整 Mailbox 检查
+
+acquire_original_main_prefix() 仍调用 claim_main_prefix(prefix)。该函数仍检查真实已知 prefix、generation/journal、单一活动 claim 和原 delta ordinal 连续性。
+
+ack_published_original_main_prefix() 仍检查 ACK 四字段，并调用 ack_published_prefix(prefix)。Mailbox 的 equal(Prefix, Prefix) 仍比较：
+
+纯文本
+generation / journal_generation / through
+完整 prefix bytes
+event 数量
+每个 event 的 ordinal 与 bytes
+
+原 acknowledge_main_prefix_locked() 也仍要求与实际 claim 匹配。Source applied frontier 仍由原 Source 消费路径推进；ACK 后的真实关闭唤醒也保留。
+
+所以，在快照确实不可变这个前提成立时，复用原 Mailbox::Prefix 是正确方向。 Packed 缺口破坏的是这个前提，不是说明需要重写 Mailbox。
+
+另需保持原语义：“等值副本走 fallback”不等于“等值副本一律拒绝”。 真正相同且合法的副本，仍按原完整 wire 校验和原 Mailbox 状态决定；被修改的副本才应因不匹配被拒绝。
+
+5. 跨线程与 Node 参数可变性：当前相关路径没有新增混用
+缓存访问保持 Main 侧
+
+本次新增缓存命中方法，以及 inspect/acquire/ACK 入口，都有 Main 线程限制。缓存中的解码 Dictionary 没有通过此次修改安装给 Source；跨线程交接仍是既有 Mailbox bytes。
+
+不需要为了这个 Main-only 缓存新增全局锁。 同时也不能把“深只读”当作将来可以随意把同一个 Godot 容器跨线程传递的许可。本次安全结论仅针对读到的 Main-only 接线。
+
+Node 分发确实使用独立 delta，而非冻结快照内的 events
+
+当前 acquire_original_main_prefix() 保留：
+
+C++
+for (const auto &e : claim.events) {
+    Variant event;
+    if (!thaw(e.bytes, event)) return {};
+    events.push_back(event);
+}
+
+world_main_prefix_consumer.gd:42–45 随后从 _held.events[_next_event] 取出事件，交给真实 dispatcher，不是从 _held.main_prefix.events 取冻结事件执行。
+
+所以：
+
+纯文本
+共享 main_prefix：原接受数据的框架快照
+独立 events：本次实际 delta 的可变调用参数
+
+这条隔离保留了。fallback 的 main_prefix 也仍走原 duplicate(true)。
+
+不要把后续优化扩展成直接把缓存中的 event Dictionary 填入 delta。 那会真正把只读容器传进原可变 Node 参数路径；当前代码没有这样做。
+
+6. 建议的最小修正：限定缓存资格，不修改 plain 数据合同
+
+建议只收紧这个缓存的准入：
+
+纯文本
+真实 FIFO READY
+→ 原 thaw / plain 验证
+→ 判断整棵树是否属于可安全共享的不可变值范围
+    是：递归 seal，安装 Dictionary＋原 Prefix 缓存
+    否：保留原非缓存返回及 acquire/ACK 完整校验
+
+当前最小且明确的边界是：树内任何 key/value 出现任一种 PACKED_*_ARRAY，该 prefix 不进入身份快路径。
+
+几个实施约束很重要：
+
+不能把 Packed 从 plain() 中全局拒绝。 那会改变现有消息/地图数据支持范围。这里只是不让它获得缓存资格。
+
+不能只把 Packed 复制一次再继续共享缓存。 返回共享树后，caller 仍可取得那份 Packed 的新别名；问题再次出现。
+
+不能把 Packed 改成普通 Array 再 seal。 这改变 Variant 类型及 wire 合同，不再是同一原生已接受数据。
+
+不能只让 acquire/ACK fallback，却继续让 inspect 反复返回一棵可被 Packed 别名污染的共享树。 不合格树的 inspect 返回行为也应保留原独立解码语义，避免后续调用读到之前 caller 修改过的“缓存观察”。
+
+资格判断应覆盖整棵树后再发布，避免半途发现不合格，却把一棵部分冻结的数据作为原可变 fallback 交出去。合格标记与 Dictionary、原 Prefix 必须同一次安装、同一次失效；不要重新恢复每次命中时的全树扫描。
+
+7. 当前组件还缺哪些直接验证
+
+我读到了 tests/framework/publication_prefix_immutable_20261018.gd 和它的 Source helper。
+
+现有 helper 的嵌套数据是：
+
+gdscript
+"nested": {"array": [{"index": index}]}
+
+现有负例是深复制后修改 .text。这些覆盖了 Dictionary/Array 层级和 foreign mutable-copy，不覆盖“原顶层对象不变、Packed 子值变化”。 因此你报告的旧引擎三项 RED 与这次发现并不冲突。
+
+后续由你运行时，建议在原组件内补齐这些边界，而不是另造模拟 ACK：
+
+验证点	必须证明
+真实 Source 发布 Packed 叶子，Main 经别名修改	不能凭原顶层 id 命中旧 wire；实际修改后的值必须走原不匹配拒绝
+Packed 嵌在多层 Array/Dictionary，含空 Packed	仍被识别为不可共享；空数组也不能因当前没有元素而放行，随后可 append
+合格树反复 inspect	同一不可变 snapshot 可复用，原 FIFO 不新增 claim/ACK
+修改独立 delta 的嵌套参数	原缓存快照和原 Native bytes 不变；不冻结 Node 参数
+相同内容的副本、被修改副本、另一 Host 的快照	均不获得本缓存身份资格，保持原完整验证结果
+ACK 后仍持有旧快照、再取得下一份 prefix	不串用缓存、不重复 Node 执行；Source 仍只按真实 ACK 退役
+分发 PENDING、claim 已占用、重复合法 ACK	保留原游标和原幂等/拒绝语义，缓存不能制造额外执行许可
+
+最终意见：保留“真实 FIFO 解码一次、合格不可变快照复用、delta 独立 thaw、原 claim/ACK 不变”的方案；先堵住 Packed 子值造成的完整不可变性缺口，再以新引擎实际 GREEN 和完整 World 验证。当前这版尚不能仅凭三项只读断言转绿，就宣布缓存安全闭合，更不能代替完整 World 与六阶段旧档仓库验收。
+
+ChatGPT 可能会出错。请核查重要信息。
+最新一条回复
+
+
+
+
+Pro
+回答已完成

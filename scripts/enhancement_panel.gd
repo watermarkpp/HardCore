@@ -53,7 +53,7 @@ func _ready() -> void:
 	# Keep the source inventory layout, including its calibrated BagPanel.
 	# Only the two paper-doll sections are retired from this derived page.
 	_original_main_callback_ledger["_ready"] = int(_original_main_callback_ledger.get("_ready",0)) + 1
-	_original_source_enhancement_panel__ready()
+	await _original_source_enhancement_panel__ready()
 	_original_main_callback_ledger["_ready"] -= 1
 
 
@@ -91,16 +91,12 @@ func _original_source_enhancement_panel__ready() -> void:
 	set_synthesis_recipe_previews(recipe_entries)
 	ForgeLayoutScript.apply_profile(self, "forge")
 	_show_forge_artwork("initial")
-	_refresh_forge_information()
-
-
+	await _refresh_forge_information()
 func refresh() -> void:
 	super.refresh()
 	_hide_inherited_left_sections()
 	if not forge_slots.is_empty() and not _forging:
-		_refresh_forge_information()
-
-
+		await _refresh_forge_information()
 func _on_runtime_layout_profile_applied(profile_id: String) -> void:
 	super._on_runtime_layout_profile_applied(profile_id)
 	_hide_inherited_left_sections()
@@ -268,9 +264,7 @@ func set_synthesis_recipe_previews(entries: Array[Dictionary]) -> void:
 		(slot.get_node("RecipeProfession") as Label).text = ProfessionRules.profession_display_name(str(entry.get("profession", ""))).left(1)
 		UIItemSelectionVisualScript.apply(slot, false, &"GothicComponentSlotButton", &"GothicComponentSelectedSlotButton")
 	if _mode == "synthesis":
-		_refresh_forge_information()
-
-
+		await _refresh_forge_information()
 func _on_synthesis_recipe_pressed(index: int) -> void:
 	if _mode != "synthesis" or _forging or index >= _synthesis_recipe_previews.size():
 		return
@@ -283,9 +277,7 @@ func _on_synthesis_recipe_pressed(index: int) -> void:
 	var item := RelicRules.record_for_id(recipe_id)
 	if not item.is_empty():
 		_show_presented_item(item, {}, synthesis_recipe_slots[index], {"recipe_profession": str(_synthesis_recipe_previews[index].get("profession", ""))})
-	_refresh_forge_information()
-
-
+	await _refresh_forge_information()
 func _build_forge_information() -> void:
 	var rules_panel := _forge_section("ForgeRulesPanel", Vector2(32, 424), Vector2(300, 210))
 	var rules_title := _section_title("材料需求", 300)
@@ -412,9 +404,7 @@ func _set_mode(mode: String) -> void:
 	if hint != null:
 		hint.text = "装备与材料可放任意格，顺序不限" if mode == "forge" else "请选择配方，材料可放任意格"
 	_ui_sync_empty_destinations()
-	_refresh_forge_information()
-
-
+	await _refresh_forge_information()
 func _show_forge_artwork(result: String) -> void:
 	var selected_name: String = {
 		"initial": "ForgeImageInitial",
@@ -448,13 +438,17 @@ func preview_synthesis_animation() -> void:
 
 func _refresh_forge_information() -> void:
 	_original_main_callback_ledger["_refresh_forge_information"] = int(_original_main_callback_ledger.get("_refresh_forge_information",0)) + 1
-	_original_source_enhancement_panel__refresh_forge_information()
+	await _original_source_enhancement_panel__refresh_forge_information()
 	_original_main_callback_ledger["_refresh_forge_information"] -= 1
 
+
+var _actual_quote_refresh_sequence := 0
 
 func _original_source_enhancement_panel__refresh_forge_information() -> void:
 	if rules_label == null or chance_label == null or fee_label == null or forge_button == null:
 		return
+	_actual_quote_refresh_sequence += 1
+	var refresh_sequence: int = _actual_quote_refresh_sequence
 	_forge_quote.clear()
 	_synthesis_quote.clear()
 	var tray: Array[Dictionary] = PlayerState.workbench_tray(_mode)
@@ -487,7 +481,9 @@ func _original_source_enhancement_panel__refresh_forge_information() -> void:
 			_synthesis_quote = {"valid": false, "message": "需要4个远古圣物碎片，当前已放入%d个。" % material_slots.size()}
 			return
 		var recipe: Dictionary = _synthesis_recipe_previews[_selected_synthesis_recipe]
-		_synthesis_quote = PlayerState.quote_relic_synthesis(int(recipe.get("item_id", -1)), material_slots, str(recipe.get("profession", "")))
+		var synthesis_quote: Dictionary = await _actual_owner_quote(&"quote_relic_synthesis", [int(recipe.get("item_id", -1)), material_slots, str(recipe.get("profession", ""))])
+		if refresh_sequence != _actual_quote_refresh_sequence or _mode != "synthesis": return
+		_synthesis_quote = synthesis_quote
 		forge_button.disabled = _forging or not bool(_synthesis_quote.get("valid", false))
 		return
 	var has_target := false
@@ -499,7 +495,9 @@ func _original_source_enhancement_panel__refresh_forge_information() -> void:
 	fee_label.text = "[center]—[/center]"
 	forge_button.text = "开始锻造"
 	forge_button.disabled = true
-	_forge_quote = PlayerState.quote_forge_tray()
+	var forge_quote: Dictionary = await _actual_owner_quote(&"quote_forge_tray", [])
+	if refresh_sequence != _actual_quote_refresh_sequence or _mode != "forge": return
+	_forge_quote = forge_quote
 	forge_button.tooltip_text = str(_forge_quote.get("message", ""))
 	if not bool(_forge_quote.get("valid", false)):
 		return
@@ -540,7 +538,7 @@ func _original_source_enhancement_panel__on_forge_slot_pressed(index: int) -> vo
 			_selected_workbench_slot = index
 			_show_forge_slot_detail(index, occupied)
 		_ui_sync_empty_destinations()
-		_refresh_forge_information()
+		await _refresh_forge_information()
 		return
 	_selected_workbench_slot = -1
 	if selected_stack.is_empty():
@@ -551,7 +549,7 @@ func _original_source_enhancement_panel__on_forge_slot_pressed(index: int) -> vo
 		_show_error_message(str(place_result.get("message", "无法放入物品。")))
 		return
 	_clear_inventory_selection_styles()
-	_refresh_forge_information()
+	await _refresh_forge_information()
 	_selected_workbench_slot = index
 	_ui_sync_empty_destinations()
 	var placed: Array[Dictionary] = PlayerState.workbench_tray(_mode)
@@ -600,7 +598,7 @@ func _original_source_enhancement_panel__take_selected_workbench_item(destinatio
 			_hide_item_detail()
 	else:
 		_show_error_message(str(result.get("message", "无法取回物品。")))
-	_refresh_forge_information()
+	await _refresh_forge_information()
 	_ui_sync_empty_destinations()
 
 
@@ -648,7 +646,7 @@ func _on_forge_pressed() -> void:
 func _original_source_enhancement_panel__on_forge_pressed() -> void:
 	if _forging:
 		return
-	_refresh_forge_information()
+	await _refresh_forge_information()
 	if _mode == "synthesis":
 		if not bool(_synthesis_quote.get("valid", false)):
 			_show_error_message(str(_synthesis_quote.get("message", "请先选择配方并放入4个远古圣物碎片。")))
@@ -659,7 +657,7 @@ func _original_source_enhancement_panel__on_forge_pressed() -> void:
 		if not bool(result.get("committed", false)):
 			_forging = false
 			_show_error_message(str(result.get("message", "合成失败，材料未消耗。")))
-			_refresh_forge_information()
+			await _refresh_forge_information()
 			return
 		_selected_workbench_slot = -1
 		await _play_synthesis_animation()
@@ -674,7 +672,7 @@ func _original_source_enhancement_panel__on_forge_pressed() -> void:
 	if not bool(result.get("committed", false)):
 		_forging = false
 		_show_error_message(str(result.get("message", "锻造失败，请重新选择材料。")))
-		_refresh_forge_information()
+		await _refresh_forge_information()
 		return
 	await _play_forge_animation("success" if bool(result.forge_succeeded) else "failure")
 	if bool(result.forge_succeeded):
@@ -711,9 +709,7 @@ func _original_source_enhancement_panel__play_forge_animation(result_artwork: St
 		overlay.modulate.a = 0.0
 	_show_forge_artwork(result_artwork)
 	_forging = false
-	_refresh_forge_information()
-
-
+	await _refresh_forge_information()
 func _play_synthesis_animation() -> void:
 	_original_main_callback_ledger["_play_synthesis_animation"] = int(_original_main_callback_ledger.get("_play_synthesis_animation",0)) + 1
 	await _original_source_enhancement_panel__play_synthesis_animation()
@@ -739,4 +735,14 @@ func _original_source_enhancement_panel__play_synthesis_animation() -> void:
 	for overlay: Panel in _forge_glow_overlays:
 		overlay.modulate.a = 0.0
 	_forging = false
-	_refresh_forge_information()
+	await _refresh_forge_information()
+func _actual_owner_quote(method: StringName, arguments: Array) -> Dictionary:
+	assert(method in [&"quote_forge_tray",&"quote_relic_synthesis"])
+	var gate: RefCounted = PlayerState.get("_source_domain_gate")
+	if gate != null and gate.state() == "S":
+		var actual: Dictionary = await PlayerState.submit_original_profile_command(method,arguments)
+		if actual.get("success") != true or not actual.get("result") is Dictionary:
+			push_error("actual Source quote command did not return its original result: "+str(method))
+			return {}
+		return actual.result
+	return PlayerState.callv(method,arguments)

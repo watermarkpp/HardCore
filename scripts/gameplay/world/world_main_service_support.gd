@@ -122,13 +122,20 @@ class Lifecycle extends RefCounted:
 			if identity.is_empty(): return {"success":false,"status":"INVALID"}
 			_renderer_actors[service_id] = identity.duplicate(true); ids.append(service_id)
 		return {"success":true,"status":"READY","ids":ids}
-	func request_original_renderer_destruction(service_id: int) -> bool:
-		if not _renderer_actors.has(service_id): return false
-		return release_presented_actor_at_original_free(int(_renderer_actors[service_id].runtime_id)).get("status") == "READY"
+	func request_original_renderer_destruction(service_id: int) -> Dictionary:
+		if not _renderer_actors.has(service_id): return {"status":"INVALID","error":"actual_captured_renderer_service_required"}
+		var actor_id: int = int(_renderer_actors[service_id].runtime_id)
+		var scope: RefCounted = _core.get_ref().get("_actor_scopes").get(actor_id)
+		# Closing SERVICE may run before Root's original subtree exit. Do not
+		# invoke the strict Node-retirement port early and latch its INVALID.
+		# The original callback dispatcher alone completes this same scope.
+		if scope != null and not scope.exit_callbacks_complete: return {"status":"PENDING","error":"actual_original_actor_exit_pending","service_id":service_id}
+		return release_presented_actor_at_original_free(actor_id)
 	func original_renderer_destruction_receipt(service_id: int) -> Dictionary:
 		if not _renderer_actors.has(service_id): return {"status":"INVALID"}
 		var id: int = _renderer_actors[service_id].runtime_id
 		if not _actor_free.has(id): return {"status":"PENDING"}
+		if not _actor_free[id].failure.is_empty(): return _actor_free[id].failure
 		var receipt: Dictionary = _actor_free[id].receipt
 		return {"status":"PENDING"} if receipt.is_empty() else (receipt if receipt.get("service_id") == service_id and receipt.get("actor_identity") == _renderer_actors[service_id] else {"status":"INVALID"})
 	func _actual_application_P() -> bool:
@@ -162,6 +169,8 @@ class Lifecycle extends RefCounted:
 		if not row.receipt.is_empty(): return row.receipt
 		if not _actual_application_P(): return {"success":true,"status":"PENDING","actor_identity":row.identity}
 		var actual: Dictionary = _native.actual_original_actor_view_free_receipt(row.identity)
+		row.last_observed_status = str(actual.get("status",""))
+		row.last_observed_error = str(actual.get("error",""))
 		if actual.get("status") == "READY": row.receipt = actual.duplicate(true)
 		elif actual.get("status") not in ["PENDING","BUSY","BACKPRESSURE"]: row.failure = actual.duplicate(true)
 		return actual
@@ -171,6 +180,8 @@ class Lifecycle extends RefCounted:
 		if row.receipt.get("metadata_released") == true: return true
 		if not _actual_application_P(): return false
 		var actual: Dictionary = _native.actual_original_actor_view_free_receipt(row.identity)
+		row.last_observed_status = str(actual.get("status",""))
+		row.last_observed_error = str(actual.get("error",""))
 		if actual.get("status") not in ["READY","PENDING","BUSY","BACKPRESSURE"]: row.failure = actual.duplicate(true)
 		if actual.get("status") != "READY" or actual.get("metadata_released") != true or actual.get("renderer_registration_retired") != true: return false
 		row.receipt = actual.duplicate(true)

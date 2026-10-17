@@ -70,6 +70,7 @@ func show_save_exit_failure(message: String) -> void: _emit(&"show_save_exit_fai
 func replay(point: Vector2) -> void: _emit(&"replay",[point])
 func play_item_event(identity: String, semantic: String, context: Dictionary) -> void: _emit(&"play_item_event",[identity,semantic,context])
 func play_event(id: String, context: Dictionary = {}) -> void: _emit(&"play_event",[id,context])
+func stop_all_audio(reason := "world_exit") -> void: _emit(&"stop_all_audio",[reason])
 func set_town_presence(inside: bool) -> void: _emit(&"set_town_presence",[inside])
 func begin_map_transition(map: int, transition: String) -> void: _emit(&"begin_map_transition",[map,transition])
 func set_map_context(map: int, zones: Array, position_gu: Vector2, transition: String) -> void: _emit(&"set_map_context",[map,zones,position_gu,transition])

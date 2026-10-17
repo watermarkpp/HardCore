@@ -3,6 +3,8 @@ extends Node
 ## No fake World/renderer/ready/capability/terminal receipt is supplied here.
 const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
 const CatalogGate := preload("res://scripts/gameplay/content/catalog_publication_gate.gd")
+const NPCDisplay := preload("res://scripts/gameplay/world/world_npc_visual_shell.gd")
+const PortalDisplay := preload("res://scripts/gameplay/world/world_portal_visual_shell.gd")
 var _proof := Proof.new()
 var _failed := 0
 var _launcher: Control
@@ -25,6 +27,12 @@ var _closing_transport: RefCounted
 var _actual_world_root_id := 0
 var _actual_launcher_id := 0
 var _actual_terminal_rng_capability_verified := false
+var _actual_stale_view_outbox_recorded := false
+var _actual_enemy_shells: Dictionary = {}
+var _actual_enemy_upgrades: Dictionary = {}
+var _actual_enemy_presentations_ready := false
+var _actual_interactable_before: Dictionary = {}
+var _actual_interactable_arrival_checked := false
 func check(ok: bool, label: String) -> void:
 	_proof.record(ok,label)
 	if not ok: _failed += 1; print("ACTUAL_FULL_WORLD_FAILED ",label)
@@ -61,8 +69,8 @@ func _run() -> void:
 	# User-approved external functional diagnostic only; production bootstrap
 	# deadlines and all frame/performance acceptance criteria are unchanged.
 	var requested_seconds: int = int(ProjectSettings.get_setting("hardcore/diagnostics/full_world_test_timeout_seconds",30))
-	check(requested_seconds in [30,120],"exact approved diagnostic timeout")
-	_diagnostic_seconds = requested_seconds if requested_seconds in [30,120] else 30
+	check(requested_seconds in [30,120,180],"exact approved diagnostic timeout")
+	_diagnostic_seconds = requested_seconds if requested_seconds in [30,120,180] else 30
 	_deadline = Time.get_ticks_usec()+_diagnostic_seconds*1000000
 func _process(_delta: float) -> void:
 	if _finishing or (not _clicked and not is_instance_valid(_launcher)): return
@@ -98,10 +106,21 @@ func _process(_delta: float) -> void:
 		var closure: Dictionary = _application.get("_world_loading_pin_closure")
 		var npc: RefCounted = _application.get("_services").caster_executor.get("_interactable")
 		check(npc != null and npc.inspect_actual_original_loading_pins(closure.interactable_loading).get("success") == true,"same physical NPC textures are pinned before actual Source start")
+		if npc != null:
+			_actual_interactable_before = {"id":npc.get_instance_id(),"proof":npc.get("_proof").duplicate(true),"io":npc.inspect_actual_original_interactable_io()}
 		check(assembly.get("owner_session_id",0) > 0 and assembly.owner_session_id == _application.get("_session_front").session_id,"actual World publication binds the one persistent Session")
 		for field: String in ["profile_publication","profile_state","content_snapshot","feature_resource_boot"]:
 			check(not assembly.has(field),"World does not republish Session authority: "+field)
 		_assembly_verified = true
+	# Inspect Main-owned values only; do not resubmit, relabel or discard input.
+	if not _actual_stale_view_outbox_recorded and _application != null:
+		var debug_composition: RefCounted = _application.get("_main_composition")
+		var debug_views: RefCounted = debug_composition.get("_views") if debug_composition != null else null
+		if debug_views != null:
+			var outbox: Array = debug_views.get("_input_outbox")
+			if not outbox.is_empty() and outbox.front().context.get("world_context") != debug_views.get("_world"):
+				_actual_stale_view_outbox_recorded = true
+				print("ACTUAL_STALE_VIEW_OUTBOX ",JSON.stringify({"Main_frame":Engine.get_process_frames(),"current_world":debug_views.get("_world"),"pending_count":outbox.size(),"first":outbox.front(),"last_arrival":debug_views.get("_last_map_arrival")}))
 	var observed: Dictionary = _observed_state()
 	_record_actual_loading_progress()
 	if not _recorded_launch_abort and producer==null and is_instance_valid(_launcher) and _clicked and _launcher.get("_launch_in_progress")==false:
@@ -120,10 +139,12 @@ func _process(_delta: float) -> void:
 	if encoded != _last_state:
 		_last_state = encoded; print("ACTUAL_FULL_WORLD_STATE ",encoded)
 	if not _closing and _application != null:
+		_check_actual_interactable_arrival()
+		_sample_actual_initial_enemy_presentations()
 		var transport: RefCounted = _application.get("_transport")
 		var root: Node2D = _application.get("_root_transport").retained_root()
 		var world: Dictionary = transport.get("_world")
-		if transport.get("_state") == "S" and world.get("runtime_map_id",-1) >= 0 and is_instance_valid(root) and get_tree().current_scene == root and (not is_instance_valid(_launcher) or not _launcher.launch_loading_overlay.visible):
+		if transport.get("_state") == "S" and world.get("runtime_map_id",-1) >= 0 and is_instance_valid(root) and get_tree().current_scene == root and (not is_instance_valid(_launcher) or not _launcher.launch_loading_overlay.visible) and _actual_enemy_presentations_ready:
 			var composition: RefCounted = _application.get("_main_composition")
 			var registry: RefCounted = composition.get("_registry")
 			check(registry.actual_original_player_view(world) != null,"same actual Source player has a real Main renderer after first map arrival")
@@ -131,6 +152,18 @@ func _process(_delta: float) -> void:
 			check(CatalogGate.reader_count() == 1,"one persistent Source catalog reader while actual World is live")
 			for field: String in _expected_derived_profile_view:
 				check(_facade.get("_source_domain_gate").read_original_profile_view(field) == _expected_derived_profile_view[field],"initial Main UI preserves original Profile getter: "+field)
+			check(not _actual_enemy_upgrades.is_empty(),"real initially structural Enemy shell upgrades through actual Source binding completion")
+			var interactable: RefCounted = composition.get("_views").get("_caster").get("_interactable")
+			var physical_npcs := 0
+			var physical_portals := 0
+			for actual_node: Dictionary in interactable.inspect_actual_original_interactable_io().actual_nodes:
+				var display: Node = instance_from_id(int(actual_node.actual_node_id))
+				if not is_instance_valid(display) or display.get_parent() != root or not display.is_inside_tree(): continue
+				if display is NPCDisplay: physical_npcs += 1
+				if display is PortalDisplay: physical_portals += 1
+			check(_actual_interactable_arrival_checked and physical_npcs > 0 and physical_portals > 0,"real Source-created NPC and zone_portal both have actual Main children in the arrived map")
+			print("ACTUAL_INTERACTABLE_NODES ",JSON.stringify({"world":world,"npc_count":physical_npcs,"portal_count":physical_portals}))
+			print("ACTUAL_MAIN_ENEMY_BINDING_UPGRADES ",JSON.stringify(_actual_enemy_upgrades))
 			_closing = true
 			_closing_transport = transport
 			_actual_world_root_id = root.get_instance_id()
@@ -157,6 +190,7 @@ func _process(_delta: float) -> void:
 		else: _finish.call_deferred()
 func _observed_state() -> Dictionary:
 	var value: Dictionary = {"clicked":_clicked,"closing":_closing,"application":_application != null}
+	value.actual_initial_enemy_presentations = {"observed_shells":_actual_enemy_shells.size(),"observed_upgrades":_actual_enemy_upgrades.size(),"ready":_actual_enemy_presentations_ready}
 	if is_instance_valid(_launcher):
 		value.launch_in_progress = _launcher.get("_launch_in_progress")
 		value.launch_receipt = _launcher.get("_source_startup_receipt").get("error","")
@@ -178,6 +212,21 @@ func _observed_state() -> Dictionary:
 		if actual_composition != null:
 			value.composition_stage = actual_composition.get("_stage")
 			value.composition_failure = actual_composition.actual_failure()
+			if _host != null and _host.status().get("close_requested") == true:
+				var closing: RefCounted = actual_composition.get("_closing_frames")
+				if closing != null:
+					var obligations: Dictionary = closing.capture_actual_closing_process_obligations()
+					var accepted: Array = obligations.get("accepted",[])
+					value.actual_closing_process = {"accepted_count":accepted.size(),"first_sequence":accepted.front().get("publication",{}).get("sequence") if not accepted.is_empty() else null,"last_sequence":accepted.back().get("publication",{}).get("sequence") if not accepted.is_empty() else null,"capture_stopped":obligations.get("capture_stopped"),"pending_service":_bounded_diagnostic(obligations.get("pending_service",{})),"stop_receipt":_bounded_diagnostic(obligations.get("stop_receipt",{})),"fault":_bounded_diagnostic(obligations.get("fault",{}))}
+					value.actual_closing_process.armed = closing.get("_armed")
+					value.actual_closing_process.finished = closing.get("_finished")
+					value.actual_closing_process.last_main_signal = closing.get("_last_main_signal")
+					value.actual_closing_process.last_published_sequence = closing.get("_last_published_sequence")
+					value.actual_closing_process.actual_signal_connected = get_tree().process_frame.is_connected(closing._on_actual_process_frame_signal)
+				value.actual_closing_signal_highwater = _host.original_close_process_signal_highwater()
+				value.actual_next_published_prefix = _host.inspect_next_original_published_prefix()
+				var failure: RefCounted = _application.get("_main_failure")
+				if failure != null: value.actual_Main_faults = _bounded_diagnostic(failure.actual_original_main_source_faults())
 		value.actual_application_exit = _bounded_diagnostic(_application.actual_original_terminal_exit())
 		value.last_launch_receipt = _bounded_diagnostic(_application.last_launch_receipt())
 		if _host != null and not str(_host.status().get("fault","")).is_empty():
@@ -193,6 +242,21 @@ func _observed_state() -> Dictionary:
 				value.actual_prefix_failure = prefix.failure()
 				var event: Dictionary = prefix.actual_current_original_event()
 				value.actual_failed_event = {"kind":event.get("kind"),"operation":event.get("operation"),"event":event.get("event"),"ordinal":event.get("ordinal")}
+				if event.get("operation") == &"caster_presentation" and event.get("arguments") is Array and event.arguments.size() == 1:
+					value.actual_failed_caster_command = _bounded_diagnostic(event.arguments[0])
+					var caster_views: RefCounted = composition.get("_views")
+					var caster: RefCounted = caster_views.get("_caster") if caster_views != null else null
+					if caster != null:
+						value.actual_failed_caster = {"execution_failure":caster.get("_execution_failure"),"last_command":_bounded_diagnostic(caster.get("_last_command")),"claimed_ticket":caster.get("_claimed_ticket"),"awaiting_reply":caster.get("_awaiting_reply"),"closed":caster.get("_closed")}
+				if event.get("operation") == &"map_loading" and event.get("arguments") is Array and event.arguments.size() == 1:
+					var request: Dictionary = event.arguments[0]
+					value.actual_failed_map_request = {"operation":request.get("operation"),"request_sequence":request.get("request_sequence"),"owner_descriptor":request.get("owner_descriptor"),"scope":_bounded_diagnostic(request.get("scope")),"identity":event.get("reply_identity")}
+					var views: RefCounted = composition.get("_views")
+					if views != null:
+						var executor: RefCounted = views.get("_map_executor")
+						if executor != null: value.actual_failed_map_executor = {"fault":executor.get("_fault"),"descriptor":executor.actual_owner_descriptor(),"pending":executor.has_pending_original_map_reply()}
+						var producer: RefCounted = views.get("_map_producer")
+						if producer != null: value.actual_failed_map_owner = {"descriptor":producer.get("_descriptor"),"scope":_bounded_diagnostic(producer.get("_scope")),"arrival":_bounded_diagnostic(producer.get("_arrival_transaction")),"closing":producer.get("_closing"),"release_stage":_bounded_diagnostic(producer.get("_release_stage"))}
 			var primitive: RefCounted = _application.get("_services").get("feature_main")
 			if primitive != null:
 				value.last_actual_Main_operation = primitive.get("_last_request").get("operation")
@@ -262,3 +326,49 @@ func _finish() -> void:
 	var written: bool = _write_receipt()
 	print("CHARACTER_SOURCE_FULL_WORLD_20261016_","PASS" if written and _failed == 0 else "FAIL")
 	get_tree().quit(0 if written and _failed == 0 else 1)
+
+func _sample_actual_initial_enemy_presentations() -> void:
+	var composition: RefCounted = _application.get("_main_composition")
+	if composition == null: return
+	var registry: RefCounted = composition.get("_registry")
+	if registry == null: return
+	var pending := 0
+	var complete := 0
+	for id: int in registry.get("_actors"):
+		var row: Dictionary = registry.get("_actors")[id]
+		if row.get("kind",row.get("last",{}).get("kind","")) != "enemy": continue
+		if row.get("structural_only") == true: pending += 1
+		else: complete += 1
+		var view: Node2D = row.view
+		if not is_instance_valid(view) or view.visual == null or view.visual.sprite == null or view.overhead == null or row.assets == null: continue
+		var marker: Sprite2D = view.overhead.rank_marker
+		var label: Label = view.overhead.name_label
+		var font: Font = label.get_theme_font("font") if label != null else null
+		var physical := {"view":view.get_instance_id(),"visual":view.visual.get_instance_id(),"sprite":view.visual.sprite.get_instance_id(),"overhead":view.overhead.get_instance_id(),"assets":row.assets.get_instance_id(),"marker":marker.get_instance_id() if marker != null else 0,"marker_texture":marker.texture.get_instance_id() if marker != null and marker.texture != null else 0,"font":font.get_instance_id() if font != null else 0}
+		if row.get("structural_only") == true:
+			if not _actual_enemy_shells.has(id): _actual_enemy_shells[id] = {"physical":physical,"identity":row.identity.duplicate(true),"service_id":view.visual.canonical_service_id,"main_frame":Engine.get_process_frames()}
+		elif _actual_enemy_shells.has(id) and not _actual_enemy_upgrades.has(id):
+			var earlier: Dictionary = _actual_enemy_shells[id]
+			check(earlier.physical == physical,"same actual Enemy shell/Sprite/overhead/marker/font/asset owners survive first complete projection")
+			check(earlier.identity == row.identity and earlier.service_id == view.visual.canonical_service_id,"actual Enemy shell upgrade preserves exact actor/service identity")
+			check(row.last.publication_sequence >= 1,"actual complete Source projection owns the physical upgrade")
+			_actual_enemy_upgrades[id] = {"actor_identity":row.identity.duplicate(true),"service_id":view.visual.canonical_service_id,"physical":physical,"source_sequence":row.last.publication_sequence,"main_frame":Engine.get_process_frames()}
+	_actual_enemy_presentations_ready = complete > 0 and pending == 0 and not _actual_enemy_upgrades.is_empty()
+
+func _check_actual_interactable_arrival() -> void:
+	if _actual_interactable_arrival_checked or _actual_interactable_before.is_empty(): return
+	var composition: RefCounted = _application.get("_main_composition")
+	var views: RefCounted = composition.get("_views") if composition != null else null
+	if views == null or views.get("_last_map_arrival").is_empty(): return
+	var transaction: Dictionary = views.get("_last_map_arrival")
+	var npc: RefCounted = views.get("_caster").get("_interactable")
+	var io: Dictionary = npc.inspect_actual_original_interactable_io()
+	check(npc.get_instance_id() == _actual_interactable_before.id and io.world_context == transaction.after_world,"same actual NPC owner follows the verified Native map arrival before new-map commands")
+	check(npc.get("_proof") == _actual_interactable_before.proof and io.actual_texture_pins == _actual_interactable_before.io.actual_texture_pins,"map arrival retains exact original NPC Loading proof and physical texture pins")
+	check(not npc.can_commit_actual_original_map_arrival(transaction),"already consumed before-world cannot replay NPC routing mutation")
+	var forged: Dictionary = transaction.duplicate(true)
+	forged.before_world = transaction.after_world.duplicate(true)
+	forged.after_world.world_epoch += 1
+	check(not npc.commit_actual_original_map_arrival(forged) and npc.get("_world") == transaction.after_world,"uncommitted next-map values cannot mutate the real NPC owner")
+	_actual_interactable_arrival_checked = true
+	print("ACTUAL_INTERACTABLE_MAP_ARRIVAL ",JSON.stringify({"producer_runtime_id":npc.get_instance_id(),"world":io.world_context,"actual_texture_pins":io.actual_texture_pins,"original_proof_world":npc.get("_proof").world_context}))

@@ -105,6 +105,9 @@ func _init(host: Object, boot: Dictionary) -> void:
 	_check(access.register_driver(driver_handle, _driver), "driver registered before first scheduler submission")
 	var driver_id: int = driver_handle.get_instance_id()
 	var scheduler_id: int = scheduler_handle.get_instance_id()
+	var has_retiring_lookup: bool = _registry.has_method("resolve_original_retiring_service")
+	_check(has_retiring_lookup,"real registry provides original retiring-handle lookup")
+	if has_retiring_lookup: _check(_registry.resolve_original_retiring_service(driver_id)==null and _registry.resolve_original_retiring_service(0)==null and _registry.resolve_original_retiring_service(-1)==null,"retirement-only lookup rejects active/invalid identities")
 	_check(_registry.resolve_service(driver_id) == driver_handle and access.runtime_id(_driver) == driver_id, "job key is service ObjectID rather than RefCounted model ID")
 	var qualification: Dictionary = _registry.service_qualification(driver_id)
 	_check(qualification.present and not qualification.queued_for_retirement, "streaming qualification observes source present and queued independently")
@@ -120,6 +123,7 @@ func _init(host: Object, boot: Dictionary) -> void:
 	_check(_scheduler.jobs.has(driver_id), "original submit accepts and retains original job before queue-retirement")
 	_check(_registry.queue_service_retirement(driver_id), "queued boundary delegates actual source scope")
 	_check(driver_handle.is_inside_world() and driver_handle.is_queued_for_retirement() and _scheduler.jobs.has(driver_id), "queued and inside remain independent; accepted task retained before exit")
+	if has_retiring_lookup: _check(_registry.resolve_original_retiring_service(driver_id)==null,"queued alone is not the original retiring boundary")
 	qualification = _registry.service_qualification(driver_id)
 	_check(qualification.present and qualification.queued_for_retirement, "streaming queued observation remains present before original exit")
 	_driver_scope.state.can_process = false
@@ -135,9 +139,11 @@ func _init(host: Object, boot: Dictionary) -> void:
 	_driver_scope.state.inside_world = false
 	_check(_registry.begin_service_retirement(driver_id), "driver reset/cancel/unregister precedes handle retirement")
 	_check(_registry.resolve_service(driver_id) == null, "retiring service cannot resolve for new jobs")
+	if has_retiring_lookup: _check(_registry.resolve_original_retiring_service(driver_id)==driver_handle and _registry.resolve_original_retiring_service(driver_id).model()==_driver and _registry.resolve_original_retiring_service(scheduler_id)==null,"same canonical retiring Object/model remains available only to original final-free")
 	_driver_scope.free_allowed = true
 	_check(_registry.final_free_service(driver_id), "manual driver Object final-free at allowed source position")
 	_check(not is_instance_valid(driver_handle), "canonical driver ObjectID is invalid after final-free")
+	if has_retiring_lookup: _check(_registry.resolve_original_retiring_service(driver_id)==null,"final-free removes original retiring identity")
 	_check(not _registry.service_qualification(driver_id).present, "final-free service returns canonical absence even if model is retained")
 	var retained_task := SearchState.new()
 	_scheduler.jobs[123] = {"token": 1, "search": retained_task}

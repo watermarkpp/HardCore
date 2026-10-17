@@ -4,6 +4,7 @@
 #include "content_value_graph.h"
 #include "scene/2d/node_2d.h"
 #include "source_admission_opcodes.h"
+#include "source_caster_cleanup_policy.h"
 #include "core/io/marshalls.h"
 #include "core/os/os.h"
 #include <algorithm>
@@ -43,6 +44,20 @@ Mailbox::Bytes freeze(const Variant&v){
     auto b=std::make_shared<std::vector<uint8_t>>();b->resize(n);if(encode_variant(v,b->data(),n,false)!=OK)return {};return b;
 }
 bool thaw(const Mailbox::Bytes&b,Variant&v){int read=0;return b&&!b->empty()&&b->size()<=INT32_MAX&&decode_variant(v,b->data(),static_cast<int>(b->size()),&read,false)==OK&&read==b->size()&&plain(v);}
+// Only a freshly decoded, already validated plain Native prefix reaches
+// this seal. Delta events sent to the physical dispatcher remain independent
+// mutable decodes, exactly as before; only the framing snapshot is shared.
+void seal_main_prefix_value(const Variant &value) {
+    if(value.get_type()==Variant::ARRAY){
+        Array values=value;const Array &read=values;
+        for(int i=0;i<read.size();++i)seal_main_prefix_value(read[i]);
+        values.make_read_only();
+    }else if(value.get_type()==Variant::DICTIONARY){
+        Dictionary values=value;const Array keys=values.keys();
+        for(int i=0;i<keys.size();++i){seal_main_prefix_value(keys[i]);seal_main_prefix_value(values.get(keys[i],Variant()));}
+        values.make_read_only();
+    }
+}
 bool integer(const Dictionary&d,const char*k,int64_t&v){if(!d.has(k)||d[k].get_type()!=Variant::INT)return false;v=d[k];return true;}
 bool identity(const Dictionary&d,Mailbox::Identity&i){int64_t g=0,s=0;if(d.size()!=2||!integer(d,"bridge_generation",g)||g<=0||!integer(d,"op_sequence",s)||s<=0)return false;i={static_cast<uint64_t>(g),static_cast<uint64_t>(s)};return true;}
 Dictionary identity(const Mailbox::Identity&i){Dictionary d;d["bridge_generation"]=static_cast<int64_t>(i.generation);d["op_sequence"]=static_cast<int64_t>(i.sequence);return d;}
@@ -163,6 +178,14 @@ bool typed_result(const StringName&op,const Variant&r,bool resource,const Array&
 }
 }
 
+bool HardCoreSimulationHost::cached_original_published_prefix(const Dictionary &value, OriginalMailbox::Prefix &prefix) const {
+    if(!Thread::is_main_thread()||main_published_prefix_value.is_empty()||!value.is_read_only()||value.id()!=main_published_prefix_value.id()||!main_published_prefix_cache.bytes||main_published_prefix_cache.generation!=bridge_generation)return false;
+    // Exact collection identity is safe only because the entire decoded tree
+    // is read-only and this owner retains it. Mutable/foreign/equal copies use
+    // the original full validation and encoding path below, without trust.
+    prefix=main_published_prefix_cache;
+    return true;
+}
 int64_t HardCoreSimulationHost::owner_thread_id()const{ERR_FAIL_COND_V(!is_owner(),0);return static_cast<int64_t>(owner.load(std::memory_order_acquire));}
 Ref<HardCoreSimulationHost> HardCoreSimulationHost::resource_primitive_transport(){ERR_FAIL_COND_V(!is_owner(),{});return Ref<HardCoreSimulationHost>(this);}
 Ref<HardCoreSimulationHost> HardCoreSimulationHost::world_primitive_transport(){ERR_FAIL_COND_V(!is_owner(),{});return Ref<HardCoreSimulationHost>(this);}
@@ -254,7 +277,18 @@ Dictionary HardCoreSimulationHost::try_register_published_original_main_prefix(c
 }
 bool HardCoreSimulationHost::ack_published_original_main_prefix(const Dictionary&p,const Dictionary&a){
     ERR_FAIL_COND_V(!Thread::is_main_thread()||!original_primitives,false);Mailbox::Prefix prefix;int64_t generation=0,journal=0,through=0;
-    if(!prefix_wire(p,bridge_generation,prefix)||a.size()!=4||!integer(a,"bridge_generation",generation)||generation!=prefix.generation||!integer(a,"journal_generation",journal)||journal!=prefix.journal_generation||!integer(a,"through_ordinal",through)||through!=prefix.through||!a.has("applied")||a["applied"].get_type()!=Variant::BOOL||!static_cast<bool>(a["applied"])||!original_primitives->ack_published_prefix(prefix)){set_fault("published_original_prefix_actual_ack_rejected");return false;}return true;
+    if((!cached_original_published_prefix(p,prefix)&&!prefix_wire(p,bridge_generation,prefix))||a.size()!=4||!integer(a,"bridge_generation",generation)||generation!=prefix.generation||!integer(a,"journal_generation",journal)||journal!=prefix.journal_generation||!integer(a,"through_ordinal",through)||through!=prefix.through||!a.has("applied")||a["applied"].get_type()!=Variant::BOOL||!static_cast<bool>(a["applied"])||!original_primitives->ack_published_prefix(prefix)){set_fault("published_original_prefix_actual_ack_rejected");return false;}
+    main_published_prefix_value=Dictionary();main_published_prefix_cache=Mailbox::Prefix();
+    // A final ordinary ACK may be the only remaining closing progress. Main
+    // records it above; only S may consume it and retire its original debt.
+    // Serialize the revision update with the same wait mutex, so notification
+    // cannot be lost between the close predicate and suspension. No new P/H,
+    // IO result, retry or gameplay work is manufactured by this actual ACK.
+    if(close_requested.load(std::memory_order_acquire)){
+        {std::lock_guard<std::mutex> lock(mailbox_mutex);close_revision.fetch_add(1,std::memory_order_release);}
+        wake.notify_all();
+    }
+    return true;
 }
 Dictionary HardCoreSimulationHost::completed_original_main_prefix_receipt(){
     ERR_FAIL_COND_V(!is_owner()||!original_primitives,Dictionary());auto receipt=original_primitives->consume_published_receipts();if(!receipt.applied)return {};
@@ -382,10 +416,10 @@ Dictionary HardCoreSimulationHost::capture_main_gameplay_random(){
     Dictionary d;d["contract_id"]="hardcore.gameplay_global_random.handoff.v1";d["seed"]=static_cast<int64_t>(state.seed);d["state"]=static_cast<int64_t>(state.state);d["increment"]=static_cast<int64_t>(state.increment);return d;
 }
 Dictionary HardCoreSimulationHost::acquire_original_main_prefix(const Dictionary&p){
-    ERR_FAIL_COND_V(!Thread::is_main_thread()||!original_primitives,Dictionary());Mailbox::Prefix prefix;if(!prefix_wire(p,bridge_generation,prefix))return {};
+    ERR_FAIL_COND_V(!Thread::is_main_thread()||!original_primitives,Dictionary());Mailbox::Prefix prefix;const bool cached=cached_original_published_prefix(p,prefix);if(!cached&&!prefix_wire(p,bridge_generation,prefix))return {};
     auto claim=original_primitives->claim_main_prefix(prefix);if(!claim.ready)return {};
     Array events;for(const auto&e:claim.events){Variant event;if(!thaw(e.bytes,event))return {};events.push_back(event);}
-    Dictionary d;d["main_prefix"]=p.duplicate(true);d["after_ordinal"]=static_cast<int64_t>(claim.after);d["through_ordinal"]=static_cast<int64_t>(claim.through);d["events"]=events;return d;
+    Dictionary d;d["main_prefix"]=cached?p:p.duplicate(true);d["after_ordinal"]=static_cast<int64_t>(claim.after);d["through_ordinal"]=static_cast<int64_t>(claim.through);d["events"]=events;return d;
 }
 Dictionary HardCoreSimulationHost::submit_live_original_resource(const Dictionary&p){
     ERR_FAIL_COND_V(!is_owner()||!live_resources||!original_primitives,Dictionary());Dictionary invalid;invalid["status"]="INVALID";
@@ -423,9 +457,14 @@ Dictionary HardCoreSimulationHost::submit_live_original_resource(const Dictionar
     if(context_status==hardcore::simulation::SourceEventReplyMailbox::Status::PENDING){duplicate["status"]="BUSY";return duplicate;}
     if(context_status!=hardcore::simulation::SourceEventReplyMailbox::Status::READY)return invalid;
     if(!issued_context.is_empty()){request.issued_claim_context=freeze(issued_context);if(!request.issued_claim_context)return invalid;}
-    auto admitted=live_resources->submit(request);Dictionary result;
+    bool not_admitted_closing=false;
+    auto admitted=live_resources->submit(request,&not_admitted_closing);Dictionary result;
     if(admitted==LiveMailbox::Admission::ACCEPTED||admitted==LiveMailbox::Admission::DUPLICATE){result["status"]="PENDING";result["request"]=r;}
-    else result["status"]=admitted==LiveMailbox::Admission::BUSY?"BUSY":admitted==LiveMailbox::Admission::BACKPRESSURE?"BACKPRESSURE":"INVALID";return result;
+    else {
+        result["status"]=admitted==LiveMailbox::Admission::BUSY?"BUSY":admitted==LiveMailbox::Admission::BACKPRESSURE?"BACKPRESSURE":"INVALID";
+        if(not_admitted_closing)result["error"]="actual_live_mailbox_closing_not_admitted";
+    }
+    return result;
 }
 Dictionary HardCoreSimulationHost::acquire_pending_live_original_resource(){
     ERR_FAIL_COND_V(!Thread::is_main_thread()||!live_resources,Dictionary());drain_live_feature_transfer_receipts();auto pending=live_resources->acquire(now_usec());if(!pending.ready)return {};Variant request;if(!thaw(pending.request.original.bytes,request))return {};Dictionary packet;packet["channel"]="resource_live";packet["request"]=request;packet["identity"]=identity(pending.request.original.identity);packet["native_acquired_usec"]=static_cast<int64_t>(pending.acquired_usec);return packet;
@@ -642,7 +681,7 @@ bool caster_event(const Dictionary&e,const EventReplies::Identity&id){if(!e.has(
  }for(const char*name:{"create_visual_model","bind_projectile","bind_ground","redraw_cast","projectile_audio_phase","prepare_projectile_visual","set_cast_y_sort","create_fire_wall_cell","fire_wall_animation_diagnostics","activate_fire_wall_cells","synchronize_fire_wall_cells","cast_has_visual","prepare_ground_visual","sync_cast","retire_cast","discard_visual","refresh_cell_lifetime","monster_audio","player_physical_contact_audio","source_interactable::spawn_npc","source_interactable::spawn_portal","source_interactable::face_npc","source_interactable::retire","source_interactable::session_diagnostics","source_caster_warm::collect_admit","source_caster_warm::retire","source_caster_warm::loading_state","source_caster_warm::loading_claim_retire"})if(op==StringName(name))return true;return false;}
 }
 bool HardCoreSimulationHost::bind_main_caster_reply_producer(const Ref<RefCounted>&p,const String&sha){ERR_FAIL_COND_V(!Thread::is_main_thread()||main_caster_reply_producer.is_valid()||p.is_null(),false);Ref<Script>s=p->get_script();if(s.is_null()||s->get_path()!=String("res://scripts/gameplay/world/world_caster_main_executor.gd")||sha.length()!=64||s->get_source_code().sha256_text()!=sha)return false;main_caster_reply_producer=p;main_caster_reply_sha=sha;main_caster_reply_id.store(static_cast<int64_t>(p->get_instance_id()),std::memory_order_release);return true;}
-Dictionary HardCoreSimulationHost::reserve_original_caster_event(const Dictionary&i,const Dictionary&e){ERR_FAIL_COND_V(!is_owner()||!caster_event_replies,Dictionary());EventReplies::Identity id;if(!event_identity(i,id)||id.generation!=bridge_generation||!caster_event(e,id))return event_status(EventReplies::Status::INVALID);Dictionary c=Array(e["arguments"])[0];if(c.get("world_context",Variant())!=Variant(primitive_world)||c.get("main_executor_id",Variant())!=Variant(main_caster_reply_id.load(std::memory_order_acquire))||!e.has("source_site")||e["source_site"].get_type()!=Variant::DICTIONARY||!validate_original_source_site(e["source_site"]))return event_status(EventReplies::Status::INVALID);StringName op=c.get("operation",Variant());bool cleanup=op==SNAME("retire_cast")||op==SNAME("discard_visual")||op==SNAME("source_interactable::retire");return event_status(caster_event_replies->reserve(id,event_wire(e),cleanup));}
+Dictionary HardCoreSimulationHost::reserve_original_caster_event(const Dictionary&i,const Dictionary&e){ERR_FAIL_COND_V(!is_owner()||!caster_event_replies,Dictionary());EventReplies::Identity id;if(!event_identity(i,id)||id.generation!=bridge_generation||!caster_event(e,id))return event_status(EventReplies::Status::INVALID);Dictionary c=Array(e["arguments"])[0];if(c.get("world_context",Variant())!=Variant(primitive_world)||c.get("main_executor_id",Variant())!=Variant(main_caster_reply_id.load(std::memory_order_acquire))||!e.has("source_site")||e["source_site"].get_type()!=Variant::DICTIONARY||!validate_original_source_site(e["source_site"]))return event_status(EventReplies::Status::INVALID);StringName op=c.get("operation",Variant());CharString operation_name=String(op).utf8();bool cleanup=hardcore::simulation::is_original_caster_cleanup_operation(std::string_view(operation_name.get_data(),operation_name.length()));return event_status(caster_event_replies->reserve(id,event_wire(e),cleanup));}
 Dictionary HardCoreSimulationHost::accept_original_caster_event(const Dictionary&i,const Dictionary&e,const Dictionary&p){
     ERR_FAIL_COND_V(!is_owner()||!caster_event_replies||!original_primitives,Dictionary());
     auto invalid=[](const char*reason){auto out=event_status(EventReplies::Status::INVALID);out["error"]=reason;return out;};
@@ -676,9 +715,14 @@ Dictionary HardCoreSimulationHost::inspect_next_original_published_prefix(){
     using State=Mailbox::PublishedReadStatus;
     out["status"]=read.status==State::READY?"READY":read.status==State::BUSY?"BUSY":read.status==State::PENDING?"PENDING":"INVALID";
     if(read.status==State::READY){
-        Variant prefix;
-        if(!thaw(read.prefix.bytes,prefix)){out["status"]="INVALID";out["error"]="registered_prefix_wire_invalid";return out;}
-        out["prefix"]=prefix;
+        if(main_published_prefix_cache.bytes!=read.prefix.bytes){
+            Variant prefix;
+            if(!thaw(read.prefix.bytes,prefix)||prefix.get_type()!=Variant::DICTIONARY){out["status"]="INVALID";out["error"]="registered_prefix_wire_invalid";return out;}
+            seal_main_prefix_value(prefix);
+            main_published_prefix_value=prefix;
+            main_published_prefix_cache=read.prefix;
+        }
+        out["prefix"]=main_published_prefix_value;
     }
     return out;
 }

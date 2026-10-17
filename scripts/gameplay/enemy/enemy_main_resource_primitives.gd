@@ -36,6 +36,8 @@ func configure_original_actor_asset_inputs(loading: RefCounted, prefix: RefCount
 	return true
 func prepare_original_player_renderer_inputs(profile: RefCounted, world: Dictionary, scope: Dictionary) -> Dictionary:
 	return _actor_assets.prepare_original_player_inputs(profile,world,scope) if _actor_assets != null else {"success":false,"status":"MISSING","error":"actual_actor_input_owner_missing"}
+func prepare_original_enemy_renderer_inputs(world: Dictionary, scope: Dictionary) -> Dictionary:
+	return _actor_assets.prepare_original_enemy_inputs(world,scope) if _actor_assets!=null else {"success":false,"status":"MISSING","error":"actual_actor_input_owner_missing"}
 func bind_original_actor_renderer_inputs(owner: Dictionary, template_key: String, scope: Dictionary) -> Dictionary:
 	return _actor_assets.bind_original_actor_inputs(owner,template_key,scope) if _actor_assets != null else {"success":false,"status":"MISSING"}
 func lookup_original_actor_renderer_asset(owner: Dictionary, key: String, scope: Dictionary) -> Dictionary:

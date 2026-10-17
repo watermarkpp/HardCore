@@ -129,7 +129,7 @@ const SOURCE_FIELDS := [
   "_warehouse_validated_collections",
   "_ui_l1_buy_quote_rows"
 ]
-const SOURCE_MODEL_SHA256 := "727fcb7d79ceac7bd6035e485e30ad2563f0de95b49c8ce463d463b893be3f21"
+const SOURCE_MODEL_SHA256 := "6494836608290dc21137982f44dee29c03148d510177eb19f37b234dcca789db"
 
 static func _fail(reason: String) -> Dictionary: return {"ok":false,"errors":[reason]}
 

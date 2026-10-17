@@ -1,0 +1,138 @@
+ChatGPT 说：
+
+这两处迁移可以保留；静态复核未发现新增的退出顺序环，也未发现 Dictionary 返回迁移遗漏了当前生产调用者。它们针对的是 World38 已证实的“过早调用严格 port＋真实 INVALID 被压成 PENDING”，没有把回调未完成当作 Renderer 已退役。
+
+我读完了两份 exit_order_candidate.gd 和 fix_renderer_exit_order.py，并核对了原回调完成路径、严格 ViewTransport 和调用者。读回时，R 中对应生产文件也已包含这两处迁移文本；下述结论是对这份实现的静态评价，不代表新一轮 World 已通过。
+
+1. 新增 PENDING 门放置正确，不会反向阻塞原退出回调
+
+候选 world_main_service_support.exit_order_candidate.gd:125–133 的实际顺序是：
+
+纯文本
+确认 service_id 属于已捕获的 Renderer 集合
+→ 从该 actor_id 查同一 Core 的 _actor_scopes
+→ scope 存在、原退出回调未完成：返回 PENDING
+→ 否则进入原 release_presented_actor_at_original_free()
+
+这个提前返回发生在 release_presented_actor_at_original_free() 之前。 因而在回调尚未完成时，它不会创建新的 _actor_free 行，不会调用严格 ViewTransport，不会产生 application 请求，也不会把这次正常等待缓存成 failure。
+
+它等待的旗标也不是在 Renderer 完成之后才会写入：
+
+纯文本
+Root.close_at_original_world_exit()
+→ exit_original_world_children_at_checkpoint()
+→ _exit_original_subtree()
+→ 原 actor/service 退出回调
+→ scope.exit_at_original_checkpoint()
+    → exit_callbacks_complete = true
+
+我核对到，enemy 路径是在原 model._exit_tree()、tree_exiting 和组移除之后完成 scope；world_temporal_scope.gd::exit_at_original_checkpoint() 写入该旗标，而真正的 free_at_original_checkpoint() 是后续另一阶段。这条回调完成路径不等待 original_renderer_retirement_complete()。
+
+定位：world_simulation_core.gd:1026–1048、::_exit_original_subtree()、::exit_original_world_children_at_checkpoint()；world_temporal_scope.gd:90–104；world_root_phase_adapter.gd::close_at_original_world_exit()。
+
+因此，修复后的顺序成立：
+
+纯文本
+早到的关闭 SERVICE：只得到 actor_exit_pending
+→ 原 Root 子树退出照常执行、完成旗标
+→ 后续真实关闭 SERVICE：进入严格 actor-free port
+
+它没有新增 await，也没有持有一个需要 Root 来释放的同步等待。
+
+2. 只挡住“过早申请 Node 退役”，没有挡住前序 accepted 工作
+
+world_live_close_phase.exit_order_candidate.gd::original_p_close_commit() 仍然先执行：
+
+纯文本
+原 streamer 关闭 SERVICE
+→ live_binding_ready_for_original_renderer_free(id)
+→ request_original_renderer_destruction(id)
+
+新增 scope 门位于最后一步内部，没有移到整个关闭 SERVICE 之前。
+
+这点很重要：原 binding 的真实结果提交、Source 消费、ticket 退役仍能先推进；不会出现“为了等退出回调，连原 accepted binding 清理也一起停掉”的新依赖。
+
+同时，你保留的是该 actor 的回调完成条件，没有扩大成“必须等整个 Root step16 完成”或“必须等全部 children final-free”。后二者才可能把 Renderer 退役与其后续阶段接成环。
+
+3. Dictionary 迁移正确，真实失败不再被吞成等待
+
+候选调用者第 49–54 行已经按状态显式分流：
+
+实际返回	当前处理	_destruction_requested[id]
+PENDING / BUSY / BACKPRESSURE	保留原等待阶段	不置位
+READY	继续原流程	才置位
+INVALID、缺失 status 或其他非 READY 状态	返回 INVALID，保留 actual_failure	不置位
+
+没有再对 Dictionary 使用旧的 if not result 布尔判断。 本轮 scripts/gameplay 搜索到的实际调用点就是 world_live_close_phase.gd:49；其余匹配是方法定义和 has_method 依赖声明，没有读到第二个仍按 bool 使用的生产调用者。
+
+缺少 success 字段的本地 actor_exit_pending 也不会在这里被误判：这个内部迁移接口的调用者明确读 status，不是用 success 推断是否继续。最终真实退出回执的 success/actual_original_exit 检查仍在原位置。
+
+随后 RENDERER_RETIREMENT 仍会取得保存的真实 receipt，并继续检查：
+
+纯文本
+receipt.status == READY
+receipt.service_id == 当前 id
+receipt.actual_node_absent == true
+
+READY 后没有跳过原 receipt 验证，也没有直接进入最终资源释放。
+
+4. failure 透传没有改变释放顺序，且旧失败仍然保留
+
+候选 original_renderer_destruction_receipt() 在读取成功 receipt 前增加：
+
+gdscript
+if not _actor_free[id].failure.is_empty():
+    return _actor_free[id].failure
+
+这是正确的失败优先级：已有真实 failure 时，不能再拿空 receipt 报 PENDING，也不能拿之前保存的 READY 遮住后来记录的失败。 外层已有非 READY 返回路径会保留该 receipt，Core 现有关闭状态检查负责接收非暂态错误。
+
+原 release_presented_actor_at_original_free() 的 failure 缓存逻辑没有清除；候选也没有修改 _destruction_requested、回调完成旗标或已有回执来“修复”World38 的旧实例。
+
+有一个边界需要准确表述：当 scope 仍未完成时，新 request 门会先返回 PENDING；它不会在这一刻越过等待门去读取原 release 路径的缓存 failure。等原回调完成后，已有 failure 仍会由原 release 路径返回并上报。 这是等待门的顺序效果，不是清除或改写 failure。你安排的新 World 回归应验证新实例不再产生这个过早 INVALID，不能要求已经记录真实失败的旧 World38 自动恢复。
+
+5. 严格 port 和两阶段退役仍保持原职责
+
+我回读了 source_application_providers.gd:225–235。严格 ViewTransport 仍要求：
+
+纯文本
+同一 Source/Core 和 canonical actor identity
+→ 原 actor scope 存在，exit_callbacks_complete 为 true
+→ 实际 actor_view_free_state 调用
+→ READY 回执的 identity、NodeAbsent、资产退役事实全部有效
+
+候选没有把其中任何一项改为 PENDING 或宽松通过。
+
+特别是 scope == null 没有被新增门归类为“等一等”：它继续走原 release、既有缓存及严格验证路径。对于尚无完成回执的新请求，缺少 canonical scope 仍应由原严格路径拒绝，不能伪装成正常的“回调还没执行”。
+
+后续次序也没有变化：
+
+纯文本
+原退出回调完成
+→ 前序 binding/ticket 结清
+→ Main 实际 Node 退役及第一阶段资产回执
+→ Renderer READY
+→ Root step16 完成
+→ 原 children final-free
+→ 原 retire_visual_binding、最终 metadata 确认
+→ streamer 完整终态、finish_owner
+
+这次修改没有把第一阶段 NodeAbsent 与最终 binding/metadata 退役合并。
+
+对接下来真实回归的判据
+
+不需要扩大观察面。这次修复是否命中，主要看三项事实：
+
+早到 SERVICE 返回 actual_original_actor_exit_pending，同一 actor 不新增 actual_original_actor_exit_before_Node_retirement failure，也没有因此提交 actor-free application。
+原回调完成后，同一 actor 在后续真实 SERVICE 进入原严格 port，走真实 PENDING→READY；只有 READY 才置 _destruction_requested。
+真实错误仍失败：已有 failure、缺失 canonical scope、身份或物理回执错误，不再被 bool 接口永久压成 PENDING；正常路径仍继续通过 NodeAbsent、最终 binding/metadata 和 ACK。
+
+本次没有需要阻止这两处迁移的顺序问题。保留这个小范围修复，继续你安排的真实 World 回归即可；无需再改 streamer、application 队列、死亡尾部或时钟。
+
+ChatGPT 可能会出错。请核查重要信息。
+最新一条回复
+
+
+
+
+Pro
+回答已完成

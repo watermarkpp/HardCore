@@ -88,7 +88,7 @@ func create_original_owner_services(publication: Dictionary) -> bool:
 	var descriptors := LootDescriptors.new(_world.owner_services.GameData,made.services.ItemDropInstanceRules,phase.loot_descriptors)
 	if not _world.register_original_owner_service(&"LootPreferences",preferences) or not _world.register_original_owner_service(&"LootActorFactory",LootFactory.new(preferences,descriptors)): return false
 	var coordinator := Bootstrap.new()
-	if not coordinator.configure_owner(_world.profile_runtime,made.services.WorldBootstrapResources,made.services.ContentLayers): return _source_fail("original_bootstrap_ports_rejected")
+	if not coordinator.configure_owner(_world.profile_runtime,made.services.WorldBootstrapResources,made.services.ContentLayers,bool(_world.clock_ports.get_setting("hardcore/diagnostics/main_boot_trace",false))): return _source_fail("original_bootstrap_ports_rejected")
 	if not _fields.bind_owner_field(&"_world_bootstrap_coordinator",coordinator): return _source_fail("original_bootstrap_field_missing")
 	if not has_method("original_map_loading_transport") or not coordinator.bind_original_map_transport(call(&"original_map_loading_transport")): return _source_fail("actual_Source_map_transport_missing")
 	return not _world.is_faulted()
@@ -444,12 +444,15 @@ func _actual_exit_proof(proof: Dictionary) -> bool:
 func close_at_original_world_exit() -> bool:
 	# Node::_propagate_exit_tree: reverse children _exit_tree, then Root._exit_tree;
 	# final free is a separate checkpoint and accepted leases can retain storage.
+	_world.trace_actual_source_close("Root_before_children")
 	if not _children_exited:
 		var proof: Dictionary = required_owner_service(&"WorldSourceCheckpoint").original_world_exit_admission(_world.current_world_identity())
 		if not _actual_exit_proof(proof): return false
 		if not _world.exit_original_world_children_at_checkpoint(): return false
 		_children_exited = true
+	_world.trace_actual_source_close("Root_after_children")
 	while _exit_step < 17:
+		_world.trace_actual_source_close("Root_step:"+str(_exit_step))
 		match _exit_step:
 			0: if not required_owner_service(&"SourceFrames").retire_pending_threaded_claims(): return false
 			1: if not _world.streaming.retire_threaded_resource_claims(): return false
@@ -494,7 +497,9 @@ func close_at_original_world_exit() -> bool:
 					_fields.write_source_field(&"_presented_target_ref",null)
 			16:
 				var view_exit: Dictionary = required_owner_service(&"WorldViewLifecycle").actual_world_view_exit(_world.current_world_identity())
-				if view_exit.get("success") != true or view_exit.get("actual_original_exit") != true: return false
+				if view_exit.get("success") != true or view_exit.get("actual_original_exit") != true:
+					_world.trace_actual_source_close("Root_view_exit:"+str(view_exit.get("status","MISSING"))+":"+str(view_exit.get("error",""))+":"+str(_world.current_clock_frame().get("phase","")))
+					return false
 		_exit_step += 1
 	if not _world.final_free_original_world_children_at_checkpoint(): return false
 	var session: RefCounted = _world.original_source_session()

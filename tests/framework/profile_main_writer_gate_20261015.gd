@@ -4,6 +4,7 @@ extends Node
 const Facade := preload("res://scripts/player_state.gd")
 const Gate := preload("res://scripts/gameplay/source/main_profile_source_gate.gd")
 const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
+const Queries := preload("res://scripts/gameplay/profile/profile_original_ui_queries.gd")
 class RefusalObserver extends RefCounted:
 	var denied: Array[Dictionary] = []
 	var notifications: Array[int] = []
@@ -56,9 +57,22 @@ func _run() -> void:
 	check(gate.prepare(),"second lawful preparation begins")
 	# Controlled immutable display fixture: not a Native/source adoption proof.
 	var published: Dictionary = {"level":original_level+2,"inventory":model.inventory.duplicate(true)}
+	var actual_queries: Dictionary = Queries.capture(actual_main_model)
+	published[Queries.FIELD] = actual_queries.duplicate(true)
 	check(gate.commit(published),"real gate stores immutable view in component commit state")
 	published.level = original_level+20
 	check(facade.level == original_level+2 and model.level == original_level,"display view does not alias external dictionary or modify model")
+	var read_denied_before: int = observer.denied.size()
+	check(facade.inventory_weight() == actual_queries.inventory_weight and facade.max_inventory_weight() == actual_queries.max_inventory_weight and facade.experience_to_next_level() == actual_queries.experience_to_next_level,"three facade read queries return captured real owner results without invoking the retired Model")
+	check(observer.denied.size() == read_denied_before,"lawful published read results do not masquerade as forbidden Main writers")
+	check(gate.read_original_profile_view(Queries.FIELD).is_read_only(),"nested original query results are detached immutable display values")
+	check(facade.inventory_occupied_count() == actual_queries.inventory_occupied_count and facade.available_skill_ids() == actual_queries.available_skill_ids,"Source read facade retains exact original occupied-slot count and available-skill order")
+	check(facade.current_bich_quest_id() == actual_queries.current_bich_quest_id,"Source read facade returns owner-computed current quest")
+	for quest_id: String in actual_queries.quest_facts:
+		check(facade.quest_objective_lines(quest_id) == actual_queries.quest_facts[quest_id].lines and facade.quest_reward_label(quest_id) == actual_queries.quest_facts[quest_id].reward,"quest text is copied from exact owner-computed facts:"+quest_id)
+	for skill_id: String in actual_queries.skill_facts:
+		var fact: Dictionary = actual_queries.skill_facts[skill_id]
+		check(facade.is_skill_learned(skill_id) == fact.learned and facade.effective_skill_level(skill_id) == fact.level and facade.is_skill_available(skill_id) == fact.available,"skill read facts retain actual canonical owner results:"+skill_id)
 	facade.level = original_level+30
 	check(model.level == original_level,"S state rejects old setter while keeping readonly display")
 	check(facade.profile_core_for_owner() == null,"S state cannot recover old model from public facade")

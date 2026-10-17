@@ -1,0 +1,23 @@
+{
+  "baseline": "45170d0eaf4d2c642d4a03de392f64fa2b1e25bf",
+  "source_content_sha256": "9b2ab902673a719658440621f98bfc2526835eb3f5dc2b59371c5a2db0b9b46e",
+  "source_manifest": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\SOURCE_MANIFEST.json",
+  "real_index_before": "3180f91855b8bc8d7a22848592ff9f95f2d19574a73f7a3eea90e962f7151b22",
+  "approved_full_world_120": false,
+  "approved_full_world_180": false,
+  "approved_source_save_180": false,
+  "command": [
+    "tools/run_godot_tests.ps1",
+    "-GodotExecutable",
+    "C:/Users/Administrator/.codex/worktrees/multicore-v115/HardCore/outputs/v115_multicore/codex_resume_20261015_182255/windows_immutable_prefix_cache_20261018_build/Godot_v115-stable_win64_console.exe",
+    "-TestPaths",
+    "tests/framework/publication_prefix_immutable_20261018.tscn",
+    "tests/framework/multicore_v115_script_semantic_20261015.tscn",
+    "tests/framework/main_feature_command_loans_20261016.tscn",
+    "tests/framework/code_preparation_engine_namespace_capture_test.tscn",
+    "tests/framework/code_preparation_native_symbol_probe_test.tscn",
+    "tests/framework/code_preparation_scalar_math_probe_test.tscn",
+    "-TimeoutSeconds",
+    "30"
+  ]
+}

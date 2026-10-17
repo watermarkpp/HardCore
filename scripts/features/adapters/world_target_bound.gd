@@ -172,7 +172,9 @@ static func _rejected(reason: String) -> Dictionary:
 func _capture_inputs(monster_id: int) -> RefCounted:
 	if _inputs.has(monster_id): return _inputs[monster_id]
 	if OS.get_thread_caller_id() != OS.get_main_thread_id():
-		return _owner_inputs.get(monster_id)
+		var owner_inputs: RefCounted = _owner_inputs.get(monster_id)
+		if owner_inputs != null: _inputs[monster_id] = owner_inputs
+		return owner_inputs
 	var inputs: RefCounted = Inputs.capture(monster_id,
 		EnemyActor._attack_range_policy_record_for_id(monster_id),
 		EnemyActor._movement_authority_record_for_id(monster_id))

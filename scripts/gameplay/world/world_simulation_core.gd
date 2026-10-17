@@ -358,6 +358,9 @@ func _init(host: Object, boot: Dictionary, source_session: RefCounted = null) ->
 	if not streaming.configure_owner({"FrameBudget": frame_budget, "Time": clock_ports, "RuntimeDiagnostics": diagnostics,
 		"services": service_registry, "primitives": resources, "test_mode": profile.test_mode,
 		"synchronous_visual_loading_for_tests": boot.assembly.source_domain_publication.synchronous_monster_visual_loading_for_tests}, _source_scopes.game_root, Callable(self, "_resource_failure")): return
+	if streaming.original_initial_binding_observed.connect(_on_original_initial_enemy_binding_observed) != OK:
+		fault("initial_enemy_presentation_completion_not_connected",{})
+		return
 	# Bind this same World coordinator to its persistent Session before the
 	# original ready coroutine can submit later map/visual work. It remains
 	# cold during genuine epoch-zero Loading and switches with that one Session.
@@ -435,6 +438,13 @@ func fault(code: String, details: Dictionary) -> void:
 		if nested is Dictionary:
 			for field: String in ["error","reason","method","service","field","key"]:
 				if nested.get(field) is String or nested.get(field) is StringName: observation["detail_"+field] = str(nested[field]).left(256)
+		if code == "world_input_boundary_rejected" and details.get("packet") is Dictionary:
+			var rejected_input: Dictionary = details.packet
+			var input_events: Array = []
+			for event: Variant in rejected_input.get("original_events",[]):
+				if input_events.size() >= 8: break
+				if event is Dictionary: input_events.append({"kind":event.get("kind"),"context_world":event.get("view_context",{}).get("world_context")})
+			observation.input_boundary = {"current_world":_world_identity,"packet_world":rejected_input.get("world_context"),"sequence":rejected_input.get("sequence"),"last_sequence":input.get("_last_sequence") if input != null else null,"main_process_frame":rejected_input.get("main_process_frame"),"last_main_process_frame":input.get("_last_main_process_frame") if input != null else null,"main_physics_frame":rejected_input.get("main_physics_frame"),"events":input_events}
 		print("HC_SOURCE_WORLD_FAULT ",JSON.stringify(observation))
 	push_error("World simulation owner fault: " + code)
 func _reject(code: String, details: Dictionary) -> bool:
@@ -515,6 +525,7 @@ func on_phase(phase: String, frame: Dictionary) -> bool:
 		&"U_BEGIN", &"U_END", &"U_WAKE":
 			if not _invoke_root_entry(&"P", &"original_control_phase", [_phase, frame]): return false
 		&"PUBLISH":
+			_trace_actual_map_continuation_wait()
 			if not _invoke_root_entry(&"P", &"publish_original_presentation", []): return false
 	return not is_faulted()
 
@@ -554,7 +565,14 @@ func _pump_group(domain: StringName, delta: float) -> bool:
 		if domain == &"H" and not _scope_physics_enabled(scope): continue
 		if domain == &"P" and not _scope_process_enabled(scope): continue
 		if not _begin_original_entry(domain, row.entry): return false
-		var completed: Variant = target.call(row.method, delta)
+		var completed: Variant
+		if domain == &"P" and target.get_script() == EnemyVisual and row.method == &"original_process" and _original_enemy_visual_presentation_binding_pending(target):
+			# original_process's animation tail can read final-art indirectly via
+			# _apply_render_state -> ground indicator. Keep its original action
+			# clocks NOW; do not defer the callback delta or gameplay processing.
+			if target._actor_present(): target._advance_action_timers(delta)
+		else:
+			completed = target.call(row.method, delta)
 		if domain == &"P" and target.has_method("render_snapshot_at_original_boundary"):
 			var actor_handle: Object = target._actor_link.resolve_record()
 			if actor_handle != null and not publish_original_actor_visual_projection(actor_handle.get_instance_id(),false,0.0): return _reject("original_enemy_visual_publication_failed",{})
@@ -731,14 +749,22 @@ func feature_actor_in_owner_scope(actor: Object) -> bool:
 	return actor != null and registry.resolve_runtime_actor(actor.get_instance_id()) == actor and actor.is_inside_world() and actor.parent_scope_id() == parent_scope_id()
 func feature_simulation_usec() -> int:
 	return time_domains.simulation_usec()
-func feature_budget_mark_pending(category: String, pending: bool, runnable: bool) -> void:
-	frame_budget.mark_pending(category, pending, runnable, true, _source_scopes.game_root)
-func feature_budget_begin(category: String, necessary: bool) -> int: return frame_budget.begin(category, necessary)
+func feature_budget_mark_pending(category: String, pending: bool, runnable: bool, runs_when_paused := false, physics_owner := false) -> void:
+	frame_budget.mark_pending(category, pending, runnable, runs_when_paused, _source_scopes.game_root, physics_owner)
+func feature_budget_begin(category: String, necessary := false) -> int: return frame_budget.begin(category, necessary)
 func feature_budget_end(token: int) -> void: frame_budget.end(token)
 
+var _actual_close_trace_seen: Dictionary = {}
+func trace_actual_source_close(stage: String) -> void:
+	if not _boot.get("project_settings",{}).get("hardcore/diagnostics/main_boot_trace",false) or _actual_close_trace_seen.has(stage): return
+	_actual_close_trace_seen[stage] = true
+	print("HC_SOURCE_CORE_CLOSE ",JSON.stringify({"stage":stage,"thread":OS.get_thread_caller_id(),"core_id":get_instance_id(),"usec":Time.get_ticks_usec()}))
 func close_session() -> bool:
+	trace_actual_source_close("enter")
 	if _closed: return true
+	trace_actual_source_close("before_caster_replies")
 	if cast_presentation != null: service_original_caster_replies()
+	trace_actual_source_close("after_caster_replies")
 
 	if not _closing:
 		_original_close_clock_baseline = current_clock_frame()
@@ -761,9 +787,13 @@ func close_session() -> bool:
 		if not _finish_original_entry() or not exited_faulted: return false
 	else:
 		if not _source_site.is_empty(): return _reject("close_at_unfinished_original_entry", {})
+		trace_actual_source_close("before_exit_entry")
 		if not _begin_original_entry(&"P", "GameRoot._exit_tree"): return false
+		trace_actual_source_close("after_exit_entry")
 		if not _ensure_original_live_close_phase(): return false
+		trace_actual_source_close("before_Root_exit")
 		var exited: bool = _root_numeric.close_at_original_world_exit()
+		trace_actual_source_close("after_Root_exit")
 		if exited: exited = _original_live_close_phase.finish_at_original_world_free()
 		if not _finish_original_entry() or not exited: return false
 	if not _journal.consume_normal_receipt(_host.completed_original_main_prefix_receipt()): return false
@@ -1037,6 +1067,7 @@ func forget_actor_at_original_final_free(id: int) -> void:
 		if not streaming.consume_original_visual_free(visual_id):
 			fault("actual_original_visual_free_receipt_missing",{"id":visual_id})
 			return
+		_pending_initial_enemy_presentations.erase(visual_id)
 		_actor_visuals.erase(id)
 		_enemy_visual_services.erase(id)
 	if lifecycle != null and lifecycle.get("_actor_free").has(id) and not lifecycle.consume_presented_actor_at_original_free(id):
@@ -1463,11 +1494,22 @@ func activate_enemy_visual_at_original_ready(id: int, clock: Callable, title: St
 	if not _root_numeric.original_service_child_entered(service_id,scope.parent_scope_id): return
 	if not _apply_original_service_implicit_ready(&"monster_visual",scope): return
 	if not append_original_enemy_structural_header(&"VISUAL_HEADER",instance.handle,service_id): return
+	if resources.live_resource_phase():
+		_pending_initial_enemy_presentations[service_id] = {
+			"actor_identity":instance.handle.identity().duplicate(true),
+			"service_identity":handle.identity().duplicate(true),
+			"actor_handle":weakref(instance.handle),"service_handle":weakref(handle),"visual":weakref(visual)}
 	visual.initialize_at_original_ready()
+	_trace_actual_initial_enemy_binding("pending",id,service_id,{})
+	if resources.live_resource_phase() and not original_enemy_presentation_binding_pending(id):
+		fault("initial_enemy_presentation_observation_not_retained",{"actor":id,"service_id":service_id})
+		return
 	var order: Variant = _root_call(&"original_service_callback_order", [service_id, &"_process"])
 	if not order is Dictionary or order.get("ok") != true: return
-	register_original_callback(visual, scope, &"P", &"_process", scope.process_priority, order.order, order.entry)
-	emit_original_main_event(&"enemy_overhead_create", [id, title, boss, hp, maximum])
+	register_original_callback(visual, scope, &"P", &"original_process", scope.process_priority, order.order, order.entry)
+	var overhead_context: Dictionary=preload("res://scripts/gameplay/presentation/enemy_overhead_birth_context.gd").capture_original(instance.handle,instance.model)
+	if overhead_context.is_empty(): fault("actual_original_enemy_overhead_context_missing",{"actor":id}); return
+	emit_original_main_event(&"enemy_overhead_create", [id, title, boss, hp, maximum, overhead_context])
 	instance.model.refresh_name_label_position()
 
 func release_enemy_links_at_original_final_free(model: Object) -> void:
@@ -1726,7 +1768,11 @@ func _exit_original_service_at_checkpoint(id: int) -> bool:
 	var model: RefCounted = _service_models[id]
 	match handle.kind():
 		&"polygon_pursuit_driver",&"path_scheduler": return paths.retire_at_original_exit(id)
-		&"monster_visual": model.retire()
+		&"monster_visual":
+			model.retire()
+			# End presentation responsibility at original exit only. The binding
+			# FIFO, accepted tickets and their cleanup keep their original owners.
+			_pending_initial_enemy_presentations.erase(id)
 		&"node_timer": model.stop()
 		&"m30_summon_queue": pass # original script has no _exit_tree body
 		&"player_visual": pass # original PlayerVisual has no _exit_tree body
@@ -1735,6 +1781,7 @@ func _exit_original_service_at_checkpoint(id: int) -> bool:
 	return scope.exit_at_original_checkpoint() and service_registry.begin_service_retirement(id)
 
 func _exit_original_subtree(id: int) -> bool:
+	trace_actual_source_close("subtree_enter:"+str(id))
 	for child: int in _root_numeric.original_children_reverse_order(id):
 		if not _exit_original_subtree(child): return false
 	if _actor_scopes.has(id): return exit_original_actor_scope_at_checkpoint(id)
@@ -1755,6 +1802,7 @@ func _free_original_service_at_checkpoint(id: int) -> bool:
 	if not _service_scopes[id].free_at_original_checkpoint() or not service_registry.final_free_service(id): return false
 	if kind == &"monster_visual":
 		if not streaming.consume_original_visual_free(id): return _reject("actual_visual_free_receipt_consume_failed",{"id":id})
+		_pending_initial_enemy_presentations.erase(id)
 		for owner_id: int in _enemy_visual_services.keys():
 			if _enemy_visual_services[owner_id] == id:
 				_enemy_visual_services.erase(owner_id)
@@ -1904,9 +1952,11 @@ func on_original_close_process_phase(frame: Dictionary) -> bool:
 	if cast_presentation==null or not cast_presentation.has_method("begin_original_warm_commit_phase") or not cast_presentation.has_method("end_original_warm_commit_phase") or not has_method("service_original_caster_replies"):
 		return _reject("MISSING_actual_C99_warm_close_commit",{})
 	if not cast_presentation.begin_original_warm_commit_phase(frame): return _reject("actual_warm_close_commit_rejected",{})
-	var caster_progressed: bool = bool(call("service_original_caster_replies"))
+	call("service_original_caster_replies")
 	var caster_window_closed: bool = cast_presentation.end_original_warm_commit_phase()
-	if not caster_progressed or not caster_window_closed: return _reject("actual_warm_close_reply_commit_failed",{})
+	# false from this existing service means outstanding real receipts, as in
+	# normal P_GROUP. A true service fault is recorded in the same Core ledger.
+	if not caster_window_closed or _faults.size() != prior_faults: return _reject("actual_warm_close_reply_commit_failed",{})
 	# Map cleanup owns the same actual closing P opportunity. Its accepted
 	# continuation may suspend on Source service signals; no Main waits for S.
 	var map_coordinator: RefCounted = _root_numeric.get("_world_bootstrap_coordinator")
@@ -1926,6 +1976,8 @@ func on_original_close_process_phase(frame: Dictionary) -> bool:
 	if not _service_original_delete_front_cleanup_at_actual_P(): return _reject("actual_delete_front_close_cleanup_rejected",{})
 	profile.service_receipts()
 	var progressed: Dictionary = _original_live_close_phase.original_p_close_commit(frame)
+	trace_actual_source_close("Renderer_progress:"+str(progressed.get("status","MISSING"))+":"+str(progressed.get("phase",""))+":"+str(progressed.get("service_id",0)))
+	if progressed.has("observation"): trace_actual_source_close("Renderer_detail:"+JSON.stringify(progressed))
 	if progressed.get("status") not in ["PENDING","RENDERER_READY","READY","CLOSED"]:
 		return _reject("original_live_close_process_cleanup_failed",progressed)
 	# Persistent MonsterSourceFrames cache/escrow cleanup uses this SAME actual
@@ -1950,6 +2002,12 @@ func original_session_close_resource_owner_held() -> bool:
 	assert(OS.get_thread_caller_id()==_owner)
 	return _original_session_close_resource_hold
 
+func capture_original_persistent_close_scope() -> Dictionary:
+	if OS.get_thread_caller_id() != _owner or not _closing or _closed or not _source_site.is_empty() or int(frame_budget.snapshot().open_scopes) != 0: return {}
+	# This is an exact Source-owner handoff, including a SIGNAL whose SERVICE
+	# has not arrived yet. The closed Core is never called to service later P.
+	return {"contract_id":"hardcore.source.persistent_close_scope.v1","source_core_id":get_instance_id(),"owner_session_id":_original_source_session.original_budget_session_id(),"world_context":current_world_identity(),"baseline":_original_close_clock_baseline.duplicate(true),"last_source_frame":_original_close_last_source_frame,"last_Main_frame":_original_close_last_Main_frame,"pending_service":_original_close_pending_service,"entry_ordinal":_entry_ordinal}
+
 func original_close_renderer_retirement_complete() -> bool:
 	return _original_live_close_phase != null and _original_live_close_phase.original_renderer_retirement_complete()
 
@@ -1965,7 +2023,7 @@ func current_original_source_site() -> Dictionary: return _source_site.duplicate
 
 
 func commit_original_source_map_arrival_context(root: RefCounted, map_id: int, source_generation: int) -> bool:
-	if OS.get_thread_caller_id() != _owner or root != _root_numeric or is_faulted(): return false
+	if OS.get_thread_caller_id() != _owner or root != _root_numeric or _closing or _closed or is_faulted(): return false
 	if not _last_original_map_arrival.is_empty() and _world_identity == _last_original_map_arrival.after_world and map_id == int(_world_identity.runtime_map_id) and source_generation == int(_world_identity.world_epoch):
 		return _host.verify_committed_original_map_arrival(_last_original_map_arrival)
 	if _source_site.is_empty() or str(_source_site.get("domain","")) != "P" or _source_site.get("world_context") != _world_identity: return false
@@ -1987,6 +2045,8 @@ func commit_original_source_map_arrival_context(root: RefCounted, map_id: int, s
 	if not captured.ok: return false
 	var transaction: Dictionary = captured.value
 	if not validate_original_map_arrival_transaction(transaction) or not _original_source_session.validate_original_map_arrival_transaction(self,transaction): return false
+	var viewport := required_owner_service(&"VisualViewport", ["can_commit_original_map_arrival_transaction","commit_original_map_arrival_transaction"])
+	if viewport == null or not viewport.can_commit_original_map_arrival_transaction(transaction): return false
 	# Finish the old world entry, but retain the original P, deadline, budget,
 	# journal, Player life/HP/physics/scope, and every old actor retirement debt.
 	_original_map_arrival_commit_state = {"transaction":transaction,"stage":"VALIDATED"}
@@ -2002,6 +2062,8 @@ func commit_original_source_map_arrival_context(root: RefCounted, map_id: int, s
 	_original_map_arrival_commit_state.stage = "SESSION_ROUTE_COMMITTED"
 	if not transport.commit_original_map_arrival_transaction(transaction): return _reject("actual_map_arrival_transport_route_failed",capture_original_map_arrival_commit_state())
 	_original_map_arrival_commit_state.stage = "SOURCE_ROUTE_COMMITTED"
+	if not viewport.commit_original_map_arrival_transaction(transaction): return _reject("actual_map_arrival_viewport_binding_failed",capture_original_map_arrival_commit_state())
+	_original_map_arrival_commit_state.stage = "VIEWPORT_BINDING_COMMITTED"
 	if not _begin_original_entry(&"P","GameRoot._load_zone:after_actual_arrival"): return _reject("actual_map_arrival_same_P_reopen_failed",capture_original_map_arrival_commit_state())
 	# Enter combat geometry only with the actual committed map and the same
 	# player's already-authoritative pose/life. No placeholder map qualification.
@@ -2119,6 +2181,102 @@ func enter_original_m30_summon_queue_at_child_boundary(model: RefCounted) -> boo
 const ActorVisualPublication := preload("res://scripts/gameplay/presentation/source_actor_visual_publication.gd")
 var _actor_visual_publication_sequences: Dictionary = {}
 var _player_visual_publication_callbacks: Dictionary = {}
+# Identity/presentation responsibility only: no cached art answer, readiness,
+# profile, Native reply or resource-work cursor.
+var _pending_initial_enemy_presentations: Dictionary = {}
+
+func _initial_enemy_presentation_world_matches(before: Dictionary, after: Dictionary) -> bool:
+	if before == after: return true
+	var arrival: Dictionary = _last_original_map_arrival
+	# Only the existing exact contiguous arrival can explain ServiceHandle's
+	# dynamic registry world. This helper never changes either captured world.
+	if arrival.is_empty() or arrival.before_world != before or arrival.after_world != after or _world_identity != after: return false
+	if arrival.world_core_id != get_instance_id() or arrival.registry_id != registry.get_instance_id() or arrival.source_root_id != _root_numeric.get_instance_id() or arrival.owner_session_id != _original_source_session.original_budget_session_id(): return false
+	return _original_source_session.get("_last_original_map_arrival") == arrival and _host.verify_committed_original_map_arrival(arrival)
+
+func _initial_enemy_presentation_owner_matches(id: int, held: Dictionary, service: Object) -> bool:
+	if not _actor_instances.has(id) or service == null: return false
+	var instance: RefCounted = _actor_instances[id]
+	if held.actor_handle.get_ref() != instance.handle or registry.resolve_runtime_actor(id) != instance.handle or held.service_handle.get_ref() != service: return false
+	# Enemy ActorHandle worlds are frozen at birth. Existing arrival rebinds
+	# ONLY the attached Player; old Enemies retain retirement responsibility.
+	if instance.handle.identity() != held.actor_identity or int(_enemy_visual_services.get(id,0)) != service.get_instance_id(): return false
+	if held.visual.get_ref() != service.model() or not is_same(_actor_visuals.get(id),service.model()): return false
+	var current: Dictionary = service.identity()
+	var original: Dictionary = held.service_identity
+	if current.size() != original.size(): return false
+	for key: String in original:
+		if key != "world" and current.get(key) != original[key]: return false
+	return _initial_enemy_presentation_world_matches(original.world,current.world)
+
+func original_enemy_presentation_binding_pending(id: int) -> bool:
+	if OS.get_thread_caller_id() != _owner or not _actor_instances.has(id): return false
+	var service_id: int = int(_enemy_visual_services.get(id,0))
+	var held: Dictionary = _pending_initial_enemy_presentations.get(service_id,{})
+	if held.is_empty() or _closing or _closed: return false
+	var service: Object = service_registry.resolve_service(service_id)
+	if service == null or service.is_queued_for_retirement() or _actor_instances[id].handle.is_queued_for_retirement(): return false
+	if not _initial_enemy_presentation_owner_matches(id,held,service):
+		fault("initial_enemy_presentation_owner_changed",{"actor":id,"service_id":service_id})
+		return false
+	if not streaming.original_initial_binding_observation_pending(service_id,held.service_identity):
+		fault("initial_enemy_presentation_observation_missing",{"actor":id,"service_id":service_id})
+		return false
+	# An earlier visibility fact is not this observation's completion.
+	return true
+
+func _original_enemy_visual_presentation_binding_pending(visual: RefCounted) -> bool:
+	var actor: Object = visual._actor_link.resolve_record()
+	return actor != null and original_enemy_presentation_binding_pending(actor.get_instance_id())
+
+func _on_original_initial_enemy_binding_observed(service_id: int, original_identity: Dictionary, consumed: Dictionary) -> void:
+	var held: Dictionary = _pending_initial_enemy_presentations.get(service_id,{})
+	# Actual exit can already have ended the presentation responsibility;
+	# accepted resource work still settles through the unchanged FIFO.
+	if held.is_empty():
+		if _closing or _closed: return
+		var retiring: Object = service_registry.resolve_service(service_id)
+		if retiring == null or retiring.is_queued_for_retirement(): return
+		fault("initial_enemy_presentation_obligation_missing",{"service_id":service_id})
+		return
+	var id: int = int(held.actor_identity.runtime_id)
+	var service: Object = service_registry.resolve_service(service_id)
+	if _closing or _closed or service == null or service.is_queued_for_retirement() or not _actor_instances.has(id) or _actor_instances[id].handle.is_queued_for_retirement():
+		_pending_initial_enemy_presentations.erase(service_id)
+		return
+	if original_identity != held.service_identity or not _initial_enemy_presentation_owner_matches(id,held,service):
+		fault("initial_enemy_presentation_completion_owner_changed",{"actor":id,"service_id":service_id})
+		return
+	var reply: Dictionary = consumed.get("reply",{})
+	var request: Dictionary = reply.get("request",{})
+	if consumed.get("status") != "COMMITTED" or reply.get("executed") != true or request.get("op") != &"observe_binding" or request.get("args") != [service_id] or not _initial_enemy_presentation_world_matches(held.service_identity.world,request.get("site",{}).get("world_context",{})):
+		fault("initial_enemy_presentation_consumed_observation_invalid",{"service_id":service_id})
+		return
+	if not resources.has_binding_fact(service_id) or resources.binding_fact(service_id) != consumed.get("result"):
+		fault("initial_enemy_presentation_actual_fact_missing",{"service_id":service_id})
+		return
+	if int(_actor_visual_publication_sequences.get(id,0)) != 0:
+		fault("initial_enemy_presentation_already_published",{"actor":id})
+		return
+	# Consume only presentation responsibility, after the genuine row/result.
+	# No stale delta is replayed and the existing physical shell is reused.
+	_pending_initial_enemy_presentations.erase(service_id)
+	if not publish_original_actor_visual_projection(id,false,0.0): return
+	# First full projection must precede dependent anchor/redraw operations.
+	var observer: RefCounted = _enemy_presentation[id]
+	observer.refresh_name_label_position()
+	observer._request_actor_redraw_if_dynamic()
+	_trace_actual_initial_enemy_binding("completed",id,service_id,consumed)
+
+func _trace_actual_initial_enemy_binding(stage: String, id: int, service_id: int, consumed: Dictionary) -> void:
+	if not _boot.get("project_settings",{}).get("hardcore/diagnostics/main_boot_trace",false): return
+	var visual: RefCounted = _actor_visuals.get(id)
+	var actor: RefCounted = _actor_instances.get(id)
+	var service: Object = service_registry.resolve_service(service_id)
+	if visual == null or actor == null or service == null: return
+	var receipt: Dictionary = consumed.get("reply",{})
+	var value := {"stage":stage,"core_id":get_instance_id(),"source_thread":_owner,"actor_identity":actor.handle.identity(),"service_identity":service.identity(),"service_id":service_id,"source_P":source_process_epoch(),"source_H":source_physics_ordinal(),"visual_process_enabled":visual.is_processing(),"publication_sequence":int(_actor_visual_publication_sequences.get(id,0)),"initial_observation_pending":streaming.original_initial_binding_observation_pending(service_id,service.identity()),"actual_binding_fact":resources.has_binding_fact(service_id),"consumed_status":consumed.get("status",""),"native_deadline_status":receipt.get("native_deadline_status",""),"native_operation_identity":consumed.get("identity",{}),"budget_settlement":consumed.get("budget_receipt",{})}
+	print("HC_ACTUAL_INITIAL_ENEMY_BINDING ",JSON.stringify(value))
 
 func capture_original_actor_visual_projection(id: int, advance_visual: bool, delta: float) -> Dictionary:
 	if OS.get_thread_caller_id() != _owner or not _actor_instances.has(id) or not is_finite(delta) or delta < 0.0: return {}
@@ -2131,6 +2289,8 @@ func capture_original_actor_visual_projection(id: int, advance_visual: bool, del
 
 func publish_original_actor_visual_projection(id: int, advance_visual: bool, delta: float) -> bool:
 	if OS.get_thread_caller_id() != _owner or not _actor_instances.has(id): return false
+	if original_enemy_presentation_binding_pending(id): return true
+	if is_faulted(): return false
 	# The existing retained actor-fact queue must be accepted first; a later
 	# P snapshot cannot overtake a failed earlier presentation fact.
 	if _actor_instances[id].ports.has_method("flush_facts") and not _actor_instances[id].ports.flush_facts(): return _reject("original_actor_fact_prefix_pending",{})
@@ -2254,3 +2414,23 @@ func _service_original_delete_front_cleanup_at_actual_P() -> bool:
 	if debt.is_empty(): return true
 	_prepare_original_presented_actor_final_free(int(debt.actor_identity.runtime_id),int(debt.service_id),false)
 	return _faults.size() == prior_faults and not _original_delete_queue.is_empty() and _original_delete_queue.front() == front
+
+# Read-only Source-owner heartbeat for a suspended genuine map continuation.
+# The trace does not poll Native replies, wake waiters, or execute a callback.
+var _last_actual_map_wait_trace_usec := 0
+func _trace_actual_map_continuation_wait() -> void:
+	if not bool(clock_ports.get_setting("hardcore/diagnostics/main_boot_trace",false)) or _root_numeric == null: return
+	var now: int = Time.get_ticks_usec()
+	if now - _last_actual_map_wait_trace_usec < 5000000: return
+	_last_actual_map_wait_trace_usec = now
+	var transport: RefCounted = _root_numeric.original_map_loading_transport()
+	if transport == null: return
+	var coordinator: RefCounted = _root_numeric.get("_world_bootstrap_coordinator")
+	var staged: Dictionary = coordinator.actual_staged_continuation_observation() if coordinator!=null else {}
+	if not transport.has_pending_original_map_continuation() and staged.is_empty(): return
+	var waiting: Array = profile_runtime.get("_resource_service_waiters")
+	var counts: Array[int] = []
+	for waiter: RefCounted in waiting: counts.append(waiter.get_signal_connection_list("released").size())
+	var job: Dictionary = transport.get("_job")
+	var trace: Dictionary = transport.get("_trace_job")
+	print("HC_SOURCE_MAP_WAIT ",JSON.stringify({"usec":now,"epoch":_frame.get("epoch"),"source_P":_frame.get("source_process_frame"),"profile_last_P":profile_runtime.get("_last_service_sequence"),"profile_runtime_id":profile_runtime.get_instance_id(),"staged":staged,"waiters":waiting.size(),"waiter_connections":counts,"exchange_running":transport.get("_exchange_running"),"job_identity":job.get("identity",{}),"native_sealed":job.get("native_sealed",false),"settled":job.get("settled",false),"trace":trace}))

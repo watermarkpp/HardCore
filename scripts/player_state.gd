@@ -1183,6 +1183,7 @@ func _invalid_drop_instance_record(item_record: Dictionary, reason: String) -> D
 
 func has_item(item_name: String, amount := 1) -> bool:
 	if _source_domain_gate != null and _source_domain_gate.state() != "MAIN":
+		if _source_domain_gate.state() == "S": return item_count_by_entity_id(GameData.item_entity_id(item_name)) >= amount
 		return _source_domain_gate.reject_legacy_call("has_item")
 	return _model.has_item(item_name, amount)
 
@@ -1193,6 +1194,7 @@ func item_count(item_name: String) -> int:
 
 func inventory_occupied_count(records: Array = inventory) -> int:
 	if _source_domain_gate != null and _source_domain_gate.state() != "MAIN":
+		if _source_domain_gate.state() == "S" and records == inventory: return _source_domain_gate.read_original_profile_query(&"inventory_occupied_count")
 		return _source_domain_gate.reject_legacy_call("inventory_occupied_count")
 	return _model.inventory_occupied_count(records)
 
@@ -1335,6 +1337,11 @@ func _load_workbench_tray(value: Variant) -> Array[Dictionary]:
 
 func workbench_tray(mode: String) -> Array[Dictionary]:
 	if _source_domain_gate != null and _source_domain_gate.state() != "MAIN":
+		if _source_domain_gate.state() == "S":
+			var result: Array[Dictionary] = []
+			if mode in ["forge","synthesis"]:
+				result.assign(_source_domain_gate.read_original_profile_view(&"forge_tray" if mode == "forge" else &"synthesis_tray").duplicate(true))
+			return result
 		return _source_domain_gate.reject_legacy_call("workbench_tray")
 	return _model.workbench_tray(mode)
 
@@ -1650,6 +1657,7 @@ func apply_death_experience_penalty() -> int:
 
 func experience_to_next_level() -> int:
 	if _source_domain_gate != null and _source_domain_gate.state() != "MAIN":
+		if _source_domain_gate.state() == "S": return _source_domain_gate.read_original_profile_query(&"experience_to_next_level")
 		return _source_domain_gate.reject_legacy_call("experience_to_next_level")
 	return _model.experience_to_next_level()
 
@@ -1695,6 +1703,7 @@ func _learn_skill_result(skill_ref: String, inventory_index := -1, save_in_backg
 
 func is_skill_learned(skill_name: String) -> bool:
 	if _source_domain_gate != null and _source_domain_gate.state() != "MAIN":
+		if _source_domain_gate.state() == "S": return bool(_source_domain_gate.read_original_profile_query(&"skill_facts").get(preload("res://scripts/skills/skill_data_loader.gd").entity_skill_id(skill_name),{}).get("learned",false))
 		return _source_domain_gate.reject_legacy_call("is_skill_learned")
 	return _model.is_skill_learned(skill_name)
 
@@ -1731,16 +1740,22 @@ func quest_progress(quest_id: String) -> int:
 
 func current_bich_quest_id() -> String:
 	if _source_domain_gate != null and _source_domain_gate.state() != "MAIN":
+		if _source_domain_gate.state() == "S": return _source_domain_gate.read_original_profile_query(&"current_bich_quest_id")
 		return _source_domain_gate.reject_legacy_call("current_bich_quest_id")
 	return _model.current_bich_quest_id()
 
 func quest_objective_lines(quest_id: String) -> Array[String]:
 	if _source_domain_gate != null and _source_domain_gate.state() != "MAIN":
+		if _source_domain_gate.state() == "S":
+			var result: Array[String] = []
+			result.assign(_source_domain_gate.read_original_profile_query(&"quest_facts").get(quest_id,{}).get("lines",[]))
+			return result
 		return _source_domain_gate.reject_legacy_call("quest_objective_lines")
 	return _model.quest_objective_lines(quest_id)
 
 func quest_reward_label(quest_id: String) -> String:
 	if _source_domain_gate != null and _source_domain_gate.state() != "MAIN":
+		if _source_domain_gate.state() == "S": return str(_source_domain_gate.read_original_profile_query(&"quest_facts").get(quest_id,{}).get("reward",""))
 		return _source_domain_gate.reject_legacy_call("quest_reward_label")
 	return _model.quest_reward_label(quest_id)
 
@@ -1847,6 +1862,7 @@ func has_special_effect(effect_id: String) -> bool:
 
 func effective_skill_level(skill_name: String) -> int:
 	if _source_domain_gate != null and _source_domain_gate.state() != "MAIN":
+		if _source_domain_gate.state() == "S": return int(_source_domain_gate.read_original_profile_query(&"skill_facts").get(preload("res://scripts/skills/skill_data_loader.gd").entity_skill_id(skill_name),{}).get("level",0))
 		return _source_domain_gate.reject_legacy_call("effective_skill_level")
 	return _model.effective_skill_level(skill_name)
 
@@ -1857,11 +1873,16 @@ func equipment_granted_skill_ids() -> Array[String]:
 
 func is_skill_available(skill_name_or_id: String) -> bool:
 	if _source_domain_gate != null and _source_domain_gate.state() != "MAIN":
+		if _source_domain_gate.state() == "S": return bool(_source_domain_gate.read_original_profile_query(&"skill_facts").get(preload("res://scripts/skills/skill_data_loader.gd").entity_skill_id(skill_name_or_id),{}).get("available",false))
 		return _source_domain_gate.reject_legacy_call("is_skill_available")
 	return _model.is_skill_available(skill_name_or_id)
 
 func available_skill_ids() -> Array[String]:
 	if _source_domain_gate != null and _source_domain_gate.state() != "MAIN":
+		if _source_domain_gate.state() == "S":
+			var result: Array[String] = []
+			result.assign(_source_domain_gate.read_original_profile_query(&"available_skill_ids"))
+			return result
 		return _source_domain_gate.reject_legacy_call("available_skill_ids")
 	return _model.available_skill_ids()
 
@@ -1942,11 +1963,13 @@ func _prewarm_loot_inventory_catalog(records: Array) -> void:
 
 func inventory_weight(records: Array = inventory) -> int:
 	if _source_domain_gate != null and _source_domain_gate.state() != "MAIN":
+		if _source_domain_gate.state() == "S" and records == inventory: return _source_domain_gate.read_original_profile_query(&"inventory_weight")
 		return _source_domain_gate.reject_legacy_call("inventory_weight")
 	return _model.inventory_weight(records)
 
 func max_inventory_weight() -> int:
 	if _source_domain_gate != null and _source_domain_gate.state() != "MAIN":
+		if _source_domain_gate.state() == "S": return _source_domain_gate.read_original_profile_query(&"max_inventory_weight")
 		return _source_domain_gate.reject_legacy_call("max_inventory_weight")
 	return _model.max_inventory_weight()
 
@@ -2612,16 +2635,22 @@ func apply_skill_button_assignment(result: Dictionary) -> bool:
 
 func skill_button_assignments_snapshot() -> Dictionary:
 	if _source_domain_gate != null and _source_domain_gate.state() != "MAIN":
+		if _source_domain_gate.state() == "S": return _source_domain_gate.read_original_profile_query(&"skill_assignments").duplicate(true)
 		return _source_domain_gate.reject_legacy_call("skill_button_assignments_snapshot")
 	return _model.skill_button_assignments_snapshot()
 
 func skill_slots_for_group(slot_group: String) -> Array[String]:
 	if _source_domain_gate != null and _source_domain_gate.state() != "MAIN":
+		if _source_domain_gate.state() == "S":
+			var result: Array[String] = []
+			result.assign(_source_domain_gate.read_original_profile_query(&"skill_slots").get(slot_group,[]))
+			return result
 		return _source_domain_gate.reject_legacy_call("skill_slots_for_group")
 	return _model.skill_slots_for_group(slot_group)
 
 func skill_name_for_slot(slot_group: String, slot_index: int) -> String:
 	if _source_domain_gate != null and _source_domain_gate.state() != "MAIN":
+		if _source_domain_gate.state() == "S": return str(_source_domain_gate.read_original_profile_query(&"slot_names").get("%s:%d" % [slot_group,slot_index],""))
 		return _source_domain_gate.reject_legacy_call("skill_name_for_slot")
 	return _model.skill_name_for_slot(slot_group, slot_index)
 
@@ -2694,6 +2723,7 @@ func _inventory_index_by_entity_id(item_id: String) -> int:
 
 func item_count_by_entity_id(item_id: String) -> int:
 	if _source_domain_gate != null and _source_domain_gate.state() != "MAIN":
+		if _source_domain_gate.state() == "S": return int(_source_domain_gate.read_original_profile_query(&"item_counts").get(item_id,0))
 		return _source_domain_gate.reject_legacy_call("item_count_by_entity_id")
 	return _model.item_count_by_entity_id(item_id)
 

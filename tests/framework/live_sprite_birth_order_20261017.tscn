@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/live_sprite_birth_order_20261017.gd" id="1"]
+
+[node name="LiveSpriteBirthOrder" type="Node"]
+script = ExtResource("1")

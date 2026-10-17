@@ -28,7 +28,10 @@ func _run() -> void:
 	if actors.get("success") != true: _finish(); return
 	publication = publication.duplicate(false)
 	publication.actor_birth_templates = actors.templates
-	check(actors.templates.size() == 9 and actors.templates.player.exact_player_contract,"all original actor kinds and the concrete fire-wall variant are retained")
+	var actor_kinds: Array = actors.templates.keys()
+	actor_kinds.sort()
+	check(actor_kinds == ["enemy","enemy_projectile","enemy_target_magic","field","fire_wall","loot","npc","player","projectile","summon","zone_portal"] and actors.templates.player.exact_player_contract,"exact eleven production actor kinds retain original attack variants and canonical zone_portal")
+	check(actors.templates.get("zone_portal",{}).get("constructor_source_path") == "res://scripts/zone_portal.gd" and not actors.templates.has("portal"),"portal constructor publishes the same stable zone_portal ID requested by the real Source factory")
 	check(actors.templates.fire_wall.source_callbacks.has("_process") and actors.templates.fire_wall.source_callbacks.has("_physics_process") and not actors.templates.field.source_callbacks.has("_process"),"fire wall retains its actual P/H source while generic ground field remains H-only")
 	check(actors.templates.player.scope.inside_world == false and actors.templates.player.scope.parent_scope_id == 0 and not actors.templates.player.has("runtime_id"),"constructor publication allocates no future actor identity or Source child membership")
 	check(publication.service_birth_scopes.size() == 6 and publication.service_callback_templates.size() == 6,"all six current production service kinds have constructor and callback source witnesses, including the original PlayerVisual")

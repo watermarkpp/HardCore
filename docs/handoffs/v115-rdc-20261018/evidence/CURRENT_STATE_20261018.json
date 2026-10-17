@@ -1,0 +1,76 @@
+{
+  "updated": "2026-10-18T03:09:36.771686+08:00",
+  "task": "v115 real multicore integration and compatible same-signature APK; solo",
+  "worktree": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore",
+  "head": "45170d0eaf4d2c642d4a03de392f64fa2b1e25bf",
+  "protected_index_sha256": "3180f91855b8bc8d7a22848592ff9f95f2d19574a73f7a3eea90e962f7151b22",
+  "native_manifest": {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\SOURCE_MANIFEST.immutable_prefix_cache_20261018.json",
+    "sha256": "422f0773560e1a3cc07c1d92ea8b86b13a3445204e05662cb78063dfd322c06c"
+  },
+  "native_source_sha256": "037be686708445d86cc4abc6bd6b13072f3de9e67ebeb6b32051d45434415cfb",
+  "model": {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\scripts\\gameplay\\profile\\profile_model.gd",
+    "bytes": 488950,
+    "sha256": "6494836608290dc21137982f44dee29c03148d510177eb19f37b234dcca789db"
+  },
+  "profile_handoff": {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\scripts\\gameplay\\profile\\profile_state_handoff.gd",
+    "bytes": 24556,
+    "sha256": "e5d36da41ef14a678df529e4199830469bb1545df2025b6acc1cdf7801456658"
+  },
+  "command_catalogue": {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\scripts\\gameplay\\source\\profile_original_command_catalog.gd",
+    "bytes": 6925,
+    "sha256": "b44d6b6a9d28b5f4e193d889441cf73547d8db5cef51a4b9a75873aef6eee289"
+  },
+  "receiver_manifest": {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\scripts\\gameplay\\source\\main_original_receiver_manifest.json",
+    "bytes": 54401,
+    "sha256": "3c5900e1b84339b5449b96b9697a5ac87a0fbd100ce6e5aa3ead0e53d6249400"
+  },
+  "windows_build_receipt": {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_immutable_prefix_cache_20261018_build\\BUILD_RECEIPT.json",
+    "status": "BUILD_WINDOWS_ONLY_PASS",
+    "main_sha256": "f26c17c00fb11f1a2dcb07d3b079d744554bf0355a2e3e2642bb15ed55a6d373"
+  },
+  "android_template_receipt": {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\android_immutable_prefix_cache_20261018_build\\ANDROID_TEMPLATE_RECEIPT.json",
+    "status": "RUNNING",
+    "exec_session": 27312
+  },
+  "generated_code_catalogue": {
+    "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\scripts\\features\\generated\\internal_code_preparation_catalog_data.gd",
+    "bytes": 39040,
+    "sha256": "757127be74d176155edeeb568201c1cf46f446dfd551f58bee25743da86954e5"
+  },
+  "last_World": "World40 FAIL: actual82/82; all Renderer READY, Rootstep16 passed; final-free calls missing ServiceRegistry.resolve_original_retiring_service; source-index protected",
+  "running_World": null,
+  "running_exec_session": null,
+  "source_frozen": true,
+  "pending": "Implement whole-tree cache eligibility excluding every Packed leaf/key from identity cache only, retain plain and original decode/validation fallback. Implement real owned retiring ServiceHandle lookup in same registry; repair legacy component startup before claiming assertions. New seal/builds/catalogue/tests/World/sixsave/fixedsource/APK still needed.",
+  "completed_item_component": "24/0 actual Model native0; original warehouse failure schema retained; staged assertions stronger not weaker",
+  "unsupported_old_regression": "v109_inventory_durability_projection_test legacy Root.new on Main violates external Physics2D ownership; raw FAIL retained, fixture path BLOCKED; no guard bypass",
+  "save_stages_completed": 0,
+  "source_save_tool_root": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\source_save_runtime_caster_selection180_20261018",
+  "fixed_release_tool_root": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\fixed_release_snapshot_caster_selection_20261018",
+  "fixed_source_object": "NOT_RUN",
+  "APK115": "NOT_RUN",
+  "device_test": "NOT_RUN",
+  "original_data": "No original PC or phone writes. Isolated runner data only; prior original-save protections retained.",
+  "Pro_latest_actual_read": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\codex_return_20261017_01\\PRO_MAP33_UPDATE_REVIEW_20261018.visible.txt",
+  "Pro_close_review": "Renderer fix final READ and statically approved, Native cache audit final READ and BLOCKED due Packed alias hole; both final sections archived. No Pro write/testing authority sent.",
+  "usage_last": "98% used/2% remaining at04:04. Authorized conditional stop after completed Desktop + remote handoff. No shutdown.",
+  "published_batch": "actual Native FIFO RED26/2 -> GREEN26/0 native0/noerrors/protectiontrue; semantic336/0",
+  "running_test": null,
+  "observation_sources": {
+    "scripts/gameplay/source/main_original_resource_pump.gd": "a4803c2936a99327f0fbd33637143aac1e4fcc49bc34d4609a6465f09e0fc896",
+    "scripts/gameplay/world/world_main_prefix_consumer.gd": "841d488546c2d696187815f1992d218939730d14f4d420599ddf0fbb12a37b95",
+    "scripts/gameplay/world/world_live_close_phase.gd": "e1fb0d8823c2e1e6a50572c757579b3e1e87df08c097e7a38626a897062f24eb",
+    "scripts/gameplay/world/world_simulation_core.gd": "a5a9c98abcc0bc62135c280c39b7eafb13ef1f508b201f4460c0c1064a5cfe13",
+    "scripts/gameplay/world/world_main_service_support.gd": "c61b099dd9a8103b9c76abced627bbd7784f4718fce50cee079456aaf5e5f668"
+  },
+  "freeze_reason": "User explicit1-2percent conditional handoff; live98used/2remaining. All child processes terminal; no new construction/test. No shutdown.",
+  "packed_regression": "actual037 Packed RED30/3 native1/noerrors/protectiontrue; nested empty/filled Packed aliases mutate top retained id and pollute repeated inspect. Cache qualification fix NOT IMPLEMENTED.",
+  "service_regression": "legacy component BLOCKED before Source Core: parent busy add_child + missing current integer Native config. New retiring lookup assertions NOT_RUN. World40 actual missing production method is independent RED evidence."
+}

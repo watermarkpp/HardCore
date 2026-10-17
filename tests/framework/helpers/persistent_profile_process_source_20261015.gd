@@ -89,7 +89,11 @@ func _init(host: Object, boot: Dictionary) -> void:
 	_check(not application_api.bind_original_session_services(_session,host,applications.services),"a second binding cannot reset existing Session owners")
 	var before_call: int = host.next_original_operation_sequence()
 	var refused_call: Dictionary = applications.services.directory.prepare_directory("res://assets/data")
-	_check(refused_call.get("status") == "MISSING" and refused_call.get("error") == "actual_Loading_or_application_CPS_required" and host.next_original_operation_sequence() == before_call,"bound but unprepared Session cannot spend a Native operation or claim directory readiness outside actual Loading")
+	print("ACTUAL_UNPREPARED_APPLICATION_REFUSAL ",JSON.stringify({"receipt":refused_call,"before_operation":before_call,"after_operation":host.next_original_operation_sequence(),"actual_CPS_capability":host.capabilities().get("source_application_loading_cps")}))
+	# CPS is now a real Native capability. This intentionally unprepared
+	# component has no World/Core service to await; reject at that actual owner
+	# boundary before allocating a Native operation or claiming readiness.
+	_check(host.capabilities().get("source_application_loading_cps") == true and applications.services.directory.get("_core") == null and refused_call.get("success") == false and refused_call.get("status") == "MISSING" and refused_call.get("error") == "actual_original_application_entry_service_unavailable" and host.next_original_operation_sequence() == before_call,"bound but unprepared Session cannot spend a Native operation or claim directory readiness without its actual original service")
 	var coordinator := Coordinator.new()
 	_check(coordinator.has_method("configure_original_idle_handoff"),"Source coordinator preserves original Main counters and cursors instead of restarting")
 	if not coordinator.has_method("configure_original_idle_handoff"):

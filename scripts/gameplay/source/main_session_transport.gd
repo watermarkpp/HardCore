@@ -20,6 +20,9 @@ var _prepared: Dictionary = {}
 var _admission: RefCounted
 var _session_id := 0
 var _model_id := 0
+var _expected_read_session_id := 0
+var _expected_read_handoff := ""
+var _pending_source_read_view: Dictionary = {}
 var _pending: Dictionary = {}
 var _acks: Dictionary = {}
 var _ack_submitted: Dictionary = {}
@@ -91,6 +94,8 @@ func request_original_source_session_adoption(admission: RefCounted, prepared: D
 		var graph: RefCounted=ClassDB.instantiate("HardCoreContentValueGraph")
 		if graph.validate(built.boot,false).get("success")!=true: return _abort_actual_Path_before_Source_start(admission,prepared,"actual_plain_runtime_boot_required")
 	_admission=admission;_prepared=prepared;_state="PREPARED"
+	_expected_read_session_id=int(built.boot.get("session_id",0))
+	_expected_read_handoff=preload("res://scripts/gameplay/world/world_profile_ui_view.gd").original_handoff_identity(built.boot.get("profile_state_handoff",{}))
 	preload("res://scripts/gameplay/source/main_boot_trace.gd").mark(self,"BEFORE_ACTUAL_NATIVE_HOST_START")
 	if not _host.start(RuntimeScript,built.boot,built.config):
 		return _abort_actual_Path_before_Source_start(admission,prepared,"actual_Host_start_rejected")
@@ -107,6 +112,9 @@ func request_original_source_session_adoption(admission: RefCounted, prepared: D
 		await actual_main_progress
 	if admission.get("_committed")!=true or admission.get("_gate").state()!="S" or _adopted.prepared_receipt!=prepared.receipt: return _fail("actual_Main_commit_and_loaded_S_receipt_required")
 	_state="S"
+	if not _pending_source_read_view.is_empty():
+		if _pending_source_read_view.session_id!=_session_id or _pending_source_read_view.profile_model_id!=_model_id or not _facade.get("_source_domain_gate").update_original_profile_view(_pending_source_read_view.fields): return _fail("actual_retained_Source_read_view_adoption_mismatch")
+		_pending_source_read_view={}
 	return {"success":true,"prepared_receipt":prepared.receipt,"source_receipt":_adopted}
 func _abort_actual_Path_before_Source_start(admission: RefCounted, prepared: Dictionary, reason: String) -> Dictionary:
 	# Restore the captured actual Main callback only while Native confirms no
@@ -169,7 +177,7 @@ func can_commit_actual_original_map_arrival(transaction: Dictionary) -> bool:
 	var event: Dictionary = _prefix.actual_current_original_event()
 	return event.get("operation") == &"source_map_arrival" and event.get("arguments") == [transaction] and _host.verify_committed_original_map_arrival(transaction) and _input_publisher.can_commit_actual_original_map_arrival(transaction)
 func commit_actual_original_map_arrival(transaction: Dictionary) -> bool:
-	if not can_commit_actual_original_map_arrival(transaction) or not _input_publisher.commit_actual_original_map_arrival(transaction): return false
+	if not can_commit_actual_original_map_arrival(transaction) or not _input_publisher.commit_actual_original_map_arrival(transaction,_host): return false
 	_world = transaction.after_world.duplicate(true)
 	# Already accepted packets retain their original world/sequence. Source's
 	# input identity validator must consume or reject those exact packets.
@@ -206,6 +214,33 @@ func apply_original_transport_journal_event(event: Dictionary) -> bool:
 			if receipt.get("owner_session_id")!=_session_id or receipt.get("original_logout_committed")!=true: return false
 			_close_authorized=true
 		_: return false
+	return true
+func apply_original_profile_read_view_event(event: Dictionary) -> bool:
+	# The same claimed Source journal that updates HUD also refreshes legacy
+	# facade reads. A Source command receipt still replaces this same read view
+	# later in journal order; neither route can invoke the retired Main Model.
+	if OS.get_thread_caller_id()!=OS.get_main_thread_id() or _prefix.actual_current_original_event()!=event or event.get("kind")!="original_world_presentation" or event.get("operation")!=&"original_profile_view" or not event.get("arguments") is Array or event.arguments.size()!=1: return false
+	var view: Dictionary=event.arguments[0]
+	if _state not in ["PREPARED","S","DRAINING","CLOSING"] or view.get("session_id")!=_expected_read_session_id or view.get("handoff_identity")!=_expected_read_handoff or not view.get("profile_model_id") is int or view.profile_model_id==0 or view.get("origin")!="actual_S_adopted_owner" or not view.get("fields") is Dictionary: return false
+	if _state=="PREPARED":
+		# Source's genuine initial read event precedes its adoption receipt in
+		# the cold prefix. It must not hold that prefix/Source factory hostage.
+		# Retain verified plain bytes; only the actual later adoption may expose
+		# them through the facade whose old Main writer remains closed.
+		if not _pending_source_read_view.is_empty() and _pending_source_read_view.profile_model_id!=view.profile_model_id: return false
+		var graph: RefCounted=ClassDB.instantiate("HardCoreContentValueGraph")
+		var captured: Dictionary=graph.capture(view,true,false)
+		if captured.get("success")!=true: return false
+		_pending_source_read_view=captured.value
+		return true
+	if view.session_id!=_session_id or view.profile_model_id!=_model_id or _facade.get("_source_domain_gate").state()!="S": return false
+	if not _facade.get("_source_domain_gate").update_original_profile_view(view.fields): return false
+	var profile_signal: Variant = view.get("profile_signal","")
+	if not profile_signal is String or (profile_signal != "" and StringName(profile_signal) not in preload("res://scripts/gameplay/world/world_profile_ui_view.gd").ORIGINAL_PROFILE_SIGNALS): return false
+	# Legacy physical panels subscribe to the real facade, while World HUD
+	# subscribes to its read view. Both see the same owner-computed fields
+	# before the exact originating signal; no old Profile setter is invoked.
+	if profile_signal != "": _facade.emit_signal(StringName(profile_signal))
 	return true
 func request_original_application_close(what: Variant) -> Variant:
 	if what is Dictionary:

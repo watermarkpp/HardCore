@@ -39,6 +39,8 @@ func _init(core: RefCounted, registry: RefCounted, handle: Object, model: RefCou
 	_visual_available = visual_available
 	_recording_enabled = observer_enabled
 
+func owner_thread_id() -> int: return _owner
+
 func _owned() -> bool:
 	assert(OS.get_thread_caller_id() == _owner)
 	return OS.get_thread_caller_id() == _owner

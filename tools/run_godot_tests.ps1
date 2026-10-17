@@ -4,6 +4,7 @@ param(
     [ValidateRange(1, 180)]
     [int]$TimeoutSeconds = 30,
     [switch]$ApprovedFullWorld120,
+    [switch]$ApprovedFullWorld180,
     [switch]$ApprovedSourceSave180,
     [switch]$Verbose,
     [string[]]$TestPaths = @(),
@@ -1363,7 +1364,12 @@ $AuthorizedSustainedColdScenes = @(
     'tests/framework/natural_sustained_chain_cold_test.tscn',
     'tests/framework/natural_sustained_resource_cold_test.tscn'
 )
-if ($ApprovedSourceSave180 -or $TimeoutSeconds -eq 180) {
+if ($ApprovedFullWorld180) {
+    if ($ApprovedSourceSave180 -or $ApprovedFullWorld120 -or $TimeoutSeconds -ne 180 -or $EffectiveSuite -cne 'adhoc' -or
+        @($SelectedTests).Count -ne 1 -or @($SelectedTests)[0] -cne 'tests/framework/character_source_full_world_20261016.tscn') {
+        throw 'Only the explicitly user-approved single full-world cold-launch/exit diagnostic may use World180.'
+    }
+} elseif ($ApprovedSourceSave180 -or $TimeoutSeconds -eq 180) {
     if (-not $ApprovedSourceSave180 -or $ApprovedFullWorld120 -or $TimeoutSeconds -ne 180 -or $EffectiveSuite -cne 'adhoc' -or
         @($SelectedTests).Count -ne 1 -or @($SelectedTests)[0] -cne 'tests/framework/source_save_roundtrip_20261017.tscn') {
         throw 'Only one explicitly approved Source save/warehouse roundtrip stage may use 180s.'

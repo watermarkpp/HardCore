@@ -22,7 +22,7 @@ public:
   AsyncLiveResourceMailbox(Original&,uint64_t generation,size_t slots,size_t request_bytes,size_t reply_bytes);
   ~AsyncLiveResourceMailbox(); // Refuse loss of accepted obligations.
   bool bind_owner();
-  Admission submit(const Request&); // S nonblocking; ACCEPTED reserves reply storage.
+  Admission submit(const Request&,bool*not_admitted_closing=nullptr); // S nonblocking; ACCEPTED reserves reply storage.
   struct Probe{Admission status=Admission::ACCEPTED;Request request;}; // ACCEPTED here means fresh reservation.
   Probe probe_submission(uint64_t owner_session,uint64_t reservation,const Bytes&); // S exact preimage dedupe.
   Pending acquire(uint64_t actual_acquire_invocation_usec); // Main nonblocking; actual source clock only.

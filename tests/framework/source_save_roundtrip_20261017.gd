@@ -138,6 +138,17 @@ func _process(_delta: float) -> void:
 			report.terminals.append({"kind":"QUIT","terminal":terminal,"native_status":host.status()})
 			_finish()
 func _command(method: String,args: Array) -> Dictionary:
+	# Actual Main read view at this fixture's explicit selection boundary. No missing-witness bypass.
+	var selection_port := preload("res://scripts/gameplay/source/main_profile_ui_command.gd")
+	args=args.duplicate(true)
+	if method=="unequip_to_inventory_slot":
+		args.append(selection_port.capture_selection("equipment",args[0],facade.equipment.get(args[0],{})))
+	elif method=="transfer_warehouse_prepared":
+		if args.size()==2: args.append([])
+		var records: Array=facade.inventory if args[0]=="deposit" else facade.warehouse_inventory
+		var selections: Array=[]
+		for slot: int in args[1]: selections.append(selection_port.capture_selection("inventory" if args[0]=="deposit" else "warehouse",slot,records[slot]))
+		args.append(selections)
 	var reply: Dictionary=await facade.submit_original_profile_command(StringName(method),args)
 	if not check(Audit.command_matches(reply,method,expected.profile_id,source_session,source_model,command_id),"formal same-session command receipt "+method):return {}
 	command_id=reply.receipt.command_id

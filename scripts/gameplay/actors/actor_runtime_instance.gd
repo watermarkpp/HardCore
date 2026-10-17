@@ -11,6 +11,7 @@ var _registry: WeakRef
 var _world: Object
 var _kind: StringName
 var _closed := false
+var _original_world_exit_applied := false
 
 func _init(p_model: RefCounted, p_handle: Object, p_ports: RefCounted, p_motion: RefCounted, registry: RefCounted, world: Object, kind: StringName) -> void:
 	model = p_model
@@ -69,8 +70,18 @@ func accept_numeric_visual_publication(publication: Dictionary) -> bool:
 func leave_world() -> bool:
 	if not healthy(): return false
 	if not handle.is_inside_world(): return true
-	if _kind == &"player": model.on_world_exit()
+	if _kind == &"player" and not apply_original_world_exit_once(): return false
 	return handle.set_world_membership(false)
+
+func apply_original_world_exit_once() -> bool:
+	assert(OS.get_thread_caller_id() == _owner)
+	if _closed or _kind != &"player" or model == null: return false
+	if _original_world_exit_applied: return true
+	# Record before invoking the original body: disposal may reenter an owner.
+	# Membership/group/tree-exiting order remains the caller's responsibility.
+	_original_world_exit_applied = true
+	model.on_world_exit()
+	return true
 
 func rehome_player(new_world: Dictionary, clock_generation: String, native_world: Object, configuration: Dictionary, screen_to_ground: Callable) -> bool:
 	if not healthy() or _kind != &"player" or handle.is_inside_world() or handle.is_queued_for_retirement(): return false
@@ -96,7 +107,9 @@ func rehome_player(new_world: Dictionary, clock_generation: String, native_world
 
 func enter_world(parent_scope: int, can_process: bool, physics_enabled: bool) -> bool:
 	if not healthy() or not handle.set_runtime_qualification(parent_scope, can_process, physics_enabled): return false
+	var was_inside: bool = handle.is_inside_world()
 	if not handle.set_world_membership(true): return false
+	if not was_inside: _original_world_exit_applied = false
 	return ports.publish_pose()
 
 func final_retire() -> bool:
@@ -107,7 +120,7 @@ func final_retire() -> bool:
 	if not ports.flush_facts(): return false
 	var id: int = handle.get_instance_id()
 	if _kind == &"player":
-		model.on_world_exit()
+		if not apply_original_world_exit_once(): return false
 		model.release_profile_subscription()
 	else:
 		model.owner_link = null

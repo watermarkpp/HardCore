@@ -1,0 +1,37 @@
+{
+  "status": "FAIL",
+  "scope": "actual World38 startup82/82 then exit blocked; original Actor exit precondition INVALID cached and bool collapsed pending",
+  "producer_log": "outputs\\v115_multicore\\invocations\\codex_full_world_exact_pending_20261018_38\\logs\\character_source_full_world_20261016.stdout.log",
+  "observations": [
+    {
+      "core_id": -9223371117396225122,
+      "stage": "Renderer_detail:{\"error\":\"actor_free_call\",\"observation\":{\"actor_free_failure\":\"actual_original_actor_exit_before_Node_retirement\",\"actor_free_last_error\":\"actual_original_actor_exit_before_Node_retirement\",\"actor_free_last_status\":\"INVALID\",\"actor_free_present\":true,\"actor_free_receipt_status\":\"\",\"actor_id\":1393381349221,\"application_applied\":false,\"application_consumed\":false,\"application_identity\":{},\"application_operation\":\"\",\"binding_count\":0,\"binding_head_operation\":\"\",\"binding_head_service\":0,\"live_intents\":0,\"live_ticket_services\":0},\"phase\":\"ACCEPTED_BINDINGS\",\"service_id\":1394757080991,\"status\":\"PENDING\"}",
+      "thread": 38,
+      "usec": 123232109
+    },
+    {
+      "core_id": -9223371117396225122,
+      "stage": "Renderer_detail:{\"error\":\"actor_free_call\",\"observation\":{\"actor_free_failure\":\"actual_original_actor_exit_before_Node_retirement\",\"actor_free_last_error\":\"actual_original_actor_exit_before_Node_retirement\",\"actor_free_last_status\":\"INVALID\",\"actor_free_present\":true,\"actor_free_receipt_status\":\"\",\"actor_id\":1393381349221,\"application_applied\":false,\"application_consumed\":false,\"application_identity\":{},\"application_operation\":\"\",\"binding_count\":0,\"binding_head_operation\":\"\",\"binding_head_service\":0,\"live_intents\":2,\"live_ticket_services\":0},\"phase\":\"ACCEPTED_BINDINGS\",\"service_id\":1394757080991,\"status\":\"PENDING\"}",
+      "thread": 38,
+      "usec": 123238465
+    },
+    {
+      "core_id": -9223371117396225122,
+      "stage": "Renderer_detail:{\"error\":\"actor_free_call\",\"observation\":{\"actor_free_failure\":\"actual_original_actor_exit_before_Node_retirement\",\"actor_free_last_error\":\"actual_original_actor_exit_before_Node_retirement\",\"actor_free_last_status\":\"INVALID\",\"actor_free_present\":true,\"actor_free_receipt_status\":\"\",\"actor_id\":1393381349221,\"application_applied\":false,\"application_consumed\":false,\"application_identity\":{},\"application_operation\":\"\",\"binding_count\":0,\"binding_head_operation\":\"\",\"binding_head_service\":0,\"live_intents\":1,\"live_ticket_services\":0},\"phase\":\"ACCEPTED_BINDINGS\",\"service_id\":1394757080991,\"status\":\"PENDING\"}",
+      "thread": 38,
+      "usec": 123248636
+    },
+    {
+      "core_id": -9223371117396225122,
+      "stage": "Root_after_children",
+      "thread": 38,
+      "usec": 123419549
+    },
+    {
+      "core_id": -9223371117396225122,
+      "stage": "Root_step:16",
+      "thread": 38,
+      "usec": 123542808
+    }
+  ]
+}

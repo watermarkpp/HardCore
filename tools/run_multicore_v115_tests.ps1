@@ -5,6 +5,7 @@ param(
     [string[]]$ExternalInputPaths = @(),
     [switch]$VerboseEngine,
     [switch]$ApprovedFullWorld120,
+    [switch]$ApprovedFullWorld180,
     [switch]$ApprovedSourceSave180,
     [ValidateSet(30,60)][int]$TimeoutSeconds = 30
 )
@@ -17,18 +18,25 @@ function Get-ExactInputHash([string]$Path) {
 }
 $effectiveTimeout = $TimeoutSeconds
 if ($ApprovedSourceSave180) {
-    if ($ApprovedFullWorld120 -or $TimeoutSeconds -ne 60 -or $TestPaths.Count -ne 1 -or
+    if ($ApprovedFullWorld120 -or $ApprovedFullWorld180 -or $TimeoutSeconds -ne 60 -or $TestPaths.Count -ne 1 -or
         $TestPaths[0] -cne 'tests/framework/source_save_roundtrip_20261017.tscn') {
         throw 'The approved 180s exception is restricted to one Source save/warehouse roundtrip stage.'
     }
     $effectiveTimeout = 180
 }
 if ($ApprovedFullWorld120) {
-    if ($TimeoutSeconds -ne 60 -or $TestPaths.Count -ne 1 -or
+    if ($ApprovedFullWorld180 -or $TimeoutSeconds -ne 60 -or $TestPaths.Count -ne 1 -or
         $TestPaths[0] -cne 'tests/framework/character_source_full_world_20261016.tscn') {
         throw 'The approved 120s exception is restricted to the single full-world cold-launch/exit diagnostic.'
     }
     $effectiveTimeout = 120
+}
+if ($ApprovedFullWorld180) {
+    if ($ApprovedFullWorld120 -or $ApprovedSourceSave180 -or $TimeoutSeconds -ne 60 -or $TestPaths.Count -ne 1 -or
+        $TestPaths[0] -cne 'tests/framework/character_source_full_world_20261016.tscn') {
+        throw 'The user-approved 180s World exception is restricted to the single full-world cold-launch/exit diagnostic.'
+    }
+    $effectiveTimeout = 180
 }
 $testRoot = Split-Path -Parent $PSScriptRoot
 $testRun = Join-Path $testRoot ('outputs/v115_multicore/invocations/' + $Label)
@@ -109,12 +117,13 @@ try {
     $env:HARDCORE_AUDIT_RUNTIME_APPDATA = Join-Path $testRoot '.godot/runtime_appdata/multicore_v115'
     [ordered]@{baseline=$env:HARDCORE_R3_TESTED_SHA;source_content_sha256=$env:HARDCORE_R3_CONTENT_SHA256;
         source_manifest=$manifestPath;real_index_before=$indexBefore.ToLowerInvariant();
-        approved_full_world_120=[bool]$ApprovedFullWorld120;approved_source_save_180=[bool]$ApprovedSourceSave180;
-        command=@('tools/run_godot_tests.ps1','-GodotExecutable',$GodotExecutable,'-TestPaths')+$TestPaths+@('-TimeoutSeconds',[string]$effectiveTimeout)+$(if($ApprovedFullWorld120){@('-ApprovedFullWorld120')}elseif($ApprovedSourceSave180){@('-ApprovedSourceSave180')}else{@()})} |
+        approved_full_world_120=[bool]$ApprovedFullWorld120;approved_full_world_180=[bool]$ApprovedFullWorld180;approved_source_save_180=[bool]$ApprovedSourceSave180;
+        command=@('tools/run_godot_tests.ps1','-GodotExecutable',$GodotExecutable,'-TestPaths')+$TestPaths+@('-TimeoutSeconds',[string]$effectiveTimeout)+$(if($ApprovedFullWorld120){@('-ApprovedFullWorld120')}elseif($ApprovedFullWorld180){@("-ApprovedFullWorld180")}elseif($ApprovedSourceSave180){@('-ApprovedSourceSave180')}else{@()})} |
         ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $testRun 'SOURCE_BINDING.json') -Encoding utf8
     $runnerArgs = @{GodotExecutable=$GodotExecutable;TestPaths=$TestPaths;TimeoutSeconds=$effectiveTimeout}
     if ($ApprovedFullWorld120) { $runnerArgs.ApprovedFullWorld120 = $true }
     if ($ApprovedSourceSave180) { $runnerArgs.ApprovedSourceSave180 = $true }
+    if ($ApprovedFullWorld180) { $runnerArgs.ApprovedFullWorld180 = $true }
     if ($VerboseEngine) { $runnerArgs.Verbose = $true }
     & (Join-Path $PSScriptRoot 'run_godot_tests.ps1') @runnerArgs
     $nativeExit = $LASTEXITCODE

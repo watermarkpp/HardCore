@@ -81,14 +81,14 @@ func _stage_asset(key: String, loaded: Dictionary, expected: String, facts: Dict
 func _template_receipt(key: String) -> Dictionary:
 	var row: Dictionary = _templates[key]
 	return {"success":true,"status":"READY","phase":"INPUTS_PINNED","template_key":key,"template_id":row.id,
-		"world_context":row.world,"loading_scope":row.scope,"fact_count":row.facts.size(),"texture_count":row.texture_tokens.size(),"audio_count":row.audio_tokens.size(),"actual_shader_id":row.shader.get_instance_id()}
+		"world_context":row.world,"loading_scope":row.scope,"fact_count":row.facts.size(),"texture_count":row.texture_tokens.size(),"audio_count":row.audio_tokens.size(),"actual_shader_id":row.shader.get_instance_id() if row.shader!=null else 0}
 
 func inspect_actual_original_input_template(receipt: Dictionary) -> Dictionary:
 	if not _main() or not receipt.get("template_key") is String or not _templates.has(receipt.template_key) or _template_receipt(receipt.template_key) != receipt: return _error("actual_same_input_template_required")
 	var row: Dictionary = _templates[receipt.template_key]
 	if row.database_revision != GameData.database_revision or row.configuration_revision != ContentLayers.configuration_revision or _loading.verify_actual_original_loading_scope(row.scope).get("success") != true: return _error("actual_input_template_source_changed")
 	var vault: RefCounted = _vault.get_ref()
-	if vault.get("_texture_roots").get(row.root_key,[]) != row.texture_tokens or _aux_references.get(row.root_key,[]) != [row.shader]: return _error("actual_input_template_roots_changed")
+	if vault.get("_texture_roots").get(row.root_key,[]) != row.texture_tokens or _aux_references.get(row.root_key,[]) != ([row.shader] if row.shader!=null else []): return _error("actual_input_template_roots_changed")
 	for token: int in row.texture_tokens:
 		var resource: Texture2D = vault.texture_for_renderer(token)
 		if resource == null or resource.get_instance_id() != token: return _error("actual_input_template_texture_missing")
@@ -97,6 +97,7 @@ func inspect_actual_original_input_template(receipt: Dictionary) -> Dictionary:
 	return {"success":true,"status":"READY","actual_template":receipt,"actual_ledger_id":get_instance_id(),"actual_vault_id":vault.get_instance_id(),"actual_Main_process_frame":Engine.get_process_frames()}
 
 func bind_original_actor_inputs(owner: Dictionary, template_key: String, scope: Dictionary) -> Dictionary:
+	if owner.get("kind")=="enemy": return _bind_original_enemy_inputs(owner,template_key,scope)
 	if not _main() or owner.size() != 4 or owner.get("contract_id") != "hardcore.actor.renderer_owner.v1" or owner.get("kind") != "player" or not owner.get("actor_identity") is Dictionary or not owner.get("renderer_registry_id") is int or owner.renderer_registry_id == 0: return _error("actual_actor_renderer_owner_required")
 	if not Contract.valid_identity(owner.actor_identity) and not Contract.valid_premap_player_identity(owner.actor_identity): return _error("actual_Player_display_identity_required")
 	if not _templates.has(template_key): return _error("actual_prepared_actor_template_required","MISSING")
@@ -191,7 +192,7 @@ func inspect_original_actor_renderer_pin(owner: Dictionary, fact: Dictionary, sc
 		if token not in roots.get(owned.root_key,[]) or vault.texture_for_renderer(token) == null: return _error("actual_actor_texture_pin_missing")
 	for token: int in template.audio_tokens:
 		if audio_for_renderer(token) == null: return _error("actual_actor_audio_pin_missing")
-	if not _aux_references.has(owned.root_key) or template.shader not in _aux_references[owned.root_key]: return _error("actual_actor_shader_pin_missing")
+	if not _aux_references.has(owned.root_key) or (template.shader!=null and template.shader not in _aux_references[owned.root_key]): return _error("actual_actor_shader_pin_missing")
 	if fact.get("asset_key") != "closure":
 		var actual: Dictionary = lookup_original_actor_renderer_asset(owner,str(fact.get("asset_key","")),scope)
 		if actual != fact: return _error("actual_asset_fact_changed")
@@ -203,6 +204,7 @@ func audio_for_renderer(token: int) -> AudioStream:
 	return value as AudioStream if value is AudioStream and value.get_instance_id() == token else null
 
 func bind_original_actor_renderer_instance(owner: Dictionary, scope: Dictionary, view: Node2D) -> Dictionary:
+	if owner.get("kind")=="enemy": return _bind_original_enemy_instance(owner,scope,view)
 	if inspect_original_actor_renderer_pin(owner,{"asset_key":"closure"},scope).get("success") != true or not is_instance_valid(view) or not view.is_inside_tree() or view.get("_identity") != owner.actor_identity or view.get("_kind") != owner.kind: return _error("actual_created_actor_instance_required")
 	var visual: Node2D = view.get("visual")
 	if visual == null or visual.get_script() != PlayerVisual or not visual.actual_render_binding_ok(): return _error("actual_player_visual_binding_required")
@@ -276,3 +278,72 @@ static func load_original_player_appearance_path(path: String) -> Dictionary:
 		if image == null or image.is_empty(): return {"status":"FAILED","origin":"original_PlayerVisual.raw_png","path":path}
 		return {"status":"LOADED","resource":ImageTexture.create_from_image(image),"origin":"original_PlayerVisual.raw_png","path":path}
 	return {"status":"ABSENT","origin":"original_PlayerVisual.no_load_branch","path":path,"imported_exists":false,"file_exists":FileAccess.file_exists(path)}
+
+# Enemy auxiliary display inputs share the same actual vault/roots and owner
+# retirement ledger. No second texture cache, scheduler or Source model.
+func prepare_original_enemy_inputs(world: Dictionary, scope: Dictionary) -> Dictionary:
+	if not _main() or _loading.verify_actual_original_loading_scope(scope).get("success")!=true or _loading.actual_original_loading_scope(world)!=scope: return _error("actual_original_Enemy_Loading_required")
+	var formatter: Script=preload("res://scripts/monster_display_formatter.gd")
+	var paths: Array[String]=[formatter.rank_for_context(-1,"boss").marker_texture,formatter.rank_for_context(-1,"elite").marker_texture]
+	var recipe := {"kind":"enemy","marker_paths":paths}
+	var key: String=preload("res://scripts/gameplay/source/source_command_digest.gd").sha256({"root_id":world.get("world_runtime_id"),"profile_id":world.get("profile_id"),"recipe":recipe})
+	if _templates.has(key): return _template_receipt(key)
+	var facts: Dictionary={};var textures: Dictionary={}
+	for path: String in paths:
+		var exists: bool=ResourceLoader.exists(path)
+		var texture: Texture2D=load(path) as Texture2D if exists else null
+		var loaded := {"status":("LOADED" if texture!=null else "FAILED") if exists else "ABSENT","resource":texture,"origin":"original_MonsterOverhead.rank_marker","path":path,"imported_exists":exists}
+		if not _stage_asset("path:"+path,loaded,"Texture2D",facts,textures): return _error("actual_original_Enemy_marker_load_failed:"+path,"MISSING")
+	var vault: RefCounted=_vault.get_ref()
+	var references: Dictionary=vault.get("_texture_references")
+	for token: int in textures: references[token]=textures[token]
+	var tokens: Array=textures.keys();var root_key: String="actor_template:"+key
+	if not tokens.is_empty() and not vault._replace_roots(root_key,tokens): return _error("actual_Enemy_template_roots_rejected")
+	_aux_references[root_key]=[] # No shader/material exists in the original overhead.
+	_next_template+=1
+	_templates[key]={"id":_next_template,"world":world.duplicate(true),"scope":scope.duplicate(true),"recipe":recipe,"facts":facts,"texture_tokens":tokens,"audio_tokens":[],"root_key":root_key,"shader":null,"database_revision":GameData.database_revision,"configuration_revision":ContentLayers.configuration_revision}
+	return _template_receipt(key)
+
+func _bind_original_enemy_inputs(owner: Dictionary, template_key: String, scope: Dictionary) -> Dictionary:
+	if not _main() or owner.size()!=4 or owner.get("contract_id")!="hardcore.actor.renderer_owner.v1" or owner.get("kind")!="enemy" or not owner.get("actor_identity") is Dictionary or not Contract.valid_identity(owner.actor_identity) or not owner.get("renderer_registry_id") is int or not _templates.has(template_key): return _error("actual_formal_Enemy_owner_and_template_required")
+	var template: Dictionary=_templates[template_key];var world: Dictionary=owner.actor_identity.world
+	if template.recipe.get("kind")!="enemy" or template.scope!=scope or template.world.world_runtime_id!=world.world_runtime_id or template.world.profile_id!=world.profile_id or template.database_revision!=GameData.database_revision or template.configuration_revision!=ContentLayers.configuration_revision: return _error("actual_Enemy_template_owner_scope_mismatch")
+	var event: Dictionary=_prefix.actual_current_original_event()
+	var prefix: Dictionary=_prefix.actual_current_original_prefix()
+	if event.get("kind")!="original_world_presentation" or event.get("operation")!=&"enemy_overhead_create" or not event.get("arguments") is Array or event.arguments.size()!=6 or not event.arguments[5] is Dictionary or event.get("source_site",{}).get("world_context")!=world or not event.get("ordinal") is int or event.ordinal<=0 or prefix.get("through_ordinal",0)<event.ordinal: return _error("actual_current_Native_Enemy_overhead_event_required")
+	var context: Dictionary=event.arguments[5]
+	if not preload("res://scripts/gameplay/presentation/enemy_overhead_birth_context.gd").validate(context) or context.actor_identity!=owner.actor_identity or event.arguments[0]!=owner.actor_identity.runtime_id: return _error("actual_Enemy_birth_context_identity_required")
+	var registry: Object=instance_from_id(owner.renderer_registry_id)
+	if registry==null or registry.get_script()!=preload("res://scripts/gameplay/presentation/main_actor_visual_registry.gd") or registry.get("_header_prefix_consumer")==null or registry.get("_header_prefix_consumer").get_ref()!=_prefix or registry.get("_world")!=world or registry.get("_retiring").has(owner.actor_identity.runtime_id): return _error("actual_same_Native_Enemy_registry_required")
+	var structural: Dictionary=registry.get("_actors").get(owner.actor_identity.runtime_id,{})
+	if structural.get("structural_only")!=true or structural.get("identity")!=owner.actor_identity or structural.get("actor_header",{}).get("actor_identity")!=owner.actor_identity or structural.get("visual_header",{}).get("actor_identity")!=owner.actor_identity or not is_instance_valid(structural.get("view")): return _error("actual_original_Enemy_headers_required")
+	var key: String=_owner_key(owner)
+	if _owners.has(key):
+		if _owners[key].template!=template_key or _owners[key].scope!=scope or _owners[key].retiring: return _error("actual_Enemy_owner_changed")
+		return inspect_original_actor_renderer_pin(owner,{"asset_key":"closure"},scope)
+	var root_key: String="actor_owner:"+key
+	if not template.texture_tokens.is_empty() and not _vault.get_ref()._replace_roots(root_key,template.texture_tokens): return _error("actual_Enemy_marker_owner_roots_rejected")
+	_owners[key]={"owner":owner.duplicate(true),"scope":scope.duplicate(true),"template":template_key,"root_key":root_key,"retiring":false,"instance":null,"instance_bound":false,"accepted_ordinal":event.ordinal}
+	_aux_references[root_key]=[]
+	return inspect_original_actor_renderer_pin(owner,{"asset_key":"closure"},scope)
+
+func _bind_original_enemy_instance(owner: Dictionary, scope: Dictionary, view: Node2D) -> Dictionary:
+	if inspect_original_actor_renderer_pin(owner,{"asset_key":"closure"},scope).get("success")!=true or not is_instance_valid(view) or not view.is_inside_tree() or view.is_queued_for_deletion() or view.get_script()!=preload("res://scripts/gameplay/presentation/actor_main_visual_shell.gd") or view.get("_identity")!=owner.actor_identity or view.get("_kind")!="enemy": return _error("actual_created_Enemy_shell_required")
+	var row: Dictionary=_owners[_owner_key(owner)]
+	var event: Dictionary=_prefix.actual_current_original_event()
+	if event.get("ordinal")!=row.accepted_ordinal or event.get("operation")!=&"enemy_overhead_create": return _error("actual_same_Enemy_overhead_execution_required")
+	if row.instance_bound: return inspect_original_actor_renderer_pin(owner,{"asset_key":"closure"},scope) if row.instance!=null and row.instance.get_ref()==view else _error("actual_same_Enemy_instance_required")
+	var overhead: Node2D=view.get("overhead")
+	if not is_instance_valid(overhead) or overhead.get_parent()!=view or overhead.get_script()!=preload("res://scripts/gameplay/presentation/enemy_main_overhead_projection.gd") or overhead.get("_assets")!=view.get("_assets"): return _error("actual_original_Enemy_overhead_required")
+	var label: Label=overhead.get("name_label")
+	if not is_instance_valid(label) or label.get_parent()!=overhead: return _error("actual_Enemy_Label_required")
+	var font: Font=label.get_theme_font("font")
+	if font==null: return _error("actual_Enemy_Label_font_required")
+	_aux_references[row.root_key].append(font)
+	var marker: Sprite2D=overhead.get("rank_marker")
+	if marker!=null:
+		var path: String=overhead.marker_texture_path()
+		var fact: Dictionary=lookup_original_actor_renderer_asset(owner,"path:"+path,scope)
+		if fact.get("success")!=true or fact.get("exists")!=true or marker.get_parent()!=overhead or marker.texture==null or marker.texture.get_instance_id()!=fact.get("resource_token") or _vault.get_ref().texture_for_renderer(fact.resource_token)!=marker.texture: return _error("actual_Enemy_rank_marker_binding_required")
+	row.instance=weakref(view);row.instance_bound=true
+	return inspect_original_actor_renderer_pin(owner,{"asset_key":"closure"},scope)

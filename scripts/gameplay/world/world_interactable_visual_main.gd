@@ -22,6 +22,16 @@ func configure_main(root: Node2D,executor: RefCounted,loading: RefCounted,router
 	_root=root; _executor=weakref(executor); _loading=loading; _router=router; _world=world.duplicate(true); return true
 func _main() -> void: assert(OS.get_thread_caller_id()==OS.get_main_thread_id() and _root!=null)
 func _fail(code: String) -> Dictionary: return {"success":false,"status":"INVALID","error":code}
+func can_commit_actual_original_map_arrival(transaction: Dictionary) -> bool:
+	if OS.get_thread_caller_id()!=OS.get_main_thread_id() or _closed or _proof.is_empty() or _executor==null or not is_instance_valid(_root) or not _root.is_inside_tree(): return false
+	var executor: RefCounted = _executor.get_ref()
+	return executor!=null and executor.get("_interactable")==self and executor.get("_root")==_root and executor.get("_world")==_world and _world==transaction.get("before_world") and executor.get("_host").verify_committed_original_map_arrival(transaction)
+func commit_actual_original_map_arrival(transaction: Dictionary) -> bool:
+	if not can_commit_actual_original_map_arrival(transaction): return false
+	_world=transaction.after_world.duplicate(true)
+	# Only current command routing changes. Issued identities, retained NPC
+	# textures and the original Loading proof keep their exact provenance.
+	return true
 func prepare_original_loading(proof: Dictionary,boundary: Dictionary,appearances: Array[int]) -> Dictionary:
 	_main()
 	if not _proof.is_empty() or appearances.is_empty() or proof.get("world_context")!=_world or proof.get("main_executor_id")!=_executor.get_ref().get_instance_id() or not proof.get("closure_id") is int or proof.closure_id<=0: return _fail("same_actual_caster_Loading_closure_required")

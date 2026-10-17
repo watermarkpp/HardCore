@@ -26,8 +26,17 @@ func configure_owner(world: RefCounted, factory: RefCounted, transport: RefCount
 	if not factory.has_method("adopt_original_loading_publication") or not factory.environment.has_method("clear_original_map_environment") or not factory.environment.has_method("finish_original_map_build"): return false
 	_world = world; _factory = factory; _environment = factory.environment; _transport = transport
 	return true
+func _trace_rejected_current(reason: String, details: Dictionary = {}) -> void:
+	if not bool(_world.clock_ports.get_setting("hardcore/diagnostics/main_boot_trace",false)): return
+	print("HC_SOURCE_MAP_BUILD_REJECT ",JSON.stringify({"reason":reason,"usec":Time.get_ticks_usec(),"generation":_generation,"world":_world.current_world_identity(),"descriptor_world":_transport.get("_descriptor").get("world_context"),"scope":_transport.get("_scope"),"details":details}))
 func _current() -> bool:
-	return _coordinator != null and _coordinator.is_generation_current(_generation) and _transport.scope_is_current()
+	if _coordinator == null: return false
+	if not _coordinator.is_generation_current(_generation):
+		_trace_rejected_current("coordinator_generation",{"current_generation":_coordinator.generation,"current_stage":_coordinator.stage})
+		return false
+	var current: bool = _transport.scope_is_current()
+	if not current: _trace_rejected_current("native_map_scope")
+	return current
 func prepare_map_build(map_id: int, coordinator: RefCounted, data: Dictionary) -> Dictionary:
 	if coordinator.owner_thread_id() != _owner or not _transport.scope_is_current(): return {"ok":false}
 	_coordinator = coordinator; _generation = coordinator.generation; _map_id = map_id; _complete = false
@@ -59,7 +68,9 @@ func build_one_map_item(descriptor: Dictionary) -> Dictionary:
 	if not _current(): return {"ok":false,"cancelled":true}
 	if built.get("ok") == true:
 		_visual_facts = built.visual_facts
-		if not _environment.install_original_gothic_build_entries(_visual_facts.gothic_collision_entries): return {"ok":false}
+		if not _environment.install_original_gothic_build_entries(_visual_facts.gothic_collision_entries):
+			_trace_rejected_current("environment_install",{"entries":_visual_facts.gothic_collision_entries.size()})
+			return {"ok":false}
 	return built
 func build_one_collision(descriptor: Dictionary) -> Variant:
 	if not _current(): return null

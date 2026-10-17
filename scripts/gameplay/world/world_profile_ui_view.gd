@@ -9,23 +9,29 @@ signal quests_changed
 var _owner := OS.get_thread_caller_id()
 var _snapshot: Dictionary = {}
 var _serial := 0
+const ORIGINAL_PROFILE_SIGNALS := [&"profile_changed",&"inventory_changed",&"equipment_changed",&"skills_changed",&"quests_changed"]
 func owner_thread_id() -> int: return _owner
 func actual_source_snapshot() -> Dictionary: return _snapshot
 func _get(field: StringName) -> Variant:
 	assert(OS.get_thread_caller_id()==_owner)
 	assert(_snapshot.fields.has(field),"actual_Source_Profile_UI_field_missing:"+str(field))
 	return _snapshot.fields[field]
-func accept_original_journal_snapshot(snapshot: Dictionary) -> bool:
+func accept_original_journal_snapshot(snapshot: Dictionary, before_signals: Callable = Callable()) -> bool:
 	if _owner!=OS.get_main_thread_id() or OS.get_thread_caller_id()!=_owner or snapshot.get("contract_id")!="world.profile.actual_Source_read_view.v1" or not snapshot.get("fields") is Dictionary or not snapshot.get("queries") is Dictionary: return false
 	if not snapshot.get("sequence") is int or snapshot.sequence<=_serial and not _snapshot.is_empty(): return snapshot==_snapshot
 	if not _snapshot.is_empty():
 		if snapshot.session_id!=_snapshot.session_id or snapshot.handoff_identity!=_snapshot.handoff_identity: return false
 		if snapshot.profile_model_id!=_snapshot.profile_model_id and not (_snapshot.origin=="actual_Main_loaded_before_adoption" and snapshot.origin=="actual_S_adopted_owner"): return false
+	var profile_signal: Variant = snapshot.get("profile_signal","")
+	if not profile_signal is String or (profile_signal != "" and StringName(profile_signal) not in ORIGINAL_PROFILE_SIGNALS): return false
 	var graph: RefCounted = ClassDB.instantiate("HardCoreContentValueGraph")
 	var captured: Dictionary=graph.capture(snapshot,true,false)
 	if captured.get("success")!=true: return false
 	_snapshot=captured.value;_serial=snapshot.sequence
-	profile_changed.emit();inventory_changed.emit();equipment_changed.emit();skills_changed.emit();quests_changed.emit()
+	if before_signals.is_valid() and before_signals.call()!=true: return false
+	# Deliver the actual original signal once, in Source journal order. A
+	# cold read snapshot has no originating change and invents no callbacks.
+	if profile_signal != "": emit_signal(StringName(profile_signal))
 	return true
 func experience_to_next_level() -> int: return _snapshot.queries.experience_to_next_level
 func item_count_by_entity_id(id: String) -> int: return int(_snapshot.queries.item_counts.get(id,0))
@@ -58,30 +64,25 @@ static func capture_original_main_loaded(profile: RefCounted, handoff: Dictionar
 	for name: String in ["_profession_id","gender","equipment","level","experience","gold","computed_stats","inventory","quest_states","quick_slots"]:
 		if handoff.source_fields.get(name)!=profile.get(name): return {}
 	return _capture_profile(profile,GameData.item_entity_id,{"session_id":actual_budget_session_id,"sequence":0,"world_context":world,"handoff_identity":identity,"origin":"actual_Main_loaded_before_adoption"})
-static func capture_actual_owner(core: RefCounted, sequence: int) -> Dictionary:
+static func capture_actual_owner(core: RefCounted, sequence: int, profile_signal: StringName = &"") -> Dictionary:
 	assert(OS.get_thread_caller_id()!=OS.get_main_thread_id() and core.owner_thread_id()==OS.get_thread_caller_id())
 	var session: RefCounted=core.original_source_session()
 	var identity: String=session.original_profile_handoff_identity()
 	if identity.is_empty() or sequence<=0: return {}
-	return _capture_profile(core.profile,core.owner_services.GameData.item_entity_id,{"session_id":session.original_budget_session_id(),"sequence":sequence,"world_context":core.current_world_identity(),"handoff_identity":identity,"origin":"actual_S_adopted_owner"})
+	return _capture_profile(core.profile,core.owner_services.GameData.item_entity_id,{"session_id":session.original_budget_session_id(),"sequence":sequence,"world_context":core.current_world_identity(),"handoff_identity":identity,"origin":"actual_S_adopted_owner","profile_signal":str(profile_signal)})
 static func _capture_profile(profile: RefCounted, item_id: Callable, header: Dictionary) -> Dictionary:
 	var fields: Dictionary={}
-	for name: String in ["profession","profession_id","gender","equipment","level","experience","gold","computed_stats","inventory","quest_states","quick_slots"]: fields[name]=profile.get(name)
-	var counts: Dictionary={}
-	for raw: Variant in profile.inventory:
-		if not raw is Dictionary: continue
-		var id: String=item_id.call(raw)
-		if not id.is_empty(): counts[id]=profile.item_count_by_entity_id(id)
-	var current: String=profile.current_bich_quest_id()
+	for name: String in preload("res://scripts/gameplay/source/profile_original_command_catalog.gd").READ_FIELDS: fields[name]=profile.get(name)
+	fields.gender=profile.gender
+	var original_queries: Dictionary=preload("res://scripts/gameplay/profile/profile_original_ui_queries.gd").capture(profile)
+	fields[preload("res://scripts/gameplay/profile/profile_original_ui_queries.gd").FIELD]=original_queries
+	var counts: Dictionary=original_queries.item_counts
+	var current: String=original_queries.current_bich_quest_id
 	var lines: Dictionary={}
-	for id: String in profile.quest_states.keys(): lines[id]=profile.quest_objective_lines(id)
-	if not current.is_empty(): lines[current]=profile.quest_objective_lines(current)
-	var slots: Dictionary={}
-	var assignments: Dictionary=profile.skill_button_assignments_snapshot()
-	for group: String in [profile.SKILL_SLOT_GROUP_CENTER,profile.SKILL_SLOT_GROUP_ATTACK,profile.SKILL_SLOT_GROUP_ATTACK_RING]:
-		var actual_slots: Array=profile.skill_slots_for_group(group)
-		for i: int in range(actual_slots.size()): slots["%s:%d" % [group,i]]=profile.skill_name_for_slot(group,i)
-	var queries: Dictionary={"experience_to_next_level":profile.experience_to_next_level(),"item_counts":counts,"current_bich_quest_id":current,"quest_lines":lines,"slot_names":slots,"skill_button_assignments_snapshot":assignments}
+	for id: String in original_queries.quest_facts: lines[id]=original_queries.quest_facts[id].lines
+	var slots: Dictionary=original_queries.slot_names
+	var assignments: Dictionary=original_queries.skill_assignments
+	var queries: Dictionary={"experience_to_next_level":original_queries.experience_to_next_level,"item_counts":counts,"current_bich_quest_id":current,"quest_lines":lines,"slot_names":slots,"skill_button_assignments_snapshot":assignments}
 	var snapshot: Dictionary=header.duplicate(true)
 	snapshot.merge({"contract_id":"world.profile.actual_Source_read_view.v1","profile_model_id":profile.get_instance_id(),"fields":fields,"queries":queries})
 	var graph: RefCounted = ClassDB.instantiate("HardCoreContentValueGraph")

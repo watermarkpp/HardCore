@@ -827,7 +827,7 @@ func _spawn_enemy(
 					return null
 				clear_persisted_respawn_after_spawn = true
 	var enemy: Variant = _world.create_unconfigured_enemy_model(inputs)
-	enemy.setup(monster_data, _world.skills.player, is_boss, inputs)
+	enemy.setup(monster_data, _world.player_handle(), is_boss, inputs)
 	# R4 T3: the body admission verdict is obtained synchronously BEFORE the
 	# world registers anything. A config-rejected profile never occupies the
 	# spatial index, the activity cache or the respawn slot: the spawn

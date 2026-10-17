@@ -10,6 +10,7 @@ var _pending_edges: Dictionary = {}
 var _active_edges: Dictionary = {}
 var _last_edge_main_frames: Dictionary = {}
 var _packet: Dictionary
+var _last_received_world: Dictionary
 func _init(world: RefCounted) -> void: _world = weakref(world)
 func owner_thread_id() -> int: return _owner
 func actual_main_frame_observation() -> Dictionary:
@@ -18,7 +19,7 @@ func actual_main_frame_observation() -> Dictionary:
 	return {"main_process_frame":_packet.main_process_frame,"interval_ms":_packet.actual_main_frame_interval_ms}
 func accept(packet: Dictionary) -> bool:
 	if OS.get_thread_caller_id() != _owner or packet.get("contract_id") != "world.input.publication.v1": return false
-	if packet.get("world_context") != _world.get_ref().current_world_identity(): return false
+	if not _publication_world_matches_current(packet): return false
 	if not packet.get("main_process_frame") is int or packet.main_process_frame < _last_main_process_frame or not packet.get("main_physics_frame") is int or packet.main_physics_frame < 0: return false
 	for field: String in ["actions", "buttons"]:
 		if not packet.get(field) is Dictionary: return false
@@ -43,6 +44,7 @@ func accept(packet: Dictionary) -> bool:
 	_last_sequence = packet.sequence
 	_last_main_process_frame = packet.main_process_frame
 	_packet = packet
+	_last_received_world = packet.world_context
 	return true
 func _action(action: StringName) -> Dictionary:
 	if not _packet.actions.has(String(action)):
@@ -103,3 +105,29 @@ func process_original_viewport_picking() -> bool:
 			# visual-radius or first-enemy guess. Default Viewport value is false.
 			if fact.first_only: break
 	return not core.is_faulted()
+
+static func _is_original_viewport_observation(packet: Dictionary) -> bool:
+	# Value-schema discrimination only: this never authorizes a Native arrival.
+	if packet.get("contract_id") != "world.input.publication.v1" or not packet.get("world_context") is Dictionary or not packet.get("main_process_frame") is int: return false
+	var events: Variant = packet.get("original_events")
+	if not events is Array or events.size() != 1 or not events[0] is Dictionary: return false
+	var event: Dictionary = events[0]
+	if event.get("kind") != "world_viewport_publication" or not event.get("arguments") is Array or event.arguments.size() != 1 or not event.arguments[0] is Dictionary: return false
+	var publication: Dictionary = event.arguments[0]
+	var context: Variant = event.get("view_context")
+	if not context is Dictionary or context.get("actual_Main_capture") != true or context.get("world_context") != packet.world_context or not context.get("actual_hud_observation") is Dictionary: return false
+	if not context.get("main_process_frame") is int or context.main_process_frame < 0 or context.main_process_frame > packet.main_process_frame: return false
+	return publication.get("contract_id") == "world.visual.actual_viewport.v1" and publication.get("world_identity") == packet.world_context and publication.get("main_process_frame") == context.main_process_frame
+
+func _publication_world_matches_current(packet: Dictionary) -> bool:
+	if _world == null or not packet.get("world_context") is Dictionary: return false
+	var core: RefCounted = _world.get_ref()
+	if core == null: return false
+	var current: Dictionary = core.current_world_identity()
+	if packet.world_context == current: return true
+	# Preserve the actual InputMap/button sample and its original edge/serial
+	# semantics, not a rewritten current-world packet or a dropped command.
+	if _last_received_world == current or not _is_original_viewport_observation(packet): return false
+	if core.get_script() == null or core.get_script().resource_path != "res://scripts/gameplay/world/world_simulation_core.gd": return false
+	var viewport: RefCounted = core.required_owner_service(&"VisualViewport",["can_accept_original_main_world"])
+	return viewport != null and viewport.can_accept_original_main_world(packet.world_context)

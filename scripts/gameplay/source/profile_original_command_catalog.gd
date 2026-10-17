@@ -26,7 +26,7 @@ const ARITIES: Dictionary = {
     1
   ],
   "destroy_inventory_indices": [
-    1
+    2
   ],
   "device_lab_active_save_document": [
     0
@@ -41,7 +41,7 @@ const ARITIES: Dictionary = {
     0
   ],
   "equip_inventory_index_result": [
-    3
+    4
   ],
   "experience_to_next_level": [
     0
@@ -125,18 +125,17 @@ const ARITIES: Dictionary = {
     3
   ],
   "transfer_warehouse_prepared": [
-    2,
-    3
+    4
   ],
   "transfer_workbench_immediate": [
     3,
     4
   ],
   "unequip_to_inventory_slot": [
-    3
+    4
   ],
   "use_inventory_index_result": [
-    2
+    3
   ],
   "workbench_tray": [
     1
@@ -174,12 +173,12 @@ const SOURCE_METHOD_SHA256: Dictionary = {
   "create_character": "7e3098ac9fb50cba628b3c6ddfc63f6b874fd1a5e4955c92c56c8dd5facab451",
   "current_bich_quest_id": "7338610c9fa5b70ab4243ab374024fda86e99edb32eaf84709b5f5fc50fba5d6",
   "delete_character_profile": "4acbd8918833f85d380428563f4be093d4ecd5d45ce4f3e41e8480ef23ba0581",
-  "destroy_inventory_indices": "4674804f13f4bce6f61ae32c3c86eddd952eef5183f353b44bd7768dac738a03",
+  "destroy_inventory_indices": "2c441aee234168e7492e0aa27fae13fe21aa99facb97b18c3ffc7ffdbbbf5b54",
   "device_lab_active_save_document": "7cdc89f14116f1ae55e779f30ba8c83dca238ea6abf2a7b24858722e25eea9ea",
   "device_lab_apply_save_document": "f23d881d2b833f49c7206ccaeb7f1df0b24d29da87d6aa25a4c7d120e9d788a6",
   "effective_skill_level": "d2aebeca33b043a4b84075b3f162c566195bd58269f7dc129bd3fe52b0dc1c58",
   "ensure_chiyue_test_roster": "b0a92da160c530e6ef55df7e3140074262be13a4546fedaeb6c980667fa013a3",
-  "equip_inventory_index_result": "94413e7ffb1544c36b511592ced59e6699f1427332368c8053fa55ad97325a77",
+  "equip_inventory_index_result": "02dc2315ec708eef9833af88f66619d879f3d4292d8897b90564bfc6ef08b2a3",
   "experience_to_next_level": "bddf5aaffeb994fdcde9bd146ee2e3f86d32ee1eae7eccf1d73105932e8808a1",
   "feature_publication_context": "ebd87350b8763e46b1af0647b2fefaa515f63726ef5c5176744b9e1e97ca1778",
   "finish_startup_save_upgrade": "c678d8de6fbed70f01974df53f0b3948d26c6d313a99fe198d808342af356485",
@@ -207,10 +206,10 @@ const SOURCE_METHOD_SHA256: Dictionary = {
   "skill_name_for_slot": "b3e26674a82995a337f680d38b1c4ae4db05b52b28611bcf8256d9770e18ecd8",
   "sort_inventory_deterministic": "b38bb984df6b609c48cf3cfc78bad30e1b63184cc79253968377843b155b3e12",
   "transfer_shared_gold_prepared": "535ef73a609cbe3c32a281fab52a1972c1d78be938587eaa8fb0bd1ecddeaaa1",
-  "transfer_warehouse_prepared": "a3c5d770c00601770b1ae5d9f215608dd09b518a268f23fb930280448a4dcc98",
+  "transfer_warehouse_prepared": "cd03402062d1ba03f1c93c90f0e44a29637a97105cdfcba943e15e49f29f2bf7",
   "transfer_workbench_immediate": "c0dfa2602b2ca531a234fafcea9f9fa32572a58509806bfa8e288898efbb7cec",
-  "unequip_to_inventory_slot": "256a9dcf21564e3fcacd71882a6e83f19ad44409dbc16289f91bb6cccaee5044",
-  "use_inventory_index_result": "c9e4ec4ba7d31e35024f2126d6c26bc4cf56e3b5aacf90428b28e00770454cfb",
+  "unequip_to_inventory_slot": "719d4c02e910b71682a483a1a70ef893c47408f668accded7c9680b9763b4a07",
+  "use_inventory_index_result": "2cd38984229facdb3e22a9b55ddf7c72fa1d7390b533f99fdc10bbf71155484e",
   "workbench_tray": "2cd72d64327adaadbf8ce34c458ad42a176da96f3681d29826279a65a5adf1dc"
 }
 static func accepts(method: String,size: int)->bool:

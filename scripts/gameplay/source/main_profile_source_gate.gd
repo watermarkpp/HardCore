@@ -54,6 +54,14 @@ func update_original_profile_view(values: Dictionary) -> bool:
 	if captured.get("success")!=true: return false
 	_snapshot=captured.value
 	return true
+func read_original_profile_query(method: StringName) -> Variant:
+	var types: Dictionary = preload("res://scripts/gameplay/profile/profile_original_ui_queries.gd").TYPES
+	if not types.has(method):
+		return reject_legacy_call("unpublished_query:"+str(method))
+	var queries: Variant = read_original_profile_view(preload("res://scripts/gameplay/profile/profile_original_ui_queries.gd").FIELD)
+	if not queries is Dictionary or not queries.has(method) or typeof(queries[method]) != types[method]:
+		return reject_legacy_call("invalid_query:"+str(method))
+	return queries[method]
 func submit_original_profile_command(method: StringName, arguments: Array) -> Dictionary:
 	if _state!="S": return {"success":false,"errors":["actual_s_profile_not_committed"]}
 	return await _router.submit_original_profile_command(method,arguments)

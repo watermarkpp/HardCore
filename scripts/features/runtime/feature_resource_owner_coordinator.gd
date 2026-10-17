@@ -1351,6 +1351,9 @@ func cancel_code_owner(consumer: RefCounted, generation: int) -> void:
 
 func retire_code_result(result: Dictionary) -> void:
 	if _primitives.failed(): return
+	if actual_original_live_feature_bound():
+		_retire_actual_live_code_result(result)
+		return
 	var resource: Variant = result.get("resource")
 	if _primitives.failed(): return
 	var lease: Variant = result.get("lease")
@@ -1360,6 +1363,16 @@ func retire_code_result(result: Dictionary) -> void:
 		retire_resources({resource.resource_path: resource})
 	if _primitives.failed(): return
 	result.clear() # original lease PREDELETE submits Shader + retained Script refs.
+
+func _retire_actual_live_code_result(result: Dictionary) -> void:
+	# Original LIVE retirement body, shared by the genuine Main command and
+	# original Source Root exit. Tokens already carry their issued identity;
+	# inspecting a physical Script here would park LIVE on a forbidden query.
+	var lease: Variant = result.get("lease")
+	var resource: Variant = result.get("resource")
+	if resource != null and not (lease is Lease and is_same(lease._domain_code_resource,resource)):
+		retire_resources({"actual_code_result":resource})
+	result.clear() # Existing domain PREDELETE retains the actual cleanup debt.
 
 func _exit_tree() -> void:
 	if _primitives.failed(): return
@@ -2068,10 +2081,8 @@ func admit_actual_original_main_command(method: String, arguments: Array, actual
 	if method == "cancel_code_owner" and arguments.size()==2 and arguments[0] is RefCounted and arguments[1] is int:
 		cancel_code_owner(arguments[0],arguments[1]); return {"status":"VALUE","result":null}
 	if method == "retire_code_result" and arguments.size()==1 and arguments[0] is Dictionary:
-		var retired: Dictionary=arguments[0]
-		var lease: Variant=retired.get("lease"); var resource: Variant=retired.get("resource")
-		if resource != null and not (lease is Lease and is_same(lease._domain_code_resource,resource)): retire_resources({"actual_code_result":resource})
-		retired.clear(); return {"status":"VALUE","result":null}
+		_retire_actual_live_code_result(arguments[0])
+		return {"status":"VALUE","result":null}
 	if closing: return {"status":"INVALID","error":"closing_Feature_new_preparation_forbidden"}
 	var request: Request = Request.new()
 	request.live_state={"pc":"","leaf":{},"context":actual_context.duplicate(false),"completion":{},"completion_queued":false,"cancel_scope":false,"release_wait":[]}

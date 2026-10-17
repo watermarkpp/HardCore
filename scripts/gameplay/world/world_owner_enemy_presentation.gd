@@ -373,6 +373,7 @@ func _request_actor_redraw_if_dynamic() -> void:
 ## EnemyActor physics/state transitions.
 
 func _request_actor_redraw_if_dynamic_internal() -> void:
+	if _core.get_ref().original_enemy_presentation_binding_pending(_id): return
 	if visual != null and visual.uses_final_art():
 		return
 	var draws_procedural_fallback := should_draw_synthetic_ground_shadow()
@@ -470,6 +471,7 @@ func red_poison_indicator_rect() -> Rect2:
 	)
 
 func refresh_name_label_position() -> void:
+	if _core.get_ref().original_enemy_presentation_binding_pending(_id): return
 	if _model.get_ref().presentation.has_overhead(): _emit_render(&"enemy_overhead_anchor_y", [health_bar_anchor_y()])
 
 func set_audio_seed_for_test(seed_value: int) -> void:

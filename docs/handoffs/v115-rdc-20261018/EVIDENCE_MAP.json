@@ -1,0 +1,798 @@
+{
+  "status": "PASS",
+  "scope": "copy identity only, not game acceptance",
+  "files": [
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\codex_return_20261017_01\\CURRENT_STATE_20261018.json",
+      "copy": "evidence/CURRENT_STATE_20261018.json",
+      "sha256": "21569af0dd6e6923bec20f85f4a2d9a565f4b7e273c6cb3f4ca32cbdd5d6dcd3",
+      "bytes": 6448
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\codex_return_20261017_01\\IMMUTABLE_PREFIX_CACHE_IMPLEMENTATION.json",
+      "copy": "evidence/IMMUTABLE_PREFIX_CACHE_IMPLEMENTATION.json",
+      "sha256": "d6e8d3497a687e88518b467cf93d6b1a5b1927e220d68b75f21e38fdf3d7a58d",
+      "bytes": 1086
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\codex_return_20261017_01\\IMMUTABLE_PREFIX_NATIVE_SEAL.json",
+      "copy": "evidence/IMMUTABLE_PREFIX_NATIVE_SEAL.json",
+      "sha256": "da51991f4ad29bdb9251f6857261a14caa51b9eaf149175c88d57692f0afab25",
+      "bytes": 1076
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\codex_return_20261017_01\\PUBLICATION_BATCH_REVIEW.json",
+      "copy": "evidence/PUBLICATION_BATCH_REVIEW.json",
+      "sha256": "91671b4a2edb042f5665e9d04684e1e8abb140824b0be78090ec02fcefdf6c2c",
+      "bytes": 1265
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\codex_return_20261017_01\\RENDERER_EXIT_ORDER_FIX_REVIEW.json",
+      "copy": "evidence/RENDERER_EXIT_ORDER_FIX_REVIEW.json",
+      "sha256": "967fd6d5f0d815263b665666f83a4acebb5fa0a36c1f6f53eb9ccb07e9563a32",
+      "bytes": 879
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\codex_return_20261017_01\\WORLD38_RENDERER_INVALID_RED.json",
+      "copy": "evidence/WORLD38_RENDERER_INVALID_RED.json",
+      "sha256": "d36d41c127bc0fae88968a4565e6d4499627c6471abceb31949a753e7c3e18fa",
+      "bytes": 3023
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\SOURCE_MANIFEST.immutable_prefix_cache_20261018.json",
+      "copy": "evidence/SOURCE_MANIFEST.immutable_prefix_cache_20261018.json",
+      "sha256": "422f0773560e1a3cc07c1d92ea8b86b13a3445204e05662cb78063dfd322c06c",
+      "bytes": 36914
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\windows_immutable_prefix_cache_20261018_build\\BUILD_RECEIPT.json",
+      "copy": "evidence/windows_immutable_prefix_cache_20261018_build/BUILD_RECEIPT.json",
+      "sha256": "88b049a0b96727dde161c56934f11cf276d936060087d5eb0a9d9a76d6c824c2",
+      "bytes": 1273
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\android_immutable_prefix_cache_20261018_build\\ANDROID_TEMPLATE_RECEIPT.json",
+      "copy": "evidence/android_immutable_prefix_cache_20261018_build/ANDROID_TEMPLATE_RECEIPT.json",
+      "sha256": "7d3b57bb5092f1f3754b33ab6f2d35392a7f9e883da03d2aed80bb3d76866a24",
+      "bytes": 24505
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\immutable_prefix_code_catalogue_20261018\\GENERATION_RECEIPT.json",
+      "copy": "evidence/immutable_prefix_code_catalogue_20261018/GENERATION_RECEIPT.json",
+      "sha256": "625a6ca58c549b9b64866087a3b9f002723e137d5ddd8638aecd1497b810b915",
+      "bytes": 7283
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\PROTECTION.json",
+      "copy": "evidence/invocations/codex_immutable_prefix_native_20261018_01/PROTECTION.json",
+      "sha256": "ba20e5dd24abf46843f511859014a8399987a5c89154d97f5c7d49f04ab0619a",
+      "bytes": 304
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\SOURCE_BINDING.json",
+      "copy": "evidence/invocations/codex_immutable_prefix_native_20261018_01/SOURCE_BINDING.json",
+      "sha256": "a9dadf42756ff6051a6c8cc364ca9001f1ee4bd2b7cd511225764ecc53d55f86",
+      "bytes": 1319
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\logs\\runner_results_adhoc_20261018_035458_335_13980.json",
+      "copy": "evidence/invocations/codex_immutable_prefix_native_20261018_01/runner_results_adhoc_20261018_035458_335_13980.json",
+      "sha256": "9ddbd25a5aa8e3247c061134f9e02fe617d9d16cdbe962fde37737e922e603e4",
+      "bytes": 26767
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\native\\840835de-3d80-4d09-8ddd-7d149756009b\\code_preparation_native_symbol_probe_test.result.json",
+      "copy": "evidence/invocations/codex_immutable_prefix_native_20261018_01/840835de-3d80-4d09-8ddd-7d149756009b/code_preparation_native_symbol_probe_test.result.json",
+      "sha256": "2b8fa3535e4143444a37d0ab71ff638c44d3f440aa0f8ca862a8ffdd436762b7",
+      "bytes": 3922
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\native\\8fcf684f-c7f4-4d90-9cf6-94618e93f4ef\\code_preparation_scalar_math_probe_test.result.json",
+      "copy": "evidence/invocations/codex_immutable_prefix_native_20261018_01/8fcf684f-c7f4-4d90-9cf6-94618e93f4ef/code_preparation_scalar_math_probe_test.result.json",
+      "sha256": "aa22ac4a14eb228e685985b02c341fe9bd814a0104c361b245fd755eda7c21b5",
+      "bytes": 3273
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\native\\96f84a04-b3f5-466f-8dbf-98771cf0c174\\publication_prefix_immutable_20261018.result.json",
+      "copy": "evidence/invocations/codex_immutable_prefix_native_20261018_01/96f84a04-b3f5-466f-8dbf-98771cf0c174/publication_prefix_immutable_20261018.result.json",
+      "sha256": "35ce4803ace5f41bd6bb2f5b52957f7d946e885ce58260ca2455f9e6ee161a4b",
+      "bytes": 4867
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\native\\97d4fa7c-d82b-4f84-ab67-b00eae454265\\multicore_v115_script_semantic_20261015.result.json",
+      "copy": "evidence/invocations/codex_immutable_prefix_native_20261018_01/97d4fa7c-d82b-4f84-ab67-b00eae454265/multicore_v115_script_semantic_20261015.result.json",
+      "sha256": "a388ab6d3bdb1dbdd8c70b864e62208d5efcb5710aa2e424e2eac1187e511339",
+      "bytes": 59609
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\native\\a92bdd70-0dd0-4402-ac4d-e2250f5fb01e\\main_feature_command_loans_20261016.result.json",
+      "copy": "evidence/invocations/codex_immutable_prefix_native_20261018_01/a92bdd70-0dd0-4402-ac4d-e2250f5fb01e/main_feature_command_loans_20261016.result.json",
+      "sha256": "f355421d94b271025d9b739f8a28d53d05408e8203e47e12ca2ba75e191576b4",
+      "bytes": 5385
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_immutable_prefix_native_20261018_01\\native\\debe701a-0c85-4cd1-a864-ae2ec0d3ff54\\code_preparation_engine_namespace_capture_test.result.json",
+      "copy": "evidence/invocations/codex_immutable_prefix_native_20261018_01/debe701a-0c85-4cd1-a864-ae2ec0d3ff54/code_preparation_engine_namespace_capture_test.result.json",
+      "sha256": "ace5d5c0329a9e3388b8fa023a427e9d61ef8ebc35e199c80e854a9b25141b60",
+      "bytes": 2663
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_full_world_immutable_prefix_20261018_40\\PROTECTION.json",
+      "copy": "evidence/invocations/codex_full_world_immutable_prefix_20261018_40/PROTECTION.json",
+      "sha256": "e45fe3a3502afb0ff0fe9a3b82c773b1f8313cfc55f72b1fbfaa53494bdd8045",
+      "bytes": 304
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_full_world_immutable_prefix_20261018_40\\SOURCE_BINDING.json",
+      "copy": "evidence/invocations/codex_full_world_immutable_prefix_20261018_40/SOURCE_BINDING.json",
+      "sha256": "7f2745362ced2e7c3199eb0061c0c0ed48a3cf914801b367dc60ccd56b2146d2",
+      "bytes": 1013
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_full_world_immutable_prefix_20261018_40\\logs\\runner_results_adhoc_20261018_035930_827_8888.json",
+      "copy": "evidence/invocations/codex_full_world_immutable_prefix_20261018_40/runner_results_adhoc_20261018_035930_827_8888.json",
+      "sha256": "229be34040ac96c01a34ae2d284b3ef213e37f2cf792ef48748cda8404c14831",
+      "bytes": 6038
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_full_world_immutable_prefix_20261018_40\\native\\6234fe16-f33b-4482-8272-ad408fcde5c4\\character_source_full_world_20261016.result.json",
+      "copy": "evidence/invocations/codex_full_world_immutable_prefix_20261018_40/6234fe16-f33b-4482-8272-ad408fcde5c4/character_source_full_world_20261016.result.json",
+      "sha256": "f3272d08937fc7855681246aae6e5b1f27f3d734d83de3b084983a2d09987a66",
+      "bytes": 40554
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_packed_retiring_RED_20261018_01\\PROTECTION.json",
+      "copy": "evidence/invocations/codex_packed_retiring_RED_20261018_01/PROTECTION.json",
+      "sha256": "e45fe3a3502afb0ff0fe9a3b82c773b1f8313cfc55f72b1fbfaa53494bdd8045",
+      "bytes": 304
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_packed_retiring_RED_20261018_01\\SOURCE_BINDING.json",
+      "copy": "evidence/invocations/codex_packed_retiring_RED_20261018_01/SOURCE_BINDING.json",
+      "sha256": "cae601cd885c909eaa500366dbe8ee9961ab0ffe25155d109066f31e6a2a5884",
+      "bytes": 1027
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_packed_retiring_RED_20261018_01\\logs\\runner_results_adhoc_20261018_040413_632_7764.json",
+      "copy": "evidence/invocations/codex_packed_retiring_RED_20261018_01/runner_results_adhoc_20261018_040413_632_7764.json",
+      "sha256": "9b9aea26f9a42834ac9e9b45f36a0b917e6a1ae3bcd3b63f5aa07f852afb909f",
+      "bytes": 10655
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\invocations\\codex_packed_retiring_RED_20261018_01\\native\\ceac9e6a-9882-4b96-89f4-619972c246c9\\publication_prefix_packed_20261018.result.json",
+      "copy": "evidence/invocations/codex_packed_retiring_RED_20261018_01/ceac9e6a-9882-4b96-89f4-619972c246c9/publication_prefix_packed_20261018.result.json",
+      "sha256": "260fac098cbc71c52567d0cf5821e561bd8b92d7950c5f14853a5984c4249f0d",
+      "bytes": 4753
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\core\\io\\resource_loader.cpp",
+      "copy": "engine_delta/core/io/resource_loader.cpp",
+      "sha256": "91ad9d97fd0e50ee18d9bc07a5837a0661c6720d5ba2d4a0331af483f4ec4b59",
+      "bytes": 60984
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\core\\io\\resource_loader.h",
+      "copy": "engine_delta/core/io/resource_loader.h",
+      "sha256": "6cd55faedbe7317db41d6b3bf14136eb7bdf64ff969c43d90761d50ac017ec6b",
+      "bytes": 15696
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\core\\math\\math_funcs.cpp",
+      "copy": "engine_delta/core/math/math_funcs.cpp",
+      "sha256": "5fdd76c7151e4cb7f5175ed1d75ee60b7781cce769f96b659cdc89751ef938da",
+      "bytes": 6237
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\core\\math\\math_funcs.h",
+      "copy": "engine_delta/core/math/math_funcs.h",
+      "sha256": "b2c3ec36c0d09297713be78278e97a293a0b023cdabc1cfd7942e4877795c6b9",
+      "bytes": 26746
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\core\\object\\worker_thread_pool.cpp",
+      "copy": "engine_delta/core/object/worker_thread_pool.cpp",
+      "sha256": "b4a23f214e7ed28c3663787fa9439bdd3fda5827a357d0b7215932b7a30fb9ed",
+      "bytes": 34610
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\core\\object\\worker_thread_pool.h",
+      "copy": "engine_delta/core/object/worker_thread_pool.h",
+      "sha256": "dd54a1d4c5b12c038f1cf26a670e8f2e9a0e94d97928ecc53a19bbd0d991cc98",
+      "bytes": 12280
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\main\\main.cpp",
+      "copy": "engine_delta/main/main.cpp",
+      "sha256": "74ebd33d1b98895df544e988cc386703c3b33bf402840fe8b6ae756a02c41598",
+      "bytes": 211280
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\godot_physics_2d\\godot_space_2d.cpp",
+      "copy": "engine_delta/modules/godot_physics_2d/godot_space_2d.cpp",
+      "sha256": "bdf4b6b053530e1061d785a7fdf708c19100ef30d5e0e1bea1ed8c320e3500dc",
+      "bytes": 44820
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\godot_physics_2d\\register_types.cpp",
+      "copy": "engine_delta/modules/godot_physics_2d/register_types.cpp",
+      "sha256": "1787182d192482db7482b06ec56b94b7abee424fc337bf1b11fd27c57801abcf",
+      "bytes": 3602
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\SCsub",
+      "copy": "engine_delta/modules/hardcore_simulation/SCsub",
+      "sha256": "109cf7b68a6a9b1296567fa911ec5161aaeb9d0b63e717f93a960676a7982de0",
+      "bytes": 462
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\async_live_resource_mailbox.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/async_live_resource_mailbox.cpp",
+      "sha256": "fdd7eb44b578ace97e8b822a1760cbdde4c9a5e7288c21bb9f77711304e733f4",
+      "bytes": 15434
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\async_live_resource_mailbox.h",
+      "copy": "engine_delta/modules/hardcore_simulation/async_live_resource_mailbox.h",
+      "sha256": "5c8488c2cf61194bd646714c50994e63c0726ab4892544c8ad6108bb3188ae93",
+      "bytes": 4573
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\batch_executor.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/batch_executor.cpp",
+      "sha256": "e28aa648fac15a746877ad071ac489a9c7633267bcc66d56eec292f9d2a6d09a",
+      "bytes": 7828
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\batch_executor.h",
+      "copy": "engine_delta/modules/hardcore_simulation/batch_executor.h",
+      "sha256": "df7a33373a5e45030a43345037b9340cdcd355f005b8b460e8d826636f19a174",
+      "bytes": 2942
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\batch_types.h",
+      "copy": "engine_delta/modules/hardcore_simulation/batch_types.h",
+      "sha256": "1e48f3326668e217ae60c8706ddef0900dc4e0c3f6680ec04e6a4b3069f992cc",
+      "bytes": 915
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\close_process_mailbox.h",
+      "copy": "engine_delta/modules/hardcore_simulation/close_process_mailbox.h",
+      "sha256": "8249d9073e4da0056d45b1f57ddb10e9041ea392f4e066a6580a3292b325eec1",
+      "bytes": 5557
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\close_progress_signal.h",
+      "copy": "engine_delta/modules/hardcore_simulation/close_progress_signal.h",
+      "sha256": "04f936b0ef42e475455ba6ef4a8075ade78714064f5fe56b414b697c7617ecbc",
+      "bytes": 489
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\config.py",
+      "copy": "engine_delta/modules/hardcore_simulation/config.py",
+      "sha256": "a8de87cf6212f9f5cf058243ada34193a83095d95475b3974e2a1354b20ba7da",
+      "bytes": 493
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\content_value_graph.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/content_value_graph.cpp",
+      "sha256": "c47365bb1bd5b480790190d656ba9024b85fda8a3aecd3133544853751f475aa",
+      "bytes": 7681
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\content_value_graph.h",
+      "copy": "engine_delta/modules/hardcore_simulation/content_value_graph.h",
+      "sha256": "b124e7a4f3669e9f51895bb855a5a2ac4ca061b9433e910bc7583e52c9431ddb",
+      "bytes": 744
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\crowd_geometry_kernel.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/crowd_geometry_kernel.cpp",
+      "sha256": "a775be5b1d161c6df1515df613a3e0d8bc3936e4c637c5e7f3204ac3e383100b",
+      "bytes": 7315
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\crowd_geometry_kernel.h",
+      "copy": "engine_delta/modules/hardcore_simulation/crowd_geometry_kernel.h",
+      "sha256": "13a75093be16042a9cf09c9875750e5eb580eff7cac3284e035b314ef56f0096",
+      "bytes": 1588
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\crowd_geometry_owner.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/crowd_geometry_owner.cpp",
+      "sha256": "66f79df4b801ebc082e0c2ffa27f18c168ef1cfaddf49f50e9dbc5b20d105101",
+      "bytes": 13532
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\crowd_geometry_owner.h",
+      "copy": "engine_delta/modules/hardcore_simulation/crowd_geometry_owner.h",
+      "sha256": "ceb3a82c13b9651ff58f7e479f32934c8f9526d861721634e6af060059b0b9d9",
+      "bytes": 2309
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\feature_live_schema.h",
+      "copy": "engine_delta/modules/hardcore_simulation/feature_live_schema.h",
+      "sha256": "72027ad2119f8d5ebed267c42d475c33ae6eef12d687d02a06a23e5d083e1123",
+      "bytes": 3149
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\feature_live_source_seal.h",
+      "copy": "engine_delta/modules/hardcore_simulation/feature_live_source_seal.h",
+      "sha256": "2975b531093f4e88aef0ecf767b76e84d4c9476718642c6753a71ee8495de41a",
+      "bytes": 136
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\feature_live_transport.h",
+      "copy": "engine_delta/modules/hardcore_simulation/feature_live_transport.h",
+      "sha256": "e83805fa2e4aba0793c8be4e055404774212509a5a8e3ba093aed5bfcc6c4bae",
+      "bytes": 347
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\gameplay_global_random.h",
+      "copy": "engine_delta/modules/hardcore_simulation/gameplay_global_random.h",
+      "sha256": "de90e77f0c8a5f5393ae9d2050b919f256526d8852654f57dc39aecd06022a2e",
+      "bytes": 1472
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\gameplay_global_random_binding.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/gameplay_global_random_binding.cpp",
+      "sha256": "cd47da170be3af0b1b151c996003ff53adb17c1758b25b5c84e452eea53efb77",
+      "bytes": 3725
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\gameplay_global_random_binding.h",
+      "copy": "engine_delta/modules/hardcore_simulation/gameplay_global_random_binding.h",
+      "sha256": "e4ed3ec88cc9f30562de47e49e2bc0d5e61d67a8138da45af89096bdcc6c7e1d",
+      "bytes": 812
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\gameplay_random_return_math.h",
+      "copy": "engine_delta/modules/hardcore_simulation/gameplay_random_return_math.h",
+      "sha256": "0dce511303092e0f986c0276f71f4d14a4c819ef08fb22489894731f21ddaaaa",
+      "bytes": 212
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\godot_physics_backend.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/godot_physics_backend.cpp",
+      "sha256": "2980f1bb5bf88a08dedbbbace2f5a937f790493b19476ebdb68879b831379ed9",
+      "bytes": 178
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\godot_physics_backend.h",
+      "copy": "engine_delta/modules/hardcore_simulation/godot_physics_backend.h",
+      "sha256": "c112e972169de8e43faf9a3f0eb764ed672a2fa63288ecb1eb2b3ca10af0328a",
+      "bytes": 973
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\godot_worker_pool_adapter.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/godot_worker_pool_adapter.cpp",
+      "sha256": "26a95cbb60a0a37295128317224edbb198bb59e7e68eea81f918a7cd5de5ddc4",
+      "bytes": 39
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\godot_worker_pool_adapter.h",
+      "copy": "engine_delta/modules/hardcore_simulation/godot_worker_pool_adapter.h",
+      "sha256": "ecea6c14983409678f7d58bc4012f1c41f2f93dfc937182faefd27e80b02ae9a",
+      "bytes": 1164
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\main_source_deferred.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/main_source_deferred.cpp",
+      "sha256": "2af9228fe45ca2ac039218f099789d7a206ec83d1012b4c843eae83bb35bb9bc",
+      "bytes": 6874
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\main_source_deferred.h",
+      "copy": "engine_delta/modules/hardcore_simulation/main_source_deferred.h",
+      "sha256": "cea430fedae98d24f22a14e8c28898cb0629a01ad0c44f500faf3f6dcc40e669",
+      "bytes": 730
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\map_loading_host_state.h",
+      "copy": "engine_delta/modules/hardcore_simulation/map_loading_host_state.h",
+      "sha256": "ecb2116ec04896989e85c0527b1dea0d1415ce7b3ac8835bd859944c81d6ec57",
+      "bytes": 1242
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\map_loading_provenance.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/map_loading_provenance.cpp",
+      "sha256": "353da959a62779edd95cd8000b819c98d5f2b59d76f2aed2a5b87f8059074086",
+      "bytes": 3376
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\map_loading_provenance.h",
+      "copy": "engine_delta/modules/hardcore_simulation/map_loading_provenance.h",
+      "sha256": "6f2ef20885223abc6afd7b4fe273777983021217d450572ad967933fd785a0e7",
+      "bytes": 1653
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\motion_adapter.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/motion_adapter.cpp",
+      "sha256": "dcbd22eb812b515485706fe02a6f555ff6437232f84302c5e10a769f337a6c49",
+      "bytes": 1126
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\motion_adapter.h",
+      "copy": "engine_delta/modules/hardcore_simulation/motion_adapter.h",
+      "sha256": "8a7ef24eb81a42abb1603e97875b9d607228ade83268d79b93c2219476964442",
+      "bytes": 2175
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\numeric_point_query_scope.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/numeric_point_query_scope.cpp",
+      "sha256": "d822178363cec9ac8e9052189d8abbc98fe9c51eecdbbedb03766da730d6ad29",
+      "bytes": 127
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\numeric_point_query_scope.h",
+      "copy": "engine_delta/modules/hardcore_simulation/numeric_point_query_scope.h",
+      "sha256": "1141d47f850af4ca1e4b95c0524e8114c792f4ecb585cc329281ca7be7604710",
+      "bytes": 676
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\original_primitive_mailbox.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/original_primitive_mailbox.cpp",
+      "sha256": "4c0e2afa81fb32f9d6fc6a69dbab559e56dada3fa8273dcfbbee715e0632a0ec",
+      "bytes": 22579
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\original_primitive_mailbox.h",
+      "copy": "engine_delta/modules/hardcore_simulation/original_primitive_mailbox.h",
+      "sha256": "8839d8b9b48228bff69db74d724028ed2b29be24f32bb24ecb101ad0fc63aeb7",
+      "bytes": 6413
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\physics_motion_parity_tests.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/physics_motion_parity_tests.cpp",
+      "sha256": "bdfcc642a38adbe61bc02b8e951883aded5d3d2415e2168d0030e4e9d4dbd2fa",
+      "bytes": 8941
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\physics_motion_parity_tests.h",
+      "copy": "engine_delta/modules/hardcore_simulation/physics_motion_parity_tests.h",
+      "sha256": "dc7428492470f5ea8e460dd438c1a602583e8be90cfbe23f1d38139540c53484",
+      "bytes": 166
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\physics_port.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/physics_port.cpp",
+      "sha256": "c4d833788d2fd1137598047f13e07126be82672d4ddc9826224374747867228c",
+      "bytes": 2107
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\physics_port.h",
+      "copy": "engine_delta/modules/hardcore_simulation/physics_port.h",
+      "sha256": "626d81d3013e53de4efcb0f84e6ee7a549cc41da85b51bed74f6a939826bab06",
+      "bytes": 1241
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\presentation_bridge.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/presentation_bridge.cpp",
+      "sha256": "2c938d3b5905e3e052edea72f2bca651b8c869b8ddea56403703a7417ac2981e",
+      "bytes": 5015
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\presentation_bridge.h",
+      "copy": "engine_delta/modules/hardcore_simulation/presentation_bridge.h",
+      "sha256": "ad733001f29202649b0e7479a000b72c6b50bd75649b2e01a593a9ccdf9182ba",
+      "bytes": 1674
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\pursuit_numeric.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/pursuit_numeric.cpp",
+      "sha256": "2c52e3ed9f43d0d109ee106581004a2da14690301e0aae10848be542da5666b6",
+      "bytes": 24939
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\pursuit_numeric.h",
+      "copy": "engine_delta/modules/hardcore_simulation/pursuit_numeric.h",
+      "sha256": "4cf49e3f15a92e2342612d785d18cffd805433bb345bc5d5e085fe8700b58ca5",
+      "bytes": 5759
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\pursuit_planning_owner.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/pursuit_planning_owner.cpp",
+      "sha256": "568845143c3044efff8a41ca488582e88590b52fe935602034a6441827b82512",
+      "bytes": 24796
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\pursuit_planning_owner.h",
+      "copy": "engine_delta/modules/hardcore_simulation/pursuit_planning_owner.h",
+      "sha256": "e8a4c4b0c985a1b1e77d54adc2a39feb77049bae08c7635e78926e15aa4886d4",
+      "bytes": 3159
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\register_types.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/register_types.cpp",
+      "sha256": "c43a83b1825ff33f37b6139c710e620ba2caefb9ff4e94500c1aff0288e9e7b2",
+      "bytes": 1457
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\register_types.h",
+      "copy": "engine_delta/modules/hardcore_simulation/register_types.h",
+      "sha256": "cdd7ba1925918dbd030ba6d9addfa533eaa8668d64428a3d2c4b4b696f02b521",
+      "bytes": 218
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\resource_observation.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/resource_observation.cpp",
+      "sha256": "8bbde8c262605eaaaffa92a0a4e54305a7d2ef057c289e63bb3f51e4d50c64ef",
+      "bytes": 2865
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\resource_observation.h",
+      "copy": "engine_delta/modules/hardcore_simulation/resource_observation.h",
+      "sha256": "aac97a9a4dd92fa964b02cde9adcbe36d9f28ecc748dfd7db156704dce324616",
+      "bytes": 661
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\simulation_clock.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/simulation_clock.cpp",
+      "sha256": "2caa780c01b2e8795ebce28c3ffde2a0d4b69a32a18192f5df4e664dee45be13",
+      "bytes": 9555
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\simulation_clock.h",
+      "copy": "engine_delta/modules/hardcore_simulation/simulation_clock.h",
+      "sha256": "5728100df474bd2fcf675bd76650f043b6c7d6e441faeb97f7229d085ad1b457",
+      "bytes": 3657
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\simulation_host.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/simulation_host.cpp",
+      "sha256": "045d01f53a2d741bd88f34ebc6bc684684175bfc0e7eaacfedad8999e3134b8d",
+      "bytes": 78982
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\simulation_host.h",
+      "copy": "engine_delta/modules/hardcore_simulation/simulation_host.h",
+      "sha256": "c8aca53bee9c5bef9b5412c165165fccadca6dc01a3ec1c64bcea5e611330d07",
+      "bytes": 20577
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\simulation_host_close_process.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/simulation_host_close_process.cpp",
+      "sha256": "05b523748d6c753233bfa43cfa5eae8f107c091cd072cffe109448900a39f747",
+      "bytes": 15419
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\simulation_host_feature_live.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/simulation_host_feature_live.cpp",
+      "sha256": "041b3a6c4bf5d0786fce01bf84b35ffe9d0b1dcafb0210934d8d403cca1c4a25",
+      "bytes": 25237
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\simulation_host_gameplay_random_return.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/simulation_host_gameplay_random_return.cpp",
+      "sha256": "ce66da5b83c930f266c5d4fc698de28b6fe0298052309b12dfc9c8dc6322a03c",
+      "bytes": 9621
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\simulation_host_issued_claims.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/simulation_host_issued_claims.cpp",
+      "sha256": "f28435bb733f6d1ff8c94ae4b8b9d2c070bc25420cc92966e69c8aa71a2dc762",
+      "bytes": 42210
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\simulation_host_map_loading.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/simulation_host_map_loading.cpp",
+      "sha256": "1f4bea6c6071f0f6c958cddadfe333e3002359e326aea3b47e915bca5af0263c",
+      "bytes": 37012
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\simulation_host_original_primitives.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/simulation_host_original_primitives.cpp",
+      "sha256": "1889829d9e4360999f0151afecf81892acb85ee7b01b2959d76c36494de2d53d",
+      "bytes": 95168
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\simulation_world_2d.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/simulation_world_2d.cpp",
+      "sha256": "f37ae7790cec8aa805bc4652b29fe1a328d9e660960d4e34055e2e5a90a4c861",
+      "bytes": 34812
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\simulation_world_2d.h",
+      "copy": "engine_delta/modules/hardcore_simulation/simulation_world_2d.h",
+      "sha256": "fb6793777aed7f5355af33b8e6bfddb12564ee6784dbc637ca65202fc02506f8",
+      "bytes": 4599
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\source_admission_opcodes.h",
+      "copy": "engine_delta/modules/hardcore_simulation/source_admission_opcodes.h",
+      "sha256": "b10e699efba094c8b996c00a6bb1e44596d1e42bb985e6cb70243a09844b8089",
+      "bytes": 1087
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\source_admission_scope_ledger.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/source_admission_scope_ledger.cpp",
+      "sha256": "4debdeb88067d0e0cdd4c8308c01d88791e04dbc02588f78ad7d2bf777695f59",
+      "bytes": 4105
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\source_admission_scope_ledger.h",
+      "copy": "engine_delta/modules/hardcore_simulation/source_admission_scope_ledger.h",
+      "sha256": "08f5eb82f7f5089475c690aca63d0470b85f788cadb8533276878f0cbff26651",
+      "bytes": 1621
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\source_event_issued_claim_attachment.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/source_event_issued_claim_attachment.cpp",
+      "sha256": "429a8067d0fe3f0df2f604c7b9b09aa521a0181ab7c23fddf57461b7faf901a9",
+      "bytes": 9428
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\source_event_reply_mailbox.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/source_event_reply_mailbox.cpp",
+      "sha256": "5c3f909821a447bd61bfbcb26a0df762d2dd4c84d9c085c85fda95676e61ca08",
+      "bytes": 9281
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\source_event_reply_mailbox.h",
+      "copy": "engine_delta/modules/hardcore_simulation/source_event_reply_mailbox.h",
+      "sha256": "435b3864c3d5316c1d3d7cd6da98b4cc4438f3db3614ff5358270886426b5d20",
+      "bytes": 6087
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\terminal_owner_unbind_guard.h",
+      "copy": "engine_delta/modules/hardcore_simulation/terminal_owner_unbind_guard.h",
+      "sha256": "8284392603bb106c7ad3a30e4a52e386dbf141d39d9ab229ed89f76ea26d3df8",
+      "bytes": 2722
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\timer_ledger.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/timer_ledger.cpp",
+      "sha256": "73ef7dad3548d85f091787b7a1f340d16f6d96785fcbfca75a1eff09c9f9e4f5",
+      "bytes": 2791
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\timer_ledger.h",
+      "copy": "engine_delta/modules/hardcore_simulation/timer_ledger.h",
+      "sha256": "8b29763ea6f64665fab179412ca841dbcc9bbae89e130bb4affb269c091056c2",
+      "bytes": 1846
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\transport_probe.cpp",
+      "copy": "engine_delta/modules/hardcore_simulation/transport_probe.cpp",
+      "sha256": "852b0f61a94b58bb774b148a8497a3e936493bc9770ef83b4884587c621a750c",
+      "bytes": 5909
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\transport_probe.h",
+      "copy": "engine_delta/modules/hardcore_simulation/transport_probe.h",
+      "sha256": "6dda0a0f68dc9b8a13fa783ed046f50c832cff2c38a0632422099ad4ff55de96",
+      "bytes": 428
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\scene\\2d\\physics\\character_body_2d.cpp",
+      "copy": "engine_delta/scene/2d/physics/character_body_2d.cpp",
+      "sha256": "68d6844f6632dc083a93db0b486e7491ade81b56a9af73ff2d0e44dfa66f3544",
+      "bytes": 19101
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\scene\\2d\\physics\\character_body_2d.h",
+      "copy": "engine_delta/scene/2d/physics/character_body_2d.h",
+      "sha256": "3ff08877cfd7b4812d9a44b8ae49077a0bec6a4aadfe875668b7022ff876fc71",
+      "bytes": 5405
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\scene\\2d\\physics\\character_motion_2d.cpp",
+      "copy": "engine_delta/scene/2d/physics/character_motion_2d.cpp",
+      "sha256": "f5808d520c7ea0344f47aadf7f48af6a9d3fda2fbba6865d0fa4f20e72b9987d",
+      "bytes": 19581
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\scene\\2d\\physics\\character_motion_2d.h",
+      "copy": "engine_delta/scene/2d/physics/character_motion_2d.h",
+      "sha256": "eb0f5d5373d4ea67384cd0d066d490ac740047d05719a423f63a8cd1f610d140",
+      "bytes": 5111
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\scene\\2d\\physics\\physics_body_2d.cpp",
+      "copy": "engine_delta/scene/2d/physics/physics_body_2d.cpp",
+      "sha256": "b610fef9c9cec4bb95fc44ae9d019f3e6255c1e66167c2780e94ace10ef68670",
+      "bytes": 8052
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\scene\\main\\scene_tree.cpp",
+      "copy": "engine_delta/scene/main/scene_tree.cpp",
+      "sha256": "043d6ee454ea8c2d5b022029f3095188603c3ae0e608c6be7892d0434044869d",
+      "bytes": 76155
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\scene\\main\\viewport.cpp",
+      "copy": "engine_delta/scene/main/viewport.cpp",
+      "sha256": "0eb70c50c2e46db7906d27aa943d7d1782866e5ef222a6e509ffdd718db7b0ac",
+      "bytes": 201085
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\scene\\resources\\world_2d.cpp",
+      "copy": "engine_delta/scene/resources/world_2d.cpp",
+      "sha256": "e7c9dc3b908ea7e21a292df51fc68aede68265965eef44b79a9cc69b21b98e52",
+      "bytes": 6926
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\servers\\physics_2d\\physics_server_2d.h",
+      "copy": "engine_delta/servers/physics_2d/physics_server_2d.h",
+      "sha256": "05e659527264653c113c3874a01e855ff4e5ff9e01f25c05bb371f6f12bb1735",
+      "bytes": 33118
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\servers\\physics_2d\\physics_server_2d_wrap_mt.cpp",
+      "copy": "engine_delta/servers/physics_2d/physics_server_2d_wrap_mt.cpp",
+      "sha256": "65a5ef4d27e030503fe029260ddba64863cce5f6edc3cf71975eebbe49b71133",
+      "bytes": 11224
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\servers\\physics_2d\\physics_server_2d_wrap_mt.h",
+      "copy": "engine_delta/servers/physics_2d/physics_server_2d_wrap_mt.h",
+      "sha256": "917045f41b5665129988774c471484f64b5295c8557c0779e8de3c5cc8f4bfab",
+      "bytes": 16171
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\servers\\server_wrap_mt_common.h",
+      "copy": "engine_delta/servers/server_wrap_mt_common.h",
+      "sha256": "7970bff3f98233deba8438da17df91bf7ce8277eee647656c8c02a8ea2367b7e",
+      "bytes": 31010
+    },
+    {
+      "original": "C:\\Users\\Administrator\\Documents\\HardCore-engine-v115\\godot\\modules\\hardcore_simulation\\source_caster_cleanup_policy.h",
+      "copy": "engine_delta/modules/hardcore_simulation/source_caster_cleanup_policy.h",
+      "sha256": "697d83972c6be61ebe97edec5f288bb7a50c436e16e89a60a0b2c2d5f2ceb41c",
+      "bytes": 391
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\codex_return_20261017_01\\implement_immutable_prefix_cache.py",
+      "copy": "continuation_tools/implement_immutable_prefix_cache.py",
+      "sha256": "feedd2145040d62d6aba0e9c2e91d8b1d0f8969658549aefe57c03b6e056878e",
+      "bytes": 6161
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\codex_return_20261017_01\\seal_immutable_prefix_cache.py",
+      "copy": "continuation_tools/seal_immutable_prefix_cache.py",
+      "sha256": "f98b5e166ade9bc5737004a41f24a799978e6e3928486eca38711f63f00d2b9c",
+      "bytes": 2594
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\codex_return_20261017_01\\fix_renderer_exit_order.py",
+      "copy": "continuation_tools/fix_renderer_exit_order.py",
+      "sha256": "52d749aa18d1b31bdca1734686e2090331cc413daa5e87f804b6129a71dfa20a",
+      "bytes": 4344
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\codex_return_20261017_01\\prepare_immutable_prefix_delivery_tools.py",
+      "copy": "continuation_tools/prepare_immutable_prefix_delivery_tools.py",
+      "sha256": "1b0395d15efb7c53c330cf5c51d23e0c9fa2c414ae5a2b6c94a8979058aca933",
+      "bytes": 5229
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\codex_return_20261017_01\\run_full_world_immutable_prefix_20261018.ps1",
+      "copy": "continuation_tools/run_full_world_immutable_prefix_20261018.ps1",
+      "sha256": "09e7f8bfad6a4a3e5f309e10358ce0e586d8391b27a4e6f82cc8611e44b0383e",
+      "bytes": 2504
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\codex_return_20261017_01\\prepare_packed_and_retiring_regressions.py",
+      "copy": "continuation_tools/prepare_packed_and_retiring_regressions.py",
+      "sha256": "8e3907b6f929d7bd46b792f83c1bd6dc2f4f95057915376aef911180dad9e853",
+      "bytes": 4880
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\codex_return_20261017_01\\CONTINUATION.md",
+      "copy": "continuation_tools/CONTINUATION.md",
+      "sha256": "863bad42ce0a2d38fb93e1ef2a7f18c57521f89b6924bc4169083ac135adeb08",
+      "bytes": 40363
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\build_windows_immutable_prefix_cache_20261018.py",
+      "copy": "continuation_tools/build_windows_immutable_prefix_cache_20261018.py",
+      "sha256": "fb6d84f21eb66e5e5d800ca9a6f5629551c10770f4e7ff7f8086165d027d5387",
+      "bytes": 3346
+    },
+    {
+      "original": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\generate_immutable_prefix_code_catalogue_20261018.py",
+      "copy": "continuation_tools/generate_immutable_prefix_code_catalogue_20261018.py",
+      "sha256": "329d617b35de31102f934d59f2b065684f0f39e15667f1068bd3d533c048ba88",
+      "bytes": 4253
+    }
+  ]
+}

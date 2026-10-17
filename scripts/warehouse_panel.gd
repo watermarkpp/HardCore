@@ -414,7 +414,7 @@ func _on_visibility_changed() -> void:
 
 func refresh() -> void:
 	_original_main_callback_ledger["refresh"] = int(_original_main_callback_ledger.get("refresh",0)) + 1
-	_original_source_warehouse_panel_refresh()
+	await _original_source_warehouse_panel_refresh()
 	_original_main_callback_ledger["refresh"] -= 1
 
 
@@ -449,7 +449,7 @@ func _original_source_warehouse_panel_refresh() -> void:
 	# bank view so any gold mutation while the panel is visible reaches
 	# bank_balance_label. _refresh_bank_state self-guards on
 	# is_visible_in_tree + dirty, keeping the L1 hidden-panel skip intact.
-	_refresh_bank_state()
+	await _refresh_bank_state()
 	if not _layout_initialized:
 		_layout_initialized = true
 		_layout_apply_count += 1
@@ -635,6 +635,7 @@ func _update_item_cell(
 	if cell.get_meta("item_presentation", []) == presentation:
 		return
 	cell.set_meta("item_presentation", presentation.duplicate(true))
+	cell.set_meta("original_item_selection",preload("res://scripts/gameplay/source/main_profile_ui_command.gd").capture_selection("inventory" if side=="bag" else "warehouse",data_index,record))
 	cell.name = "%sCell_%d" % [side.capitalize(), display_index]
 	button.set_meta("side", side)
 	button.set_meta("data_index", data_index)
@@ -807,11 +808,15 @@ func _original_source_warehouse_panel__bank_boundary_message(deposit: bool, play
 
 func _refresh_bank_state() -> void:
 	_original_main_callback_ledger["_refresh_bank_state"] = int(_original_main_callback_ledger.get("_refresh_bank_state",0)) + 1
-	_original_source_warehouse_panel__refresh_bank_state()
+	await _original_source_warehouse_panel__refresh_bank_state()
 	_original_main_callback_ledger["_refresh_bank_state"] -= 1
 
 
+var _actual_bank_view_sequence := 0
+
 func _original_source_warehouse_panel__refresh_bank_state() -> void:
+	_actual_bank_view_sequence += 1
+	var view_sequence: int = _actual_bank_view_sequence
 	if not is_inside_tree() or not is_visible_in_tree():
 		_ui_l1_bank_dirty = true
 		_ui_l1_hidden_bank_skips += 1
@@ -823,7 +828,11 @@ func _original_source_warehouse_panel__refresh_bank_state() -> void:
 	if not _bank_transfer_pending:
 		_ui_l1_bank_dirty = false
 		_ui_l1_bank_read_count += 1
-		_bank_view_snapshot = PlayerState.shared_gold_view_snapshot()
+		var actual_bank: Dictionary = await preload("res://scripts/gameplay/source/main_profile_ui_command.gd").call_owner(&"shared_gold_view_snapshot",[])
+		if view_sequence != _actual_bank_view_sequence or not is_inside_tree() or not is_visible_in_tree():
+			_ui_l1_bank_dirty = true
+			return
+		_bank_view_snapshot = actual_bank
 	var player_gold := int(PlayerState.gold)
 	var shared_gold := int(_bank_view_snapshot.get("bank_gold", 0))
 	var unavailable := _bank_view_snapshot.is_empty() or str(_bank_view_snapshot.get("profile_id", "")) != PlayerState.active_profile_id
@@ -874,7 +883,7 @@ func _bank_result_message(deposit: bool, result: Dictionary) -> String:
 
 func _on_bank_transfer_pressed(deposit: bool) -> void:
 	_original_main_callback_ledger["_on_bank_transfer_pressed"] = int(_original_main_callback_ledger.get("_on_bank_transfer_pressed",0)) + 1
-	_original_source_warehouse_panel__on_bank_transfer_pressed(deposit)
+	await _original_source_warehouse_panel__on_bank_transfer_pressed(deposit)
 	_original_main_callback_ledger["_on_bank_transfer_pressed"] -= 1
 
 
@@ -892,7 +901,7 @@ func _original_source_warehouse_panel__on_bank_transfer_pressed(deposit: bool) -
 	if transaction_sequence <= 0 or str(_bank_view_snapshot.get("profile_id", "")) != PlayerState.active_profile_id:
 		_bank_status_message = "共享金币事务不可用，请稍后重试。"
 		transfer_detail_label.text = _bank_status_message
-		_refresh_bank_state()
+		await _refresh_bank_state()
 		return
 	_bank_transaction_serial += 1
 	var transaction_id := "warehouse-bank-%d-%d" % [transaction_sequence, _bank_transaction_serial]
@@ -917,9 +926,9 @@ func _original_source_warehouse_panel__submit_bank_transfer(deposit: bool, trans
 	var button: Button = bank_deposit_button if deposit else bank_withdraw_button
 	_clear_transfer_feedback()
 	GothicUIThemeScript.set_button_feedback(button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "warehouse.bank")
-	_refresh_bank_state()
+	await _refresh_bank_state()
 	_refresh_transfer_action_states()
-	var result: Dictionary = await PlayerState.transfer_shared_gold_prepared(deposit, transaction_id, transaction_sequence)
+	var result: Dictionary = await preload("res://scripts/gameplay/source/main_profile_ui_command.gd").call_owner(&"transfer_shared_gold_prepared",[deposit,transaction_id,transaction_sequence])
 	# Persistence is owned by PlayerState and completes if this UI was freed.
 	# A live but closed window keeps only its result state for the next open.
 	_last_bank_transfer_result = result.duplicate(true)
@@ -927,12 +936,12 @@ func _original_source_warehouse_panel__submit_bank_transfer(deposit: bool, trans
 	transfer_detail_label.text = _bank_status_message
 	# A stale sequence only refreshes the visible authority state. The failed
 	# request is never replayed with a new sequence automatically.
-	_refresh_bank_state()
+	await _refresh_bank_state()
 	_show_transfer_result(button, bool(result.get("success", false)), "warehouse.bank")
 	if is_inside_tree():
 		await get_tree().process_frame
 	_bank_transfer_pending = false
-	_refresh_bank_state()
+	await _refresh_bank_state()
 	_refresh_transfer_action_states()
 
 
@@ -1044,7 +1053,7 @@ func _original_source_warehouse_panel__deposit() -> void:
 	bank_withdraw_button.disabled = true
 	var transfer_epoch := _selection_lifecycle_epoch()
 	var transfer_selection_version := _selection_version
-	var result: Dictionary = await PlayerState.transfer_warehouse_prepared("deposit", source_indices, target_slots)
+	var result: Dictionary = await preload("res://scripts/gameplay/source/main_profile_ui_command.gd").call_owner(&"transfer_warehouse_prepared",["deposit",source_indices,target_slots,_selected_warehouse_witnesses("bag",source_indices)])
 	_transfer_pending = false
 	if not is_visible_in_tree():
 		_ui_l1_bank_dirty = true
@@ -1092,7 +1101,7 @@ func _original_source_warehouse_panel__withdraw() -> void:
 	bank_withdraw_button.disabled = true
 	var transfer_epoch := _selection_lifecycle_epoch()
 	var transfer_selection_version := _selection_version
-	var result: Dictionary = await PlayerState.transfer_warehouse_prepared("withdraw", source_indices)
+	var result: Dictionary = await preload("res://scripts/gameplay/source/main_profile_ui_command.gd").call_owner(&"transfer_warehouse_prepared",["withdraw",source_indices,[],_selected_warehouse_witnesses("stash",source_indices)])
 	_transfer_pending = false
 	if not is_visible_in_tree():
 		_ui_l1_bank_dirty = true
@@ -1330,8 +1339,31 @@ func _original_source_warehouse_panel__bag_record(slot_index: int) -> Dictionary
 	return value if value is Dictionary and not (value as Dictionary).is_empty() else {}
 
 
+
+func _displayed_warehouse_selection(side: String, index: int) -> Dictionary:
+	var cells: Array[Control]=_bag_cells if side=="bag" else _stash_cells
+	for cell: Control in cells:
+		var presentation: Array=cell.get_meta("item_presentation",[])
+		if presentation.size()>=4 and presentation[0]==side and presentation[1]==index:
+			var shown: Dictionary=cell.get_meta("original_item_selection",{})
+			if shown.get("profile_id")!=PlayerState.active_profile_id: return {}
+			return preload("res://scripts/gameplay/source/main_profile_ui_command.gd").capture_selection("inventory" if side=="bag" else "warehouse",index,shown.get("record",{}))
+	return {}
+
+func _selected_warehouse_witnesses(side: String, indices: Array) -> Array:
+	var refs: Array[Dictionary]=selected_bag_refs if side=="bag" else selected_stash_refs
+	var result: Array=[]
+	for raw: Variant in indices:
+		var witness: Dictionary={}
+		for selected: Dictionary in refs:
+			if int(selected.get("slot",-1))==int(raw): witness=selected.get("selection",{}).duplicate(true);break
+		result.append(witness)
+	return result
+
 func _selection_ref(side: String, index: int, record: Dictionary) -> Dictionary:
 	return {
+		"selection": _displayed_warehouse_selection(side,index),
+		"record": record.duplicate(true),
 		"container": side,
 		"slot": index,
 		"index": index,
@@ -1362,10 +1394,13 @@ func _original_source_warehouse_panel__find_ref_index(selection_ref: Dictionary)
 	var records: Array = PlayerState.inventory if side == "bag" else PlayerState.warehouse_inventory
 	var instance_id := str(selection_ref.get("instance_id", ""))
 	if not instance_id.is_empty():
+		var found := -1
 		for index in range(records.size()):
 			var value: Variant = records[index]
 			if value is Dictionary and str((value as Dictionary).get("instance_id", "")) == instance_id:
-				return index
+				if found>=0 or value!=selection_ref.get("record",{}): return -1
+				found=index
+		return found
 	var slot := int(selection_ref.get("slot", -1))
 	if side not in ["bag", "stash"] or slot < 0 or slot >= records.size():
 		return -1
@@ -1619,5 +1654,5 @@ func _ui_l1_flush_queued_bank_view() -> void:
 
 func _ui_l1_flush_bank_view_if_dirty() -> void:
 	if _ui_l1_bank_dirty and is_inside_tree() and is_visible_in_tree():
-		_refresh_bank_state()
+		await _refresh_bank_state()
 # UI-L1 SUPPLEMENT END

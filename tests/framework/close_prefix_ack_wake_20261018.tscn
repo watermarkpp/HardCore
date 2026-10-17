@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/close_prefix_ack_wake_20261018.gd" id="1"]
+
+[node name="ClosePrefixAckWake20261018" type="Node"]
+script = ExtResource("1")

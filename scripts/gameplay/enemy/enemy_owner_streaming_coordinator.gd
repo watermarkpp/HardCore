@@ -1,5 +1,9 @@
 extends RefCounted
 
+## Presentation completion only. The existing FIFO and primitive/Session remain
+## the sole work and BindingFact authorities. Emitted AFTER exact COMMITTED take.
+signal original_initial_binding_observed(service_id: int, original_service_identity: Dictionary, consumed: Dictionary)
+
 ## Numeric owner of the original coordinator, with no Node or Resource access.
 ## GameRoot._process -> P_GROUP; bootstrap explicit process_frame poll is separate.
 var _owner: int = OS.get_thread_caller_id()
@@ -2414,6 +2418,41 @@ func _live_finish_owner() -> bool:
 func _enqueue_live_binding(id: int, op: StringName, args: Array, completion: String, profile: Dictionary, cleanup: bool) -> void:
 	_live_bindings.append({"service_id":id,"op":op,"args":args.duplicate(true),"completion":completion,"profile":profile.duplicate(true),"cleanup":cleanup})
 
+func enqueue_live_binding_observation(id: int) -> bool:
+	# Observe the actual Main result of the preceding original journal, using
+	# the existing FIFO/Native ticket. Never infer Sprite/texture readiness on S
+	# or replay the structural creation as a second binding mutation.
+	if not _guard() or not live_resource_phase() or _live_closing or id <= 0 or deps.services.resolve_service(id) == null: return false
+	var handle: Object = deps.services.resolve_service(id)
+	var identity: Dictionary = handle.identity()
+	if not _require(not identity.is_empty(), "initial observation lacks canonical service identity"): return false
+	_enqueue_live_binding(id, &"observe_binding", [id], "initial_observation", {}, false)
+	var row: Dictionary = _live_bindings.back()
+	row.original_service_identity = identity.duplicate(true)
+	row.original_handle = weakref(handle)
+	row.original_model = weakref(handle.model())
+	return true
+
+func _original_initial_observation_owner_matches(row: Dictionary, handle: Object) -> bool:
+	if row.original_handle.get_ref() != handle or row.original_model.get_ref() != handle.model(): return false
+	var current: Dictionary = handle.identity()
+	var original: Dictionary = row.original_service_identity
+	if current.size() != original.size(): return false
+	# ServiceHandle reads the canonical registry's CURRENT world. Core verifies
+	# any world change through the actual committed arrival, never epoch >=.
+	for key: String in original:
+		if key != "world" and current.get(key) != original[key]: return false
+	return true
+
+func original_initial_binding_observation_pending(id: int, original_identity: Dictionary) -> bool:
+	if OS.get_thread_caller_id() != _owner or not _configured or _failed or _finished or _live_closing: return false
+	var handle: Object = deps.services.resolve_service(id)
+	if handle == null or _visual_is_queued(id): return false
+	for row: Dictionary in _live_bindings:
+		if int(row.service_id) == id and row.completion == "initial_observation":
+			return row.original_service_identity == original_identity and _original_initial_observation_owner_matches(row,handle)
+	return false
+
 func enqueue_live_binding_event(id: int, operation: StringName, args: Array) -> void:
 	# All relevant renderer mutations share a single per-renderer causality key.
 	_enqueue_live_binding(id, &"bind_or_clear", [id,operation,args], "", {}, operation == &"sprite_texture" and args == [null] or operation == &"visual_visible" and args == [false])
@@ -2506,7 +2545,10 @@ func _live_poll_bindings() -> void:
 		var before_identity: Dictionary = handle.identity() if handle.has_method("identity") else {}
 		var model: Object = handle.model()
 		# Finish the ORIGINAL completion even if it consumes the last allowance.
-		if row.completion == "activation": model.commit_live_resource_activation(row.profile)
+		if row.completion == "initial_observation":
+			if not _require(row.op == &"observe_binding" and _original_initial_observation_owner_matches(row,handle), "consumed initial observation changed canonical owner"): return
+			original_initial_binding_observed.emit(int(row.service_id),row.original_service_identity,result)
+		elif row.completion == "activation": model.commit_live_resource_activation(row.profile)
 		elif row.completion == "release": model.commit_live_resource_release()
 		if _failed or _finished or before_identity.is_empty() or not is_instance_valid(handle): return
 		if not is_same(deps.services.resolve_service(int(row.service_id)), handle) or _visual_is_queued(int(row.service_id)): return

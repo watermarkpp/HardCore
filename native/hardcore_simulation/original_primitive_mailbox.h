@@ -31,10 +31,10 @@ public:
     MainEventStatus claimed_main_event_status(uint64_t journal,uint64_t ordinal,const Bytes&)const;
     MainEventStatus try_register_original_presentation_prefix(const Prefix&);
     MainPrefixClaim claim_main_prefix(const Prefix&); // Main unique delta across normal/cold/live consumers.
-    enum class AsyncAdmission{ACCEPTED,BUSY,INVALID,BACKPRESSURE};
+    enum class AsyncAdmission{ACCEPTED,BUSY,INVALID,BACKPRESSURE,NOT_ADMITTED_CLOSING};
     struct AsyncPreview{uint64_t sequence=0,call_ordinal=0;};
     AsyncPreview preview_async(const Bytes&)const; // S try-lock, no resource wait.
-    AsyncAdmission admit_async(const Request&); // S try-lock, shared admission sequence/site allocator.
+    AsyncAdmission admit_async(const Request&,bool reject_closing=false); // S try-lock, shared admission sequence/site allocator.
     bool ack_async_prefix(const Request&); // Main factual receipt, never S applied-ledger writes.
     bool commit_async(const Identity&); // S budget settled.
     enum class AsyncCommit{COMMITTED,BUSY,INVALID};
@@ -98,7 +98,7 @@ private:
     Prefix last_published_ack_;
     std::map<uint64_t,Bytes> known_events_;
     size_t known_event_bytes_=0; // The journal wire budget is independent of FIFO/ticket slots.
-    bool register_events(const Prefix&);
+    bool register_events(const Prefix&,bool commit=true);
     void prune_events();
     static bool equal(const Bytes&,const Bytes&);
     static bool equal(const Prefix&,const Prefix&);

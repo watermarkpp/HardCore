@@ -179,13 +179,22 @@ func set_original_pending_arrival_position(position_px: Vector2) -> void:
 		_world.fault("invalid_original_pending_arrival_position",{}); return
 	_pending_arrival_position = position_px
 
+func _trace_original_gothic_rejection(reason: String, details: Dictionary) -> void:
+	if bool(_world.clock_ports.get_setting("hardcore/diagnostics/main_boot_trace",false)):
+		print("HC_SOURCE_GOTHIC_BUILD_REJECT ",JSON.stringify({"reason":reason,"details":details,"generation":_staged_generation,"usec":Time.get_ticks_usec()}))
 func install_original_gothic_build_entries(entries: Array) -> bool:
-	if OS.get_thread_caller_id() != _owner_thread or not _generation_is_current(): return false
+	if OS.get_thread_caller_id() != _owner_thread:
+		_trace_original_gothic_rejection("owner",{"owner":_owner_thread,"actual":OS.get_thread_caller_id()});return false
+	if not _generation_is_current():
+		_trace_original_gothic_rejection("environment_generation",{});return false
 	if entries == _gothic_collision_entries: return true
-	if not _gothic_collision_entries.is_empty(): return false
+	if not _gothic_collision_entries.is_empty():
+		_trace_original_gothic_rejection("different_existing_entries",{"existing":_gothic_collision_entries.size(),"received":entries.size()});return false
 	var copied: Dictionary = Graph.copy_and_seal(entries)
-	if not copied.get("ok",false): return false
-	if not _world.native_bodies.register_gothic_environment_bodies(copied.value,_staged_generation): return false
+	if not copied.get("ok",false):
+		_trace_original_gothic_rejection("graph_copy",{});return false
+	if not _world.native_bodies.register_gothic_environment_bodies(copied.value,_staged_generation):
+		_trace_original_gothic_rejection("native_registration",{"existing_ids":_world.native_bodies.get("_gothic_ids").size(),"received":entries.size()});return false
 	_gothic_collision_entries = copied.value
 	for id: int in _world.native_bodies.get("_gothic_ids"):
 		_environment_body_ids.append(id)

@@ -110,19 +110,32 @@ func on_phase(name: String, frame: Dictionary) -> bool:
 	# The actual source callback manifest decides exact hall/loading/world
 	# callback priority/tree order and calls Core.on_phase exactly once.
 	return _services.source_frames.dispatch_original_session_phase(name, frame, self, _session, _world)
+var _actual_close_trace_seen: Dictionary = {}
+func _actual_close_trace(stage: String) -> void:
+	if not _boot_trace or _actual_close_trace_seen.has(stage): return
+	_actual_close_trace_seen[stage] = true
+	print("HC_SOURCE_RUNTIME_CLOSE ",JSON.stringify({"stage":stage,"thread":OS.get_thread_caller_id(),"runtime_id":get_instance_id(),"usec":Time.get_ticks_usec()}))
 func close_session() -> bool:
+	_actual_close_trace("enter")
 	if _original_close_session_freed: return true
 	if _session == null: return _close_actual_failure_before_session()
+	_actual_close_trace("before_dispatcher_admission")
 	if not _original_frame_dispatcher.begin_original_session_close(self,_session,_world): return false
+	_actual_close_trace("after_dispatcher_admission")
 	if _world!=null:
 		if not _world.hold_original_session_close_resource_owner(): return false
 		# Advance original Root exit/GC while retaining actual Native resource
 		# endpoint and current World Context until persistent cache cleanup READY.
+		_actual_close_trace("before_World_close")
 		_world.close_session()
+		_actual_close_trace("after_World_close")
+	_actual_close_trace("before_resource_waiters")
 	if _session.original_resource_service_waiter_count()>0: return false
 	# Advance/inspect genuine accepted service/IO/lease retirement without final
 	# freeing the Session. Its actual source implementation is strictly required.
+	_actual_close_trace("before_persistent_frames_prepare")
 	if not _services.source_frames.prepare_original_source_session_close(_session): return false
+	_actual_close_trace("after_persistent_frames_prepare")
 	if _world!=null:
 		if not _world.release_original_session_close_resource_owner() or not leave_original_world(): return false
 	if not _host.has_method("original_close_process_producer_drained") or not _host.has_method("request_original_close_process_producer_stop"):

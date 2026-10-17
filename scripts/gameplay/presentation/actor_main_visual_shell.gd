@@ -16,6 +16,7 @@ var visual: Node2D
 var health_bar: Node2D
 var overhead: Node2D
 var _configured := false
+var _enemy_birth_context: Dictionary
 
 func configure_main(publication: Dictionary, assets: RefCounted, phase_bridge: RefCounted) -> bool:
 	if OS.get_thread_caller_id() != OS.get_main_thread_id() or _configured or assets == null or not assets.is_actual_loading_bound(): return false
@@ -84,9 +85,10 @@ func apply_original_player_fact(event: String, payload: Dictionary) -> bool:
 	return not _assets.is_faulted()
 
 func create_original_overhead(title: String, boss: bool, hp: int, maximum: int) -> bool:
-	if OS.get_thread_caller_id() != OS.get_main_thread_id() or _kind != "enemy" or not _configured or overhead != null: return false
-	overhead = EnemyOverhead.new(); overhead.name = "MonsterOverhead"
-	if not overhead.configure_original_projection(_assets): return false
+	if OS.get_thread_caller_id()!=OS.get_main_thread_id() or _kind!="enemy" or overhead!=null or _assets==null or not _assets.is_actual_loading_bound() or (not _configured and not has_actual_original_enemy_birth_inputs(_identity)): return false
+	var actual: Node2D=EnemyOverhead.new(); actual.name="MonsterOverhead"
+	if not actual.configure_original_projection(_assets): actual.free(); return false
+	overhead=actual
 	OriginalMonsterVisual.configure_actor_y_sort_item(overhead,"overhead_root")
 	overhead.setup(title,boss,hp,maximum)
 	add_child(overhead)
@@ -133,11 +135,11 @@ var _boss_phase_two: bool:
 var _boss_warning: float:
 	get: return float(_snapshot.actor.boss_warning)
 var monster_id: int:
-	get: return int(_snapshot.actor.monster_id)
+	get: return int(_snapshot.actor.monster_id) if _configured else int(_enemy_birth_context.monster_id)
 var display_name: String:
-	get: return str(_snapshot.actor.display_name)
+	get: return str(_snapshot.actor.display_name) if _configured else str(_enemy_birth_context.display_name)
 var monster_data: Dictionary:
-	get: return _snapshot.actor.monster_data
+	get: return _snapshot.actor.monster_data if _configured else _enemy_birth_context.monster_data
 
 class ProfileDisplay:
 	extends RefCounted
@@ -322,3 +324,15 @@ func apply_original_source_pickable_fact(value: bool, ordinal: int) -> bool:
 	if OS.get_thread_caller_id()!=OS.get_main_thread_id() or not is_inside_tree() or is_queued_for_deletion() or ordinal<=_last_pickable_ordinal: return false
 	actual_source_input_pickable=value;_last_pickable_ordinal=ordinal
 	return true
+
+func prepare_original_enemy_overhead_context(context: Dictionary, assets: RefCounted) -> bool:
+	if OS.get_thread_caller_id()!=OS.get_main_thread_id() or _kind!="enemy" or _configured or not _enemy_birth_context.is_empty() or _assets!=null or overhead!=null or not is_inside_tree() or is_queued_for_deletion() or visual==null or assets==null or not assets.is_actual_loading_bound(): return false
+	if not preload("res://scripts/gameplay/presentation/enemy_overhead_birth_context.gd").validate(context) or context.actor_identity!=_identity or assets.owner_descriptor().get("actor_identity")!=_identity or assets.owner_descriptor().get("kind")!="enemy": return false
+	_enemy_birth_context=preload("res://scripts/gameplay/presentation/actor_visual_projection_contract.gd").capture(context)
+	_assets=assets
+	for key: Variant in context.metadata: set_meta(StringName(key),context.metadata[key])
+	# Numeric snapshot/readiness deliberately stays absent. Original overhead
+	# _ready reads only these exact Source name/classification/context facts.
+	return true
+func has_actual_original_enemy_birth_inputs(identity: Dictionary) -> bool:
+	return OS.get_thread_caller_id()==OS.get_main_thread_id() and _kind=="enemy" and not _enemy_birth_context.is_empty() and _enemy_birth_context.actor_identity==identity and _identity==identity and _assets!=null and _assets.is_actual_loading_bound() and _assets.owner_descriptor().get("actor_identity")==identity

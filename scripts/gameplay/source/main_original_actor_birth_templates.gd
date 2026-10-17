@@ -15,7 +15,7 @@ const SOURCES := {
 	"fire_wall":["res://scripts/fire_wall_field_controller.gd","d5672ddb85668bb98dd58029876cda2c4506dc5270b4ad52eed570e601578e93"],
 	"loot":["res://scripts/loot_pickup.gd","945e0a8a924237b5d6cca1ca65352b914bad27095e252713f72843c5a616ced2"],
 	"npc":["res://scripts/npc_actor.gd","61a829928c169fb36d14f0e3d7dede7cf1eae648750f9e32306f8cc9f4ce2096"],
-	"portal":["res://scripts/zone_portal.gd","86e78478fa70fca7e20745d45d462ac0c76bd0b3e789d96d81a297bd422181b5"]}
+	"zone_portal":["res://scripts/zone_portal.gd","86e78478fa70fca7e20745d45d462ac0c76bd0b3e789d96d81a297bd422181b5"]}
 
 static func capture_callbacks(code: Script) -> Dictionary:
 	var callbacks: Dictionary = {}

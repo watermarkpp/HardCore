@@ -112,6 +112,15 @@ func dispatch_original_close_process_boundary(boundary: String, frame: Dictionar
 	return boundary!="NODE_PROCESS_SERVICE" or (_profile_hooks.service_original_receipts_at_actual_source_boundary() and (_feature_commands == null or _feature_commands.service_actual_closing_acknowledgements(frame)))
 func original_source_callbacks_closed(core: RefCounted) -> bool:
 	return _world_callbacks_closed and _core!=null and is_same(_core.get_ref(),core) and _world_inputs.is_empty()
+func service_original_close_session_obligations(session: RefCounted, frame: Dictionary) -> bool:
+	if OS.get_thread_caller_id()!=_owner or _final or not _normal_closed or _session==null or not is_same(_session.get_ref(),session) or _runtime==null or _runtime.get_ref()==null or _runtime.get_ref().current_original_world_core()!=null or not _world_inputs.is_empty() or frame!=_host.current_clock_frame(): return false
+	if _core!=null and _core.get_ref()!=null and not _core.get_ref().is_original_world_closed(): return false
+	return session.service_original_close_session_obligations(frame,_service_original_persistent_close_receipts)
+func _service_original_persistent_close_receipts() -> bool:
+	var session: RefCounted=_session.get_ref()
+	var profile: Dictionary=session.original_profile_owner()
+	if profile.get("success")==true: profile.profile.service_receipts()
+	return _profile_hooks!=null and _profile_hooks.service_original_receipts_at_actual_source_boundary() and (_feature_commands==null or _feature_commands.service_actual_closing_acknowledgements(_host.current_clock_frame()))
 func begin_original_world_exit(core: RefCounted) -> bool:
 	if OS.get_thread_caller_id()!=_owner or _core==null or not is_same(_core.get_ref(),core) or not _world_inputs.is_empty(): return false
 	_world_callbacks_closed=true
