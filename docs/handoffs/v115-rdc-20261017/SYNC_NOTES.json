@@ -1,0 +1,14 @@
+{
+  "status": "REMOTE_SOURCE_PUSH_AND_READBACK_PASS",
+  "source_snapshot_commit": "0c05d546b652209117fb3e196c17336de781b058",
+  "branch": "codex/v115-rdc-handoff-20261017",
+  "origin": "git@github-hardcore:watermarkpp/HardCore.git",
+  "source_worktree_head_unchanged": "45170d0eaf4d2c642d4a03de392f64fa2b1e25bf",
+  "real_index_sha256": "3180f91855b8bc8d7a22848592ff9f95f2d19574a73f7a3eea90e962f7151b22",
+  "latest_source_status": "World FAIL; six oldsave Source stages NOT_RUN; release snapshot NOT_RUN; APK115 NOT_RUN; device NOT_RUN",
+  "handoff_whitespace_check": "FAIL exit2; preserved exact patch evidence and preexisting source warnings; see evidence/HANDOFF_COMMIT_DIFF_CHECK.json",
+  "new_changes_since_source_snapshot": "Only report section12, this note and whitespace evidence; no game implementation",
+  "resume": "Same-PC RDC existing R/E; first cache fix and strict viewport map-arrival handoff; do not reset or rebuild from old HEAD",
+  "worker": "finished; fixed release tools component41/0 only; viewport block NOT_RUN",
+  "at": "2026-10-17T17:13:08.202761"
+}
