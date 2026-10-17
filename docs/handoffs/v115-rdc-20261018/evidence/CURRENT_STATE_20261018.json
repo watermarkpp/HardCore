@@ -36,13 +36,13 @@
   },
   "android_template_receipt": {
     "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\codex_resume_20261015_182255\\android_immutable_prefix_cache_20261018_build\\ANDROID_TEMPLATE_RECEIPT.json",
-    "status": "RUNNING",
-    "exec_session": 27312
+    "status": "PASS_BUILD_ONLY_PACKED_SAFETY_FAIL"
   },
   "generated_code_catalogue": {
     "path": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\scripts\\features\\generated\\internal_code_preparation_catalog_data.gd",
-    "bytes": 39040,
-    "sha256": "757127be74d176155edeeb568201c1cf46f446dfd551f58bee25743da86954e5"
+    "bytes": 39042,
+    "sha256": "4af4b5c303dcd49ab8920261c1952535a717716f9e0a14d236c75f036251ed21",
+    "scope": "Formal new037/f26 capture-bound generated data; later Native fix requires regeneration"
   },
   "last_World": "World40 FAIL: actual82/82; all Renderer READY, Rootstep16 passed; final-free calls missing ServiceRegistry.resolve_original_retiring_service; source-index protected",
   "running_World": null,
@@ -52,8 +52,8 @@
   "completed_item_component": "24/0 actual Model native0; original warehouse failure schema retained; staged assertions stronger not weaker",
   "unsupported_old_regression": "v109_inventory_durability_projection_test legacy Root.new on Main violates external Physics2D ownership; raw FAIL retained, fixture path BLOCKED; no guard bypass",
   "save_stages_completed": 0,
-  "source_save_tool_root": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\source_save_runtime_caster_selection180_20261018",
-  "fixed_release_tool_root": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\fixed_release_snapshot_caster_selection_20261018",
+  "source_save_tool_root": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\source_save_runtime_immutable_prefix180_20261018",
+  "fixed_release_tool_root": "C:\\Users\\Administrator\\.codex\\worktrees\\multicore-v115\\HardCore\\outputs\\v115_multicore\\fixed_release_snapshot_immutable_prefix_20261018",
   "fixed_source_object": "NOT_RUN",
   "APK115": "NOT_RUN",
   "device_test": "NOT_RUN",
@@ -72,5 +72,7 @@
   },
   "freeze_reason": "User explicit1-2percent conditional handoff; live98used/2remaining. All child processes terminal; no new construction/test. No shutdown.",
   "packed_regression": "actual037 Packed RED30/3 native1/noerrors/protectiontrue; nested empty/filled Packed aliases mutate top retained id and pollute repeated inspect. Cache qualification fix NOT IMPLEMENTED.",
-  "service_regression": "legacy component BLOCKED before Source Core: parent busy add_child + missing current integer Native config. New retiring lookup assertions NOT_RUN. World40 actual missing production method is independent RED evidence."
+  "service_regression": "legacy component BLOCKED before Source Core: parent busy add_child + missing current integer Native config. New retiring lookup assertions NOT_RUN. World40 actual missing production method is independent RED evidence.",
+  "source_checkpoint_commit": "a0dbb19bfec59e24730c4b17106bdb2dd6f46db7",
+  "source_checkpoint_ref": "codex/v115-rdc-handoff-20261018"
 }
